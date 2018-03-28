@@ -23,7 +23,7 @@ public class Tray {
 
             SystemTray tray = SystemTray.getSystemTray();
 
-            sortir = new MenuItem("Sortir del servidor");
+            sortir = new MenuItem("Sortir del client");
 
             popup.add(sortir);
 

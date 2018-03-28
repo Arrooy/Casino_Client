@@ -81,8 +81,12 @@ public class NetworkManager extends Thread {
 
     /** Solicita al servidor tencar la sessio actual*/
     public void requestLogOut(){
-        user.setOnline(false);
-        send(user);
+        if(user != null) {
+            user.setOnline(false);
+            send(user);
+        }else
+            logOut();
+
     }
 
     /** Completa el tencament de la sessio actual despres de rebre la confirmacio per part del servidor*/

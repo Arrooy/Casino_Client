@@ -2,6 +2,7 @@ package Controlador;
 
 import Vista.MainView;
 import Network.*;
+import Vista.MiniView;
 import Vista.Tray;
 
 import java.awt.event.ActionEvent;
@@ -19,10 +20,17 @@ public class Controller implements ActionListener, WindowListener {
     /** Responsable de la connectivitat amb el servidor*/
     private NetworkManager networkManager;
 
+    private MiniViewController MVcontroller;
+
     /** Inicialitza un nou controlador i realitza les relacions amb la vista i el gestor de la connectivitat*/
     public Controller(MainView view, NetworkManager networkManager) {
         this.view = view;
         this.networkManager = networkManager;
+
+        //MiniView creation
+        MiniView miniView = new MiniView();
+        MVcontroller = new MiniViewController(this,miniView);
+        miniView.addController(MVcontroller);
     }
 
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
@@ -53,12 +61,15 @@ public class Controller implements ActionListener, WindowListener {
                 //S'intenta desconectar-se del servidor
                 networkManager.requestLogOut();
                 break;
+            case "trayButtonExit":
+                exitProgram(0);
+                break;
         }
     }
 
     @Override
     public void windowOpened(WindowEvent e) {
-
+        System.out.println("Window opened");
     }
 
     @Override
@@ -68,26 +79,27 @@ public class Controller implements ActionListener, WindowListener {
 
     @Override
     public void windowClosed(WindowEvent e) {
-
     }
 
     @Override
     public void windowIconified(WindowEvent e) {
-        //TODO: IDEA: ficar segona vista, minimalista, quan joc sta iconified.
+        MVcontroller.show();
     }
 
     @Override
     public void windowDeiconified(WindowEvent e) {
-
+        MVcontroller.hide();
     }
 
     @Override
     public void windowActivated(WindowEvent e) {
-
+        System.out.println("Window Activated");
+        MVcontroller.hide();
     }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
-
+        System.out.println("Window Deactivated");
+        MVcontroller.show();
     }
 }
