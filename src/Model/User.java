@@ -1,13 +1,11 @@
 package Model;
 
 import Network.Message;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /** Usuari basic del casino*/
 
-public class User extends Message implements Serializable {
+public class User extends Message {
 
     /** Defineix el identificador del missatge. Util per quan s'envia amb el networkManager*/
     private final double ID;

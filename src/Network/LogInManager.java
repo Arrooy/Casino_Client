@@ -48,7 +48,7 @@ public class LogInManager implements Runnable {
     }
 
     /** Inicialitza el nom i la password del usuari que es vol fer LogIn*/
-    public void init(String username, String password,NetworkManager networkManager) {
+    public void config(String username, String password, NetworkManager networkManager) {
         this.username = username;
         this.password = password;
         this.networkManager = networkManager;
