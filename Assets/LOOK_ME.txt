@@ -1,0 +1,4 @@
+https://kenney.nl/assets?s=cards
+https://opengameart.org/content/casino-pack
+https://opengameart.org/content/poker-chips
+https://github.com/ginuerzh/poker/tree/master/Poker/assets/2x
