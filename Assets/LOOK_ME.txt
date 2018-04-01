@@ -2,5 +2,6 @@ https://kenney.nl/assets?s=cards
 https://opengameart.org/content/casino-pack
 https://opengameart.org/content/poker-chips
 https://github.com/ginuerzh/poker/tree/master/Poker/assets/2x
+https://github.com/hayeah/playing-cards-assets/tree/master/png
 GUIDELINES:
 http://www.conceptarthouse.com/news/2015/9/25/hit-the-jackpot-casino-game-art-explained
