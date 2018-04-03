@@ -48,6 +48,7 @@ public class MainView extends JFrame {
 
         //Es centra la finestra en el centre de la pantalla
         setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2);
+        setExtendedState(JFrame.MAXIMIZED_BOTH); //FULL SCREEN
         setTitle("Casino");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
