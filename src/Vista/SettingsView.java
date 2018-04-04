@@ -38,7 +38,7 @@ public class SettingsView extends JPanel {
         jpExit.add(jpgblExit);
         this.add(jpExit, BorderLayout.SOUTH);
 
-        //Panell que té els botons per accedir a les diferents configuracions
+        //Panell que té els botons per accedir a les diferents opcions
         JPanel jpgblBotons = new JPanel(new GridBagLayout());
 
         c.insets = new Insets(0,0,20,0);
