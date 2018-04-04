@@ -7,9 +7,9 @@ import java.io.Serializable;
  * Obliga a que tots els elements que s'envien tinguin un ID
  */
 
-public abstract class Message implements Serializable{
-    private double ID;
-    public double getID(){
-        return ID;
-    }
+public abstract class Message implements Serializable {
+    
+    public abstract String getContext();
+    public abstract double getID();
+
 }

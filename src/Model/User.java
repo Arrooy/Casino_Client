@@ -9,6 +9,7 @@ public class User extends Message {
 
     /** Defineix el identificador del missatge. Util per quan s'envia amb el networkManager*/
     private final double ID;
+    private final String context;
 
     /** Nom de l'usuari*/
     private String username;
@@ -39,13 +40,15 @@ public class User extends Message {
      * @param name Username del usuari que es vol crear
      * @param password Password del usuari que es vol crear
      */
-    public User(String name, String password) {
+    public User(String name, String password, String context) {
 
         ID = Math.random();
 
         this.username = name;
         this.password = password;
         this.credentialsOk = false;
+
+        this.context = context;
     }
 
     /**
@@ -53,8 +56,10 @@ public class User extends Message {
      * @param username login i identificador de l'usuari (se suposa que no generarà col·lisió)
      * @param password contrassenya necessària per a realitzar el login
      * @param mail correu de contacte de l'usuari
+     * @param context
      */
-    public User(String username, String password, String mail) {
+    public User(String username, String password, String mail, String context) {
+        this.context = context;
 
         coinHistory = new ArrayList<>();
 
@@ -81,6 +86,12 @@ public class User extends Message {
         this.credentialsOk = credentialsOk;
     }
 
+    @Override
+    public String getContext() {
+        return null;
+    }
+
+    @Override
     public double getID() {
         return ID;
     }
