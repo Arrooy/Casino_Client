@@ -1,9 +1,18 @@
 package Vista;
 
+import Controlador.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class LogInView extends JPanel {
+public class LogInView extends View {
+
+    private JButton jbAccept;
+    private JTextField jtfUsername;
+    private JPasswordField jpfPassword;
+    private JCheckBox jcbRememberLogIn;
+    private JButton jbBack;
+
     public LogInView(){
         this.setLayout(new BorderLayout());
 
@@ -13,7 +22,7 @@ public class LogInView extends JPanel {
         //Marges
         c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
-        JButton jbBack = new JButton("BACK");
+        jbBack = new JButton("BACK");
         jbBack.setFocusable(false);
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra
@@ -38,8 +47,8 @@ public class LogInView extends JPanel {
         c.insets = new Insets(0,0,20,10);
         JLabel jlName = new JLabel("UserName:");
         JLabel jlPassword = new JLabel("Password:");
-        JRadioButton jrbRememberMe = new JRadioButton("Remember user");
-        jrbRememberMe.setFocusable(false);
+        jcbRememberLogIn = new JCheckBox("Remember user");
+        jcbRememberLogIn.setFocusable(false);
 
         //S'afegeixen les etiquetes
         c.gridy = 0;
@@ -51,11 +60,11 @@ public class LogInView extends JPanel {
         c.gridy = 2;
         c.gridx = 1;
         c.insets = new Insets(0,0,0,0);
-        jpgblInfo.add(jrbRememberMe, c);
+        jpgblInfo.add(jcbRememberLogIn, c);
 
         //S'afegeixen els camps per omplir
-        JTextField jtfName = new JTextField();
-        JPasswordField jpfPassword = new JPasswordField();
+        jtfUsername = new JTextField();
+        jpfPassword = new JPasswordField();
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
@@ -63,13 +72,13 @@ public class LogInView extends JPanel {
         c.ipadx = 200;
         c.gridwidth = 2;
 
-        jpgblInfo.add(jtfName, c);
+        jpgblInfo.add(jtfUsername, c);
 
         c.gridy = 1;
         jpgblInfo.add(jpfPassword, c);
 
         //S'afegeix el botó per acceptar la info introduida
-        JButton jbAccept = new JButton("Accept");
+        jbAccept = new JButton("Accept");
         jbAccept.setFocusable(false);
 
         c.gridy = 3;
@@ -82,4 +91,44 @@ public class LogInView extends JPanel {
         this.add(jpgblInfo, BorderLayout.CENTER);
 
     }
+
+    @Override
+    public void addController(Controller c) {
+        //private JButton jbAccept;
+        jbAccept.setActionCommand("logIn");
+        jbAccept.addActionListener(c);
+
+        jbBack.setActionCommand("backToMain");
+        jbBack.addActionListener(c);
+    }
+
+    /** Obra una finestra indicant un error*/
+    public void displayError(String title,String errorText) {
+        JOptionPane.showMessageDialog(this,title,errorText,JOptionPane.ERROR_MESSAGE);
+    }
+
+    public boolean displayQuestion(String message) {
+        //Retorna true si
+        //Retorn false no
+        return JOptionPane.showConfirmDialog(this,message,"Are you sure?",JOptionPane.YES_NO_OPTION) == 0;
+    }
+
+    public void clearFields() {
+        jpfPassword.setText("");
+        jtfUsername.setText("");
+        jcbRememberLogIn.setSelected(false);
+    }
+
+    public String getUsername() {
+        return jtfUsername.getText();
+    }
+
+    public String getPassword() {
+        return String.valueOf(jpfPassword.getPassword());
+    }
+
+    public boolean getRememberLogIn() {
+        return jcbRememberLogIn.isSelected();
+    }
+
 }

@@ -1,8 +1,7 @@
 package Controlador;
 
-import Vista.MainView;
+import Vista.*;
 import Network.*;
-import Vista.Tray;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,20 +13,22 @@ import java.awt.event.WindowListener;
 public class Controller implements ActionListener, WindowListener {
 
     /** Finestra grafica del client*/
-    private MainView view;
+    private Finestra finestra;
+    private MainViewClient mainView;
+    private LogInView logInView;
 
     /** Responsable de la connectivitat amb el servidor*/
     private NetworkManager networkManager;
 
     /** Inicialitza un nou controlador i realitza les relacions amb la vista i el gestor de la connectivitat*/
-    public Controller(MainView view, NetworkManager networkManager) {
-        this.view = view;
+    public Controller(Finestra finestra, NetworkManager networkManager) {
         this.networkManager = networkManager;
+        this.finestra = finestra;
     }
 
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
     public void displayError(String title, String errorText){
-        view.displayError(title,errorText);
+        mainView.displayError(title,errorText);
     }
 
     /** Metode per a tencar el client de forma segura.*/
@@ -39,15 +40,22 @@ public class Controller implements ActionListener, WindowListener {
 
     /** Retorna l'estat de la JCheckBox RememberLogIn inidcant doncs si s'ha de guardar localment el login del usuari*/
     public boolean rememberLogIn(){
-        return view.getRememberLogIn();
+        return (logInView != null) && logInView.getRememberLogIn();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()){
+            case "goToLogIn":
+                finestra.setLogInView();
+                break;
+            case "backToMain":
+                logInView.clearFields();
+                finestra.setMainView();
+                break;
             case "logIn":
                 //S'intenta fer logIn al servidor amb les credencials introduides
-                networkManager.logIn(view.getUsername(),view.getPassword());
+                networkManager.logIn(logInView.getUsername(), logInView.getPassword());
                 break;
             case "logOut":
                 //S'intenta desconectar-se del servidor
@@ -58,6 +66,16 @@ public class Controller implements ActionListener, WindowListener {
                 break;
         }
     }
+
+    public void setMainView(MainViewClient mainView) {
+        this.mainView = mainView;
+    }
+
+    public void setLogInView(LogInView logInView) {
+        this.logInView = logInView;
+    }
+
+
 
     @Override
     public void windowOpened(WindowEvent e) {

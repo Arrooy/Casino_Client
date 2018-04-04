@@ -1,15 +1,26 @@
 package Vista;
 
+import Controlador.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class MainViewClient extends JPanel{
+public class MainViewClient extends View{
+
+    private JButton logInButton;
+    private JButton logOutButton;
+    private JButton jbSignIn;
+    private JButton jbGuest;
+
+    /**
+     *  Crea la vista del client amb una amplada i una alçada determinades per width i height
+     */
     public MainViewClient(){
         this.setLayout(new BorderLayout());
 
-        JButton jbExit = new JButton("EXIT");
-        jbExit.setFocusable(false);
-        jbExit.setPreferredSize(new Dimension(150,30));
+        logOutButton = new JButton("EXIT");
+        logOutButton.setFocusable(false);
+        logOutButton.setPreferredSize(new Dimension(150,30));
 
         //Panell per col·locar el botó exit a la part baixa a l'esquerra
         JPanel jpgblExit = new JPanel(new GridBagLayout());
@@ -17,7 +28,7 @@ public class MainViewClient extends JPanel{
         //Marges
         c.insets = new Insets(0,20,20,0);
         c.fill = GridBagConstraints.BOTH;
-        jpgblExit.add(jbExit, c);
+        jpgblExit.add(logOutButton, c);
         JPanel jpExit = new JPanel(new FlowLayout(FlowLayout.LEFT));
         jpExit.add(jpgblExit);
         this.add(jpExit, BorderLayout.SOUTH);
@@ -30,20 +41,20 @@ public class MainViewClient extends JPanel{
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
 
-        JButton jbLogIn = new JButton("LOGIN");
-        jbLogIn.setFocusable(false);
-        jbLogIn.setPreferredSize(new Dimension(150,30));
-        JButton jbSingIn = new JButton("SINGIN");
-        jbSingIn.setFocusable(false);
-        jbSingIn.setPreferredSize(new Dimension(150,30));
-        JButton jbGuest = new JButton("GUEST");
+        logInButton = new JButton("LOGIN");
+        logInButton.setFocusable(false);
+        logInButton.setPreferredSize(new Dimension(150,30));
+        jbSignIn = new JButton("SINGIN");
+        jbSignIn.setFocusable(false);
+        jbSignIn.setPreferredSize(new Dimension(150,30));
+        jbGuest = new JButton("GUEST");
         jbGuest.setFocusable(false);
         jbGuest.setPreferredSize(new Dimension(150,30));
 
-        jpgblBotons.add(jbLogIn, c);
+        jpgblBotons.add(logInButton, c);
 
         c.gridy = 1;
-        jpgblBotons.add(jbSingIn, c);
+        jpgblBotons.add(jbSignIn, c);
 
         c.gridy = 2;
         c.insets = new Insets(0,0,0,0);
@@ -51,4 +62,42 @@ public class MainViewClient extends JPanel{
 
         this.add(jpgblBotons, BorderLayout.CENTER);
     }
+
+    /** Afegeix el controlador del programa a la vista*/
+    @Override
+    public void addController(Controller c){
+        //Tray.addController(c);
+
+        //Tenen el mateix actionCommand perque les dues accions resulten en el mateix
+        logInButton.setActionCommand("goToLogIn");
+        logInButton.addActionListener(c);
+
+        logOutButton.setActionCommand("logOut");
+        logOutButton.addActionListener(c);
+
+        //addWindowListener(c);
+    }
+
+    /** Obra una finestra indicant un error*/
+    public void displayError(String title,String errorText) {
+        JOptionPane.showMessageDialog(this,title,errorText,JOptionPane.ERROR_MESSAGE);
+    }
+
+    public boolean displayQuestion(String message) {
+        //Retorna true si
+        //Retorn false no
+        return JOptionPane.showConfirmDialog(this,message,"Are you sure?",JOptionPane.YES_NO_OPTION) == 0;
+    }
+
+    /*public String getUsername() {
+        return jtfUsername.getText();
+    }*/
+
+    /*public String getPassword() {
+        return String.valueOf(jpfPassword.getPassword());
+    }*/
+
+    /*public boolean getRememberLogIn() {
+        return jcbRememberLogIn.isSelected();
+    }*/
 }
