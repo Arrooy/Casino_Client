@@ -27,18 +27,22 @@ public class LogInManager implements Runnable {
         try {
 
             //Enviem l'usuari per intentar accedir al sistema amb les creedencials introduides
-            User UsuariIntent = new User(username,password);
+            User usuariIntent = new User(username,password);
             //Set online indica al servidor que el paquet que rebrá no correspon a una desconexio d'un usuari
-            UsuariIntent.setOnline(true);
-            networkManager.send(UsuariIntent);
+            usuariIntent.setOnline(true);
+            networkManager.send(usuariIntent);
+            System.out.println("Evniant solicituds");
 
             //Esperem a una resposta del servidor
-            User responseUser = waitLogInResponse(UsuariIntent);
+            User responseUser = waitLogInResponse(usuariIntent);
 
             //Si la resposta del servidor indica que tot es correcte. Es completa el logIn
             if(responseUser.areCredentialsOk()){
                 finishLogIn(responseUser);
+                System.out.println("perf");
+                networkManager.displayError("Usuari - Contrasenya correcte!","Ets el puto amo, fesme un fill tete\nNOTA PROGRAMADOR VISTA: cundiria ficar aquesta alerta a la vista!!!!!");
             }else {
+                System.out.println("mal rollo tete");
                 //De lo contari, s'indica al usuari que s'ha equivocat
                 networkManager.displayError("Usuari - Contrasenya incorrecte!","Torna a intentar-ho pls\nNOTA PROGRAMADOR VISTA: cundiria ficar aquesta alerta a la vista!!!!!");
             }

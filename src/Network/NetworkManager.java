@@ -184,6 +184,8 @@ public class NetworkManager extends Thread {
     public void send(Object objectToSend){
         try {
             oos.writeObject(objectToSend);
+            User u = (User) objectToSend;
+            System.out.println(u.getUsername());
         } catch (IOException e) {
             System.out.println("IMPOSSIBLE ENVIAR MISSATGE!\n\n");
             e.printStackTrace();

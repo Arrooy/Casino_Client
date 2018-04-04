@@ -5,6 +5,9 @@ import Controlador.Controller;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @deprecated
+ */
 public class MainView extends JFrame {
 
     private JButton logInButton;
