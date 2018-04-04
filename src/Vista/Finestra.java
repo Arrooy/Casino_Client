@@ -16,6 +16,7 @@ public class Finestra extends JFrame {
         //TODO: Configurar accions byDefault de manera correcte
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(500, 720);
+        setExtendedState(JFrame.MAXIMIZED_BOTH); //FULL SCREEN
 
         layout = new CardLayout();
         getContentPane().setLayout(layout);

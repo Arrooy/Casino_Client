@@ -107,4 +107,8 @@ public class Controller implements ActionListener, WindowListener {
     @Override
     public void windowDeactivated(WindowEvent e) {
     }
+
+    public void showGamesView() {
+        finestra.setGamesView();
+    }
 }

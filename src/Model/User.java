@@ -9,7 +9,7 @@ public class User extends Message {
 
     /** Defineix el identificador del missatge. Util per quan s'envia amb el networkManager*/
     private final double ID;
-    private final String context;
+    private String context;
 
     /** Nom de l'usuari*/
     private String username;
@@ -88,7 +88,7 @@ public class User extends Message {
 
     @Override
     public String getContext() {
-        return null;
+        return context;
     }
 
     @Override
@@ -142,5 +142,14 @@ public class User extends Message {
 
     public void setOnline(boolean online) {
         this.online = online;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuari:\n\tUsername: " + username + "\n\tPassword: " + password + "\n\tID: " + ID;
     }
 }

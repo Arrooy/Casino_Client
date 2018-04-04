@@ -43,7 +43,7 @@ public class NetworkManager extends Thread {
     private ArrayList<Message> lectures;
 
     /** logInManager per a l'inici de sesio*/
-    private Transmission logInManager;
+    //private Transmission logInManager;
 
     /** Indica si s'ha de fer LogIn automatic amb les dades locals*/
     private boolean autoLogin;
@@ -53,7 +53,7 @@ public class NetworkManager extends Thread {
 
     /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.*/
     public NetworkManager() {
-        logInManager = new Transmission(this);
+       // logInManager = new Transmission(null, this);
         lectures = new ArrayList<>();
 
         Object[] configuracio = JsonManager.llegirJson("IpServidor", "PortServidor",JsonManager.BOOLEAN_R);
@@ -75,7 +75,8 @@ public class NetworkManager extends Thread {
         }
 
         //Configurem el logInManager i l'iniciem
-        logInManager.config((String)credentials[0],(String)credentials[1],this);
+        Transmission logInManager = new Transmission( this);
+        logInManager.config((String)credentials[0],(String)credentials[1], Transmission.CONTEXT_LOGIN,this);
         (new Thread(logInManager)).start();
     }
 
@@ -83,6 +84,7 @@ public class NetworkManager extends Thread {
     public void requestLogOut(){
         if(user != null) {
             user.setOnline(false);
+            user.setContext(Transmission.CONTEXT_LOGOUT);
             send(user);
         }else
             logOut();
@@ -112,9 +114,11 @@ public class NetworkManager extends Thread {
                 //es guarden en la llista de lectures.
                 try {
                     Message missatge = (Message) ois.readObject();
+
                     //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
                     if(ServidorVolDesconnectarAquestClient(missatge))
                         continue;
+
                     lectures.add(missatge);
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -185,7 +189,7 @@ public class NetworkManager extends Thread {
         try {
             oos.writeObject(objectToSend);
             User u = (User) objectToSend;
-            System.out.println(u.getUsername());
+            System.out.println(u);
         } catch (IOException e) {
             System.out.println("IMPOSSIBLE ENVIAR MISSATGE!\n\n");
             e.printStackTrace();
@@ -227,5 +231,9 @@ public class NetworkManager extends Thread {
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
     public void displayError(String title, String errorText){
         controller.displayError(title,errorText);
+    }
+
+    public void enterToGames() {
+        controller.showGamesView();
     }
 }

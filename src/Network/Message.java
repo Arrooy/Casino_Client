@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 
 public abstract class Message implements Serializable {
-    
+
     public abstract String getContext();
     public abstract double getID();
 
