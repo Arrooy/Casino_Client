@@ -5,21 +5,22 @@ import Model.User;
 
 import static java.lang.Thread.sleep;
 
-/** LogInManager gesiona el process de logIn del sistema*/
+/** Transmission gesiona el process de logIn del sistema*/
 
-public class LogInManager implements Runnable {
+public class Transmission implements Runnable {
 
     /** Nom del usuari que vol fer logIn*/
-    private String username;
+//    private String username;
 
     /** Password del usuari que vol fer logIn*/
-    private String password;
+//    private String password;
 
     /** Referencia al networkManager per a poder enviar dades al servidor*/
     private NetworkManager networkManager;
 
-    public LogInManager(NetworkManager networkManager){
+    public Transmission(NetworkManager networkManager, String context){
         this.networkManager = networkManager;
+
     }
 
     @Override
@@ -27,7 +28,7 @@ public class LogInManager implements Runnable {
         try {
 
             //Enviem l'usuari per intentar accedir al sistema amb les creedencials introduides
-            User usuariIntent = new User(username,password);
+            User usuariIntent = new User(username,password, "");
             //Set online indica al servidor que el paquet que rebrá no correspon a una desconexio d'un usuari
             usuariIntent.setOnline(true);
             networkManager.send(usuariIntent);

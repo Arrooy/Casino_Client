@@ -10,6 +10,7 @@ public class Finestra extends JFrame {
     private CardLayout layout;
     private MainViewClient mainView;
     private LogInView logInView;
+    private GamesView gamesView;
 
     public Finestra() {
         //TODO: Configurar accions byDefault de manera correcte
@@ -21,14 +22,17 @@ public class Finestra extends JFrame {
 
         mainView = new MainViewClient();
         logInView = new LogInView();
+        gamesView = new GamesView();
 
         add("main", mainView);
         add("logIn", logInView);
+        add("games", gamesView);
     }
 
     public void addController(Controller c) {
         mainView.addController(c);
         logInView.addController(c);
+        //TODO: controler del games view
 
         c.setMainView(mainView);
         c.setLogInView(logInView);
@@ -40,5 +44,9 @@ public class Finestra extends JFrame {
 
     public void setLogInView() {
         layout.show(getContentPane(), "logIn");
+    }
+
+    public void setGamesView() {
+        layout.show(getContentPane(), "games");
     }
 }
