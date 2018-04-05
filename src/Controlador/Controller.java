@@ -76,8 +76,6 @@ public class Controller implements ActionListener, WindowListener {
         this.logInView = logInView;
     }
 
-
-
     @Override
     public void windowOpened(WindowEvent e) {
     }
