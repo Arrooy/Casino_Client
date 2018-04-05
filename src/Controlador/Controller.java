@@ -91,7 +91,8 @@ public class Controller implements ActionListener, WindowListener {
                 finestra.setSignInView();
                 break;
             case "acceptSignIn":
-                signUp();
+                if (signInView.passwordIsCorrect()) signUp();
+                else ;//TODO: mostra error informatiu
                 break;
         }
     }

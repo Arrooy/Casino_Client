@@ -125,6 +125,10 @@ public class SignInView extends View {
         return String.valueOf(jpfPassword.getPassword());
     }
 
+    public String getConfirmation() {
+        return String.valueOf(jpfConfirmPassword.getPassword());
+    }
+
     public String getMail() {
         return jtfEmail.getText();
     }
@@ -133,5 +137,9 @@ public class SignInView extends View {
         jtfName.setText("");
         jtfEmail.setText("");
         jpfPassword.setText("");
+    }
+
+    public boolean passwordIsCorrect() {
+        return getPassword().equals(getConfirmation());
     }
 }
