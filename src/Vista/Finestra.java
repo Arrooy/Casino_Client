@@ -10,7 +10,7 @@ public class Finestra extends JFrame {
     private CardLayout layout;
     private MainViewClient mainView;
     private LogInView logInView;
-    private GamesView gamesView;
+    private GameSelector gameSelector;
     private SignInView signInView;
     private SettingsView settingsView;
 
@@ -29,15 +29,16 @@ public class Finestra extends JFrame {
 
         mainView = new MainViewClient();
         logInView = new LogInView();
-        gamesView = new GamesView();
+        gameSelector = new GameSelector();
         signInView = new SignInView();
         settingsView = new SettingsView();
 
         add("main", mainView);
         add("logIn", logInView);
-        add("games", gamesView);
+        add("gameSelector", gameSelector);
         add("signIn", signInView);
         add("settings", settingsView);
+        //add("blackJack", );
     }
 
     /*
@@ -56,10 +57,15 @@ public class Finestra extends JFrame {
 
         mainView.addController(c);
         logInView.addController(c);
-        //TODO: controler del games view
+        gameSelector.addController(c);
+        signInView.addController(c);
+        settingsView.addController(c);
 
         c.setMainView(mainView);
         c.setLogInView(logInView);
+        c.setSignInView(signInView);
+        c.setSettingsView(settingsView);
+        c.setGameSelector(gameSelector);
 
         addWindowListener(c);
     }
@@ -72,8 +78,8 @@ public class Finestra extends JFrame {
         layout.show(getContentPane(), "logIn");
     }
 
-    public void setGamesView() {
-        layout.show(getContentPane(), "games");
+    public void setGameSelector() {
+        layout.show(getContentPane(), "gameSelector");
     }
 
     public void setSignInView() {
@@ -82,5 +88,9 @@ public class Finestra extends JFrame {
 
     public void setSettingsView() {
         layout.show(getContentPane(), "settings");
+    }
+
+    public void setBlackJackView() {
+        layout.show(getContentPane(), "blackJack");
     }
 }

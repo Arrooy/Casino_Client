@@ -2,7 +2,6 @@ package Model;
 import Controlador.Controller;
 import Network.*;
 import Vista.Finestra;
-import Vista.MainViewClient;
 
 public class Casino_Client {
     public static void main(String[] args) {
@@ -11,8 +10,6 @@ public class Casino_Client {
         //MainViewClient view = new MainViewClient();
 
         Finestra finestra = new Finestra();
-
-        MainViewClient mainView = new MainViewClient();
 
         //Es defineix el gestor de connectivitat amb el servidor
         NetworkManager networkManager = new NetworkManager();

@@ -16,6 +16,9 @@ public class Controller implements ActionListener, WindowListener {
     private Finestra finestra;
     private MainViewClient mainView;
     private LogInView logInView;
+    private SignInView signInView;
+    private GameSelector gameSelector;
+    private SettingsView settingsView;
 
     /** Responsable de la connectivitat amb el servidor*/
     private NetworkManager networkManager;
@@ -62,6 +65,22 @@ public class Controller implements ActionListener, WindowListener {
                 //S'intenta desconectar-se del servidor
                 networkManager.requestLogOut();
                 break;
+            case "settings":
+                finestra.setSettingsView();
+                break;
+            case "signIn":
+                finestra.setSignInView();
+                break;
+            case "guest":
+                displayError("YOW! ETS INVITADO","Molt guay :D");
+                break;
+            case "roulette":
+                finestra.setBlackJackView();
+                break;
+            case "horse":
+                break;
+            case "blackJack":
+                break;
             case "trayButtonExit":
                 exitProgram(0);
                 break;
@@ -71,10 +90,12 @@ public class Controller implements ActionListener, WindowListener {
     public void setMainView(MainViewClient mainView) {
         this.mainView = mainView;
     }
-
     public void setLogInView(LogInView logInView) {
         this.logInView = logInView;
     }
+    public void setSignInView(SignInView signInView) {this.signInView = signInView;}
+    public void setGameSelector(GameSelector gameSelector) {this.gameSelector = gameSelector;}
+    public void setSettingsView(SettingsView settingsView) {this.settingsView = settingsView;}
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -104,6 +125,6 @@ public class Controller implements ActionListener, WindowListener {
     }
 
     public void showGamesView() {
-        finestra.setGamesView();
+        finestra.setGameSelector();
     }
 }

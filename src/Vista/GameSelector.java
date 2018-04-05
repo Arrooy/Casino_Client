@@ -5,7 +5,7 @@ import Controlador.Controller;
 import javax.swing.*;
 import java.awt.*;
 
-public class GamesView extends View {
+public class GameSelector extends View {
 
     private JButton jbSettings;
     private JButton jbLogOut;
@@ -13,7 +13,7 @@ public class GamesView extends View {
     private JButton jbBlackJack;
     private JButton jbRoulette;
 
-    public GamesView(){
+    public GameSelector(){
 
         this.setLayout(new BorderLayout());
 

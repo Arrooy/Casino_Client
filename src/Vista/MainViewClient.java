@@ -75,6 +75,12 @@ public class MainViewClient extends View{
 
         logOutButton.setActionCommand("logOut");
         logOutButton.addActionListener(c);
+
+        jbSignIn.setActionCommand("signIn");
+        jbSignIn.addActionListener(c);
+
+        jbGuest.setActionCommand("guest");
+        jbGuest.addActionListener(c);
     }
 
     /** Obra una finestra indicant un error*/

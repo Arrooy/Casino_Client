@@ -1,9 +1,11 @@
 package Vista;
 
+import Controlador.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class SignInView extends JPanel {
+public class SignInView extends View {
     public SignInView(){
         this.setLayout(new BorderLayout());
 
@@ -90,5 +92,10 @@ public class SignInView extends JPanel {
         jpgblInfo.add(jbAccept, c);
 
         this.add(jpgblInfo, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void addController(Controller c) {
+
     }
 }
