@@ -11,12 +11,7 @@ public class Transmission implements Runnable {
 
     public static final String CONTEXT_LOGIN = "login";
     public static final String CONTEXT_LOGOUT = "logout";
-
-    /** Nom del usuari que vol fer logIn*/
-//    private String username;
-
-    /** Password del usuari que vol fer logIn*/
-//    private String password;
+    public static final String CONTEXT_SIGNUP = "signup";
 
     private Message msg;
     private String context;
@@ -28,6 +23,8 @@ public class Transmission implements Runnable {
         this.networkManager = networkManager;
         this.msg = msg;
         this.context = msg.getContext();
+
+        (new Thread(this)).start();
     }
 
     public Transmission(NetworkManager networkManager) {
@@ -46,8 +43,12 @@ public class Transmission implements Runnable {
                 break;
             default:
         }
+
     }
 
+    /**
+     * login o logout
+     */
     private void updateConnection() {
         try {
             //Enviem l'usuari per intentar accedir al sistema amb les creedencials introduides
@@ -64,8 +65,6 @@ public class Transmission implements Runnable {
             if(responseUser.areCredentialsOk()){
                 finishLogIn(responseUser);
 
-                networkManager.enterToGames();
-
                 //TODO: que algu fagi algo amb aixo per a que no quedi com el cul
                 networkManager.displayError("Usuari - Contrasenya correcte!","Ets el puto amo, fesme un fill tete\nNOTA PROGRAMADOR VISTA: cundiria ficar aquesta alerta a la vista!!!!!");
             }else {
@@ -81,6 +80,7 @@ public class Transmission implements Runnable {
     /** Prepara un missatge per a transmetre*/
     public void config(String username, String password, String context, NetworkManager networkManager) {
         this.networkManager = networkManager;
+
         msg = new User(username, password, context);
         this.context = context;
     }
@@ -113,5 +113,7 @@ public class Transmission implements Runnable {
             //El borrem del json si existeix
             JsonManager.removeRemember();
         }
+
+        networkManager.enterToGames();
     }
 }

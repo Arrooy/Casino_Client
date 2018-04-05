@@ -6,6 +6,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SignInView extends View {
+
+    private JButton jbBack;
+    private JTextField jtfName;
+    private JTextField jtfEmail;
+    private JPasswordField jpfPassword;
+    private JPasswordField jpfConfirmPassword;
+    private JButton jbAccept;
+
     public SignInView(){
         this.setLayout(new BorderLayout());
 
@@ -15,7 +23,7 @@ public class SignInView extends View {
         //Marges
         c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
-        JButton jbBack = new JButton("BACK");
+        jbBack = new JButton("BACK");
         jbBack.setFocusable(false);
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra
@@ -57,10 +65,10 @@ public class SignInView extends View {
         jpgblInfo.add(jlConfirmPassword, c);
 
         //S'afegeixen els camps per omplir
-        JTextField jtfName = new JTextField();
-        JTextField jtfEmail = new JTextField();
-        JPasswordField jpfPassword = new JPasswordField();
-        JPasswordField jpfConfirmPassword = new JPasswordField();
+        jtfName = new JTextField();
+        jtfEmail = new JTextField();
+        jpfPassword = new JPasswordField();
+        jpfConfirmPassword = new JPasswordField();
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
@@ -81,7 +89,7 @@ public class SignInView extends View {
         jpgblInfo.add(jpfConfirmPassword, c);
 
         //S'afegeix el botó per acceptar la info introduida
-        JButton jbAccept = new JButton("Accept");
+        jbAccept = new JButton("Accept");
         jbAccept.setFocusable(false);
 
         c.gridy = 4;
@@ -96,6 +104,17 @@ public class SignInView extends View {
 
     @Override
     public void addController(Controller c) {
+        jbBack.setActionCommand("backToMain");
+        jbBack.addActionListener(c);
 
+        //private JTextField jtfName;
+        //private JTextField jtfEmail;
+        //private JPasswordField jpfPassword
+        //private JPasswordField jpfConfirmPassword;
+
+        jbAccept.setActionCommand("acceptSignIn");
+        jbAccept.addActionListener(c);
     }
+
+
 }

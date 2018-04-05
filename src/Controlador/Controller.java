@@ -1,5 +1,6 @@
 package Controlador;
 
+import Model.User;
 import Vista.*;
 import Network.*;
 
@@ -84,7 +85,17 @@ public class Controller implements ActionListener, WindowListener {
             case "trayButtonExit":
                 exitProgram(0);
                 break;
+            case "goSignIn":
+                finestra.setSignInView();
+                break;
+            case "acceptSignIn":
+                signUp();
+                break;
         }
+    }
+
+    private void signUp() {
+        User user = finestra.getSignUpUser();
     }
 
     public void setMainView(MainViewClient mainView) {

@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.Controller;
+import Model.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -88,6 +89,14 @@ public class Finestra extends JFrame {
 
     public void setSettingsView() {
         layout.show(getContentPane(), "settings");
+    }
+
+    public User getSignUpUser() {
+        User user = new User(signInView.getUsername(), signInView.getPassword(), signInView.getMail(), "");
+
+
+
+        return user;
     }
 
     public void setBlackJackView() {

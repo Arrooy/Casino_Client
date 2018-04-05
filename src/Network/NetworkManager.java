@@ -188,8 +188,8 @@ public class NetworkManager extends Thread {
     public void send(Object objectToSend){
         try {
             oos.writeObject(objectToSend);
-            User u = (User) objectToSend;
-            System.out.println(u);
+            //User u = (User) objectToSend;
+            //System.out.println(u);
         } catch (IOException e) {
             System.out.println("IMPOSSIBLE ENVIAR MISSATGE!\n\n");
             e.printStackTrace();
@@ -205,7 +205,7 @@ public class NetworkManager extends Thread {
      */
     public Object read(double ID){
         //Es miren tots els missatges registrats fins el moment
-        for(Message message : lectures){
+        for(Message message: lectures){
             //Si el missatge de l'iteracio conte l'id que es buscava, es retorna l'objecte.
             if(message.getID() == ID) {
                 lectures.remove(message);
@@ -235,5 +235,9 @@ public class NetworkManager extends Thread {
 
     public void enterToGames() {
         controller.showGamesView();
+    }
+
+    public Controller getController() {
+        return controller;
     }
 }

@@ -68,8 +68,13 @@ public class MainViewClient extends View{
     @Override
     public void addController(Controller c){
 
+        jbSignIn.setActionCommand("goSignIn");
+        jbSignIn.addActionListener(c);
 
-        //Tenen el mateix actionCommand perque les dues accions resulten en el mateix
+        jbGuest.setActionCommand("enterAsGuest");
+        jbGuest.addActionListener(c);
+
+        //Tenen el mateix actionCommand perque les dues accions resulten en el mateix - wtf?
         logInButton.setActionCommand("goToLogIn");
         logInButton.addActionListener(c);
 
