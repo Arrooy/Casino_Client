@@ -3,6 +3,7 @@ package Vista;
 import Controlador.Controller;
 import Model.User;
 import Network.Transmission;
+import Vista.GameViews.BlackJackView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,7 @@ public class Finestra extends JFrame {
     private GameSelectorView gameSelectorView;
     private SignInView signInView;
     private SettingsView settingsView;
+    private BlackJackView blackJackView;
 
     public Finestra() {
 
@@ -34,13 +36,14 @@ public class Finestra extends JFrame {
         gameSelectorView = new GameSelectorView();
         signInView = new SignInView();
         settingsView = new SettingsView();
+        blackJackView = new BlackJackView();
 
         add("main", mainView);
         add("logIn", logInView);
         add("gameSelectorView", gameSelectorView);
         add("signIn", signInView);
         add("settings", settingsView);
-        //add("blackJack", );
+        add("blackJack", blackJackView);
     }
 
     /*
