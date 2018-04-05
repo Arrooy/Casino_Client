@@ -32,6 +32,11 @@ public class Transmission implements Runnable {
 
         switch (context) {
             case CONTEXT_LOGIN:
+                if (!updateConnection()) {
+                    networkManager.setLoginErrorMessage("⋙ Error, dades incorrectes");
+                }
+                break;
+            case CONTEXT_SIGNUP:
                 updateConnection();
                 break;
             case CONTEXT_LOGOUT:
@@ -45,7 +50,7 @@ public class Transmission implements Runnable {
     /**
      * login o logout
      */
-    private void updateConnection() {
+    private boolean updateConnection() {
         try {
             //Enviem l'usuari per intentar accedir al sistema amb les creedencials introduides
             User usuariIntent = (User) msg;
@@ -62,13 +67,18 @@ public class Transmission implements Runnable {
                 finishLogIn(responseUser);
 
                 //TODO: que algu fagi algo amb aixo per a que no quedi com el cul
-                networkManager.displayError("Usuari - Contrasenya correcte!","Ets el puto amo, fesme un fill tete\nNOTA PROGRAMADOR VISTA: cundiria ficar aquesta alerta a la vista!!!!!");
-            }else {
+                //networkManager.displayError("Usuari - Contrasenya correcte!","Ets el puto amo, fesme un fill tete\nNOTA PROGRAMADOR VISTA: cundiria ficar aquesta alerta a la vista!!!!!");
+
+                return true;
+            } else {
                 //De lo contari, s'indica al usuari que s'ha equivocat
-                networkManager.displayError("Usuari - Contrasenya incorrecte!","Torna a intentar-ho pls\nNOTA PROGRAMADOR VISTA: cundiria ficar aquesta alerta a la vista!!!!!");
+                //networkManager.displayError("Usuari - Contrasenya incorrecte!","Torna a intentar-ho pls\nNOTA PROGRAMADOR VISTA: cundiria ficar aquesta alerta a la vista!!!!!");
+
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 

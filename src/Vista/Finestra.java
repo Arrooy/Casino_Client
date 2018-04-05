@@ -2,6 +2,7 @@ package Vista;
 
 import Controlador.Controller;
 import Model.User;
+import Network.Transmission;
 
 import javax.swing.*;
 import java.awt.*;
@@ -92,14 +93,18 @@ public class Finestra extends JFrame {
     }
 
     public User getSignUpUser() {
-        User user = new User(signInView.getUsername(), signInView.getPassword(), signInView.getMail(), "");
-
-
-
-        return user;
+        return new User(signInView.getUsername(), signInView.getPassword(), signInView.getMail(), Transmission.CONTEXT_SIGNUP);
     }
 
     public void setBlackJackView() {
         layout.show(getContentPane(), "blackJack");
+    }
+
+    public LogInView getLogInView() {
+        return logInView;
+    }
+
+    public SignInView getSignInView() {
+        return signInView;
     }
 }

@@ -55,6 +55,7 @@ public class Controller implements ActionListener, WindowListener {
                 break;
             case "backToMain":
                 logInView.clearFields();
+                signInView.clearFields();
                 finestra.setMainView();
                 break;
             case "logIn":
@@ -96,7 +97,7 @@ public class Controller implements ActionListener, WindowListener {
     }
 
     private void signUp() {
-        User user = finestra.getSignUpUser();
+        networkManager.requestSignUp(finestra.getSignUpUser());
     }
 
     public void setMainView(MainViewClient mainView) {
@@ -138,5 +139,9 @@ public class Controller implements ActionListener, WindowListener {
 
     public void showGamesView() {
         finestra.setGameSelector();
+    }
+
+    public void showErrorLogIn(String s) {
+        logInView.setError(s);
     }
 }

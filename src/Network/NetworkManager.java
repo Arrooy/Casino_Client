@@ -236,4 +236,14 @@ public class NetworkManager extends Thread {
     public Controller getController() {
         return controller;
     }
+
+    /**
+     * Envia al servidor una petició de SignUp per a un usuari concret
+     * @param user
+     */
+    public void requestSignUp(User user) {
+        new Transmission(user, this);
+    }
+
+    public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
 }

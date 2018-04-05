@@ -117,4 +117,21 @@ public class SignInView extends View {
     }
 
 
+    public String getUsername() {
+        return jtfName.getText();
+    }
+
+    public String getPassword() {
+        return String.valueOf(jpfPassword.getPassword());
+    }
+
+    public String getMail() {
+        return jtfEmail.getText();
+    }
+
+    public void clearFields() {
+        jtfName.setText("");
+        jtfEmail.setText("");
+        jpfPassword.setText("");
+    }
 }

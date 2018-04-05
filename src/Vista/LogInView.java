@@ -14,8 +14,20 @@ public class LogInView extends View {
     private JButton jbBack;
     private final static char PASSWORD_CHAR = '☭';
 
+    private JLabel errorMessage;
+
+    /**
+     * TODO: acabar de colocar el missatge d'error
+     */
     public LogInView(){
         this.setLayout(new BorderLayout());
+
+        JPanel jpGeneric = new JPanel();
+        jpGeneric.setLayout(new BoxLayout(jpGeneric, BoxLayout.PAGE_AXIS));
+
+        errorMessage = new JLabel("");
+        errorMessage.setHorizontalAlignment(JLabel.CENTER);
+        errorMessage.setForeground(new Color(201, 25, 25));
 
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblBack = new JPanel(new GridBagLayout());
@@ -35,7 +47,7 @@ public class LogInView extends View {
         JPanel jpTitle = new JPanel();
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
         JLabel jlTitle = new JLabel("Log In");
-        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 200));
+        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
 
         //Marges
         c.insets = new Insets(20,0,0,0);
@@ -53,13 +65,13 @@ public class LogInView extends View {
         jcbRememberLogIn.setFocusable(false);
 
         //S'afegeixen les etiquetes
-        c.gridy = 0;
+        c.gridy = 1;
         jpgblInfo.add(jlName, c);
 
-        c.gridy = 1;
+        c.gridy = 2;
         jpgblInfo.add(jlPassword, c);
 
-        c.gridy = 2;
+        c.gridy = 3;
         c.gridx = 1;
         c.insets = new Insets(0,0,0,0);
         jpgblInfo.add(jcbRememberLogIn, c);
@@ -70,29 +82,34 @@ public class LogInView extends View {
         jpfPassword.setEchoChar(PASSWORD_CHAR);
 
         c.insets = new Insets(0,0,20,0);
-        c.gridy = 0;
+        c.gridy = 1;
         c.gridx = 1;
         c.ipadx = 200;
         c.gridwidth = 2;
 
         jpgblInfo.add(jtfUsername, c);
 
-        c.gridy = 1;
+        c.gridy = 2;
         jpgblInfo.add(jpfPassword, c);
 
         //S'afegeix el botó per acceptar la info introduida
         jbAccept = new JButton("Accept");
         jbAccept.setFocusable(false);
 
-        c.gridy = 3;
+        c.gridy = 4;
         c.gridx = 0;
         c.gridwidth = 3;
         c.insets = new Insets(20,0,0,0);
 
         jpgblInfo.add(jbAccept, c);
 
-        this.add(jpgblInfo, BorderLayout.CENTER);
+        jpGeneric.add(jpgblInfo);
+        jpGeneric.add(errorMessage);
+        add(jpGeneric, BorderLayout.CENTER);
+    }
 
+    public void setError(String error) {
+        errorMessage.setText(error);
     }
 
     @Override
@@ -122,6 +139,7 @@ public class LogInView extends View {
         jpfPassword.setText("");
         jtfUsername.setText("");
         jcbRememberLogIn.setSelected(false);
+        errorMessage.setText("");
     }
 
     public String getUsername() {
