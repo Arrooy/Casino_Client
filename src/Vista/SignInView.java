@@ -3,8 +3,8 @@ package Vista;
 import javax.swing.*;
 import java.awt.*;
 
-public class SingInView extends JPanel {
-    public SingInView(){
+public class SignInView extends JPanel {
+    public SignInView(){
         this.setLayout(new BorderLayout());
 
         //Panell per col·locar el botó back a la part baixa a l'esquerra

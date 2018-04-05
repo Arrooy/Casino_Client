@@ -1,9 +1,11 @@
 package Vista;
 
+import Controlador.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class GamesView extends JPanel {
+public class GamesView extends View {
     private JButton jbSettings;
     private JButton jbLogOut;
     private JButton jbHorseRace;
@@ -72,5 +74,24 @@ public class GamesView extends JPanel {
         jpgblBotons.add(jbSettings, c);
 
         this.add(jpgblBotons, BorderLayout.CENTER);
+    }
+
+
+    @Override
+    public void addController(Controller c) {
+        jbSettings.setActionCommand("settings");
+        jbSettings.addActionListener(c);
+
+        jbLogOut.setActionCommand("logOut");
+        jbLogOut.addActionListener(c);
+
+        jbHorseRace.setActionCommand("horse");
+        jbHorseRace.addActionListener(c);
+
+        jbBlackJack.setActionCommand("blackJack");
+        jbBlackJack.addActionListener(c);
+
+        jbRoulette.setActionCommand("roulette");
+        jbRoulette.addActionListener(c);
     }
 }

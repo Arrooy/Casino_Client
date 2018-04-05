@@ -1,13 +1,15 @@
 package Vista;
 
+import Controlador.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class SettingsView extends JPanel {
+public class SettingsView extends View {
     private JButton jbChangePassword;
     private JButton jbBack;
     private JButton jbAddMoney;
-    private JButton jbBalance;
+    private JButton jbWalletEvolution;
 
     public SettingsView(){
         this.setLayout(new BorderLayout());
@@ -50,8 +52,8 @@ public class SettingsView extends JPanel {
         jbChangePassword.setFocusable(false);
         jbAddMoney = new JButton("ADD MONEY");
         jbAddMoney.setFocusable(false);
-        jbBalance = new JButton("BALANCE");
-        jbBalance.setFocusable(false);
+        jbWalletEvolution = new JButton("WALLET EVOLUTION");
+        jbWalletEvolution.setFocusable(false);
 
         jpgblBotons.add(jbChangePassword, c);
 
@@ -60,8 +62,23 @@ public class SettingsView extends JPanel {
 
         c.gridy = 2;
         c.insets = new Insets(0,0,0,0);
-        jpgblBotons.add(jbBalance, c);
+        jpgblBotons.add(jbWalletEvolution, c);
 
         this.add(jpgblBotons, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void addController(Controller c) {
+        jbChangePassword.setActionCommand("changePass");
+        jbChangePassword.addActionListener(c);
+
+        jbBack.setActionCommand("backFromSettings");
+        jbBack.addActionListener(c);
+
+        jbAddMoney.setActionCommand("addMoneyButton");
+        jbAddMoney.addActionListener(c);
+
+        jbWalletEvolution.setActionCommand("walletEvolution");
+        jbWalletEvolution.addActionListener(c);
     }
 }
