@@ -18,7 +18,7 @@ public class Controller implements ActionListener, WindowListener {
     private MainViewClient mainView;
     private LogInView logInView;
     private SignInView signInView;
-    private GameSelector gameSelector;
+    private GameSelectorView gameSelectorView;
     private SettingsView settingsView;
 
     /** Responsable de la connectivitat amb el servidor*/
@@ -65,6 +65,7 @@ public class Controller implements ActionListener, WindowListener {
             case "logOut":
                 //S'intenta desconectar-se del servidor
                 networkManager.requestLogOut();
+                finestra.setMainView();
                 break;
             case "settings":
                 finestra.setSettingsView();
@@ -105,7 +106,7 @@ public class Controller implements ActionListener, WindowListener {
         this.logInView = logInView;
     }
     public void setSignInView(SignInView signInView) {this.signInView = signInView;}
-    public void setGameSelector(GameSelector gameSelector) {this.gameSelector = gameSelector;}
+    public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
     public void setSettingsView(SettingsView settingsView) {this.settingsView = settingsView;}
 
     @Override
