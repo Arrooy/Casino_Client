@@ -12,6 +12,7 @@ public class LogInView extends View {
     private JPasswordField jpfPassword;
     private JCheckBox jcbRememberLogIn;
     private JButton jbBack;
+    private final static char PASSWORD_CHAR = '☭';
 
     public LogInView(){
         this.setLayout(new BorderLayout());
@@ -34,7 +35,8 @@ public class LogInView extends View {
         JPanel jpTitle = new JPanel();
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
         JLabel jlTitle = new JLabel("Log In");
-        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 24));
+        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 200));
+
         //Marges
         c.insets = new Insets(20,0,0,0);
         jpgblTitle.add(jlTitle, c);
@@ -65,6 +67,7 @@ public class LogInView extends View {
         //S'afegeixen els camps per omplir
         jtfUsername = new JTextField();
         jpfPassword = new JPasswordField();
+        jpfPassword.setEchoChar(PASSWORD_CHAR);
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
@@ -94,9 +97,11 @@ public class LogInView extends View {
 
     @Override
     public void addController(Controller c) {
-        //private JButton jbAccept;
         jbAccept.setActionCommand("logIn");
         jbAccept.addActionListener(c);
+
+        jtfUsername.setActionCommand("logIn");
+        jtfUsername.addActionListener(c);
 
         jbBack.setActionCommand("backToMain");
         jbBack.addActionListener(c);

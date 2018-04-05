@@ -56,6 +56,7 @@ public class Controller implements ActionListener, WindowListener {
             case "logIn":
                 //S'intenta fer logIn al servidor amb les credencials introduides
                 networkManager.logIn(logInView.getUsername(), logInView.getPassword());
+                logInView.clearFields();
                 break;
             case "logOut":
                 //S'intenta desconectar-se del servidor

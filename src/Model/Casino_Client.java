@@ -2,14 +2,12 @@ package Model;
 import Controlador.Controller;
 import Network.*;
 import Vista.Finestra;
-import Vista.MainView;
 import Vista.MainViewClient;
 
 public class Casino_Client {
     public static void main(String[] args) {
 
         // Es crea la vista del Client
-        //MainView view = new MainView(640,480);
         //MainViewClient view = new MainViewClient();
 
         Finestra finestra = new Finestra();

@@ -15,10 +15,13 @@ public class Finestra extends JFrame {
     private SettingsView settingsView;
 
     public Finestra() {
-        //TODO: Configurar accions byDefault de manera correcte
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(500, 720);
-        setExtendedState(JFrame.MAXIMIZED_BOTH); //FULL SCREEN
+
+        Tray.init();
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        //Try to fullScreen
+        setExtendedState(MAXIMIZED_BOTH);
+        checkFullScreen();
 
         layout = new CardLayout();
         getContentPane().setLayout(layout);
@@ -36,13 +39,29 @@ public class Finestra extends JFrame {
         add("settings", settingsView);
     }
 
+    /*
+     * Verifica que el dispositiu ha pogut fer la full screen.
+     * La documentacio de JFrame indica que pot no ferse full screen alguns cops
+     */
+    private void checkFullScreen() {
+        if(getExtendedState() != MAXIMIZED_BOTH) {
+            System.out.println("Full screen no esta disponible, tirant de minimitzada.");
+            setSize(500, 720);
+            setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2);
+        }
+    }
+
     public void addController(Controller c) {
+        Tray.addController(c);
+
         mainView.addController(c);
         logInView.addController(c);
         //TODO: controler del games view
 
         c.setMainView(mainView);
         c.setLogInView(logInView);
+
+        addWindowListener(c);
     }
 
     public void setMainView() {

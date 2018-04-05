@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamesView extends View {
+
     private JButton jbSettings;
     private JButton jbLogOut;
     private JButton jbHorseRace;
@@ -13,6 +14,7 @@ public class GamesView extends View {
     private JButton jbRoulette;
 
     public GamesView(){
+
         this.setLayout(new BorderLayout());
 
         //Panell per col·locar el botó LogOut a la part baixa a l'esquerra

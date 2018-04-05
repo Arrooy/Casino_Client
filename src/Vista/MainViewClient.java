@@ -66,7 +66,7 @@ public class MainViewClient extends View{
     /** Afegeix el controlador del programa a la vista*/
     @Override
     public void addController(Controller c){
-        //Tray.addController(c);
+
 
         //Tenen el mateix actionCommand perque les dues accions resulten en el mateix
         logInButton.setActionCommand("goToLogIn");
@@ -74,8 +74,6 @@ public class MainViewClient extends View{
 
         logOutButton.setActionCommand("logOut");
         logOutButton.addActionListener(c);
-
-        //addWindowListener(c);
     }
 
     /** Obra una finestra indicant un error*/
