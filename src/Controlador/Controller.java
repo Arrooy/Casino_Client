@@ -1,17 +1,13 @@
 package Controlador;
 
-import Model.User;
 import Vista.*;
 import Network.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 
 /** Controlador del client*/
 
-public class Controller implements ActionListener, WindowListener {
+public class Controller implements ActionListener, WindowListener, MouseListener {
 
     /** Finestra grafica del client*/
     private Finestra finestra;
@@ -78,11 +74,12 @@ public class Controller implements ActionListener, WindowListener {
                 displayError("YOW! ETS INVITADO","Molt guay :D");
                 break;
             case "roulette":
-                finestra.setBlackJackView();
+
                 break;
             case "horse":
                 break;
             case "blackJack":
+                finestra.setBlackJackView();
                 break;
             case "exitProgram":
                 exitProgram(0);
@@ -107,9 +104,18 @@ public class Controller implements ActionListener, WindowListener {
     public void setLogInView(LogInView logInView) {
         this.logInView = logInView;
     }
+
     public void setSignInView(SignInView signInView) {this.signInView = signInView;}
     public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
     public void setSettingsView(SettingsView settingsView) {this.settingsView = settingsView;}
+
+    public void showGamesView() {
+        finestra.setGameSelector();
+    }
+
+    public void showErrorLogIn(String s) {
+        logInView.setError(s);
+    }
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -138,11 +144,28 @@ public class Controller implements ActionListener, WindowListener {
     public void windowDeactivated(WindowEvent e) {
     }
 
-    public void showGamesView() {
-        finestra.setGameSelector();
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
     }
 
-    public void showErrorLogIn(String s) {
-        logInView.setError(s);
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        System.out.println("Entered in a element: " + e.getComponent().getClass().getName());
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
