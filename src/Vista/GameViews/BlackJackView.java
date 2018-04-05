@@ -2,15 +2,14 @@ package Vista.GameViews;
 
 import Controlador.Controller;
 import Vista.View;
-
-import javax.swing.*;
 import java.awt.*;
 
 public class BlackJackView extends View {
 
-    public BlackJackView(){
-        Baralla cartas = new Baralla();
+    private Baralla cartas;
 
+    public BlackJackView(){
+        cartas = new Baralla();
     }
 
     @Override
@@ -22,7 +21,7 @@ public class BlackJackView extends View {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Draw Text
-        g.drawString("This is my custom Panel!",10,20);
+
+        repaint();
     }
 }
