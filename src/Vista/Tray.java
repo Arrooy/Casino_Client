@@ -39,7 +39,7 @@ public class Tray {
 
     public static void addController(Controller c) {
         sortir.addActionListener(c);
-        sortir.setActionCommand("trayButtonExit");
+        sortir.setActionCommand("exitProgram");
     }
 
     public static void exit(){

@@ -78,7 +78,7 @@ public class MainViewClient extends View{
         logInButton.setActionCommand("goToLogIn");
         logInButton.addActionListener(c);
 
-        logOutButton.setActionCommand("logOut");
+        logOutButton.setActionCommand("exitProgram");
         logOutButton.addActionListener(c);
 
         jbSignIn.setActionCommand("signIn");

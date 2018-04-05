@@ -84,7 +84,7 @@ public class Controller implements ActionListener, WindowListener {
                 break;
             case "blackJack":
                 break;
-            case "trayButtonExit":
+            case "exitProgram":
                 exitProgram(0);
                 break;
             case "goSignIn":
