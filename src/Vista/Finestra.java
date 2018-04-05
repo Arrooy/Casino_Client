@@ -19,6 +19,7 @@ public class Finestra extends JFrame {
         Tray.init();
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setSize(640, 480);
         //Try to fullScreen
         setExtendedState(MAXIMIZED_BOTH);
         checkFullScreen();
@@ -46,7 +47,6 @@ public class Finestra extends JFrame {
     private void checkFullScreen() {
         if(getExtendedState() != MAXIMIZED_BOTH) {
             System.out.println("Full screen no esta disponible, tirant de minimitzada.");
-            setSize(500, 720);
             setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2);
         }
     }

@@ -15,6 +15,7 @@ public class MainViewClient extends View{
     /**
      *  Crea la vista del client amb una amplada i una alçada determinades per width i height
      */
+
     public MainViewClient(){
         this.setLayout(new BorderLayout());
 
@@ -78,13 +79,13 @@ public class MainViewClient extends View{
 
     /** Obra una finestra indicant un error*/
     public void displayError(String title,String errorText) {
-        JOptionPane.showMessageDialog(this,title,errorText,JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null,title,errorText,JOptionPane.ERROR_MESSAGE);
     }
 
     public boolean displayQuestion(String message) {
         //Retorna true si
         //Retorn false no
-        return JOptionPane.showConfirmDialog(this,message,"Are you sure?",JOptionPane.YES_NO_OPTION) == 0;
+        return JOptionPane.showConfirmDialog(null,message,"Are you sure?",JOptionPane.YES_NO_OPTION) == 0;
     }
 
     /*public String getUsername() {

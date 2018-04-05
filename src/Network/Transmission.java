@@ -45,11 +45,7 @@ public class Transmission implements Runnable {
                 updateConnection();
                 break;
             default:
-
         }
-
-
-
     }
 
     private void updateConnection() {
@@ -81,10 +77,10 @@ public class Transmission implements Runnable {
         }
     }
 
-    /** Inicialitza el nom i la password del usuari que es vol fer LogIn*/
+    //TODO: JAVADOC SAULA!
+    /** Prepara un missatge per a transmetre*/
     public void config(String username, String password, String context, NetworkManager networkManager) {
         this.networkManager = networkManager;
-
         msg = new User(username, password, context);
         this.context = context;
     }

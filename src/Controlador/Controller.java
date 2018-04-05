@@ -88,14 +88,10 @@ public class Controller implements ActionListener, WindowListener {
     }
 
     @Override
-    public void windowClosed(WindowEvent e) {
-    }
+    public void windowClosed(WindowEvent e) {}
 
     @Override
-    public void windowIconified(WindowEvent e) {
-
-
-    }
+    public void windowIconified(WindowEvent e) {}
 
     @Override
     public void windowDeiconified(WindowEvent e) {
