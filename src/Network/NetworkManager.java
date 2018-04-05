@@ -42,9 +42,6 @@ public class NetworkManager extends Thread {
      */
     private ArrayList<Message> lectures;
 
-    /** logInManager per a l'inici de sesio*/
-    //private Transmission logInManager;
-
     /** Indica si s'ha de fer LogIn automatic amb les dades locals*/
     private boolean autoLogin;
 
@@ -53,7 +50,7 @@ public class NetworkManager extends Thread {
 
     /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.*/
     public NetworkManager() {
-       // logInManager = new Transmission(null, this);
+
         lectures = new ArrayList<>();
 
         Object[] configuracio = JsonManager.llegirJson("IpServidor", "PortServidor",JsonManager.BOOLEAN_R);
@@ -74,10 +71,9 @@ public class NetworkManager extends Thread {
             connectarAmbServidor();
         }
 
-        //Configurem el logInManager i l'iniciem
-        Transmission logInManager = new Transmission( this);
-        logInManager.config((String)credentials[0],(String)credentials[1], Transmission.CONTEXT_LOGIN,this);
-        (new Thread(logInManager)).start();
+        //Configurem el logIn i enviem la solicitud al servidor
+        User user = new User((String)credentials[0],(String)credentials[1],Transmission.CONTEXT_LOGIN);
+        new Transmission( user, this);
     }
 
     /** Solicita al servidor tencar la sessio actual*/

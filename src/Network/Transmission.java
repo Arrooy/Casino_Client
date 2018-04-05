@@ -27,10 +27,6 @@ public class Transmission implements Runnable {
         (new Thread(this)).start();
     }
 
-    public Transmission(NetworkManager networkManager) {
-        this.networkManager = networkManager;
-    }
-
     @Override
     public void run() {
 
@@ -74,15 +70,6 @@ public class Transmission implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    //TODO: JAVADOC SAULA!
-    /** Prepara un missatge per a transmetre*/
-    public void config(String username, String password, String context, NetworkManager networkManager) {
-        this.networkManager = networkManager;
-
-        msg = new User(username, password, context);
-        this.context = context;
     }
 
     /** Espera a que el servidor respongui la peticio de LogIn. Es mira cada 100ms si ha arribat la resposta*/
