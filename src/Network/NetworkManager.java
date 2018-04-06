@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Stack;
 
 //TODO: FER QUE SERVER RETORNI USER EN EL LOGIN AMB USERNAME COM A USERNAME. PER SI ES DONA EL CAS QUE FAN LOGIN AMB EL MAIL!
 
@@ -185,7 +186,7 @@ public class NetworkManager extends Thread {
      * Envia un objecte al servidor.
      * @param objectToSend objecte que es vol enviar al servidor
      */
-    public void send(Object objectToSend){
+    public synchronized void send(Object objectToSend){
         try {
             oos.writeObject(objectToSend);
             //User u = (User) objectToSend;
@@ -205,7 +206,8 @@ public class NetworkManager extends Thread {
      */
     public Message read(double ID){
         //Es miren tots els missatges registrats fins el moment
-        for(Message message: lectures){
+        for(int index = 0; index < lectures.size(); index++){
+            Message message = lectures.get(index);
             //Si el missatge de l'iteracio conte l'id que es buscava, es retorna l'objecte.
             if(message.getID() == ID) {
                 lectures.remove(message);
@@ -251,9 +253,15 @@ public class NetworkManager extends Thread {
 
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
 
-    public void initBlackJack(LinkedList<String> nomCartes) {
-        new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,true),this);
-        new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,false),this);
+    public void initBlackJack(Stack<String> nomCartes) {
+        Card card = new Card("",Transmission.CONTEXT_BLACK_JACK_INIT,nomCartes,false);
+        new Transmission(card,this);
+        card = new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,false);
+        new Transmission(card,this);
+        card = new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,true);
+        new Transmission(card,this);
+        card = new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,true);
+        new Transmission(card,this);
     }
 
     /** Pont transmitter - controlador - Model BlackJack*/

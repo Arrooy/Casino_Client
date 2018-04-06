@@ -14,6 +14,7 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_LOGOUT = "logout";
     public static final String CONTEXT_SIGNUP = "signup";
     public static final String CONTEXT_BLACK_JACK = "blackjack";
+    public static final String CONTEXT_BLACK_JACK_INIT = "blackjackinit";
 
     private Message msg;
     private String context;
@@ -44,19 +45,21 @@ public class Transmission implements Runnable {
             case CONTEXT_LOGOUT:
                 updateConnection();
                 break;
+            case CONTEXT_BLACK_JACK_INIT:
             case CONTEXT_BLACK_JACK:
-                blackJackUpdate();
+                blackJackRequestCard();
                 break;
 
             default:
         }
     }
 
-    private void blackJackUpdate() {
-        Card carta = (Card) msg;
-        networkManager.send(carta);
-
+    private void blackJackRequestCard() {
         try {
+            Card carta = (Card) msg;
+
+            networkManager.send(carta);
+
             Card cartaResposta = (Card) waitResponse(carta);
             System.out.println("cartaResposta: " + cartaResposta.getCardName());
             networkManager.newBJCard(cartaResposta);

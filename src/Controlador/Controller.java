@@ -1,11 +1,11 @@
 package Controlador;
 
 import Model.Baralla;
-import Model.BlackJack;
 import Model.Card;
 import Model.User;
 import Vista.*;
 import Network.*;
+import Vista.GameViews.BlackJackView;
 
 import java.awt.event.*;
 
@@ -20,6 +20,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     private SignInView signInView;
     private GameSelectorView gameSelectorView;
     private SettingsView settingsView;
+    private BlackJackView blackJackView;
 
     /** Usuari que controla el client*/
     private User user;
@@ -27,13 +28,11 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     /** Responsable de la connectivitat amb el servidor*/
     private NetworkManager networkManager;
 
-    /** Baralla de cartes del blackJack*/
-    private BlackJack blackJack;
-
     /** Inicialitza un nou controlador i realitza les relacions amb la vista i el gestor de la connectivitat*/
     public Controller(Finestra finestra, NetworkManager networkManager) {
         this.networkManager = networkManager;
         this.finestra = finestra;
+        Baralla.loadContent();
     }
 
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
@@ -89,10 +88,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
             case "horse":
                 break;
             case "blackJack":
-                //Es crea el model del blackJack
-                //TODO: REVISAR SI ESTA BE CREAR EL MODEL AQUI O ES MILLOR AL MAIN I NO FERLO SERVIR FINS ARA.
-                blackJack = new BlackJack(user);
-                networkManager.initBlackJack(blackJack.getNomCartes());
+                networkManager.initBlackJack(Baralla.getNomCartes());
                 finestra.setBlackJackView();
                 break;
             case "exitProgram":
@@ -113,7 +109,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     public void newBJCard(Card cartaResposta) {
-        blackJack.addCard(cartaResposta);
+        blackJackView.addCardIntoGame(Baralla.findImage(cartaResposta),this);
     }
 
     private void signUp() {
@@ -136,6 +132,10 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void showGamesView() {
         finestra.setGameSelector();
     }
+    public void setBlackJackView(BlackJackView blackJackView) {
+        this.blackJackView = blackJackView;
+    }
+
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -188,4 +188,5 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void mouseExited(MouseEvent e) {
 
     }
+
 }

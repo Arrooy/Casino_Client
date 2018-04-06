@@ -1,10 +1,10 @@
 package Model;
 
-import Network.Message;
+        import Network.Message;
 
-import java.util.LinkedList;
+        import java.util.Stack;
 
-public class Card extends Message{
+public class Card extends Message {
 
     /** Nom de la imatge de la carta*/
     private String cardName;
@@ -12,18 +12,26 @@ public class Card extends Message{
     /** Nombre del dorso de la carta*/
     private String reverseName;
 
+    /** Valor de la carta dins del blackJack*/
+    private int value;
+
     /** Defineix el identificador del missatge. Util per quan s'envia amb el networkManager*/
     private final double ID;
 
     private String context;
 
-    private LinkedList<String> nomCartes;
+    private Stack<String> nomCartes;
 
     /** Indica si la carta es per a un jugador o per a la ia.*/
     private boolean forIA;
 
-    public Card(String cardName, String context, LinkedList<String> nomCartes, boolean ownerIA){
+    private boolean girada;
+
+    public Card(String cardName, String context, Stack<String> nomCartes, boolean ownerIA){
         forIA = ownerIA;
+
+        girada = false;
+        value = 0;
 
         this.nomCartes = nomCartes;
         this.cardName = cardName;
@@ -47,10 +55,10 @@ public class Card extends Message{
         this.reverseName = reverseName;
     }
 
-    public LinkedList<String> getNomCartes() {
+    public Stack<String> getNomCartes() {
         return nomCartes;
     }
-    public void setNomCartes(LinkedList<String> nomCartes) {
+    public void setNomCartes(Stack<String> nomCartes) {
         this.nomCartes = nomCartes;
     }
 
@@ -63,4 +71,21 @@ public class Card extends Message{
     public double getID() {
         return ID;
     }
+
+    public boolean isGirada() {
+        return girada;
+    }
+
+    public void setGirada(boolean girada) {
+        this.girada = girada;
+    }
+
+
+    public int getValue() {
+        return value;
+    }
+    public void setValue(int value) {
+        this.value = value;
+    }
+
 }

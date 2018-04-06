@@ -19,7 +19,7 @@ public class Casino_Client {
 
         //Es crea l'enllaç vista amb controlador
         finestra.addController(controller);
-        finestra.setGameSelector();
+        finestra.setMainView();
 
         //Es realitza la conexio amb el servidor i sagafen els streams d'entrada / sortida
         networkManager.connectarAmbServidor(controller);

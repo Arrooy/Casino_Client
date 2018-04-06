@@ -6,17 +6,19 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class Baralla {
 
     private final static String PATH = "./Assets/Cartes_BlackJack/";
-    private LinkedList<BufferedImage> cartes;
-    private LinkedList<String> nomCartes;
+    private static LinkedList<BufferedImage> cartes;
+    private static Stack<String> nomCartes;
 
-    public Baralla() {
+    public static void loadContent() {
 
-        nomCartes = new LinkedList<>();
+        nomCartes = new Stack<>();
 
         cartes = new LinkedList<>();
 
@@ -28,31 +30,31 @@ public class Baralla {
                 BufferedImage img = null;
                 try {
                     img = ImageIO.read(carta);
-                    System.out.println(carta.getName() + ":" + img.getWidth() + " " + img.getHeight());
                 } catch (IOException e) {
                     System.out.println("Error llegint " + carta.getName());
                 }
                 if (img != null) {
                     cartes.add(img);
                 }
-                nomCartes.add(carta.getName());
+                nomCartes.push(carta.getName());
             }
+            System.out.println("Nombre de cartes carregades: " + cartes.size());
         }
-
     }
 
-    public LinkedList<String> getNomCartes() {
-        return nomCartes;
+    public static Stack<String> getNomCartes() {
+        Stack<String>nomCartesNecesaries = new Stack<>();
+        for(String carta : nomCartes){
+            if(!carta.contains("back"))
+                nomCartesNecesaries.push(carta);
+        }
+        System.out.println("Sending:" + Arrays.toString(nomCartesNecesaries.toArray()));
+        return nomCartesNecesaries;
     }
 
-    /*
-    public void paintCard(String nomCarta, Graphics g, int x, int y) {
+    public static Image findImage(Card carta) {
 
-        g.drawImage(buscaCarta(nomCarta), x, y, null);
-    }
- */
-
-    private Image buscaCarta(String nomCarta) {
+        String nomCarta = carta.isGirada() ? carta.getReverseName() : carta.getCardName();
 
         File[] listOfFiles = new File(PATH).listFiles();
 
@@ -64,7 +66,9 @@ public class Baralla {
                 }
             }
         }
-        //Si no trobem res.
+        //Per si no trobem res.
         return null;
     }
+
+
 }
