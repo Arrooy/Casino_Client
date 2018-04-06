@@ -14,8 +14,16 @@ public class SignInView extends View {
     private JPasswordField jpfConfirmPassword;
     private JButton jbAccept;
 
+    private JLabel jlErrorMessage;
+
     public SignInView(){
         this.setLayout(new BorderLayout());
+
+        //Label missatge error
+        JPanel jpGeneric = new JPanel(new GridBagLayout());
+        jlErrorMessage = new JLabel("Error");
+        jlErrorMessage.setHorizontalAlignment(JLabel.CENTER);
+        jlErrorMessage.setForeground(new Color(0, 0, 0, 0));
 
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblBack = new JPanel(new GridBagLayout());
@@ -34,7 +42,7 @@ public class SignInView extends View {
         //Panell que té el títol de la pantalla a dalt a la dreta al mig
         JPanel jpTitle = new JPanel();
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
-        JLabel jlTitle = new JLabel("Sing In");
+        JLabel jlTitle = new JLabel("Sign In");
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 24));
         //Marges
         c.insets = new Insets(20,0,0,0);
@@ -99,7 +107,25 @@ public class SignInView extends View {
 
         jpgblInfo.add(jbAccept, c);
 
-        this.add(jpgblInfo, BorderLayout.CENTER);
+        c.gridy = 1;
+        c.gridx = 0;
+        c.gridwidth = 1;
+        c.insets = new Insets(0,0,0,0);
+        jpGeneric.add(jpgblInfo, c);
+
+        //S'afegeix el missatge d'error
+        c.insets = new Insets(0,0,20,0);
+        c.anchor = GridBagConstraints.CENTER;
+        c.gridy = 0;
+        c.gridx = 0;
+        jpGeneric.add(jlErrorMessage, c);
+
+        add(jpGeneric, BorderLayout.CENTER);
+    }
+
+    public void setError(String error) {
+        jlErrorMessage.setText(error);
+        jlErrorMessage.setForeground(new Color(201, 25, 25));
     }
 
     @Override

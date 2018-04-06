@@ -14,7 +14,7 @@ public class LogInView extends View {
     private JButton jbBack;
     private final static char PASSWORD_CHAR = '☭';
 
-    private JLabel errorMessage;
+    private JLabel jlErrorMessage;
 
     /**
      * TODO: acabar de colocar el missatge d'error
@@ -22,12 +22,11 @@ public class LogInView extends View {
     public LogInView(){
         this.setLayout(new BorderLayout());
 
-        JPanel jpGeneric = new JPanel();
-        jpGeneric.setLayout(new BoxLayout(jpGeneric, BoxLayout.PAGE_AXIS));
-
-        errorMessage = new JLabel("");
-        errorMessage.setHorizontalAlignment(JLabel.CENTER);
-        errorMessage.setForeground(new Color(201, 25, 25));
+        //Label missatge error
+        JPanel jpGeneric = new JPanel(new GridBagLayout());
+        jlErrorMessage = new JLabel("Error");
+        jlErrorMessage.setHorizontalAlignment(JLabel.CENTER);
+        jlErrorMessage.setForeground(new Color(0, 0, 0, 0));
 
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblBack = new JPanel(new GridBagLayout());
@@ -57,8 +56,6 @@ public class LogInView extends View {
 
         //Panell amb els camps d'UserName, Password i l'opció de Remember me centrats al mig de la pantalla
         JPanel jpgblInfo = new JPanel(new GridBagLayout());
-        //Marges
-        c.insets = new Insets(0,0,20,10);
         JLabel jlName = new JLabel("UserName:");
         JLabel jlPassword = new JLabel("Password:");
         jcbRememberLogIn = new JCheckBox("Remember user");
@@ -66,6 +63,8 @@ public class LogInView extends View {
 
         //S'afegeixen les etiquetes
         c.gridy = 1;
+        c.gridx = 0;
+        c.insets = new Insets(0,0,20,10);
         jpgblInfo.add(jlName, c);
 
         c.gridy = 2;
@@ -103,13 +102,25 @@ public class LogInView extends View {
 
         jpgblInfo.add(jbAccept, c);
 
-        jpGeneric.add(jpgblInfo);
-        jpGeneric.add(errorMessage);
+        c.gridy = 1;
+        c.gridx = 0;
+        c.gridwidth = 1;
+        c.insets = new Insets(0,0,0,0);
+        jpGeneric.add(jpgblInfo, c);
+
+        //S'afegeix el missatge d'error
+        c.insets = new Insets(0,0,20,0);
+        c.anchor = GridBagConstraints.CENTER;
+        c.gridy = 0;
+        c.gridx = 0;
+        jpGeneric.add(jlErrorMessage, c);
+
         add(jpGeneric, BorderLayout.CENTER);
     }
 
     public void setError(String error) {
-        errorMessage.setText(error);
+        jlErrorMessage.setText(error);
+        jlErrorMessage.setForeground(new Color(201, 25, 25));
     }
 
     @Override
@@ -139,7 +150,7 @@ public class LogInView extends View {
         jpfPassword.setText("");
         jtfUsername.setText("");
         jcbRememberLogIn.setSelected(false);
-        errorMessage.setText("");
+        jlErrorMessage.setText("");
     }
 
     public String getUsername() {
