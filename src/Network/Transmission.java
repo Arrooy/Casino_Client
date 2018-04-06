@@ -2,6 +2,7 @@ package Network;
 
 import Controlador.JsonManager;
 import Model.User;
+import Model.Card;
 
 import static java.lang.Thread.sleep;
 
@@ -12,6 +13,7 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_LOGIN = "login";
     public static final String CONTEXT_LOGOUT = "logout";
     public static final String CONTEXT_SIGNUP = "signup";
+    public static final String CONTEXT_BLACK_JACK = "blackjack";
 
     private Message msg;
     private String context;
@@ -42,9 +44,25 @@ public class Transmission implements Runnable {
             case CONTEXT_LOGOUT:
                 updateConnection();
                 break;
+            case CONTEXT_BLACK_JACK:
+                blackJackUpdate();
+                break;
+
             default:
         }
+    }
 
+    private void blackJackUpdate() {
+        Card carta = (Card) msg;
+        networkManager.send(carta);
+
+        try {
+            Card cartaResposta = (Card) waitResponse(carta);
+            System.out.println("cartaResposta: " + cartaResposta.getCardName());
+            networkManager.newBJCard(cartaResposta);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -60,7 +78,7 @@ public class Transmission implements Runnable {
             networkManager.send(usuariIntent);
 
             //Esperem a una resposta del servidor
-            User responseUser = waitLogInResponse(usuariIntent);
+            User responseUser = (User) waitResponse(usuariIntent);
 
             //Si la resposta del servidor indica que tot es correcte. Es completa el logIn
             if(responseUser.areCredentialsOk()){
@@ -82,17 +100,17 @@ public class Transmission implements Runnable {
         }
     }
 
-    /** Espera a que el servidor respongui la peticio de LogIn. Es mira cada 100ms si ha arribat la resposta*/
-    private User waitLogInResponse(User UsuariIntent) throws InterruptedException {
-        User responseUser;
+    /** Espera a que el servidor respongui una peticio. Es mira cada 100ms si ha arribat la resposta*/
+    private Message waitResponse(Message SolicitudEnviada) throws InterruptedException {
+        Message resposta;
 
         do {
-            //Es demana al networkManager la resposta del servidor associada a l'id del usuari que hem enviat anteriorment.
-            responseUser = (User) networkManager.read(UsuariIntent.getID());
+            //Es demana al networkManager la resposta del servidor associada a l'id del Message que s'ha enviat anteriorment.
+            resposta = networkManager.read(SolicitudEnviada.getID());
             sleep(100);
-        }while(responseUser == null);
+        }while(resposta == null);
 
-        return responseUser;
+        return resposta;
     }
 
     /** Finalitza el logIn, actualitzant les dades de l'usuari. Tambe es gestiona la copia local del logIn*/

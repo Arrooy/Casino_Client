@@ -2,6 +2,7 @@ package Network;
 
 import Controlador.Controller;
 import Controlador.JsonManager;
+import Model.Card;
 import Model.User;
 
 import java.io.IOException;
@@ -9,6 +10,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
+
+//TODO: FER QUE SERVER RETORNI USER EN EL LOGIN AMB USERNAME COM A USERNAME. PER SI ES DONA EL CAS QUE FAN LOGIN AMB EL MAIL!
 
 /**
  * NetworkManager gestiona totes les comunicacions del client amb el servidor en les dues direccions.
@@ -199,7 +203,7 @@ public class NetworkManager extends Thread {
      * @param ID Identificador del missatge que es vol buscar.
      * @return Si read no troba el missatge que es desitja, retorna null. De lo contrari retorna el missatge.
      */
-    public Object read(double ID){
+    public Message read(double ID){
         //Es miren tots els missatges registrats fins el moment
         for(Message message: lectures){
             //Si el missatge de l'iteracio conte l'id que es buscava, es retorna l'objecte.
@@ -215,7 +219,7 @@ public class NetworkManager extends Thread {
     /** Inicialitza l'usuari un cop aquest s'ha autentificat*/
     public void setUser(User user) {
         this.user = user;
-
+        controller.setUser(user);
         System.out.println("Log in correcte");
     }
 
@@ -246,4 +250,14 @@ public class NetworkManager extends Thread {
     }
 
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
+
+    public void initBlackJack(LinkedList<String> nomCartes) {
+        new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,true),this);
+        new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,false),this);
+    }
+
+    /** Pont transmitter - controlador - Model BlackJack*/
+    public void newBJCard(Card cartaResposta) {
+        controller.newBJCard(cartaResposta);
+    }
 }

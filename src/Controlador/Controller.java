@@ -1,5 +1,9 @@
 package Controlador;
 
+import Model.Baralla;
+import Model.BlackJack;
+import Model.Card;
+import Model.User;
 import Vista.*;
 import Network.*;
 
@@ -17,8 +21,14 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     private GameSelectorView gameSelectorView;
     private SettingsView settingsView;
 
+    /** Usuari que controla el client*/
+    private User user;
+
     /** Responsable de la connectivitat amb el servidor*/
     private NetworkManager networkManager;
+
+    /** Baralla de cartes del blackJack*/
+    private BlackJack blackJack;
 
     /** Inicialitza un nou controlador i realitza les relacions amb la vista i el gestor de la connectivitat*/
     public Controller(Finestra finestra, NetworkManager networkManager) {
@@ -79,6 +89,10 @@ public class Controller implements ActionListener, WindowListener, MouseListener
             case "horse":
                 break;
             case "blackJack":
+                //Es crea el model del blackJack
+                //TODO: REVISAR SI ESTA BE CREAR EL MODEL AQUI O ES MILLOR AL MAIN I NO FERLO SERVIR FINS ARA.
+                blackJack = new BlackJack(user);
+                networkManager.initBlackJack(blackJack.getNomCartes());
                 finestra.setBlackJackView();
                 break;
             case "exitProgram":
@@ -94,8 +108,20 @@ public class Controller implements ActionListener, WindowListener, MouseListener
         }
     }
 
+    public void setUser(User u){
+        user = u;
+    }
+
+    public void newBJCard(Card cartaResposta) {
+        blackJack.addCard(cartaResposta);
+    }
+
     private void signUp() {
         networkManager.requestSignUp(finestra.getSignUpUser());
+    }
+
+    public void showErrorLogIn(String s) {
+        logInView.setError(s);
     }
 
     public void setMainView(MainViewClient mainView) {
@@ -104,17 +130,11 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void setLogInView(LogInView logInView) {
         this.logInView = logInView;
     }
-
     public void setSignInView(SignInView signInView) {this.signInView = signInView;}
     public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
     public void setSettingsView(SettingsView settingsView) {this.settingsView = settingsView;}
-
     public void showGamesView() {
         finestra.setGameSelector();
-    }
-
-    public void showErrorLogIn(String s) {
-        logInView.setError(s);
     }
 
     @Override
