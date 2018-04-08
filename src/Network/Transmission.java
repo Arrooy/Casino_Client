@@ -61,7 +61,6 @@ public class Transmission implements Runnable {
             networkManager.send(carta);
 
             Card cartaResposta = (Card) waitResponse(carta);
-            System.out.println("cartaResposta: " + cartaResposta.getCardName());
             networkManager.newBJCard(cartaResposta);
         } catch (InterruptedException e) {
             e.printStackTrace();

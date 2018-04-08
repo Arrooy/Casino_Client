@@ -6,21 +6,21 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
 
 public class Baralla {
 
     private final static String PATH = "./Assets/Cartes_BlackJack/";
-    private static LinkedList<BufferedImage> cartes;
+    //private static LinkedList<BufferedImage> cartes;
+    private static Map<String, BufferedImage> cartes;
     private static Stack<String> nomCartes;
 
-    public static void loadContent() {
+    public static int loadContent() {
 
         nomCartes = new Stack<>();
 
-        cartes = new LinkedList<>();
+        //cartes = new LinkedList<>();
+        cartes = new HashMap<>();
 
         File carpetaAssetsCartes = new File(PATH);
         File[] listOfFiles = carpetaAssetsCartes.listFiles();
@@ -34,39 +34,28 @@ public class Baralla {
                     System.out.println("Error llegint " + carta.getName());
                 }
                 if (img != null) {
-                    cartes.add(img);
+                    cartes.put(carta.getName(), img);
                 }
                 nomCartes.push(carta.getName());
             }
-            System.out.println("Nombre de cartes carregades: " + cartes.size());
         }
+        return cartes.size();
     }
 
     public static Stack<String> getNomCartes() {
+        //Enviem nomes les cartes que no son dorsals
         Stack<String>nomCartesNecesaries = new Stack<>();
         for(String carta : nomCartes){
             if(!carta.contains("back"))
                 nomCartesNecesaries.push(carta);
         }
-        System.out.println("Sending:" + Arrays.toString(nomCartesNecesaries.toArray()));
+
         return nomCartesNecesaries;
     }
 
     public static Image findImage(Card carta) {
-
+        //Modifiquem el nom de la carta si aquesta ha d'estar girada
         String nomCarta = carta.isGirada() ? carta.getReverseName() : carta.getCardName();
-
-        File[] listOfFiles = new File(PATH).listFiles();
-
-        if (listOfFiles != null) {
-
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (nomCarta.equalsIgnoreCase(listOfFiles[i].getName())) {
-                    return cartes.get(i);
-                }
-            }
-        }
-        //Per si no trobem res.
-        return null;
+        return cartes.get(nomCarta);
     }
 }

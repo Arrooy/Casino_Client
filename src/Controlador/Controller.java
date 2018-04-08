@@ -1,5 +1,6 @@
 package Controlador;
 
+import Model.AssetManager;
 import Model.Baralla;
 import Model.Card;
 import Model.User;
@@ -33,7 +34,6 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public Controller(Finestra finestra, NetworkManager networkManager) {
         this.networkManager = networkManager;
         this.finestra = finestra;
-        Baralla.loadContent();
     }
 
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
@@ -89,6 +89,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
             case "horse":
                 break;
             case "blackJack":
+                Sounds.play("cardShuffle.wav");
                 networkManager.initBlackJack(Baralla.getNomCartes());
                 finestra.setBlackJackView();
                 break;
@@ -110,8 +111,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     public void newBJCard(Card cartaResposta) {
-        System.out.println("Carta rebuda: " + cartaResposta.getCardName() );
-        blackJackView.addCardIntoGame(cartaResposta.getCardName(),cartaResposta.isForIA(),Baralla.findImage(cartaResposta),this);
+        blackJackView.addCardIntoGame(cartaResposta,this);
     }
 
     private void signUp() {
@@ -173,7 +173,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-       networkManager.newBlackJackCard(false);
+        networkManager.newBlackJackCard(false);
     }
 
     @Override
@@ -183,8 +183,6 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println("Entered in a element: " + ((JLabel)e.getSource()).getName());
-
         blackJackView.updateBoardPositions(((JLabel)e.getSource()).getName());
     }
 

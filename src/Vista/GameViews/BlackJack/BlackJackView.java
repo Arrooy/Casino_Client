@@ -2,6 +2,9 @@ package Vista.GameViews.BlackJack;
 
 import Controlador.Controller;
 
+import Controlador.Sounds;
+import Model.Baralla;
+import Model.Card;
 import Vista.View;
 
 import javax.swing.*;
@@ -54,14 +57,14 @@ public class BlackJackView extends View {
     }
     */
 
-    public void addCardIntoGame(String cardName,boolean forIa,Image card, MouseListener c){
+    public void addCardIntoGame(Card card, MouseListener c){
 
-        JLabel label = new JLabel(new ImageIcon(card));
+        JLabel label = new JLabel(new ImageIcon(Baralla.findImage(card)));
         label.addMouseListener(c);
-        label.setName(cardName);
+        label.setName(card.getCardName());
         add(label);
 
-        if(forIa){
+        if(card.isForIA()){
             //La carta es per la ia
             IACards.add(label);
         }else {
@@ -69,9 +72,11 @@ public class BlackJackView extends View {
             userCards.add(label);
         }
 
+        Sounds.play("cardPlace1.wav");
         updateBoardPositions(null);
         updateUI();
     }
+
     public void updateBoardPositions(String SelectedName){
 
         int centerScreen = getSize().width / 2;

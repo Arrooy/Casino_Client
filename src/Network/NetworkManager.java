@@ -225,7 +225,7 @@ public class NetworkManager extends Thread {
     public void setUser(User user) {
         this.user = user;
         controller.setUser(user);
-        System.out.println("Log in correcte");
+        System.out.println("[NETWORK MANAGER]: Logged In");
     }
 
     /** Inidica si es vol recordar el logIn*/

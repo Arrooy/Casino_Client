@@ -6,9 +6,9 @@ import Vista.Finestra;
 public class Casino_Client {
     public static void main(String[] args) {
 
-        // Es crea la vista del Client
-        //MainViewClient view = new MainViewClient();
+        AssetManager.loadData();
 
+        //Es crea la vista del Client
         Finestra finestra = new Finestra();
 
         //Es defineix el gestor de connectivitat amb el servidor
