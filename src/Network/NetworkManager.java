@@ -75,10 +75,13 @@ public class NetworkManager extends Thread {
         if(!conectatAmbServidor){
             connectarAmbServidor();
         }
-
+        if(conectatAmbServidor) {
         //Configurem el logIn i enviem la solicitud al servidor
-        User user = new User((String)credentials[0],(String)credentials[1],Transmission.CONTEXT_LOGIN);
-        new Transmission( user, this);
+            User user = new User((String)credentials[0],(String)credentials[1],Transmission.CONTEXT_LOGIN);
+            new Transmission( user, this);
+        }else{
+            System.out.println("No hi ha connexio amb el server");
+        }
     }
 
     /** Solicita al servidor tencar la sessio actual*/
@@ -256,16 +259,21 @@ public class NetworkManager extends Thread {
     public void initBlackJack(Stack<String> nomCartes) {
         Card card = new Card("",Transmission.CONTEXT_BLACK_JACK_INIT,nomCartes,false);
         new Transmission(card,this);
-        card = new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,false);
-        new Transmission(card,this);
-        card = new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,true);
-        new Transmission(card,this);
-        card = new Card("",Transmission.CONTEXT_BLACK_JACK,nomCartes,true);
-        new Transmission(card,this);
     }
+
+    public void newBlackJackCard(boolean forIa) {
+        new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,forIa),this);
+    }
+
 
     /** Pont transmitter - controlador - Model BlackJack*/
     public void newBJCard(Card cartaResposta) {
+
+        if(cartaResposta.getContext().equals(Transmission.CONTEXT_BLACK_JACK_INIT)){
+            new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,false),this);
+            new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
+            new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
+        }
         controller.newBJCard(cartaResposta);
     }
 }

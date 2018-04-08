@@ -28,6 +28,7 @@ public class Tray {
             popup.add(sortir);
 
             trayIcon.setPopupMenu(popup);
+            trayIcon.setToolTip("Joc guay");
 
             try {
                 tray.add(trayIcon);

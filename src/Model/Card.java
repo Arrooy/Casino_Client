@@ -39,6 +39,18 @@ public class Card extends Message {
         reverseName = null;
         this.context = context;
     }
+    public Card(String cardName, String context, boolean ownerIA){
+        forIA = ownerIA;
+
+        girada = false;
+        value = 0;
+
+        this.nomCartes = null;
+        this.cardName = cardName;
+        ID = Math.random();
+        reverseName = null;
+        this.context = context;
+    }
 
 
     public boolean isForIA() {

@@ -3,7 +3,7 @@ package Vista;
 import Controlador.Controller;
 import Model.User;
 import Network.Transmission;
-import Vista.GameViews.BlackJackView;
+import Vista.GameViews.BlackJack.BlackJackView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +27,10 @@ public class Finestra extends JFrame {
         //Try to fullScreen
         setExtendedState(MAXIMIZED_BOTH);
         checkFullScreen();
+
+        //setMinimumSize(new Dimension(BlackJackView.MIN_SCREEN_WIDTH, BlackJackView.MIN_SCREEN_HEIGHT));
+
+        //System.out.println(getMinimumSize().width + " " + getMinimumSize().height);
 
         layout = new CardLayout();
         getContentPane().setLayout(layout);

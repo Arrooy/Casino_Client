@@ -69,6 +69,4 @@ public class Baralla {
         //Per si no trobem res.
         return null;
     }
-
-
 }

@@ -5,13 +5,14 @@ import Model.Card;
 import Model.User;
 import Vista.*;
 import Network.*;
-import Vista.GameViews.BlackJackView;
+import Vista.GameViews.BlackJack.BlackJackView;
 
+import javax.swing.*;
 import java.awt.event.*;
 
 /** Controlador del client*/
 
-public class Controller implements ActionListener, WindowListener, MouseListener {
+public class Controller implements ActionListener, WindowListener, MouseListener, ComponentListener{
 
     /** Finestra grafica del client*/
     private Finestra finestra;
@@ -109,7 +110,8 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     public void newBJCard(Card cartaResposta) {
-        blackJackView.addCardIntoGame(Baralla.findImage(cartaResposta),this);
+        System.out.println("Carta rebuda: " + cartaResposta.getCardName() );
+        blackJackView.addCardIntoGame(cartaResposta.getCardName(),cartaResposta.isForIA(),Baralla.findImage(cartaResposta),this);
     }
 
     private void signUp() {
@@ -171,7 +173,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+       networkManager.newBlackJackCard(false);
     }
 
     @Override
@@ -181,12 +183,33 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println("Entered in a element: " + e.getComponent().getClass().getName());
+        System.out.println("Entered in a element: " + ((JLabel)e.getSource()).getName());
+
+        blackJackView.updateBoardPositions(((JLabel)e.getSource()).getName());
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        blackJackView.updateBoardPositions(null);
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        blackJackView.updateBoardPositions(null);
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
 
     }
 
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
+    }
 }
