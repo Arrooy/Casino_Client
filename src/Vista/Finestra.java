@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.Controller;
+import Model.AssetManager;
 import Model.User;
 import Network.Transmission;
 import Vista.GameViews.BlackJack.BlackJackView;
@@ -33,6 +34,8 @@ public class Finestra extends JFrame {
         System.out.println("[FRAME]: "+ getMinimumSize().width + " - " + getMinimumSize().height);
 
         requestFocus();
+
+        setIconImage(AssetManager.getImage("ico.png"));
 
         layout = new CardLayout();
         getContentPane().setLayout(layout);

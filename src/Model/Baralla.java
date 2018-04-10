@@ -55,7 +55,7 @@ public class Baralla {
 
     public static Image findImage(Card carta) {
         //Modifiquem el nom de la carta si aquesta ha d'estar girada
-        String nomCarta = carta.getCardName();//carta.isGirada() ? carta.getReverseName() : carta.getCardName();
+        String nomCarta = carta.isGirada() ? carta.getReverseName() : carta.getCardName();
         return cartes.get(nomCarta);
     }
 }

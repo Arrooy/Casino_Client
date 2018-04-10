@@ -26,7 +26,9 @@ public class BlackJackView extends View {
     public static final int CARD_WIDTH = 150;
     public static final int CARD_HEIGHT = 210;
 
-    public static final int MAX_CARDS_IN_HAND = 4;
+    public static final int MAX_CARDS_IN_HAND = 6;
+    public static final int MAX_CARDS = 12;
+
 
     public static final int MIN_SCREEN_WIDTH = CARD_WIDTH + MARGIN_BETWEEN_CARDS;
     public static final int MIN_SCREEN_HEIGHT = CARD_HEIGHT  + CARD_HEIGHT + MARGIN_TOP + MARGIN_BOTTOM + MARGIN_CENTER;
@@ -89,19 +91,20 @@ public class BlackJackView extends View {
     }
 
     public void updateBoardPositions(){
-        displayHand(IACards,MARGIN_TOP);
-        displayHand(userCards,getSize().height - CARD_HEIGHT - MARGIN_BOTTOM);
+        displayHand(IACards,MARGIN_TOP,1);
+        displayHand(userCards,getSize().height - CARD_HEIGHT - MARGIN_BOTTOM,-1);
         updateUI();
     }
 
-    private void displayHand(LinkedList<JLabel> cardsInHand,int marginTop) {
+    //Direction -1 == pujar. 1 == baixar
+    private void displayHand(LinkedList<JLabel> cardsInHand,int marginTop,int direction) {
 
         if(!cardsInHand.isEmpty()){
             int posicioInicialEsquerra;
             if(cardsInHand.size() <= MAX_CARDS_IN_HAND) {
                 posicioInicialEsquerra = (getSize().width / 2) - (cardsInHand.size() / 2) * CARD_WIDTH;
             }else{
-                posicioInicialEsquerra = (getSize().width / 2) - 2 * CARD_WIDTH;
+                posicioInicialEsquerra = (getSize().width / 2) - 3 * CARD_WIDTH;
             }
 
             int shiftCardsLeft = 0;
@@ -122,17 +125,13 @@ public class BlackJackView extends View {
                 int newPosX;
 
                 if(i+1 <= (MAX_CARDS_IN_HAND)) {
-                    System.out.println("->  "  +  (i + 1) + " Layer " + numberOfLayers);
                     newPosX = posicioInicialEsquerra + (CARD_WIDTH + MARGIN_BETWEEN_CARDS) * (i + 1);
                 }else{
-                    System.out.println("->  "  +  (i%MAX_CARDS_IN_HAND + 1) + " Layer " + numberOfLayers);
                     newPosX = posicioInicialEsquerra + (CARD_WIDTH + MARGIN_BETWEEN_CARDS) * (i%MAX_CARDS_IN_HAND + 1);
                 }
 
-
-                cardsInHand.get(i).setBounds(newPosX - CARD_WIDTH - shiftCardsLeft, marginTop - 50 * numberOfLayers, CARD_WIDTH, CARD_HEIGHT);
+                cardsInHand.get(i).setBounds(newPosX - CARD_WIDTH - shiftCardsLeft, marginTop + (50 * numberOfLayers)*direction, CARD_WIDTH, CARD_HEIGHT);
             }
-
         }
     }
 

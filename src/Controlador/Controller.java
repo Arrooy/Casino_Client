@@ -173,8 +173,8 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-        networkManager.newBlackJackCard(false);
-        //networkManager.newBlackJackCard(true);
+        //networkManager.newBlackJackCard(false);
+        networkManager.newBlackJackCard(true);
     }
 
     @Override
