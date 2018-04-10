@@ -4,6 +4,7 @@ import Controlador.Controller;
 import Controlador.JsonManager;
 import Model.Card;
 import Model.User;
+import Vista.SplashScreen;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -53,8 +54,17 @@ public class NetworkManager extends Thread {
     /** Inidica si estem connectats amb el servidor. Es indiferent si el client esta autentificat o no.*/
     private boolean conectatAmbServidor;
 
-    /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.*/
-    public NetworkManager() {
+    /** Splash screen del programa. En cas de tenir conexio amb el servidor, networkManager sencarrega de tencar-la*/
+    private SplashScreen splashScreen;
+
+    /** Indica el nombre de cops que el client ha intentat reconectarse amb el servidor*/
+    private int nTryConnect;
+
+    /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.
+     * @param splashScreen*/
+    public NetworkManager(SplashScreen splashScreen) {
+        this.splashScreen = splashScreen;
+        nTryConnect = 0;
 
         lectures = new ArrayList<>();
 
@@ -119,7 +129,7 @@ public class NetworkManager extends Thread {
                 //es guarden en la llista de lectures.
                 try {
                     Message missatge = (Message) ois.readObject();
-
+                    System.out.println("Rebut: " + missatge.getContext());
                     //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
                     if(ServidorVolDesconnectarAquestClient(missatge))
                         continue;
@@ -138,6 +148,7 @@ public class NetworkManager extends Thread {
         //desitja/permet la desconnexio d'aquest client
         if(missatge instanceof User){
             if(!((User)missatge).isOnline()){
+                System.out.println("BYE BYE");
                 logOut();
                 return true;
             }
@@ -161,12 +172,25 @@ public class NetworkManager extends Thread {
             oos = new ObjectOutputStream(socket.getOutputStream());
             //En el cas d'haver arribat aquest punt del codi, significa que ens hem connectat correctament
             conectatAmbServidor = true;
+
+            //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
+            splashScreen.exit();
+            controller.showFinestra();
+
             //Si en el json de configuracio inicial apareix l'indicador
             //d'autoLogin, s'executa el login de forma automatica.
             if(autoLogin)
                 logIn(JsonManager.llegirJson(JsonManager.USERNAME_R, JsonManager.PASSWORD_R));
+
         }catch (IOException e){
-            System.out.println("Impossible connectarse amb el servidor");
+            if(nTryConnect == 0) {
+                splashScreen.showError("Server connection failed");
+                nTryConnect++;
+            }else{
+                splashScreen.showError("Attempting to reconnect ["+nTryConnect+"]");
+                nTryConnect++;
+            }
+            connectarAmbServidor(controller);
         }
     }
 
@@ -276,5 +300,18 @@ public class NetworkManager extends Thread {
             new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
         }
         controller.newBJCard(cartaResposta);
+    }
+
+    public void enterAsGuest() {
+        if(!conectatAmbServidor){
+            connectarAmbServidor();
+        }
+
+        if(conectatAmbServidor) {
+            //Configurem el logIn i enviem la solicitud al servidor
+            new Transmission( new User(), this);
+        }else{
+            System.out.println("No hi ha connexio amb el server");
+        }
     }
 }

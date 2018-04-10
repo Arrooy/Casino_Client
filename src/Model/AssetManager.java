@@ -1,6 +1,7 @@
 package Model;
 
 import Controlador.Sounds;
+import Vista.SplashScreen;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,14 +17,13 @@ public class AssetManager {
     private static Map<String, BufferedImage> imatges;
     private final static String PATH_IMATGES = "./Assets/Images";
 
-    public static void loadData() {
-        System.out.println("[LOADER]: " + Baralla.loadContent() + " images.");
-        /*System.out.println("50% data loaded");*///TODO:millorar amb splash screen
-        System.out.println("[LOADER]: " + Sounds.loadAllSounds() + " sound clips");
-        System.out.println("[LOADER]: " + loadImatges() + " normal imgs");
+    public static void loadData(SplashScreen splashScreen) {
+        Baralla.loadContent(splashScreen);
+        loadImatges(splashScreen);
+        Sounds.loadAllSounds(splashScreen);
     }
 
-    private static int loadImatges(){
+    private static void loadImatges(SplashScreen splashScreen){
 
         File carpetaAssetsCartes = new File(PATH_IMATGES);
         File[] listOfFiles = carpetaAssetsCartes.listFiles();
@@ -37,13 +37,14 @@ public class AssetManager {
                     img = ImageIO.read(foto);
                 } catch (IOException e) {
                     System.out.println("Error llegint " + foto.getName());
+                    splashScreen.stop();
                 }
                 if (img != null) {
                     imatges.put(foto.getName(), img);
+                    splashScreen.infoMessage("Loaded " + imatges.size() + " UI images.");
                 }
             }
         }
-        return imatges.size();
     }
     public static Image getImage(String nom){
         return imatges.get(nom);

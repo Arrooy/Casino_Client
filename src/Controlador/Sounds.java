@@ -1,6 +1,8 @@
 package Controlador;
 
 
+import Vista.SplashScreen;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -13,7 +15,7 @@ public class Sounds extends Thread {
 
     private static Map<String, Clip> audios;
 
-    public static int loadAllSounds(){
+    public static void loadAllSounds(SplashScreen splashScreen){
         audios = new HashMap<>();
 
 
@@ -29,12 +31,12 @@ public class Sounds extends Thread {
                     // Open audio clip and load samples from the audio input stream.
                     clip.open(audioIn);//TODO: INFORMARSE DE SI AIXO ESTA BE FERHO AQUI O ES MILLOR FERHO CADA COP QUE EES FA PLAY
                     audios.put(soundFile.getName(),clip);
+                    splashScreen.infoMessage("Loaded " + audios.size() + " sound clips.");
                 }catch (Exception e){
                     e.printStackTrace();
                 }
             }
         }
-        return audios.size();
     }
 
     public static void stopAllAudio(){

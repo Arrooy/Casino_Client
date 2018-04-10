@@ -63,10 +63,6 @@ public class BlackJackView extends View {
 
     }
 
-    public void modificaAposta(){
-
-    }
-
     public void addCardIntoGame(Card card, MouseListener c){
 
         JLabel label = new JLabel(new ImageIcon(Baralla.findImage(card)));

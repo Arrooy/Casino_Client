@@ -81,12 +81,21 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 finestra.setSignInView();
                 break;
             case "guest":
-                displayError("YOW! ETS INVITADO","Molt guay :D");
+                networkManager.enterAsGuest();
                 break;
             case "roulette":
-
+                if(user.isGuest()){
+                    displayError("ETS UN GUEST PUTA","no pots pasar hehe");
+                }else{
+                    //Codi per a usuaris normals
+                }
                 break;
             case "horse":
+                if(user.isGuest()){
+                    displayError("ETS UN GUEST PUTA","no pots pasar hehe");
+                }else{
+                    //Codi per a usuaris normals
+                }
                 break;
             case "blackJack":
                 Sounds.play("cardShuffle.wav");
@@ -104,6 +113,11 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 else ;//TODO: mostra error informatiu
                 break;
         }
+    }
+
+    public void showFinestra() {
+        finestra.setVisible(true);
+        finestra.requestFocus();
     }
 
     public void setUser(User u){

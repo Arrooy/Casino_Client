@@ -11,6 +11,7 @@ import static java.lang.Thread.sleep;
 public class Transmission implements Runnable {
 
     public static final String CONTEXT_LOGIN = "login";
+    public static final String CONTEXT_LOGIN_GUEST = "loginGuest";
     public static final String CONTEXT_LOGOUT = "logout";
     public static final String CONTEXT_SIGNUP = "signup";
     public static final String CONTEXT_BLACK_JACK = "blackjack";
@@ -40,6 +41,11 @@ public class Transmission implements Runnable {
                 }
                 break;
             case CONTEXT_SIGNUP:
+                if(!updateConnection()){
+                    //TODO: ERROR SIGN IN!!!!!!
+                }
+                break;
+            case CONTEXT_LOGIN_GUEST:
                 updateConnection();
                 break;
             case CONTEXT_LOGOUT:
@@ -82,19 +88,12 @@ public class Transmission implements Runnable {
 
             //Esperem a una resposta del servidor
             User responseUser = (User) waitResponse(usuariIntent);
-
             //Si la resposta del servidor indica que tot es correcte. Es completa el logIn
             if(responseUser.areCredentialsOk()){
-                finishLogIn(responseUser);
-
-                //TODO: que algu fagi algo amb aixo per a que no quedi com el cul
-                //networkManager.displayError("Usuari - Contrasenya correcte!","Ets el puto amo, fesme un fill tete\nNOTA PROGRAMADOR VISTA: cundiria ficar aquesta alerta a la vista!!!!!");
-
+                finishUpdate(responseUser);
                 return true;
             } else {
                 //De lo contari, s'indica al usuari que s'ha equivocat
-                //networkManager.displayError("Usuari - Contrasenya incorrecte!","Torna a intentar-ho pls\nNOTA PROGRAMADOR VISTA: cundiria ficar aquesta alerta a la vista!!!!!");
-
                 return false;
             }
         } catch (Exception e) {
@@ -117,17 +116,16 @@ public class Transmission implements Runnable {
     }
 
     /** Finalitza el logIn, actualitzant les dades de l'usuari. Tambe es gestiona la copia local del logIn*/
-    private void finishLogIn(User userVerificat){
+    private void finishUpdate(User userVerificat){
+
         //S'actualitza el user
         networkManager.setUser(userVerificat);
 
         //En el cas de haver marcat la casella de recordar usuari
         if(networkManager.rememberLogIn()){
-
             //L'afegim al json
             JsonManager.addRemember(userVerificat.getUsername(),userVerificat.getPassword());
         }else{
-
             //El borrem del json si existeix
             JsonManager.removeRemember();
         }

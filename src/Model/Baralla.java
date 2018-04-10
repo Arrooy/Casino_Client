@@ -1,5 +1,7 @@
 package Model;
 
+import Vista.SplashScreen;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,7 +17,7 @@ public class Baralla {
     private static Map<String, BufferedImage> cartes;
     private static Stack<String> nomCartes;
 
-    public static int loadContent() {
+    public static void loadContent(SplashScreen splashScreen) {
 
         nomCartes = new Stack<>();
 
@@ -32,14 +34,15 @@ public class Baralla {
                     img = ImageIO.read(carta);
                 } catch (IOException e) {
                     System.out.println("Error llegint " + carta.getName());
+                    splashScreen.stop();
                 }
                 if (img != null) {
                     cartes.put(carta.getName(), img);
+                    splashScreen.infoMessage("Loaded " + cartes.size() + " card images.");
                 }
                 nomCartes.push(carta.getName());
             }
         }
-        return cartes.size();
     }
 
     public static Stack<String> getNomCartes() {

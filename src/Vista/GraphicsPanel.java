@@ -68,8 +68,6 @@ public class GraphicsPanel extends JPanel implements Runnable {
                 e.printStackTrace();
             }
         }
-        // End game immediately when running becomes false.
-        System.exit(0);
     }
 
     private void updateAndRender(long deltaMillis) {

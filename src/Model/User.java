@@ -3,6 +3,8 @@ package Model;
 import Network.Message;
 import java.util.ArrayList;
 
+import static Network.Transmission.CONTEXT_LOGIN_GUEST;
+
 /** Usuari basic del casino*/
 
 public class User extends Message {
@@ -29,9 +31,22 @@ public class User extends Message {
     /** Diners del usuari*/
     private long wallet;
 
+    /** Indica si el usuari es un guest*/
+    private boolean isGuest;
+
     /** Evolucio dels diners del usuari*/
     private ArrayList<Long> coinHistory;
 
+
+    /**
+     * Crea un usuari guest
+     * Aquest usuari se li adjudica un IdentificadorAleatori per a una millor comunicacio client - servidor.
+     */
+    public User() {
+        ID = Math.random();
+        this.context = CONTEXT_LOGIN_GUEST;
+        isGuest = true;
+    }
 
     /**
      * Crea un usuari amb un nom i una password.
@@ -151,5 +166,13 @@ public class User extends Message {
     @Override
     public String toString() {
         return "Usuari:\n\tUsername: " + username + "\n\tPassword: " + password + "\n\tID: " + ID;
+    }
+
+    public boolean isGuest() {
+        return isGuest;
+    }
+
+    public void setGuest(boolean guest) {
+        isGuest = guest;
     }
 }
