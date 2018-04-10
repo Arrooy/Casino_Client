@@ -15,18 +15,21 @@ public class SplashScreen extends JFrame implements ToDraw,Runnable{
     private GraphicsPanel backGround;
     private String info;
     private Color textColor;
-
+    private int stroke[];
     public SplashScreen(){
+
         info = "Loading AssetManager...";
         textColor = Color.black;
         //Declarem el nombre de ralles de l'animacio d'inici
-        numberOfLines = (int)(Math.random() * 25) + 8;
+        numberOfLines = (int)(Math.random() * 20) + 15;
 
         //Es declaren els colors de les ralles
         colors = new Color[numberOfLines];
+        stroke = new int[numberOfLines];
 
         //Es crea el panell per pintar l'animacio i es configura per ocupar tot el JFrame
-        backGround = new GraphicsPanel(500,700);
+        backGround = new GraphicsPanel(350,475);
+        backGround.setBackgroundColor(Color.black);
         backGround.setCurrentDrawing(this,null);
         getContentPane().add(backGround);
 
@@ -73,8 +76,35 @@ public class SplashScreen extends JFrame implements ToDraw,Runnable{
         x1 = (int)x2(0);
         y = (int)y1(0);
         y1 = (int)y2(0);
-        for(int i = 0;i < numberOfLines;i++)
-            colors[i] = new Color((int)(Math.random() * 255),(int)(Math.random() * 255),(int)(Math.random() * 255));
+        int aux = 0;
+        int colorSelecionado = (int)(Math.random() * 6);
+
+        for(int i = 0;i < numberOfLines;i++) {
+
+            switch (colorSelecionado){
+                case 0:
+                    colors[i] = new Color((int)map(i,0,numberOfLines,0,200),0,0);
+                    break;
+                case 1:
+                    colors[i] = new Color(0,(int)map(i,0,numberOfLines,0,200),0);
+                    break;
+                case 2:
+                    colors[i] = new Color((int)map(i,0,numberOfLines,0,200),(int)map(i,0,numberOfLines,0,200),0);
+                    break;
+                case 3:
+                    colors[i] = new Color(0,(int)map(i,0,numberOfLines,0,200),(int)map(i,0,numberOfLines,0,200));
+                    break;
+                case 4:
+                    colors[i] = new Color((int)map(i,0,numberOfLines,0,200),(int)map(i,0,numberOfLines,0,200),(int)map(i,0,numberOfLines,0,200));
+                    break;
+                default:
+                    colors[i] = new Color(0,0,(int)map(i,0,numberOfLines,0,200));
+            }
+            stroke[i] = 2 + aux;
+            if(i % 5 == 0)
+                aux++;
+            System.out.println(stroke[i]);
+        }
     }
 
     @Override
@@ -90,18 +120,19 @@ public class SplashScreen extends JFrame implements ToDraw,Runnable{
         g.setFont(new Font(g.getFont().getFontName(),Font.PLAIN,15));
         FontMetrics metrics = g.getFontMetrics(g.getFont());
 
-        g.drawString(info,250 - metrics.stringWidth(info)/2,675);
-        g.translate(250,250);
+        g.drawString(info,175 - metrics.stringWidth(info)/2,450);
+        g.translate(175,220);
+        g.setColor(Color.white);
+
         for(int i = 0; i < numberOfLines;i++){
             g.setColor(colors[i]);
-
-            x = (int) x1(currentTime + i*100/numberOfLines);
-            x1 = (int) x2(currentTime + i*100/numberOfLines);
-            y = (int) y1(currentTime + i*100/numberOfLines);
-            y1 = (int) y2(currentTime + i*100/numberOfLines);
+            x = (int) x1(currentTime - i*100/numberOfLines);
+            x1 = (int) x2(currentTime - i*100/numberOfLines);
+            y = (int) y1(currentTime - i*100/numberOfLines);
+            y1 = (int) y2(currentTime - i*100/numberOfLines);
 
             Graphics2D g2 = (Graphics2D) g;
-            g2.setStroke(new BasicStroke(4));
+            g2.setStroke(new BasicStroke(stroke[i]));
             g2.draw(new Line2D.Float(x1, y1,x,y));
         }
     }
@@ -113,7 +144,7 @@ public class SplashScreen extends JFrame implements ToDraw,Runnable{
 
     public void infoMessage(String message){
         this.info = message;
-        this.textColor = Color.black;
+        this.textColor = Color.white;
     }
 
     public void showError(String error) {
@@ -125,5 +156,8 @@ public class SplashScreen extends JFrame implements ToDraw,Runnable{
         while(true){
             System.out.println("ERROR");
         }
+    }
+    public float map(float value, float istart, float istop, float ostart, float ostop) {
+        return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
     }
 }

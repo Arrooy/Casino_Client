@@ -17,13 +17,20 @@ public class GraphicsPanel extends JPanel implements Runnable {
 
     private GraphicsController controller;
 
+    private Color backgroundColor;
+
     public GraphicsPanel(int width, int height) {
         this.width = width;
         this.height = height;
         setPreferredSize(new Dimension(width, height));
         setBackground(Color.BLACK);
+        backgroundColor = Color.white;
         setFocusable(true);
         requestFocus();
+    }
+    /** Modifica el color del fons*/
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     public void setCurrentDrawing(ToDraw newState, GraphicsController controller) {
@@ -68,6 +75,8 @@ public class GraphicsPanel extends JPanel implements Runnable {
                 e.printStackTrace();
             }
         }
+        // End game immediately when running becomes false.
+        System.exit(0);
     }
 
     private void updateAndRender(long deltaMillis) {
@@ -82,7 +91,8 @@ public class GraphicsPanel extends JPanel implements Runnable {
             image = createImage(width, height);
         }
         Graphics g = image.getGraphics();
-        g.clearRect(0, 0, width, height);
+        g.setColor(backgroundColor);
+        g.fillRect(0, 0, width, height);
     }
 
     public void exit() {
