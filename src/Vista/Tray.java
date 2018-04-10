@@ -38,6 +38,10 @@ public class Tray {
         }
     }
 
+    public static void showNotification(String title,String content){
+        trayIcon.displayMessage(title,content, TrayIcon.MessageType.WARNING);
+    }
+
     public static void addController(Controller c) {
         sortir.addActionListener(c);
         sortir.setActionCommand("exitProgram");

@@ -86,12 +86,13 @@ public class NetworkManager extends Thread {
 
     /** Solicita al servidor tencar la sessio actual*/
     public void requestLogOut(){
-        if(user != null) {
+        if(conectatAmbServidor){
+            User user = new User("","",Transmission.CONTEXT_LOGOUT);
             user.setOnline(false);
-            user.setContext(Transmission.CONTEXT_LOGOUT);
             send(user);
-        }else
+        }else{
             logOut();
+        }
 
     }
 
