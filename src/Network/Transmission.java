@@ -43,6 +43,7 @@ public class Transmission implements Runnable {
                 updateConnection();
                 break;
             case CONTEXT_LOGOUT:
+                System.out.println("[TRANSMISION]: sending log out");
                 updateConnection();
                 break;
             case CONTEXT_BLACK_JACK_INIT:

@@ -174,6 +174,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     @Override
     public void mousePressed(MouseEvent e) {
         networkManager.newBlackJackCard(false);
+        //networkManager.newBlackJackCard(true);
     }
 
     @Override
@@ -183,17 +184,17 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        blackJackView.updateBoardPositions(((JLabel)e.getSource()).getName());
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        blackJackView.updateBoardPositions(null);
+
     }
 
     @Override
     public void componentResized(ComponentEvent e) {
-        blackJackView.updateBoardPositions(null);
+        blackJackView.updateBoardPositions();
     }
 
     @Override

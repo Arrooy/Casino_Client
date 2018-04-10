@@ -24,13 +24,15 @@ public class Finestra extends JFrame {
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(640, 480);
+
         //Try to fullScreen
         setExtendedState(MAXIMIZED_BOTH);
         checkFullScreen();
 
-        //setMinimumSize(new Dimension(BlackJackView.MIN_SCREEN_WIDTH, BlackJackView.MIN_SCREEN_HEIGHT));
+        setMinimumSize(new Dimension(BlackJackView.MIN_SCREEN_WIDTH, BlackJackView.MIN_SCREEN_HEIGHT));
+        System.out.println("[FRAME]: "+ getMinimumSize().width + " - " + getMinimumSize().height);
 
-        //System.out.println(getMinimumSize().width + " " + getMinimumSize().height);
+        requestFocus();
 
         layout = new CardLayout();
         getContentPane().setLayout(layout);
