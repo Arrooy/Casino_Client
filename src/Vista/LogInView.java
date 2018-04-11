@@ -162,6 +162,7 @@ public class LogInView extends View {
     }
 
     public boolean getRememberLogIn() {
+        System.out.println("jcbRemember" + jcbRememberLogIn.isSelected());
         return jcbRememberLogIn.isSelected();
     }
 

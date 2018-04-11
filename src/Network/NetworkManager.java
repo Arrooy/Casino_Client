@@ -1,15 +1,18 @@
 package Network;
 
 import Controlador.Controller;
+import Controlador.Game_Controlers.BlackJackController;
 import Controlador.JsonManager;
 import Model.Card;
 import Model.User;
+import Vista.SplashScreen;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -53,8 +56,17 @@ public class NetworkManager extends Thread {
     /** Inidica si estem connectats amb el servidor. Es indiferent si el client esta autentificat o no.*/
     private boolean conectatAmbServidor;
 
-    /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.*/
-    public NetworkManager() {
+    /** Splash screen del programa. En cas de tenir conexio amb el servidor, networkManager sencarrega de tencar-la*/
+    private SplashScreen splashScreen;
+
+    /** Indica el nombre de cops que el client ha intentat reconectarse amb el servidor*/
+    private int nTryConnect;
+
+    /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.
+     * @param splashScreen*/
+    public NetworkManager(SplashScreen splashScreen) {
+        this.splashScreen = splashScreen;
+        nTryConnect = 0;
 
         lectures = new ArrayList<>();
 
@@ -76,7 +88,7 @@ public class NetworkManager extends Thread {
             connectarAmbServidor();
         }
         if(conectatAmbServidor) {
-        //Configurem el logIn i enviem la solicitud al servidor
+            //Configurem el logIn i enviem la solicitud al servidor
             User user = new User((String)credentials[0],(String)credentials[1],Transmission.CONTEXT_LOGIN);
             new Transmission( user, this);
         }else{
@@ -126,7 +138,7 @@ public class NetworkManager extends Thread {
 
                     lectures.add(missatge);
                 } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
         }
@@ -138,6 +150,7 @@ public class NetworkManager extends Thread {
         //desitja/permet la desconnexio d'aquest client
         if(missatge instanceof User){
             if(!((User)missatge).isOnline()){
+                System.out.println("BYE BYE");
                 logOut();
                 return true;
             }
@@ -161,12 +174,30 @@ public class NetworkManager extends Thread {
             oos = new ObjectOutputStream(socket.getOutputStream());
             //En el cas d'haver arribat aquest punt del codi, significa que ens hem connectat correctament
             conectatAmbServidor = true;
+
+            //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
+            splashScreen.exit();
+            controller.showFinestra();
+
             //Si en el json de configuracio inicial apareix l'indicador
             //d'autoLogin, s'executa el login de forma automatica.
             if(autoLogin)
                 logIn(JsonManager.llegirJson(JsonManager.USERNAME_R, JsonManager.PASSWORD_R));
+
         }catch (IOException e){
-            System.out.println("Impossible connectarse amb el servidor");
+            if(nTryConnect == 0) {
+                splashScreen.showError("Server connection failed");
+                nTryConnect++;
+            }else{
+                splashScreen.showError("Attempting to reconnect ["+nTryConnect+"]");
+                nTryConnect++;
+            }
+            connectarAmbServidor(controller);
+            try {
+                sleep(100);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -193,8 +224,6 @@ public class NetworkManager extends Thread {
     public synchronized void send(Object objectToSend){
         try {
             oos.writeObject(objectToSend);
-            //User u = (User) objectToSend;
-            //System.out.println(u);
         } catch (IOException e) {
             System.out.println("IMPOSSIBLE ENVIAR MISSATGE!\n\n");
             e.printStackTrace();
@@ -231,6 +260,8 @@ public class NetworkManager extends Thread {
 
     /** Inidica si es vol recordar el logIn*/
     public boolean rememberLogIn() {
+        if(autoLogin)
+            return true;
         return controller.rememberLogIn();
     }
 
@@ -243,9 +274,7 @@ public class NetworkManager extends Thread {
         controller.showGamesView();
     }
 
-    public Controller getController() {
-        return controller;
-    }
+
 
     /**
      * Envia al servidor una petició de SignUp per a un usuari concret
@@ -274,7 +303,21 @@ public class NetworkManager extends Thread {
             new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,false),this);
             new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
             new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
+            controller.initBlackJack();
         }
         controller.newBJCard(cartaResposta);
+    }
+
+    public void enterAsGuest() {
+        if(!conectatAmbServidor){
+            connectarAmbServidor();
+        }
+
+        if(conectatAmbServidor) {
+            //Configurem el logIn i enviem la solicitud al servidor
+            new Transmission( new User(), this);
+        }else{
+            System.out.println("No hi ha connexio amb el server");
+        }
     }
 }

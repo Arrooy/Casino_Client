@@ -1,5 +1,6 @@
 package Controlador;
 
+import Controlador.Game_Controlers.BlackJackController;
 import Model.AssetManager;
 import Model.Baralla;
 import Model.Card;
@@ -23,6 +24,8 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     private GameSelectorView gameSelectorView;
     private SettingsView settingsView;
     private BlackJackView blackJackView;
+
+    private BlackJackController BJController;
 
     /** Usuari que controla el client*/
     private User user;
@@ -50,7 +53,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     /** Retorna l'estat de la JCheckBox RememberLogIn inidcant doncs si s'ha de guardar localment el login del usuari*/
     public boolean rememberLogIn(){
-        return (logInView != null) && logInView.getRememberLogIn();
+        return logInView.getRememberLogIn();
     }
 
     @Override
@@ -81,17 +84,24 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 finestra.setSignInView();
                 break;
             case "guest":
-                displayError("YOW! ETS INVITADO","Molt guay :D");
+                networkManager.enterAsGuest();
                 break;
             case "roulette":
-
+                if(user.isGuest()){
+                    displayError("ETS UN GUEST PUTA","no pots pasar hehe");
+                }else{
+                    //Codi per a usuaris normals
+                }
                 break;
             case "horse":
+                if(user.isGuest()){
+                    displayError("ETS UN GUEST PUTA","no pots pasar hehe");
+                }else{
+                    //Codi per a usuaris normals
+                }
                 break;
             case "blackJack":
-                Sounds.play("cardShuffle.wav");
                 networkManager.initBlackJack(Baralla.getNomCartes());
-                finestra.setBlackJackView();
                 break;
             case "exitProgram":
                 exitProgram(0);
@@ -106,12 +116,17 @@ public class Controller implements ActionListener, WindowListener, MouseListener
         }
     }
 
+    public void showFinestra() {
+        finestra.setVisible(true);
+        finestra.requestFocus();
+    }
+
     public void setUser(User u){
         user = u;
     }
 
     public void newBJCard(Card cartaResposta) {
-        blackJackView.addCardIntoGame(cartaResposta,this);
+        BJController.newBJCard(cartaResposta);
     }
 
     private void signUp() {
@@ -121,7 +136,6 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void showErrorLogIn(String s) {
         logInView.setError(s);
     }
-
     public void setMainView(MainViewClient mainView) {
         this.mainView = mainView;
     }
@@ -132,12 +146,18 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
     public void setSettingsView(SettingsView settingsView) {this.settingsView = settingsView;}
     public void showGamesView() {
+        logInView.clearFields();
         finestra.setGameSelector();
     }
+
+    public void initBlackJack() {
+        BJController = new BlackJackController(blackJackView,networkManager);
+        finestra.setBlackJackView();
+    }
+
     public void setBlackJackView(BlackJackView blackJackView) {
         this.blackJackView = blackJackView;
     }
-
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -168,13 +188,10 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        networkManager.newBlackJackCard(false);
-        //networkManager.newBlackJackCard(true);
     }
 
     @Override
@@ -194,12 +211,14 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void componentResized(ComponentEvent e) {
-        blackJackView.updateBoardPositions();
+        if(BJController != null)
+            BJController.updateSize(false);
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
-
+        if(BJController != null)
+            BJController.updateSize(true);
     }
 
     @Override

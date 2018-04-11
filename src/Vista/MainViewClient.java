@@ -71,9 +71,6 @@ public class MainViewClient extends View{
         jbSignIn.setActionCommand("goSignIn");
         jbSignIn.addActionListener(c);
 
-        jbGuest.setActionCommand("enterAsGuest");
-        jbGuest.addActionListener(c);
-
         //Tenen el mateix actionCommand perque les dues accions resulten en el mateix - wtf?
         logInButton.setActionCommand("goToLogIn");
         logInButton.addActionListener(c);

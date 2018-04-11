@@ -3,6 +3,7 @@ package Vista;
 import Controlador.Controller;
 
 import javax.swing.*;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.*;
 
 public class SignInView extends View {
@@ -29,7 +30,7 @@ public class SignInView extends View {
         JPanel jpgblBack = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         //Marges
-        c.insets = new Insets(20,20,20,0);
+        c.insets = new Insets(20,20,0,0);
         c.fill = GridBagConstraints.BOTH;
         jbBack = new JButton("BACK");
         jbBack.setFocusable(false);
@@ -43,7 +44,7 @@ public class SignInView extends View {
         JPanel jpTitle = new JPanel();
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
         JLabel jlTitle = new JLabel("Sign In");
-        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 24));
+        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
         //Marges
         c.insets = new Insets(20,0,0,0);
         jpgblTitle.add(jlTitle, c);
@@ -100,7 +101,7 @@ public class SignInView extends View {
         jbAccept = new JButton("Accept");
         jbAccept.setFocusable(false);
 
-        c.gridy = 4;
+        c.gridy = 5;
         c.gridx = 0;
         c.gridwidth = 3;
         c.insets = new Insets(20,0,0,0);

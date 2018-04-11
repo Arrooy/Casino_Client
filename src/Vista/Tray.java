@@ -17,7 +17,7 @@ public class Tray {
 
             PopupMenu popup = new PopupMenu();
 
-            trayIcon = new TrayIcon(new ImageIcon("data/PitchTrayIcon.gif").getImage());
+            trayIcon = new TrayIcon(new ImageIcon("Assets/Images/ico.png").getImage());
 
             trayIcon.setImageAutoSize(true);
 
