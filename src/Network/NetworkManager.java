@@ -193,6 +193,11 @@ public class NetworkManager extends Thread {
                 nTryConnect++;
             }
             connectarAmbServidor(controller);
+            try {
+                sleep(100);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
