@@ -3,12 +3,12 @@ package Vista;
 import Controlador.GraphicsController;
 
 import java.awt.*;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class GraphicsPanel extends JPanel implements Runnable {
-    private int width;
-    private int height;
+    private Integer width;
+    private Integer height;
     private Image image;
 
     private Thread thread;
@@ -19,7 +19,7 @@ public class GraphicsPanel extends JPanel implements Runnable {
 
     private Color backgroundColor;
 
-    public GraphicsPanel(int width, int height) {
+    public GraphicsPanel(Integer width, int height) {
         this.width = width;
         this.height = height;
         setPreferredSize(new Dimension(width, height));
@@ -28,6 +28,15 @@ public class GraphicsPanel extends JPanel implements Runnable {
         setFocusable(true);
         requestFocus();
     }
+
+    public void updateSize(int w, int h, boolean fully){
+        this.width = w;
+        this.height = h;
+        setPreferredSize(new Dimension(width, height));
+        if(fully)
+            image = createImage(width, height);
+    }
+
     /** Modifica el color del fons*/
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -86,9 +95,13 @@ public class GraphicsPanel extends JPanel implements Runnable {
     }
 
     private void prepareGameImage() {
-        if (image == null) {
+        if(image == null){
             image = createImage(width, height);
         }
+        if (image.getWidth(null) != width || image.getHeight(null) != height) {
+            image = createImage(width, height);
+        }
+
         Graphics g = image.getGraphics();
         g.setColor(backgroundColor);
         g.fillRect(0, 0, width, height);
@@ -108,5 +121,6 @@ public class GraphicsPanel extends JPanel implements Runnable {
     private void registraControllador(GraphicsController c) {
         addKeyListener(c);
         addMouseListener(c);
+        addMouseMotionListener(c);
     }
 }

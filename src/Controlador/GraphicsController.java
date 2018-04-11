@@ -1,11 +1,10 @@
 package Controlador;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import javax.swing.event.MouseInputListener;
+import java.awt.event.*;
 
-public abstract class GraphicsController implements KeyListener, MouseListener {
+
+public abstract class GraphicsController implements KeyListener, MouseInputListener{
 
     @Override
     public abstract void keyTyped(KeyEvent e);
@@ -30,4 +29,9 @@ public abstract class GraphicsController implements KeyListener, MouseListener {
 
     @Override
     public abstract void mouseExited(MouseEvent e);
+    @Override
+    public abstract void mouseDragged(MouseEvent e);
+
+    @Override
+    public abstract void mouseMoved(MouseEvent e);
 }

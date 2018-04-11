@@ -57,4 +57,16 @@ public class Sounds extends Thread {
     public static void songNoEnd(String fileName){
         audios.get(fileName).loop(Clip.LOOP_CONTINUOUSLY);
     }
+
+    public static void waitFor(String nomFitxer) {
+        Clip clip = audios.get(nomFitxer);
+        while(clip.isRunning()){
+            try {
+                sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }

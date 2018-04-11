@@ -1,5 +1,6 @@
 package Controlador;
 
+import Controlador.Game_Controlers.BlackJackController;
 import Model.AssetManager;
 import Model.Baralla;
 import Model.Card;
@@ -23,6 +24,8 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     private GameSelectorView gameSelectorView;
     private SettingsView settingsView;
     private BlackJackView blackJackView;
+
+    private BlackJackController BJController;
 
     /** Usuari que controla el client*/
     private User user;
@@ -99,7 +102,6 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 break;
             case "blackJack":
                 networkManager.initBlackJack(Baralla.getNomCartes());
-                finestra.setBlackJackView();
                 break;
             case "exitProgram":
                 exitProgram(0);
@@ -124,7 +126,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     public void newBJCard(Card cartaResposta) {
-        blackJackView.addCardIntoGame(cartaResposta);
+        BJController.newBJCard(cartaResposta);
     }
 
     private void signUp() {
@@ -134,7 +136,6 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void showErrorLogIn(String s) {
         logInView.setError(s);
     }
-
     public void setMainView(MainViewClient mainView) {
         this.mainView = mainView;
     }
@@ -148,10 +149,15 @@ public class Controller implements ActionListener, WindowListener, MouseListener
         logInView.clearFields();
         finestra.setGameSelector();
     }
+
+    public void initBlackJack() {
+        BJController = new BlackJackController(blackJackView,networkManager);
+        finestra.setBlackJackView();
+    }
+
     public void setBlackJackView(BlackJackView blackJackView) {
         this.blackJackView = blackJackView;
     }
-
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -182,13 +188,10 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        //networkManager.newBlackJackCard(false);
-        networkManager.newBlackJackCard(true);
     }
 
     @Override
@@ -207,11 +210,15 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     @Override
-    public void componentResized(ComponentEvent e) {}
+    public void componentResized(ComponentEvent e) {
+        if(BJController != null)
+            BJController.updateSize(false);
+    }
 
     @Override
     public void componentMoved(ComponentEvent e) {
-
+        if(BJController != null)
+            BJController.updateSize(true);
     }
 
     @Override

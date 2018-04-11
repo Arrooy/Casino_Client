@@ -8,22 +8,19 @@ import Model.Card;
 import Vista.ToDraw;
 import Vista.View;
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
 import java.util.LinkedList;
 
-public class BlackJackView extends View implements ToDraw {
+public class BlackJackView extends JPanel implements ToDraw {
 
     public static final int MARGIN_BETWEEN_CARDS = 5;
     public static final int MARGIN_TOP = 10;
     public static final int MARGIN_BOTTOM = 10;
     public static final int MARGIN_CENTER = 100;
-
     public static final int CARD_WIDTH = 150;
     public static final int CARD_HEIGHT = 210;
-
     public static final int MAX_CARDS_IN_HAND = 6;
-
     public static final int MIN_SCREEN_WIDTH = CARD_WIDTH + MARGIN_BETWEEN_CARDS;
     public static final int MIN_SCREEN_HEIGHT = CARD_HEIGHT  + CARD_HEIGHT + MARGIN_TOP + MARGIN_BOTTOM + MARGIN_CENTER;
 
@@ -31,17 +28,17 @@ public class BlackJackView extends View implements ToDraw {
     private LinkedList<Card> IACards;
 
     public BlackJackView(){
-        setBackground(Color.BLACK);
-        setLayout(null);
+        setBackground(Color.green);
         IACards = new LinkedList<>();
         userCards = new LinkedList<>();
     }
 
     public void addCardIntoGame(Card card){
+        System.out.println("Adding card: " + card.getCardName());
+
         if(card.isForIA()){
             //La carta es per la ia
             IACards.add(card);
-
         }else {
             //La carta es per a la persona
             userCards.add(card);
@@ -87,14 +84,8 @@ public class BlackJackView extends View implements ToDraw {
     }
 
     @Override
-    public void addController(Controller c) {
-        setName("BlackJack");
-        addMouseListener(c);
-    }
-
-    @Override
     public void init() {
-        Sounds.play("cardShuffle.wav");
+        //Sounds.play("cardShuffle.wav");
     }
 
     @Override
@@ -108,7 +99,7 @@ public class BlackJackView extends View implements ToDraw {
         for(Card card : IACards){
             g.drawImage(Baralla.findImage(card),card.getX(),card.getY(),null);
         }
-        for(Card card : IACards){
+        for(Card card : userCards){
             g.drawImage(Baralla.findImage(card),card.getX(),card.getY(),null);
         }
     }

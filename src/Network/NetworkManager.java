@@ -27,9 +27,6 @@ public class NetworkManager extends Thread {
     /** Controlador del sistema*/
     private Controller controller;
 
-    /** Controlador del sistema*/
-    private BlackJackController BJController;
-
     /** Socket que es connectara al servidor*/
     private Socket socket;
 
@@ -301,8 +298,9 @@ public class NetworkManager extends Thread {
             new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,false),this);
             new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
             new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
+            controller.initBlackJack();
         }
-        BJController.newBJCard(cartaResposta);
+        controller.newBJCard(cartaResposta);
     }
 
     public void enterAsGuest() {
@@ -316,8 +314,5 @@ public class NetworkManager extends Thread {
         }else{
             System.out.println("No hi ha connexio amb el server");
         }
-    }
-    public void setBJController(BlackJackController BJController){
-        this.BJController = BJController;
     }
 }
