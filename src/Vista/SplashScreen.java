@@ -103,7 +103,6 @@ public class SplashScreen extends JFrame implements ToDraw,Runnable{
             stroke[i] = 2 + aux;
             if(i % 5 == 0)
                 aux++;
-            System.out.println(stroke[i]);
         }
     }
 

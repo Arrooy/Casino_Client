@@ -117,7 +117,6 @@ public class Transmission implements Runnable {
 
     /** Finalitza el logIn, actualitzant les dades de l'usuari. Tambe es gestiona la copia local del logIn*/
     private void finishUpdate(User userVerificat){
-
         //S'actualitza el user
         networkManager.setUser(userVerificat);
 

@@ -50,7 +50,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     /** Retorna l'estat de la JCheckBox RememberLogIn inidcant doncs si s'ha de guardar localment el login del usuari*/
     public boolean rememberLogIn(){
-        return (logInView != null) && logInView.getRememberLogIn();
+        return logInView.getRememberLogIn();
     }
 
     @Override
@@ -98,7 +98,6 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 }
                 break;
             case "blackJack":
-                Sounds.play("cardShuffle.wav");
                 networkManager.initBlackJack(Baralla.getNomCartes());
                 finestra.setBlackJackView();
                 break;
@@ -125,7 +124,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     public void newBJCard(Card cartaResposta) {
-        blackJackView.addCardIntoGame(cartaResposta,this);
+        blackJackView.addCardIntoGame(cartaResposta);
     }
 
     private void signUp() {
@@ -146,6 +145,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
     public void setSettingsView(SettingsView settingsView) {this.settingsView = settingsView;}
     public void showGamesView() {
+        logInView.clearFields();
         finestra.setGameSelector();
     }
     public void setBlackJackView(BlackJackView blackJackView) {
@@ -207,9 +207,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     @Override
-    public void componentResized(ComponentEvent e) {
-        blackJackView.updateBoardPositions();
-    }
+    public void componentResized(ComponentEvent e) {}
 
     @Override
     public void componentMoved(ComponentEvent e) {

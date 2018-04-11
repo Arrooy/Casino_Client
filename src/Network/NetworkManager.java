@@ -1,6 +1,7 @@
 package Network;
 
 import Controlador.Controller;
+import Controlador.Game_Controlers.BlackJackController;
 import Controlador.JsonManager;
 import Model.Card;
 import Model.User;
@@ -11,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -24,6 +26,9 @@ public class NetworkManager extends Thread {
 
     /** Controlador del sistema*/
     private Controller controller;
+
+    /** Controlador del sistema*/
+    private BlackJackController BJController;
 
     /** Socket que es connectara al servidor*/
     private Socket socket;
@@ -86,7 +91,7 @@ public class NetworkManager extends Thread {
             connectarAmbServidor();
         }
         if(conectatAmbServidor) {
-        //Configurem el logIn i enviem la solicitud al servidor
+            //Configurem el logIn i enviem la solicitud al servidor
             User user = new User((String)credentials[0],(String)credentials[1],Transmission.CONTEXT_LOGIN);
             new Transmission( user, this);
         }else{
@@ -129,14 +134,14 @@ public class NetworkManager extends Thread {
                 //es guarden en la llista de lectures.
                 try {
                     Message missatge = (Message) ois.readObject();
-                    System.out.println("Rebut: " + missatge.getContext());
+
                     //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
                     if(ServidorVolDesconnectarAquestClient(missatge))
                         continue;
 
                     lectures.add(missatge);
                 } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
         }
@@ -217,8 +222,6 @@ public class NetworkManager extends Thread {
     public synchronized void send(Object objectToSend){
         try {
             oos.writeObject(objectToSend);
-            //User u = (User) objectToSend;
-            //System.out.println(u);
         } catch (IOException e) {
             System.out.println("IMPOSSIBLE ENVIAR MISSATGE!\n\n");
             e.printStackTrace();
@@ -255,6 +258,8 @@ public class NetworkManager extends Thread {
 
     /** Inidica si es vol recordar el logIn*/
     public boolean rememberLogIn() {
+        if(autoLogin)
+            return true;
         return controller.rememberLogIn();
     }
 
@@ -267,9 +272,7 @@ public class NetworkManager extends Thread {
         controller.showGamesView();
     }
 
-    public Controller getController() {
-        return controller;
-    }
+
 
     /**
      * Envia al servidor una petició de SignUp per a un usuari concret
@@ -299,7 +302,7 @@ public class NetworkManager extends Thread {
             new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
             new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
         }
-        controller.newBJCard(cartaResposta);
+        BJController.newBJCard(cartaResposta);
     }
 
     public void enterAsGuest() {
@@ -313,5 +316,8 @@ public class NetworkManager extends Thread {
         }else{
             System.out.println("No hi ha connexio amb el server");
         }
+    }
+    public void setBJController(BlackJackController BJController){
+        this.BJController = BJController;
     }
 }

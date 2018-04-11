@@ -81,7 +81,7 @@ public class Finestra extends JFrame {
         c.setSignInView(signInView);
         c.setSettingsView(settingsView);
         c.setGameSelectorView(gameSelectorView);
-        c.setBlackJackView(blackJackView);
+
 
         addWindowListener(c);
     }

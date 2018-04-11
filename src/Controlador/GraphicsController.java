@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public abstract class GraphicsController implements KeyListener, MouseListener {
+
     @Override
     public abstract void keyTyped(KeyEvent e);
 

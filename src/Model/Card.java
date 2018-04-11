@@ -1,8 +1,8 @@
 package Model;
 
-        import Network.Message;
+import Network.Message;
 
-        import java.util.Stack;
+import java.util.Stack;
 
 public class Card extends Message {
 
@@ -25,8 +25,14 @@ public class Card extends Message {
     /** Indica si la carta es per a un jugador o per a la ia.*/
     private boolean forIA;
 
+    /** Inidica si la carta esta girada o no*/
     private boolean girada;
 
+    /** Coordenades de la carta en el joc del BJ*/
+    private int x;
+    private int y;
+
+    /** Crea una nova carta per a iniciar el blackJack*/
     public Card(String cardName, String context, Stack<String> nomCartes, boolean ownerIA){
         forIA = ownerIA;
 
@@ -39,6 +45,8 @@ public class Card extends Message {
         reverseName = null;
         this.context = context;
     }
+
+    /** Crea una carta basica, per a robar de la baralla en el blackJack*/
     public Card(String cardName, String context, boolean ownerIA){
         forIA = ownerIA;
 
@@ -52,17 +60,21 @@ public class Card extends Message {
         this.context = context;
     }
 
-
+    /** GETTERS I SETTERS*/
     public boolean isForIA() {
         return forIA;
     }
+
     public String getCardName() {return cardName;}
+
     public void setCardName(String cardName) {
         this.cardName = cardName;
     }
+
     public String getReverseName() {
         return reverseName;
     }
+
     public void setReverseName(String reverseName) {
         this.reverseName = reverseName;
     }
@@ -70,6 +82,7 @@ public class Card extends Message {
     public Stack<String> getNomCartes() {
         return nomCartes;
     }
+
     public void setNomCartes(Stack<String> nomCartes) {
         this.nomCartes = nomCartes;
     }
@@ -92,12 +105,32 @@ public class Card extends Message {
         this.girada = girada;
     }
 
-
     public int getValue() {
         return value;
     }
+
     public void setValue(int value) {
         this.value = value;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setCoords(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 }

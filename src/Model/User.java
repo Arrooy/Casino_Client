@@ -64,6 +64,7 @@ public class User extends Message {
         this.credentialsOk = false;
 
         this.context = context;
+        isGuest = false;
     }
 
     /**
@@ -89,6 +90,7 @@ public class User extends Message {
         coinHistory.add(aux);
 
         this.credentialsOk = false;
+        isGuest = false;
     }
 
     /** GETTERS I SETTERS */
