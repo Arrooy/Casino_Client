@@ -1,10 +1,11 @@
-package Controlador;
+package Controlador.CustomGraphics;
 
 import javax.swing.event.MouseInputListener;
+import java.awt.*;
 import java.awt.event.*;
 
-
-public abstract class GraphicsController implements KeyListener, MouseInputListener{
+/** #RENAME ME?????*/
+public abstract class Controlador_Interaccio_dibuix implements KeyListener, MouseInputListener {
 
     @Override
     public abstract void keyTyped(KeyEvent e);
@@ -34,4 +35,8 @@ public abstract class GraphicsController implements KeyListener, MouseInputListe
 
     @Override
     public abstract void mouseMoved(MouseEvent e);
+
+    public abstract void init();
+    public abstract void update(float delta);
+    public abstract void render(Graphics g);
 }

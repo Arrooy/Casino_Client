@@ -3,6 +3,7 @@ package Controlador;
 import Controlador.Game_Controlers.BlackJackController;
 import Model.Baralla;
 import Model.Card;
+import Model.Model_BJ;
 import Model.User;
 import Vista.*;
 import Network.*;
@@ -186,7 +187,8 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     public void initBlackJack() {
-        BJController = new BlackJackController(blackJackView,networkManager);
+        //crea el controlador de la nova partida amb un nou model
+        BJController = new BlackJackController(blackJackView,networkManager,new Model_BJ());
         finestra.setBlackJackView();
     }
 
@@ -247,13 +249,13 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     @Override
     public void componentResized(ComponentEvent e) {
         if(BJController != null)
-            BJController.updateSize(false);
+            BJController.updateSizeBJ(false);
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
         if(BJController != null)
-            BJController.updateSize(true);
+            BJController.updateSizeBJ(true);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package Controlador;
 
 
-import Vista.SplashScreen;
+import Vista.SplashScreen.SplashScreen;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

@@ -2,7 +2,7 @@ package Model;
 import Controlador.Controller;
 import Network.*;
 import Vista.Finestra;
-import Vista.SplashScreen;
+import Vista.SplashScreen.SplashScreen;
 
 public class Casino_Client {
     public static void main(String[] args) {

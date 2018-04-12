@@ -1,6 +1,6 @@
 package Model;
 
-import Vista.SplashScreen;
+import Vista.SplashScreen.SplashScreen;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

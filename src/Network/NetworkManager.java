@@ -4,7 +4,7 @@ import Controlador.Controller;
 import Controlador.JsonManager;
 import Model.Card;
 import Model.User;
-import Vista.SplashScreen;
+import Vista.SplashScreen.SplashScreen;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

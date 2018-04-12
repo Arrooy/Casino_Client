@@ -1,21 +1,29 @@
-package Vista;
+package Vista.SplashScreen;
 
+import Controlador.CustomGraphics.Controlador_Interaccio_dibuix;
+import Controlador.CustomGraphics.GraphicsManager;
 import Model.AssetManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 
-public class SplashScreen extends JFrame implements ToDraw,Runnable{
+
+public class SplashScreen extends Controlador_Interaccio_dibuix implements Runnable{
 
     private int x,y,x1,y1;
     private long currentTime;
     private int numberOfLines;
     private Color[] colors;
-    private GraphicsPanel backGround;
+    private GraphicsManager backGround;
     private String info;
     private Color textColor;
     private int stroke[];
+
+    SplashScreenVista vista;
+
     public SplashScreen(){
 
         info = "Loading AssetManager...";
@@ -27,18 +35,13 @@ public class SplashScreen extends JFrame implements ToDraw,Runnable{
         colors = new Color[numberOfLines];
         stroke = new int[numberOfLines];
 
+        vista = new SplashScreenVista(350,475);
+        JPanel aux = new JPanel();
+        aux.setSize(350,475);
+        vista.getContentPane().add(aux);
         //Es crea el panell per pintar l'animacio i es configura per ocupar tot el JFrame
-        backGround = new GraphicsPanel(350,475);
-        backGround.setBackgroundColor(Color.black);
-        backGround.setCurrentDrawing(this,null);
-        getContentPane().add(backGround);
-
-        //Es configura el JFrame per apareixer un una sola animacio al centre de la screen
-        setUndecorated(true);
-        pack();
-        setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2);
-        setVisible(true);
-        requestFocus();
+        backGround = new GraphicsManager(aux,this);
+        backGround.setClearColor(Color.black);
 
         //Iniciem la carrega d'arxius del casino
         Thread loader = new Thread(this);
@@ -54,7 +57,7 @@ public class SplashScreen extends JFrame implements ToDraw,Runnable{
 
     public void exit(){
         backGround.exit();
-        dispose();
+        vista.dispose();
     }
 
     double x2(float ti) {
@@ -158,5 +161,59 @@ public class SplashScreen extends JFrame implements ToDraw,Runnable{
     }
     public float map(float value, float istart, float istop, float ostart, float ostop) {
         return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+    }
+
+
+
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
     }
 }

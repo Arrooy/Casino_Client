@@ -1,47 +1,54 @@
 package Controlador.Game_Controlers;
 
 import Controlador.Controller;
-import Controlador.GraphicsController;
+import Controlador.CustomGraphics.Controlador_Interaccio_dibuix;
+import Model.Baralla;
 import Model.Card;
+import Model.Model_BJ;
 import Network.NetworkManager;
 import Network.Transmission;
 import Vista.GameViews.BlackJack.BlackJackView;
-import Vista.GraphicsPanel;
+import Controlador.CustomGraphics.GraphicsManager;
+
 
 import java.awt.*;
-import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 
-public class BlackJackController extends GraphicsController {
+import static Model.Model_BJ.*;
+
+public class BlackJackController extends Controlador_Interaccio_dibuix {
 
     private BlackJackView blackJackView;
     private NetworkManager networkManager;
     private int mouseX,mouseY;
-    private GraphicsPanel gp;
+    private GraphicsManager gp;
+    private Model_BJ model;
 
-    public BlackJackController(BlackJackView blackJackView,NetworkManager networkManager){
+    public BlackJackController(BlackJackView blackJackView,NetworkManager networkManager,Model_BJ model){
+        this.model = model;
         this.networkManager = networkManager;
         this.blackJackView  = blackJackView;
-        this.gp = new GraphicsPanel(blackJackView.getWidth(),blackJackView.getHeight());
-        gp.setCurrentDrawing(blackJackView,this);
-        gp.setBackgroundColor(Color.red);
-        gp.setBounds(0,0,blackJackView.getWidth(),blackJackView.getHeight());
-        blackJackView.add(gp);
+
+        this.gp = new GraphicsManager(blackJackView,this);
+        gp.setClearColor(Color.red);
     }
-    public void updateSize(boolean fully){
-        gp.updateSize(blackJackView.getWidth(),blackJackView.getHeight(),fully);
-        gp.setBounds(0,0,blackJackView.getWidth(),blackJackView.getHeight());
+
+    public void updateSizeBJ(boolean fully){
+       // gp.resize(blackJackView.getWidth(),blackJackView.getHeight(),fully);
+        //gp.setBounds(0,0,blackJackView.getWidth(),blackJackView.getHeight());
         blackJackView.updateUI();
     }
 
     public void newBJCard(Card cartaResposta, Controller c) {
 
-        blackJackView.addCardIntoGame(cartaResposta);
+        System.out.println("Card: " + cartaResposta.getCardName());
+        model.addCard(cartaResposta);
 
         //control de la carta nova!
         if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER)){
-            blackJackView.giraIA();
+            model.giraIA();
         }
 
         if(cartaResposta.getDerrota().equals("user")){
@@ -58,8 +65,7 @@ public class BlackJackController extends GraphicsController {
             c.displayError("USER LOOSE GAME!","hurray");
         }
         gp.exit();
-        blackJackView.remove(gp);
-        blackJackView.reset();
+        //blackJackView.remove(gp);
         c.showGamesView();
     }
 
@@ -101,13 +107,12 @@ public class BlackJackController extends GraphicsController {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println(e.getButton());
+        System.out.println("Button pressed BJ: " + e.getButton());
         if(e.getButton() == 1){
             networkManager.newBlackJackCard(false);
         }else{
             networkManager.endBlackJackTurn();
         }
-
     }
 
     @Override
@@ -135,4 +140,69 @@ public class BlackJackController extends GraphicsController {
         mouseX = e.getX();
         mouseY = e.getY();
     }
+
+
+    @Override
+    public void init() {
+        //Sounds.play("cardShuffle.wav");
+    }
+
+    @Override
+    public void update(float delta) {
+        updateCardsPosition(model.getIACards(),MARGIN_TOP,1);
+        updateCardsPosition(model.getUserCards(),blackJackView.getSize().height - CARD_HEIGHT - MARGIN_BOTTOM,-1);
+    }
+
+    private void updateCardsPosition(LinkedList<Card> cardsInHand, int marginTop, int direction) {
+
+        if(!cardsInHand.isEmpty()){
+            int posicioInicialEsquerra;
+            if(cardsInHand.size() <= MAX_CARDS_IN_HAND) {
+                posicioInicialEsquerra = (blackJackView.getSize().width / 2) - (cardsInHand.size() / 2) * CARD_WIDTH;
+            }else{
+                posicioInicialEsquerra = (blackJackView.getSize().width / 2) - 3 * CARD_WIDTH;
+            }
+
+            int shiftCardsLeft = 0;
+
+            int numberOfLayers = (cardsInHand.size() - 1) / (MAX_CARDS_IN_HAND);
+
+            if(cardsInHand.size() <= MAX_CARDS_IN_HAND) {
+                if (cardsInHand.size() % 2 != 0)
+                    shiftCardsLeft = CARD_WIDTH/2 ;
+            }
+
+            for (int i = 0; i < cardsInHand.size(); i++) {
+
+                if ((i + 1) % (MAX_CARDS_IN_HAND + 1) == 0) {
+                    numberOfLayers--;
+                }
+
+                int newPosX;
+
+                if(i+1 <= (MAX_CARDS_IN_HAND)) {
+                    newPosX = posicioInicialEsquerra + (CARD_WIDTH + MARGIN_BETWEEN_CARDS) * (i + 1);
+                }else{
+                    newPosX = posicioInicialEsquerra + (CARD_WIDTH + MARGIN_BETWEEN_CARDS) * (i%MAX_CARDS_IN_HAND + 1);
+                }
+                cardsInHand.get(i).setCoords(newPosX - CARD_WIDTH - shiftCardsLeft, marginTop + (50 * numberOfLayers)*direction);
+            }
+        }
+    }
+
+    @Override
+    public void render(Graphics g) {
+        System.out.println("SIZE:" + model.getIACards().size() + "m " + model.getUserCards().size());
+        if(model.IAHasCards()) {
+            for (Card card : model.getIACards()) {
+                g.drawImage(Baralla.findImage(card), card.getX(), card.getY(), null);
+            }
+        }
+        if(model.userHasCards()) {
+            for (Card card : model.getUserCards()) {
+                g.drawImage(Baralla.findImage(card), card.getX(), card.getY(), null);
+            }
+        }
+    }
+
 }

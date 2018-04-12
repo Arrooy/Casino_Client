@@ -1,7 +1,7 @@
 package Model;
 
 import Controlador.Sounds;
-import Vista.SplashScreen;
+import Vista.SplashScreen.SplashScreen;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class AssetManager {
