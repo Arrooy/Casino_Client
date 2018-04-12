@@ -179,20 +179,21 @@ public class NetworkManager extends Thread {
 
         try {
             //S'intenta realitzar la connexio al servidor
-            socket = new Socket(IP,PORT);
+            socket = new Socket(IP, PORT);
             ois = new ObjectInputStream(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             //En el cas d'haver arribat aquest punt del codi, significa que ens hem connectat correctament
             conectatAmbServidor = true;
 
-            //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
-            splashScreen.exit();
-            controller.showFinestra();
-
             //Si en el json de configuracio inicial apareix l'indicador
             //d'autoLogin, s'executa el login de forma automatica.
-            if(autoLogin)
+            if (autoLogin){
+                splashScreen.infoMessage("Logging in...");
                 logIn(JsonManager.llegirJson(JsonManager.USERNAME_R, JsonManager.PASSWORD_R));
+           }else{
+                //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
+                exitLoadingScreen();
+            }
 
         }catch (IOException e){
             if(nTryConnect == 0) {
@@ -209,6 +210,12 @@ public class NetworkManager extends Thread {
                 e1.printStackTrace();
             }
         }
+    }
+
+    public void exitLoadingScreen() {
+        //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
+        splashScreen.exit();
+        controller.showFinestra();
     }
 
     /**
@@ -282,9 +289,8 @@ public class NetworkManager extends Thread {
 
     public void enterToGames() {
         controller.showGamesView();
+        exitLoadingScreen();
     }
-
-
 
     /**
      * Envia al servidor una petició de SignUp per a un usuari concret
