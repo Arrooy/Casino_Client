@@ -32,6 +32,9 @@ public class Card extends Message {
     private int x;
     private int y;
 
+    /** Indica si l'usuari ha perdut la partida o no. En el cas de ser empat, equival a empat*/
+    private String derrota;
+
     /** Crea una nova carta per a iniciar el blackJack*/
     public Card(String cardName, String context, Stack<String> nomCartes, boolean ownerIA){
         forIA = ownerIA;
@@ -63,6 +66,9 @@ public class Card extends Message {
     /** GETTERS I SETTERS*/
     public boolean isForIA() {
         return forIA;
+    }
+    public void setForIA(boolean a) {
+        forIA = a;
     }
 
     public String getCardName() {return cardName;}
@@ -132,5 +138,13 @@ public class Card extends Message {
     public void setCoords(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void setDerrota(String derrota) {
+        this.derrota = derrota;
+    }
+
+    public String getDerrota() {
+        return derrota;
     }
 }

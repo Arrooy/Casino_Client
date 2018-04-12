@@ -126,7 +126,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     public void newBJCard(Card cartaResposta) {
-        BJController.newBJCard(cartaResposta);
+        BJController.newBJCard(cartaResposta,this);
     }
 
     private void signUp() {
