@@ -116,7 +116,6 @@ public class GraphicsManager implements Runnable {
 
         if (JPanelObjectiu.getKeyListeners().length == 0)
             JPanelObjectiu.addKeyListener(c);
-
     }
 
 }

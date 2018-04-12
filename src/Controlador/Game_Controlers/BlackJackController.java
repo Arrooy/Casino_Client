@@ -20,17 +20,21 @@ import static Model.Model_BJ.*;
 
 public class BlackJackController implements GraphicsController {
 
+    private final static int MIN_BUTTON_SPEED = 320;
+
     private BlackJackView blackJackView;
     private NetworkManager networkManager;
     private int mouseX,mouseY;
     private GraphicsManager gp;
     private Model_BJ model;
+    private long lastClick;
 
     public BlackJackController(BlackJackView blackJackView,NetworkManager networkManager){
         this.model = new Model_BJ();
         this.networkManager = networkManager;
         this.blackJackView  = blackJackView;
 
+        lastClick = 0;
         this.gp = new GraphicsManager(blackJackView,this);
         gp.setClearColor(Color.red);
     }
@@ -40,32 +44,42 @@ public class BlackJackController implements GraphicsController {
     }
 
     public void newBJCard(Card cartaResposta, Controller c) {
-
+        lastClick = 0;
         System.out.println("Card: " + cartaResposta.getCardName());
-        model.addCard(cartaResposta);
 
-        //control de la carta nova!
         if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER)){
             model.giraIA();
         }
 
-        if(cartaResposta.getDerrota().equals("user")){
-            finishGame(false,c);
-        }else if(cartaResposta.getDerrota().equals("IA")){
-            finishGame(true,c);
-        }
-    }
-
-    private void finishGame(boolean winner,Controller c) {
-        if(winner){
-            c.displayError("USER WIN GAME!","meh");
+        if(cartaResposta.getDerrota().equals("user-instant")) {
+            c.displayError("LUSIARI ES RETRASAT","DIRECTAMENT HA VOLGUT PERDRE");
+            gp.exit();
+            c.showGamesView();
         }else{
-            c.displayError("USER LOOSE GAME!","hurray");
+            model.addCard(cartaResposta);
         }
-        gp.exit();
 
-        c.showGamesView();
+        System.out.println("Adding scores: User " + model.getValueUser() + " ----- IA " + model.getValueIA());
+
+        if(cartaResposta.getDerrota().equals("false")){
+            if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER))
+                networkManager.newCardForIaTurn();
+        }else if(cartaResposta.getDerrota().equals("user")) {
+
+            c.displayError("meh perdiste nomas","Perdido");
+            gp.exit();
+            c.showGamesView();
+        }else if(cartaResposta.getDerrota().equals("IA")) {
+
+            c.displayError("Ganas:D","Ganado");
+            gp.exit();
+            c.showGamesView();
+        }
+
+
     }
+
+
 
     public int getMouseX() {
         return mouseX;
@@ -106,10 +120,15 @@ public class BlackJackController implements GraphicsController {
     @Override
     public void mousePressed(MouseEvent e) {
         System.out.println("Button pressed BJ: " + e.getButton());
-        if(e.getButton() == 1){
-            networkManager.newBlackJackCard(false);
-        }else{
-            networkManager.endBlackJackTurn();
+
+        //Es vigila un possible doble click accidental
+        if(System.currentTimeMillis() - lastClick > MIN_BUTTON_SPEED){
+            if(e.getButton() == 1){
+                networkManager.newBlackJackCard(false);
+            }else{
+                networkManager.newCardForIaTurn();
+            }
+            lastClick = System.currentTimeMillis();
         }
     }
 

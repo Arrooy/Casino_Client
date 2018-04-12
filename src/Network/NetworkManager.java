@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import static Network.Transmission.CONTEXT_BJ_FINISH_USER;
-import static Network.Transmission.CONTEXT_BJ_IA;
 
 //TODO: FER QUE SERVER RETORNI USER EN EL LOGIN AMB USERNAME COM A USERNAME. PER SI ES DONA EL CAS QUE FAN LOGIN AMB EL MAIL!
 
@@ -137,7 +136,6 @@ public class NetworkManager extends Thread {
                 try {
                     Message missatge = (Message) ois.readObject();
 
-                    processaLectura(missatge);
                     //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
                     if(ServidorVolDesconnectarAquestClient(missatge))
                         continue;
@@ -150,14 +148,6 @@ public class NetworkManager extends Thread {
         }
     }
 
-    private void processaLectura(Message missatge) {
-
-        switch (missatge.getContext()){
-            case CONTEXT_BJ_IA:
-                new Transmission(missatge,this);
-                break;
-        }
-    }
 
     /** Reconeix el missatge rebut del servidor i indica si el servidor vol la desconnexio d'aquest client*/
     private boolean ServidorVolDesconnectarAquestClient(Message missatge){
@@ -352,7 +342,7 @@ public class NetworkManager extends Thread {
         }
     }
 
-    public void endBlackJackTurn() {
-        new Transmission(new Card("",CONTEXT_BJ_FINISH_USER,false),this);
+    public void newCardForIaTurn() {
+        new Transmission(new Card("",CONTEXT_BJ_FINISH_USER,true),this);
     }
 }

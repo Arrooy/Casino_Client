@@ -17,7 +17,6 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_SIGNUP = "signup";
     public static final String CONTEXT_BJ = "blackjack";
     public static final String CONTEXT_BJ_INIT = "blackjackinit";
-    public static final String CONTEXT_BJ_IA = "blackjackIA";
     public static final String CONTEXT_BJ_FINISH_USER = "blackjackFinish";
     public static final String CONTEXT_TRANSACTION = "transaction";
     public static final String CONTEXT_GET_COINS = "userCoins";
@@ -65,12 +64,8 @@ public class Transmission implements Runnable {
 
             case CONTEXT_BJ_INIT:
             case CONTEXT_BJ:
-                blackJackRequestCard();
-                break;
-            case CONTEXT_BJ_IA:
-                break;
             case CONTEXT_BJ_FINISH_USER:
-                blackJackFinishUser();
+                blackJackRequestCard();
                 break;
             case CONTEXT_GET_COINS:
                 //Todo fer get coins MERI
@@ -86,19 +81,6 @@ public class Transmission implements Runnable {
     private void transaction(){
         Transaction transaction = (Transaction) msg;
         networkManager.send(transaction);
-    }
-
-    private void blackJackFinishUser() {
-        try {
-            Card carta = (Card) msg;
-            networkManager.send(carta);
-
-            Card cartaResposta = (Card) waitResponse(carta);
-            networkManager.newBJCard(cartaResposta);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void blackJackRequestCard() {

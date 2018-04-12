@@ -16,18 +16,26 @@ public class Model_BJ {
     private LinkedList<Card> userCards;
     private LinkedList<Card> IACards;
 
+    private int valueDisplayUser;
+    private int valueDisplayIa;
+
     public Model_BJ(){
         IACards = new LinkedList<>();
         userCards = new LinkedList<>();
+
+        valueDisplayUser = 0;
+        valueDisplayIa = 0;
     }
 
     public void addCard(Card card){
         if(card.isForIA()){
             //La carta es per la ia
             IACards.add(card);
+            valueDisplayIa += card.getValue();
         }else {
             //La carta es per a la persona
             userCards.add(card);
+            valueDisplayUser += card.getValue();
         }
     }
 
@@ -51,4 +59,13 @@ public class Model_BJ {
     public boolean userHasCards() {
         return !userCards.isEmpty();
     }
+
+    public int getValueIA(){
+        return valueDisplayIa;
+    }
+
+    public int getValueUser(){
+        return valueDisplayUser;
+    }
+
 }
