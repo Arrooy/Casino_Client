@@ -127,6 +127,7 @@ public class Finestra extends JFrame {
         return signInView;
     }
 
+    /** Escollim la vista dels settings*/
     public void setSettingsView(String s) {
         layout.show(getContentPane(), "settings");
         settings.showSetting(s);

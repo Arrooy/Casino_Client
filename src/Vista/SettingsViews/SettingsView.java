@@ -49,7 +49,7 @@ public class SettingsView extends JPanel {
         return addMoneyView;
     }
 
-
+    /** Depenent del botó que s'ha premut, es mostra un JPanel del CardLayout que representa una fncio per l'usuari*/
     public void showSetting(String s) {
 
         switch (s){

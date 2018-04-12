@@ -85,7 +85,6 @@ public class Settings extends View {
         this.add(jpDivisor, BorderLayout.CENTER);
 
     }
-
     public SettingsView getSettingsView() {
         return settingsView;
     }
@@ -108,6 +107,8 @@ public class Settings extends View {
         jbWalletEvolution.addActionListener(c);
 
     }
+    /** Per tal de fer que la prmera vegada que entris no es mostri nunguna opcio, el métode es crida
+     * amb el String "NOTHING"*/
     public void showSetting(String s){
         if(s.equals("NOTHING")){
             this.settingsView.setVisible(false);

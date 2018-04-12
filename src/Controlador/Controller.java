@@ -130,11 +130,11 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 finestra.setSettingsView(e.getActionCommand());
                 break;
             case "PASSWORD CHANGE  - CONFIRM PASSWORD":
-                if(passwordChangeView.getStrength() > 0){
-                    //passwordChangeView.getPassword();
-                    //TODO update password
-                    System.out.println("New password: " + passwordChangeView.getPassword());
-                }
+                //setNewPassword(passwordChangeView.getNewPassword());
+                //passwordChangeView.getPassword();
+                //TODO update password
+
+
                 break;
             case "ADD MONEY":
                 long money = addMoneyView.getAmount();
@@ -299,58 +299,66 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void keyReleased(KeyEvent e) {
+        int strength = 0;
         switch( ((JComponent)e.getSource()).getName()){
             case "PASSWORD FIELD CHANGE - NEW PASSWORD":
-                checkPassword();
+                strength = checkPassword(passwordChangeView.getNewPassword());
+                if(passwordChangeView.getPasswordChangeRequest() && strength > 0){
+                    passwordChangeView.canConfirm(true);
+                }else{
+                   // passwordChangeView.passwordKO("Passwords must match");
+                }
+                if(strength <= 0){
+                    passwordChangeView.canConfirm(false);
+                    passwordChangeView.setStrength(-strength);
+                    passwordChangeView.manageError(true);
+                }else{
+                    passwordChangeView.setStrength(strength);
+                    passwordChangeView.manageError(false);
+                }
+
                 break;
             case "PASSWORD FIELD CHANGE - CONFIRM PASSWORD":
-                if(!passwordChangeView.getPasswordChangeRequest()){
-                    passwordChangeView.passwordKO("Passwords must match");
+                if(passwordChangeView.getPasswordChangeRequest() && checkPassword(passwordChangeView.getNewPassword()) > 0){
+                    passwordChangeView.canConfirm(true);
+                    passwordChangeView.manageError(false);
                 }else{
-                    checkPassword();
+                    passwordChangeView.canConfirm(false);
+                    passwordChangeView.manageError(true);
+                    passwordChangeView.passwordKO("Passwords must match");
                 }
                 break;
         }
     }
 
-    /** Mostrem si el canvi de contrasenya s'ha pogut efectuar correctament*/
-    public boolean checkPassword(){
-        String newPassword = passwordChangeView.getPassword();
-        //PasswordPing passwordping = new PasswordPing("", "");//YOUR_API_KEY, YOUR_API_SECRET);
-        int strength = 0;
-       // try {
+    /** Mostrem si el canvi de contrasenya s'ha pogut efectuar correctament
+     * Retorn: < 0 : Menys de 8 caracters, retorn*-1 = strength
+     *       : = 0 : Altre error
+     *       : > 0 : No hi ha error, retorn = strength
+     *
+     * Tambe s'actualitza el missatge d'error si n'hi ha */
+    public int checkPassword(String newPassword){
+        int strength;
+        try {
             if(newPassword.length() >= 8){
-
+                strength = containsRequiredChars(newPassword);
                 if(isValidUTF(newPassword)){
-                    strength = containsRequiredChars(newPassword);
-                    if(strength > 0) {
-                        if (true/*passwordping.CheckPassword(newPassword)*/) {
-                            strength += 1;
-                            passwordChangeView.passwordOK(strength);
-                        }
-                        return true;
-                    }else{
-                        passwordChangeView.passwordKO("Must contain at least a number, lower case and upper case character");
-                        return false;
-                    }
-
+                    return strength;
                 }else{
-                    passwordChangeView.passwordKO("Must use UTF-8 characters");
-                    return false;
+                    passwordChangeView.passwordKO("Must contain valid UTF-8 characters");
+                    return 0;
                 }
-
-
             }else{
-                passwordChangeView.passwordKO("Password must contain at least 8 characters");
-                return false;
+                passwordChangeView.passwordKO("Must be at least 8 charcaters");
+                return -(int)(newPassword.length()*(float)1.75);
             }
-        /*}catch (IOException e){
-            passwordChangeView.passwordKO("Password Error");
-            return false;
-        }*/
+        }catch (Exception e) {
+            passwordChangeView.passwordKO(e.getMessage());
+            return 0;
+        }
     }
 
-
+    /** Comprovem que no hi hagi ningun caracter non UTF-8*/
     private boolean isValidUTF(String string){
         CharsetDecoder cs = Charset.forName("UTF-8").newDecoder();
 
@@ -362,16 +370,18 @@ public class Controller implements ActionListener, WindowListener, MouseListener
             return false;
         }
     }
-
-    private int containsRequiredChars (String string){
+    /** Mirem que solida es la contrasenya, en cas de que no s'hagin introduit un mínim d0un nombre, una Majuscula i una minuscula el llença
+     * una excepcio amb el text d'error que cal mostrar*/
+    private int containsRequiredChars (String string) throws Exception{
         int relativeStrength = 0;
-
+        int length = string.length();
         int upperCase = 0;
         int lowerCase = 0;
+        int specialChars = 0;
         int number = 0;
         char[] input = string.toCharArray();
 
-        for(int i = 0; i < input.length; i++){
+        for(int i = 0; i < length; i++){
             if(Character.isUpperCase(input[i])){
                 upperCase++;
             }else if(Character.isLowerCase(input[i])){
@@ -379,18 +389,20 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
             }else if(Character.isDigit(input[i])){
                 number++;
+            }else{
+                specialChars++;
             }
         }
-        if(number < 0 || upperCase < 0 || lowerCase < 0 ){
-            return -1;
+        if(number <= 0 || upperCase <= 0 || lowerCase <= 0 ){
+            throw new Exception("Must contain at least: number, Upper and Lower case character.");
         }else{
-            relativeStrength = (int)(((string.length() - number/(float)string.length() - lowerCase/(float)string.length() - upperCase/(float)string.length())* 10)/(float) string.length());
-            //TODO calculate strength
+            relativeStrength = (int)(((length - number)*(length - upperCase)*(length-lowerCase)*(length-specialChars))/(float)(length*length*length)*10);
             return relativeStrength;
         }
 
 
     }
+
 
 
 }

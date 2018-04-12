@@ -12,6 +12,7 @@ public class JNumberTextField extends JTextField {
         e.consume();
         return;
     }
+    /** En cas d'introduir algo que no sigui un nombre, aquest caracter es consumeix*/
         public int getNumber() {
             int result = -1;
             String text = getText();

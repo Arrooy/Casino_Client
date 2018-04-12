@@ -73,26 +73,28 @@ public class AddMoneyView extends View {
         jbAddMoney.setActionCommand("ADD MONEY");
     }
 
+    /** Retorna la quantitat de diners que es desitgen introduir*/
     public int getAmount(){
         return jntfAmount.getNumber();
     }
 
+    /** retorna la contrasenya de l'usuari*/
     public String getPassword(){
         return new String(jpfPassword.getPassword());
     }
-
+    /** Controla el missatge d'error*/
     public void showErrorMoney(){
         this.jlErrorMoney.setForeground(new Color(201, 25, 25));
     }
-
+    /** Controla el missatge d'error*/
     public void showErrorPassword(){
         this.jlErrorPassword.setForeground(new Color(201, 25, 25));
     }
-
+    /** Indica que no hi ha error*/
     public void noErrorMoney(){
         this.jlErrorMoney.setForeground(new Color(0, 0, 0, 0));
     }
-
+    /** Indica que no hi ha error*/
     public void noErrorPassword(){
         this.jlErrorPassword.setForeground(new Color(0, 0, 0, 0));
     }
