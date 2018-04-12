@@ -20,13 +20,15 @@ public class GraphicsManager implements Runnable {
     /**
      * Crea un gestor per a controlar els grafics custom d'un jpanel extern.
      *
-     * @param PanellObjectiu Panell on s'enganxará l'imatge resultant del update i render.
+     * @param PanellObjectiu Panell on s'enganxará l'imatge resultant del update i render. MOLT IMPORTANT QUE EL PANELL TINGUI MIDA!
      * @param c Controlador que gestiona les interaccions(Mouse&Key listeners) de la persona amb el custom rendering panel.
      */
 
     public GraphicsManager(JPanel PanellObjectiu, Controlador_Interaccio_dibuix c) {
         clearColor = Color.white;
 
+        if(PanellObjectiu.getWidth() == 0 || PanellObjectiu.getHeight() == 0)
+            System.out.println("Error ultrafatal. El panell que mhas donat no te mida especificada!");
         JPanelObjectiu = PanellObjectiu;
         JPanelObjectiu.setBackground(Color.BLACK);
         JPanelObjectiu.setFocusable(true);
