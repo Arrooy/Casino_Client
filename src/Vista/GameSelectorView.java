@@ -78,6 +78,18 @@ public class GameSelectorView extends View {
         this.add(jpgblBotons, BorderLayout.CENTER);
     }
 
+    public void enableButtons(boolean guest){
+        if(guest){
+            jbHorseRace.setEnabled(false);
+            jbRoulette.setEnabled(false);
+            jbSettings.setVisible(false);
+        } else{
+            jbHorseRace.setEnabled(true);
+            jbRoulette.setEnabled(true);
+            jbSettings.setVisible(true);
+        }
+    }
+
 
     @Override
     public void addController(Controller c) {

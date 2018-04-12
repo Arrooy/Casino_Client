@@ -1,7 +1,6 @@
 package Controlador;
 
 import Controlador.Game_Controlers.BlackJackController;
-import Model.AssetManager;
 import Model.Baralla;
 import Model.Card;
 import Model.User;
@@ -9,11 +8,9 @@ import Vista.*;
 import Network.*;
 import Vista.GameViews.BlackJack.BlackJackView;
 import Vista.SettingsViews.*;
-import com.passwordping.client.PasswordPing;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
@@ -96,18 +93,10 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 networkManager.enterAsGuest();
                 break;
             case "roulette":
-                if(user.isGuest()){
-                    displayError("ETS UN GUEST PUTA","no pots pasar hehe");
-                }else{
                     //Codi per a usuaris normals
-                }
                 break;
             case "horse":
-                if(user.isGuest()){
-                    displayError("ETS UN GUEST PUTA","no pots pasar hehe");
-                }else{
                     //Codi per a usuaris normals
-                }
                 break;
             case "blackJack":
                 networkManager.initBlackJack(Baralla.getNomCartes());
@@ -126,7 +115,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 finestra.setSettingsView("NOTHING");
                 break;
             case "SETTINGS - backFromSettings":
-                finestra.setGameSelector();
+                finestra.setGameSelector(user.isGuest());
                 break;
             case"SETTINGS - changePass":
                 finestra.setSettingsView(e.getActionCommand());
@@ -193,7 +182,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
     public void showGamesView() {
         logInView.clearFields();
-        finestra.setGameSelector();
+        finestra.setGameSelector(user.isGuest());
     }
 
     public void initBlackJack() {

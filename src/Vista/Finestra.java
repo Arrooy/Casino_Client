@@ -101,8 +101,9 @@ public class Finestra extends JFrame {
         layout.show(getContentPane(), "logIn");
     }
 
-    public void setGameSelector() {
+    public void setGameSelector(boolean guest) {
         layout.show(getContentPane(), "gameSelectorView");
+        gameSelectorView.enableButtons(guest);
     }
 
     public void setSignInView() {
