@@ -22,6 +22,7 @@ public class Transaction extends Message {
         this.context = context;
         this.gain = gain;
         this.type = type;
+        this.username = username;
 
         ID = Math.random();
     }

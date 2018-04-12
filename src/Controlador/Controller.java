@@ -1,10 +1,7 @@
 package Controlador;
 
 import Controlador.Game_Controlers.BlackJackController;
-import Model.Baralla;
-import Model.Card;
-import Model.Model_BJ;
-import Model.User;
+import Model.*;
 import Vista.*;
 import Network.*;
 import Vista.GameViews.BlackJack.BlackJackView;
@@ -79,6 +76,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
             case "logIn":
                 //S'intenta fer logIn al servidor amb les credencials introduides
                 networkManager.logIn(logInView.getUsername(), logInView.getPassword());
+                user.setUsername(logInView.getUsername());
                 break;
             case "logOut":
                 //S'intenta desconectar-se del servidor
@@ -137,28 +135,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
                 break;
             case "ADD MONEY":
-                long money = addMoneyView.getAmount();
-                String password = addMoneyView.getPassword();
-                //TODO ARREGLAR MERI
-                //networkManager.getWallet(); //get wallet hauria de rebre els diners que te l'usuari
-
-                boolean tOK = true;
-                if(false){ //FALTA MIRAR SI L'USUARI TÉ MASSA DINERS (+100.000)
-                    addMoneyView.showErrorMoney();
-                    tOK = false;
-                }else{
-                    addMoneyView.noErrorMoney();
-                }
-                if(password.equals(user.getPassword())){
-                    addMoneyView.noErrorPassword();
-                } else {
-                    addMoneyView.showErrorPassword();
-                    tOK = false;
-                }
-                if(tOK){
-                    //TODO add money MERI
-                    networkManager.doTransaction(money);
-                }
+                addMoney();
                 break;
 
         }
@@ -167,6 +144,29 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void showFinestra() {
         finestra.setVisible(true);
         finestra.requestFocus();
+    }
+
+    private void addMoney() {
+        long deposit = addMoneyView.getAmount();
+        String password = addMoneyView.getPassword();
+
+        boolean tOK = true;
+        /*if(false){
+            addMoneyView.showErrorMoney();
+            tOK = false;
+        }else{*/
+        //    addMoneyView.noErrorMoney();
+        //}
+        if(password.equals(user.getPassword())){
+            addMoneyView.noErrorPassword();
+        } else {
+            addMoneyView.showErrorPassword();
+            tOK = false;
+        }
+        if(tOK){
+            Transaction transaction = new Transaction("transaction", user.getUsername(), deposit,0);
+            new Transmission(transaction, networkManager);
+        }
     }
 
     public void setUser(User u){
@@ -216,8 +216,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     @Override
-    public void windowOpened(WindowEvent e) {
-    }
+    public void windowOpened(WindowEvent e) {}
 
     @Override
     public void windowClosing(WindowEvent e) {
@@ -226,44 +225,24 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     @Override
     public void windowClosed(WindowEvent e) {}
-
     @Override
     public void windowIconified(WindowEvent e) {}
-
     @Override
-    public void windowDeiconified(WindowEvent e) {
-    }
-
+    public void windowDeiconified(WindowEvent e) {}
     @Override
-    public void windowActivated(WindowEvent e) {
-    }
-
+    public void windowActivated(WindowEvent e) {}
     @Override
-    public void windowDeactivated(WindowEvent e) {
-    }
-
+    public void windowDeactivated(WindowEvent e) {}
     @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
+    public void mouseClicked(MouseEvent e) {}
     @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
+    public void mousePressed(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
+    public void mouseReleased(MouseEvent e) {}
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
+    public void mouseEntered(MouseEvent e) {}
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
 
     @Override
     public void componentResized(ComponentEvent e) {
@@ -278,24 +257,13 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     @Override
-    public void componentShown(ComponentEvent e) {
-
-    }
-
+    public void componentShown(ComponentEvent e) {}
     @Override
-    public void componentHidden(ComponentEvent e) {
-
-    }
-
+    public void componentHidden(ComponentEvent e) {}
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
+    public void keyTyped(KeyEvent e) {}
     @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
+    public void keyPressed(KeyEvent e) {}
 
     @Override
     public void keyReleased(KeyEvent e) {
