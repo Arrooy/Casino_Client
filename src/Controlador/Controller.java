@@ -8,13 +8,20 @@ import Model.User;
 import Vista.*;
 import Network.*;
 import Vista.GameViews.BlackJack.BlackJackView;
+import Vista.SettingsViews.*;
+import com.passwordping.client.PasswordPing;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 
 /** Controlador del client*/
 
-public class Controller implements ActionListener, WindowListener, MouseListener, ComponentListener{
+public class Controller implements ActionListener, WindowListener, MouseListener, ComponentListener, KeyListener{
 
     /** Finestra grafica del client*/
     private Finestra finestra;
@@ -22,7 +29,11 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     private LogInView logInView;
     private SignInView signInView;
     private GameSelectorView gameSelectorView;
+    private AddMoneyView addMoneyView;
+    private Settings settings;
     private SettingsView settingsView;
+    private PasswordChangeView passwordChangeView;
+    private WalletEvolutionView walletEvolutionView;
     private BlackJackView blackJackView;
 
     private BlackJackController BJController;
@@ -78,9 +89,6 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 finestra.setMainView();
 
                 break;
-            case "settings":
-                finestra.setSettingsView();
-                break;
             case "signIn":
                 finestra.setSignInView();
                 break;
@@ -114,6 +122,36 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 if (signInView.passwordIsCorrect()) signUp();
                 else ;//TODO: mostra error informatiu
                 break;
+            case "settings":
+                finestra.setSettingsView("NOTHING");
+                break;
+            case "SETTINGS - backFromSettings":
+                finestra.setGameSelector();
+                break;
+            case"SETTINGS - changePass":
+                finestra.setSettingsView(e.getActionCommand());
+                break;
+            case"SETTINGS - addMoneyButton":
+                finestra.setSettingsView(e.getActionCommand());
+                break;
+            case"SETTINGS - walletEvolution":
+                finestra.setSettingsView(e.getActionCommand());
+                break;
+            case "PASSWORD CHANGE  - CONFIRM PASSWORD":
+                if(passwordChangeView.getStrength() > 0){
+                    //passwordChangeView.getPassword();
+                    //TODO update password
+                    System.out.println("New password: " + passwordChangeView.getPassword());
+                }
+                break;
+            case "ADD MONEY":
+                if(addMoneyView.getAmount() == 0){
+                    addMoneyView.showError();
+                }else{
+                    //TODO add money
+                    addMoneyView.noError();
+                }
+
         }
     }
 
@@ -145,8 +183,14 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
     public void setSignInView(SignInView signInView) {this.signInView = signInView;}
     public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
-    public void setSettingsView(SettingsView settingsView) {this.settingsView = settingsView;}
 
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+        this.passwordChangeView = settings.getPasswordChangeView();
+        this.walletEvolutionView = settings.getWalletEvolutionView();
+        this.addMoneyView = settings.getAddMoneyView();
+        this.settingsView = settings.getSettingsView();
+    }
     public void showGamesView() {
         logInView.clearFields();
         finestra.setGameSelector();
@@ -232,4 +276,111 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void componentHidden(ComponentEvent e) {
 
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        switch( ((JComponent)e.getSource()).getName()){
+            case "PASSWORD FIELD CHANGE - NEW PASSWORD":
+                checkPassword();
+                break;
+            case "PASSWORD FIELD CHANGE - CONFIRM PASSWORD":
+                if(!passwordChangeView.getPasswordChangeRequest()){
+                    passwordChangeView.passwordKO("Passwords must match");
+                }else{
+                    checkPassword();
+                }
+                break;
+        }
+    }
+
+    /** Mostrem si el canvi de contrasenya s'ha pogut efectuar correctament*/
+    public boolean checkPassword(){
+        String newPassword = passwordChangeView.getPassword();
+        //PasswordPing passwordping = new PasswordPing("", "");//YOUR_API_KEY, YOUR_API_SECRET);
+        int strength = 0;
+       // try {
+            if(newPassword.length() >= 8){
+
+                if(isValidUTF(newPassword)){
+                    strength = containsRequiredChars(newPassword);
+                    if(strength > 0) {
+                        if (true/*passwordping.CheckPassword(newPassword)*/) {
+                            strength += 1;
+                            passwordChangeView.passwordOK(strength);
+                        }
+                        return true;
+                    }else{
+                        passwordChangeView.passwordKO("Must contain at least a number, lower case and upper case character");
+                        return false;
+                    }
+
+                }else{
+                    passwordChangeView.passwordKO("Must use UTF-8 characters");
+                    return false;
+                }
+
+
+            }else{
+                passwordChangeView.passwordKO("Password must contain at least 8 characters");
+                return false;
+            }
+        /*}catch (IOException e){
+            passwordChangeView.passwordKO("Password Error");
+            return false;
+        }*/
+    }
+
+
+    private boolean isValidUTF(String string){
+        CharsetDecoder cs = Charset.forName("UTF-8").newDecoder();
+
+        try {
+            cs.decode(ByteBuffer.wrap(string.getBytes()));
+            return true;
+        }
+        catch(CharacterCodingException e){
+            return false;
+        }
+    }
+
+    private int containsRequiredChars (String string){
+        int relativeStrength = 0;
+
+        int upperCase = 0;
+        int lowerCase = 0;
+        int number = 0;
+        char[] input = string.toCharArray();
+
+        for(int i = 0; i < input.length; i++){
+            if(Character.isUpperCase(input[i])){
+                upperCase++;
+            }else if(Character.isLowerCase(input[i])){
+                lowerCase++;
+
+            }else if(Character.isDigit(input[i])){
+                number++;
+            }
+        }
+        if(number < 0 || upperCase < 0 || lowerCase < 0 ){
+            return -1;
+        }else{
+            relativeStrength = (int)(((string.length() - number/(float)string.length() - lowerCase/(float)string.length() - upperCase/(float)string.length())* 10)/(float) string.length());
+            //TODO calculate strength
+            return relativeStrength;
+        }
+
+
+    }
+
+
 }

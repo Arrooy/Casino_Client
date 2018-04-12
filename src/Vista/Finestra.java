@@ -6,6 +6,8 @@ import Model.AssetManager;
 import Model.User;
 import Network.Transmission;
 import Vista.GameViews.BlackJack.BlackJackView;
+import Vista.SettingsViews.Settings;
+import Vista.SettingsViews.SettingsView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +19,7 @@ public class Finestra extends JFrame {
     private LogInView logInView;
     private GameSelectorView gameSelectorView;
     private SignInView signInView;
-    private SettingsView settingsView;
+    private Settings settings;
     private BlackJackView blackJackView;
 
     public Finestra() {
@@ -45,14 +47,14 @@ public class Finestra extends JFrame {
         logInView = new LogInView();
         gameSelectorView = new GameSelectorView();
         signInView = new SignInView();
-        settingsView = new SettingsView();
+        settings = new Settings();
         blackJackView = new BlackJackView();
 
         add("main", mainView);
         add("logIn", logInView);
         add("gameSelectorView", gameSelectorView);
         add("signIn", signInView);
-        add("settings", settingsView);
+        add("settings", settings);
         add("blackJack", blackJackView);
     }
 
@@ -74,12 +76,14 @@ public class Finestra extends JFrame {
         logInView.addController(c);
         gameSelectorView.addController(c);
         signInView.addController(c);
-        settingsView.addController(c);
+        settings.addController(c);
+        //blackJackView.addController(c);
+
 
         c.setMainView(mainView);
         c.setLogInView(logInView);
         c.setSignInView(signInView);
-        c.setSettingsView(settingsView);
+        c.setSettings(settings);
         c.setGameSelectorView(gameSelectorView);
         c.setBlackJackView(blackJackView);
 
@@ -105,9 +109,7 @@ public class Finestra extends JFrame {
         layout.show(getContentPane(), "signIn");
     }
 
-    public void setSettingsView() {
-        layout.show(getContentPane(), "settings");
-    }
+
 
     public User getSignUpUser() {
         return new User(signInView.getUsername(), signInView.getPassword(), signInView.getMail(), Transmission.CONTEXT_SIGNUP);
@@ -124,4 +126,10 @@ public class Finestra extends JFrame {
     public SignInView getSignInView() {
         return signInView;
     }
+
+    public void setSettingsView(String s) {
+        layout.show(getContentPane(), "settings");
+        settings.showSetting(s);
+    }
+
 }
