@@ -188,7 +188,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     public void initBlackJack() {
         //crea el controlador de la nova partida amb un nou model
-        BJController = new BlackJackController(blackJackView,networkManager,new Model_BJ());
+        BJController = new BlackJackController(blackJackView,networkManager);
         finestra.setBlackJackView();
     }
 

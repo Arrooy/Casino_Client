@@ -26,8 +26,8 @@ public class BlackJackController extends Controlador_Interaccio_dibuix {
     private GraphicsManager gp;
     private Model_BJ model;
 
-    public BlackJackController(BlackJackView blackJackView,NetworkManager networkManager,Model_BJ model){
-        this.model = model;
+    public BlackJackController(BlackJackView blackJackView,NetworkManager networkManager){
+        this.model = new Model_BJ();
         this.networkManager = networkManager;
         this.blackJackView  = blackJackView;
 
@@ -63,7 +63,7 @@ public class BlackJackController extends Controlador_Interaccio_dibuix {
             c.displayError("USER LOOSE GAME!","hurray");
         }
         gp.exit();
-        //blackJackView.remove(gp);
+
         c.showGamesView();
     }
 

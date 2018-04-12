@@ -46,9 +46,9 @@ public class Model_BJ {
     }
 
     public boolean IAHasCards() {
-        return IACards.isEmpty();
+        return !IACards.isEmpty();
     }
     public boolean userHasCards() {
-        return userCards.isEmpty();
+        return !userCards.isEmpty();
     }
 }

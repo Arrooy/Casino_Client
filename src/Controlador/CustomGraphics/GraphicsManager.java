@@ -107,9 +107,16 @@ public class GraphicsManager implements Runnable {
     }
 
     private void registraControllador(Controlador_Interaccio_dibuix c) {
-        JPanelObjectiu.addKeyListener(c);
-        JPanelObjectiu.addMouseListener(c);
-        JPanelObjectiu.addMouseMotionListener(c);
+
+        if (JPanelObjectiu.getMouseListeners().length == 0)
+            JPanelObjectiu.addMouseListener(c);
+
+        if (JPanelObjectiu.getMouseMotionListeners().length == 0)
+            JPanelObjectiu.addMouseMotionListener(c);
+
+        if (JPanelObjectiu.getKeyListeners().length == 0)
+            JPanelObjectiu.addKeyListener(c);
+
     }
 
 }
