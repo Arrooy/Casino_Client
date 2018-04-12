@@ -6,70 +6,95 @@ import Vista.View;
 import javax.swing.*;
 import java.awt.*;
 
+//TODO arreglar missatges error money i log in, sign in
 
 public class AddMoneyView extends View {
     private JButton jbAddMoney;
     private JNumberTextField jntfAmount;
-    private JLabel jlError;
+    private JPasswordField jpfPassword;
+    private JLabel jlErrorMoney;
+    private JLabel jlErrorPassword;
 
     public AddMoneyView(){
         this.setLayout(new BorderLayout());
         JPanel jpMoneyView = new JPanel(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
-
+        c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets (0,0,20,10);
+        c.insets = new Insets (0,0,20,20);
         JLabel jlMoneyLabel = new JLabel("Choose Amount: ");
         jpMoneyView.add(jlMoneyLabel, c);
 
-        c = new GridBagConstraints();
+        JLabel jlPassword = new JLabel("Password: ");
+        c.gridy = 1;
+        jpMoneyView.add(jlPassword, c);
+
         c.gridx = 1;
         c.gridy = 0;
-        c.insets = new Insets(0,0,20,10);
+        c.ipadx = 150;
+        c.insets = new Insets(0,0,20,0);
         jntfAmount = new JNumberTextField();
+        jntfAmount.setEditable(true);
         jpMoneyView.add(jntfAmount, c);
 
-        c = new GridBagConstraints();
-        c.gridx = 4;
-        c.gridy = 0;
-        c.insets = new Insets(0,0,20,0);
-        jlError = new JLabel("Introdueix una quantitat mes gran que 0");
-        jlError.setForeground(Color.red);
-        jlError.setVisible(false);
-
-
-        c = new GridBagConstraints();
-        c.gridx = 1;
+        jpfPassword = new JPasswordField();
         c.gridy = 1;
-        c.insets = new Insets(0,10,0,0);
-        c.gridwidth = 2;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.ipadx = 150;
+        jpMoneyView.add(jpfPassword, c);
+
+        c.gridx = 2;
+        c.gridy = 0;
+        c.insets = new Insets(0,20,20,0);
+        jlErrorMoney = new JLabel("Above the limit amount");
+        jlErrorMoney.setForeground(new Color(0, 0, 0, 0));
+        jpMoneyView.add(jlErrorMoney, c);
+
+        c.gridy = 1;
+        jlErrorPassword = new JLabel("Wrong password");
+        jlErrorPassword.setForeground(new Color(0, 0, 0, 0));
+        jpMoneyView.add(jlErrorPassword, c);
+
+        c.gridx = 1;
+        c.gridy = 3;
+        c.insets = new Insets(0,0,0,0);
+        c.ipadx = 50;
         jbAddMoney = new JButton("ADD");
+        jbAddMoney.setFocusable(false);
         jpMoneyView.add(jbAddMoney, c);
+
+        add(jpMoneyView, BorderLayout.CENTER);
 
     }
     @Override
     public void addController(Controller c) {
         jbAddMoney.addActionListener(c);
-        jbAddMoney.setName("ADD MONEY");
+        jbAddMoney.setActionCommand("ADD MONEY");
     }
 
     public int getAmount(){
-        if(jntfAmount.getNumber() != 0){
-            return jntfAmount.getNumber();
-        }else{
-            return -1;
-        }
+        return jntfAmount.getNumber();
     }
 
-    public void showError(){
-        this.jlError.setVisible(true);
+    public String getPassword(){
+        return new String(jpfPassword.getPassword());
     }
 
-    public void noError(){
-        this.jlError.setVisible(false);
+    public void showErrorMoney(){
+        this.jlErrorMoney.setForeground(new Color(201, 25, 25));
+    }
+
+    public void showErrorPassword(){
+        this.jlErrorPassword.setForeground(new Color(201, 25, 25));
+    }
+
+    public void noErrorMoney(){
+        this.jlErrorMoney.setForeground(new Color(0, 0, 0, 0));
+    }
+
+    public void noErrorPassword(){
+        this.jlErrorPassword.setForeground(new Color(0, 0, 0, 0));
     }
 
 

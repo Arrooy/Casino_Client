@@ -24,6 +24,7 @@ public class PasswordChangeView extends View {
         jpfConfirmPassword = new JPasswordField(20);
         jpfNewPassword = new JPasswordField(20);
         jbConfirmPassword = new JButton("Update Password");
+        jbConfirmPassword.setFocusable(false);
 
 
         JPanel jpPasswordChange = new JPanel();

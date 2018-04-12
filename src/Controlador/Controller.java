@@ -123,6 +123,8 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 break;
             case"SETTINGS - addMoneyButton":
                 finestra.setSettingsView(e.getActionCommand());
+                addMoneyView.noErrorPassword();
+                addMoneyView.noErrorMoney();
                 break;
             case"SETTINGS - walletEvolution":
                 finestra.setSettingsView(e.getActionCommand());
@@ -135,12 +137,29 @@ public class Controller implements ActionListener, WindowListener, MouseListener
                 }
                 break;
             case "ADD MONEY":
-                if(addMoneyView.getAmount() == 0){
-                    addMoneyView.showError();
+                long money = addMoneyView.getAmount();
+                String password = addMoneyView.getPassword();
+                //TODO ARREGLAR MERI
+                //networkManager.getWallet(); //get wallet hauria de rebre els diners que te l'usuari
+
+                boolean tOK = true;
+                if(false){ //FALTA MIRAR SI L'USUARI TÉ MASSA DINERS (+100.000)
+                    addMoneyView.showErrorMoney();
+                    tOK = false;
                 }else{
-                    //TODO add money
-                    addMoneyView.noError();
+                    addMoneyView.noErrorMoney();
                 }
+                if(password.equals(user.getPassword())){
+                    addMoneyView.noErrorPassword();
+                } else {
+                    addMoneyView.showErrorPassword();
+                    tOK = false;
+                }
+                if(tOK){
+                    //TODO add money MERI
+                    networkManager.doTransaction(money);
+                }
+                break;
 
         }
     }

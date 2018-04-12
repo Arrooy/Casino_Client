@@ -1,6 +1,7 @@
 package Network;
 
 import Controlador.JsonManager;
+import Model.Transaction;
 import Model.User;
 import Model.Card;
 
@@ -18,6 +19,9 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_BJ_INIT = "blackjackinit";
     public static final String CONTEXT_BJ_IA = "blackjackIA";
     public static final String CONTEXT_BJ_FINISH_USER = "blackjackFinish";
+    public static final String CONTEXT_TRANSACTION = "transaction";
+    public static final String CONTEXT_GET_COINS = "userCoins";
+
 
     private Message msg;
     private String context;
@@ -68,8 +72,20 @@ public class Transmission implements Runnable {
             case CONTEXT_BJ_FINISH_USER:
                 blackJackFinishUser();
                 break;
+            case CONTEXT_GET_COINS:
+                //Todo fer get coins MERI
+                break;
+            case CONTEXT_TRANSACTION:
+                //Todo revisar MERI
+                transaction();
+                break;
             default:
         }
+    }
+
+    private void transaction(){
+        Transaction transaction = (Transaction) msg;
+        networkManager.send(transaction);
     }
 
     private void blackJackFinishUser() {

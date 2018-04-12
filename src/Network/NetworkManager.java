@@ -3,6 +3,7 @@ package Network;
 import Controlador.Controller;
 import Controlador.JsonManager;
 import Model.Card;
+import Model.Transaction;
 import Model.User;
 import Vista.SplashScreen.SplashScreen;
 
@@ -10,6 +11,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -96,6 +99,7 @@ public class NetworkManager extends Thread {
             System.out.println("No hi ha connexio amb el server");
         }
     }
+
 
     /** Solicita al servidor tencar la sessio actual*/
     public void requestLogOut(){
@@ -301,6 +305,17 @@ public class NetworkManager extends Thread {
     }
 
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
+
+    //TODO mirar transaction OK MERI
+    public void doTransaction(long money){
+        Transaction transaction = new Transaction(Transmission.CONTEXT_TRANSACTION, user.getUsername(), money, 0);
+        new Transmission(transaction, this);
+    }
+    //TODO revisat MERI
+    public void getWallet(){
+        User userAux = new User(user.getUsername(), user.getPassword(), user.getMail(), Transmission.CONTEXT_GET_COINS);
+        new Transmission(userAux, this);
+    }
 
     public void initBlackJack(Stack<String> nomCartes) {
         Card card = new Card("",Transmission.CONTEXT_BJ_INIT,nomCartes,false);
