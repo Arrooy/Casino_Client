@@ -44,6 +44,9 @@ public class GraphicsManager implements Runnable {
         this.clearColor = clearColor;
     }
 
+    public void resize(int width, int height) {
+        image = JPanelObjectiu.createImage(width,height);
+    }
     private void initGame() {
         controlador_extern.init();
         running = true;
@@ -107,4 +110,5 @@ public class GraphicsManager implements Runnable {
         JPanelObjectiu.addMouseListener(c);
         JPanelObjectiu.addMouseMotionListener(c);
     }
+
 }

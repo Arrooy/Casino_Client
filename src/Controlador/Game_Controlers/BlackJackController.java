@@ -36,7 +36,7 @@ public class BlackJackController extends Controlador_Interaccio_dibuix {
     }
 
     public void updateSizeBJ(boolean fully){
-       // gp.resize(blackJackView.getWidth(),blackJackView.getHeight(),fully);
+        gp.resize(blackJackView.getWidth(),blackJackView.getHeight());
         //gp.setBounds(0,0,blackJackView.getWidth(),blackJackView.getHeight());
         blackJackView.updateUI();
     }
@@ -192,7 +192,6 @@ public class BlackJackController extends Controlador_Interaccio_dibuix {
 
     @Override
     public void render(Graphics g) {
-        System.out.println("SIZE:" + model.getIACards().size() + "m " + model.getUserCards().size());
         if(model.IAHasCards()) {
             for (Card card : model.getIACards()) {
                 g.drawImage(Baralla.findImage(card), card.getX(), card.getY(), null);
