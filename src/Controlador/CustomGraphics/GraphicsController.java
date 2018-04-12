@@ -13,7 +13,21 @@ import java.awt.event.*;
  * @version 1.0.1
  */
 public interface GraphicsController extends KeyListener, MouseInputListener {
+
+    /**
+     * Mètode per inicialitzar la lògica dels gràfics
+     */
     void init();
+
+    /**
+     * Mètode per a actualitzar la lògica de la vista en tot moment
+     * @param delta Periode d'actualitzacio de la pantalla (0.017s)
+     */
     void update(float delta);
+
+    /**
+     * Mètode per a organitzar tots els components a mostrar per pantalla
+     * @param g Element en el que pintar el contingut
+     */
     void render(Graphics g);
 }
