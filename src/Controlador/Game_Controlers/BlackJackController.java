@@ -35,10 +35,8 @@ public class BlackJackController extends Controlador_Interaccio_dibuix {
         gp.setClearColor(Color.red);
     }
 
-    public void updateSizeBJ(boolean fully){
+    public void updateSizeBJ(){
         gp.resize(blackJackView.getWidth(),blackJackView.getHeight());
-        //gp.setBounds(0,0,blackJackView.getWidth(),blackJackView.getHeight());
-        blackJackView.updateUI();
     }
 
     public void newBJCard(Card cartaResposta, Controller c) {

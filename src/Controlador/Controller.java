@@ -249,13 +249,13 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     @Override
     public void componentResized(ComponentEvent e) {
         if(BJController != null)
-            BJController.updateSizeBJ(false);
+            BJController.updateSizeBJ();
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
         if(BJController != null)
-            BJController.updateSizeBJ(true);
+            BJController.updateSizeBJ();
     }
 
     @Override

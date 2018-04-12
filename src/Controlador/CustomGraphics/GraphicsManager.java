@@ -46,6 +46,7 @@ public class GraphicsManager implements Runnable {
 
     public void resize(int width, int height) {
         image = JPanelObjectiu.createImage(width,height);
+        JPanelObjectiu.updateUI();
     }
     private void initGame() {
         controlador_extern.init();
