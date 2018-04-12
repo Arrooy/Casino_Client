@@ -1,7 +1,6 @@
 package Network;
 
 import Controlador.Controller;
-import Controlador.Game_Controlers.BlackJackController;
 import Controlador.JsonManager;
 import Model.Card;
 import Model.User;
@@ -12,9 +11,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Stack;
+
+import static Network.Transmission.CONTEXT_BJ_FINISH_USER;
+import static Network.Transmission.CONTEXT_BJ_IA;
 
 //TODO: FER QUE SERVER RETORNI USER EN EL LOGIN AMB USERNAME COM A USERNAME. PER SI ES DONA EL CAS QUE FAN LOGIN AMB EL MAIL!
 
@@ -63,7 +63,8 @@ public class NetworkManager extends Thread {
     private int nTryConnect;
 
     /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.
-     * @param splashScreen*/
+     * @param splashScreen
+     */
     public NetworkManager(SplashScreen splashScreen) {
         this.splashScreen = splashScreen;
         nTryConnect = 0;
@@ -132,6 +133,7 @@ public class NetworkManager extends Thread {
                 try {
                     Message missatge = (Message) ois.readObject();
 
+                    processaLectura(missatge);
                     //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
                     if(ServidorVolDesconnectarAquestClient(missatge))
                         continue;
@@ -144,13 +146,21 @@ public class NetworkManager extends Thread {
         }
     }
 
+    private void processaLectura(Message missatge) {
+
+        switch (missatge.getContext()){
+            case CONTEXT_BJ_IA:
+                new Transmission(missatge,this);
+                break;
+        }
+    }
+
     /** Reconeix el missatge rebut del servidor i indica si el servidor vol la desconnexio d'aquest client*/
     private boolean ServidorVolDesconnectarAquestClient(Message missatge){
         //Si el missatge es un usuari amb el flag online a false significa que el servidor
         //desitja/permet la desconnexio d'aquest client
         if(missatge instanceof User){
             if(!((User)missatge).isOnline()){
-                System.out.println("BYE BYE");
                 logOut();
                 return true;
             }
@@ -169,20 +179,21 @@ public class NetworkManager extends Thread {
 
         try {
             //S'intenta realitzar la connexio al servidor
-            socket = new Socket(IP,PORT);
+            socket = new Socket(IP, PORT);
             ois = new ObjectInputStream(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
             //En el cas d'haver arribat aquest punt del codi, significa que ens hem connectat correctament
             conectatAmbServidor = true;
 
-            //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
-            splashScreen.exit();
-            controller.showFinestra();
-
             //Si en el json de configuracio inicial apareix l'indicador
             //d'autoLogin, s'executa el login de forma automatica.
-            if(autoLogin)
+            if (autoLogin){
+                splashScreen.infoMessage("Logging in...");
                 logIn(JsonManager.llegirJson(JsonManager.USERNAME_R, JsonManager.PASSWORD_R));
+           }else{
+                //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
+                exitLoadingScreen();
+            }
 
         }catch (IOException e){
             if(nTryConnect == 0) {
@@ -199,6 +210,12 @@ public class NetworkManager extends Thread {
                 e1.printStackTrace();
             }
         }
+    }
+
+    public void exitLoadingScreen() {
+        //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
+        splashScreen.exit();
+        controller.showFinestra();
     }
 
     /**
@@ -242,7 +259,7 @@ public class NetworkManager extends Thread {
         for(int index = 0; index < lectures.size(); index++){
             Message message = lectures.get(index);
             //Si el missatge de l'iteracio conte l'id que es buscava, es retorna l'objecte.
-            if(message.getID() == ID) {
+            if(message != null && message.getID() == ID) {
                 lectures.remove(message);
                 return message;
             }
@@ -272,9 +289,8 @@ public class NetworkManager extends Thread {
 
     public void enterToGames() {
         controller.showGamesView();
+        exitLoadingScreen();
     }
-
-
 
     /**
      * Envia al servidor una petició de SignUp per a un usuari concret
@@ -287,25 +303,25 @@ public class NetworkManager extends Thread {
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
 
     public void initBlackJack(Stack<String> nomCartes) {
-        Card card = new Card("",Transmission.CONTEXT_BLACK_JACK_INIT,nomCartes,false);
+        Card card = new Card("",Transmission.CONTEXT_BJ_INIT,nomCartes,false);
         new Transmission(card,this);
     }
 
     public void newBlackJackCard(boolean forIa) {
-        new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,forIa),this);
+        new Transmission(new Card("",Transmission.CONTEXT_BJ,forIa),this);
     }
 
 
     /** Pont transmitter - controlador - Model BlackJack*/
     public void newBJCard(Card cartaResposta) {
 
-        if(cartaResposta.getContext().equals(Transmission.CONTEXT_BLACK_JACK_INIT)){
-            new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,false),this);
-            new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
-            new Transmission(new Card("",Transmission.CONTEXT_BLACK_JACK,true),this);
+        if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_INIT)){
+            new Transmission(new Card("",Transmission.CONTEXT_BJ,false),this);
+            new Transmission(new Card("",Transmission.CONTEXT_BJ,true),this);
+            new Transmission(new Card("",Transmission.CONTEXT_BJ,true),this);
             controller.initBlackJack();
         }
-        controller.newBJCard(cartaResposta);
+           controller.newBJCard(cartaResposta);
     }
 
     public void enterAsGuest() {
@@ -319,5 +335,9 @@ public class NetworkManager extends Thread {
         }else{
             System.out.println("No hi ha connexio amb el server");
         }
+    }
+
+    public void endBlackJackTurn() {
+        new Transmission(new Card("",CONTEXT_BJ_FINISH_USER,false),this);
     }
 }

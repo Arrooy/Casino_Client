@@ -95,16 +95,4 @@ public class MainViewClient extends View{
         //Retorn false no
         return JOptionPane.showConfirmDialog(null,message,"Are you sure?",JOptionPane.YES_NO_OPTION) == 0;
     }
-
-    /*public String getUsername() {
-        return jtfUsername.getText();
-    }*/
-
-    /*public String getPassword() {
-        return String.valueOf(jpfPassword.getPassword());
-    }*/
-
-    /*public boolean getRememberLogIn() {
-        return jcbRememberLogIn.isSelected();
-    }*/
 }

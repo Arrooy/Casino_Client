@@ -1,8 +1,10 @@
 package Controlador.Game_Controlers;
 
+import Controlador.Controller;
 import Controlador.GraphicsController;
 import Model.Card;
 import Network.NetworkManager;
+import Network.Transmission;
 import Vista.GameViews.BlackJack.BlackJackView;
 import Vista.GraphicsPanel;
 
@@ -24,15 +26,41 @@ public class BlackJackController extends GraphicsController {
         this.gp = new GraphicsPanel(blackJackView.getWidth(),blackJackView.getHeight());
         gp.setCurrentDrawing(blackJackView,this);
         gp.setBackgroundColor(Color.red);
+        gp.setBounds(0,0,blackJackView.getWidth(),blackJackView.getHeight());
         blackJackView.add(gp);
     }
     public void updateSize(boolean fully){
         gp.updateSize(blackJackView.getWidth(),blackJackView.getHeight(),fully);
+        gp.setBounds(0,0,blackJackView.getWidth(),blackJackView.getHeight());
         blackJackView.updateUI();
     }
 
-    public void newBJCard(Card cartaResposta) {
+    public void newBJCard(Card cartaResposta, Controller c) {
+
         blackJackView.addCardIntoGame(cartaResposta);
+
+        //control de la carta nova!
+        if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER)){
+            blackJackView.giraIA();
+        }
+
+        if(cartaResposta.getDerrota().equals("user")){
+            finishGame(false,c);
+        }else if(cartaResposta.getDerrota().equals("IA")){
+            finishGame(true,c);
+        }
+    }
+
+    private void finishGame(boolean winner,Controller c) {
+        if(winner){
+            c.displayError("USER WIN GAME!","meh");
+        }else{
+            c.displayError("USER LOOSE GAME!","hurray");
+        }
+        gp.exit();
+        blackJackView.remove(gp);
+        blackJackView.reset();
+        c.showGamesView();
     }
 
     public int getMouseX() {
@@ -73,7 +101,13 @@ public class BlackJackController extends GraphicsController {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        networkManager.newBlackJackCard(false);
+        System.out.println(e.getButton());
+        if(e.getButton() == 1){
+            networkManager.newBlackJackCard(false);
+        }else{
+            networkManager.endBlackJackTurn();
+        }
+
     }
 
     @Override

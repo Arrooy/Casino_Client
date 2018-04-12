@@ -14,8 +14,10 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_LOGIN_GUEST = "loginGuest";
     public static final String CONTEXT_LOGOUT = "logout";
     public static final String CONTEXT_SIGNUP = "signup";
-    public static final String CONTEXT_BLACK_JACK = "blackjack";
-    public static final String CONTEXT_BLACK_JACK_INIT = "blackjackinit";
+    public static final String CONTEXT_BJ = "blackjack";
+    public static final String CONTEXT_BJ_INIT = "blackjackinit";
+    public static final String CONTEXT_BJ_IA = "blackjackIA";
+    public static final String CONTEXT_BJ_FINISH_USER = "blackjackFinish";
 
     private Message msg;
     private String context;
@@ -35,29 +37,51 @@ public class Transmission implements Runnable {
     public void run() {
 
         switch (context) {
+
             case CONTEXT_LOGIN:
                 if (!updateConnection()) {
                     networkManager.setLoginErrorMessage("⋙ Error, dades incorrectes");
                 }
                 break;
+
             case CONTEXT_SIGNUP:
                 if(!updateConnection()){
                     //TODO: ERROR SIGN IN!!!!!!
                 }
                 break;
+
             case CONTEXT_LOGIN_GUEST:
                 updateConnection();
                 break;
+
             case CONTEXT_LOGOUT:
                 System.out.println("[TRANSMISION]: sending log out");
                 updateConnection();
                 break;
-            case CONTEXT_BLACK_JACK_INIT:
-            case CONTEXT_BLACK_JACK:
+
+            case CONTEXT_BJ_INIT:
+            case CONTEXT_BJ:
                 blackJackRequestCard();
                 break;
-
+            case CONTEXT_BJ_IA:
+                break;
+            case CONTEXT_BJ_FINISH_USER:
+                blackJackFinishUser();
+                break;
             default:
+        }
+    }
+
+    private void blackJackFinishUser() {
+        try {
+            Card carta = (Card) msg;
+            networkManager.send(carta);
+
+            Card cartaResposta = (Card) waitResponse(carta);
+            networkManager.newBJCard(cartaResposta);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

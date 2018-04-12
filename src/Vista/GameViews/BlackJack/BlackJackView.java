@@ -28,9 +28,9 @@ public class BlackJackView extends JPanel implements ToDraw {
     private LinkedList<Card> IACards;
 
     public BlackJackView(){
-        setBackground(Color.green);
         IACards = new LinkedList<>();
         userCards = new LinkedList<>();
+        setLayout(null);
     }
 
     public void addCardIntoGame(Card card){
@@ -102,5 +102,16 @@ public class BlackJackView extends JPanel implements ToDraw {
         for(Card card : userCards){
             g.drawImage(Baralla.findImage(card),card.getX(),card.getY(),null);
         }
+    }
+
+    public void giraIA() {
+        for(Card card : IACards){
+            card.setGirada(false);
+        }
+    }
+
+    public void reset() {
+        IACards = new LinkedList<>();
+        userCards = new LinkedList<>();
     }
 }

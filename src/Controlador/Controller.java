@@ -70,12 +70,13 @@ public class Controller implements ActionListener, WindowListener, MouseListener
             case "logIn":
                 //S'intenta fer logIn al servidor amb les credencials introduides
                 networkManager.logIn(logInView.getUsername(), logInView.getPassword());
-                logInView.clearFields();
                 break;
             case "logOut":
                 //S'intenta desconectar-se del servidor
+                JsonManager.removeRemember();
                 networkManager.requestLogOut();
                 finestra.setMainView();
+
                 break;
             case "settings":
                 finestra.setSettingsView();
@@ -126,7 +127,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     public void newBJCard(Card cartaResposta) {
-        BJController.newBJCard(cartaResposta);
+        BJController.newBJCard(cartaResposta,this);
     }
 
     private void signUp() {
@@ -145,6 +146,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void setSignInView(SignInView signInView) {this.signInView = signInView;}
     public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
     public void setSettingsView(SettingsView settingsView) {this.settingsView = settingsView;}
+
     public void showGamesView() {
         logInView.clearFields();
         finestra.setGameSelector();
