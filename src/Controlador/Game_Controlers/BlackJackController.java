@@ -1,7 +1,7 @@
 package Controlador.Game_Controlers;
 
 import Controlador.Controller;
-import Controlador.CustomGraphics.Controlador_Interaccio_dibuix;
+import Controlador.CustomGraphics.GraphicsController;
 import Model.Baralla;
 import Model.Card;
 import Model.Model_BJ;
@@ -18,7 +18,7 @@ import java.util.LinkedList;
 
 import static Model.Model_BJ.*;
 
-public class BlackJackController extends Controlador_Interaccio_dibuix {
+public class BlackJackController implements GraphicsController {
 
     private BlackJackView blackJackView;
     private NetworkManager networkManager;

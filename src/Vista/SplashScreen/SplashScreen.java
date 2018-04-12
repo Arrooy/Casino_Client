@@ -1,6 +1,6 @@
 package Vista.SplashScreen;
 
-import Controlador.CustomGraphics.Controlador_Interaccio_dibuix;
+import Controlador.CustomGraphics.GraphicsController;
 import Controlador.CustomGraphics.GraphicsManager;
 import Model.AssetManager;
 
@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 
 
-public class SplashScreen extends Controlador_Interaccio_dibuix implements Runnable{
+public class SplashScreen implements GraphicsController, Runnable{
 
     private int x,y,x1,y1;
     private long currentTime;

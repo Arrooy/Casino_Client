@@ -13,7 +13,7 @@ public class GraphicsManager implements Runnable {
 
     private JPanel JPanelObjectiu;
 
-    private Controlador_Interaccio_dibuix controlador_extern;
+    private GraphicsController controlador_extern;
 
     private Color clearColor;
 
@@ -24,11 +24,11 @@ public class GraphicsManager implements Runnable {
      * @param c Controlador que gestiona les interaccions(Mouse&Key listeners) de la persona amb el custom rendering panel.
      */
 
-    public GraphicsManager(JPanel PanellObjectiu, Controlador_Interaccio_dibuix c) {
+    public GraphicsManager(JPanel PanellObjectiu, GraphicsController c) {
         clearColor = Color.white;
 
         if(PanellObjectiu.getWidth() == 0 || PanellObjectiu.getHeight() == 0)
-            System.out.println("Error ultrafatal. El panell que mhas donat no te mida especificada!");
+            System.out.println("Error ultrafatal. El panell que mhas donat no te mida especificada!"); //ets un primo arroyo
         JPanelObjectiu = PanellObjectiu;
         JPanelObjectiu.setBackground(Color.BLACK);
         JPanelObjectiu.setFocusable(true);
@@ -106,7 +106,7 @@ public class GraphicsManager implements Runnable {
         g.dispose();
     }
 
-    private void registraControllador(Controlador_Interaccio_dibuix c) {
+    private void registraControllador(GraphicsController c) {
 
         if (JPanelObjectiu.getMouseListeners().length == 0)
             JPanelObjectiu.addMouseListener(c);
