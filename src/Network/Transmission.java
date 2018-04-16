@@ -74,7 +74,21 @@ public class Transmission implements Runnable {
                 //Todo revisar MERI
                 transaction();
                 break;
+            case "deposit":
+                deposit();
+                break;
             default:
+        }
+    }
+
+    private void deposit() {
+        networkManager.send(msg);
+        User res = (User) networkManager.read(msg.getID());
+
+        if (res.areCredentialsOk()) {
+            //TODO: poser missatge succssesful vista de add Money
+        } else {
+            //TODO: poser missatge error vista de add Money
         }
     }
 

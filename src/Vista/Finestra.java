@@ -109,8 +109,6 @@ public class Finestra extends JFrame {
         layout.show(getContentPane(), "signIn");
     }
 
-
-
     public User getSignUpUser() {
         return new User(signInView.getUsername(), signInView.getPassword(), signInView.getMail(), Transmission.CONTEXT_SIGNUP);
     }

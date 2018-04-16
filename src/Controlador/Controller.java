@@ -164,7 +164,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
             tOK = false;
         }
         if(tOK){
-            Transaction transaction = new Transaction("transaction", user.getUsername(), deposit,0);
+            Transaction transaction = new Transaction("deposit", user.getUsername(), deposit,0);
             new Transmission(transaction, networkManager);
         }
     }
