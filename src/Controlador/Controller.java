@@ -144,6 +144,13 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         String password = addMoneyView.getPassword();
 
         boolean tOK = true;
+        if(deposit == -1){
+            //addMoneyView.showErrorMoney("Above the limit amount ");
+            addMoneyView.showErrorMoney("Choose an amount       ");
+            tOK = false;
+        }else{
+            addMoneyView.noErrorMoney();
+        }
         if(password.equals(user.getPassword())){
             addMoneyView.noErrorPassword();
         } else {
@@ -162,11 +169,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         if (ok) {
             addMoneyView.showAddOK();
             addMoneyView.noErrorMoney();
-            System.out.println("OK");
         } else {
             addMoneyView.noTransactionOK();
-            addMoneyView.showErrorMoney();
-            System.out.println("KO");
+            addMoneyView.showErrorMoney("Above the limit amount ");
         }
     }
 

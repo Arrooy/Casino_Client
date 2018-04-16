@@ -49,7 +49,7 @@ public class AddMoneyView extends View {
         c.gridx = 2;
         c.gridy = 0;
         c.insets = new Insets(0,20,20,0);
-        jlErrorMoney = new JLabel("Above the limit amount");
+        jlErrorMoney = new JLabel("Above the limit amount ");
         jpMoneyView.add(jlErrorMoney, c);
 
         c.gridy = 1;
@@ -93,7 +93,8 @@ public class AddMoneyView extends View {
         return new String(jpfPassword.getPassword());
     }
     /** Controla el missatge d'error*/
-    public void showErrorMoney(){
+    public void showErrorMoney(String t){
+        this.jlErrorMoney.setText(t);
         this.jlErrorMoney.setForeground(new Color(125, 28, 37));
     }
     /** Controla el missatge d'error*/
@@ -101,7 +102,7 @@ public class AddMoneyView extends View {
         this.jlErrorPassword.setForeground(new Color(125, 28, 37));
     }
     /** Controla el missatge de Transaction OK*/
-    public void showAddOK(){ this.jlAddOK.setForeground(Color.GREEN); }
+    public void showAddOK(){ this.jlAddOK.setForeground(new Color(25, 151, 6)); }
     /** Indica que no hi ha error*/
     public void noErrorMoney(){
         this.jlErrorMoney.setForeground(new Color(0, 0, 0, 0));
