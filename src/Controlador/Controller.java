@@ -16,7 +16,7 @@ import java.nio.charset.CharsetDecoder;
 
 /** Controlador del client*/
 
-public class Controller implements ActionListener, WindowListener, ComponentListener, KeyListener{
+public class Controller implements ActionListener, ComponentListener, KeyListener{
 
     /** Finestra grafica del client*/
     private Finestra finestra;
@@ -52,12 +52,6 @@ public class Controller implements ActionListener, WindowListener, ComponentList
         mainView.displayError(title,errorText);
     }
 
-    /** Metode per a tencar el client de forma segura.*/
-    public void exitProgram(int status){
-        networkManager.requestLogOut();
-        Tray.exit();
-        System.exit(status);
-    }
 
     /** Retorna l'estat de la JCheckBox RememberLogIn inidcant doncs si s'ha de guardar localment el login del usuari*/
     public boolean rememberLogIn(){
@@ -102,9 +96,6 @@ public class Controller implements ActionListener, WindowListener, ComponentList
             case "blackJack":
                 networkManager.initBlackJack(Baralla.getNomCartes());
                 break;
-            case "exitProgram":
-                exitProgram(0);
-                break;
             case "goSignIn":
                 finestra.setSignInView();
                 break;
@@ -113,7 +104,8 @@ public class Controller implements ActionListener, WindowListener, ComponentList
                 else ;//TODO: mostra error informatiu
                 break;
             case "settings":
-                finestra.setSettingsView("NOTHING");
+                if(user != null && !user.isGuest())
+                    finestra.setSettingsView("NOTHING");
                 break;
             case "SETTINGS - backFromSettings":
                 finestra.setGameSelector(user.isGuest());
@@ -217,26 +209,6 @@ public class Controller implements ActionListener, WindowListener, ComponentList
     public void setBlackJackView(BlackJackView blackJackView) {
         this.blackJackView = blackJackView;
     }
-
-    @Override
-    public void windowOpened(WindowEvent e) {}
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-        exitProgram(0);
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {}
-    @Override
-    public void windowIconified(WindowEvent e) {}
-    @Override
-    public void windowDeiconified(WindowEvent e) {}
-    @Override
-    public void windowActivated(WindowEvent e) {}
-    @Override
-    public void windowDeactivated(WindowEvent e) {}
-
 
     @Override
     public void componentResized(ComponentEvent e) {

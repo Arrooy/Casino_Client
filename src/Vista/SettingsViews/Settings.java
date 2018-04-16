@@ -17,24 +17,20 @@ public class Settings extends View {
     public Settings(){
 
         this.setLayout(new BorderLayout());
-        this.setBackground(new Color(0,0,0,0));
 
         JPanel jpDivisor = new JPanel();
-        jpDivisor.setBackground(new Color(0,0,0,0));
+
         jpDivisor.setLayout(new GridLayout(1, 2));
 
         //Panell de l'esquerra que conté tots els botons
         JPanel jpLeft = new JPanel();
-        jpLeft.setBackground(new Color(0,0,0,0));
         jpLeft.setLayout(new BorderLayout());
 
         this.settingsView = new SettingsView();
 
         //Panell que té el títol de la pantalla a dalt a la dreta a l
         JPanel jpTitle = new JPanel();
-        jpTitle.setBackground(new Color(0,0,0,0));
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
-        jpgblTitle.setBackground(new Color(0,0,0,0));
         GridBagConstraints c = new GridBagConstraints();
         JLabel jlTitle = new JLabel("SETTINGS");
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 24));
@@ -61,7 +57,6 @@ public class Settings extends View {
 
         //Panell que té els botons per accedir a les diferents opcions
         JPanel jpgblBotons = new JPanel(new GridBagLayout());
-        jpgblBotons.setBackground(new Color(0,0,0,0));
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;

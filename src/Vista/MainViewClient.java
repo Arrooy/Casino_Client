@@ -18,28 +18,11 @@ public class MainViewClient extends View{
 
     public MainViewClient(){
         this.setLayout(new BorderLayout());
-        this.setBackground(new Color(0,0,0,0));
 
-        logOutButton = new JButton("EXIT");
-        logOutButton.setFocusable(false);
-        logOutButton.setPreferredSize(new Dimension(150,30));
-
-        //Panell per col·locar el botó exit a la part baixa a l'esquerra
-        JPanel jpgblExit = new JPanel(new GridBagLayout());
-        jpgblExit.setBackground(new Color(0,0,0,0));
         GridBagConstraints c = new GridBagConstraints();
-        //Marges
-        c.insets = new Insets(0,20,20,0);
-        c.fill = GridBagConstraints.BOTH;
-        jpgblExit.add(logOutButton, c);
-        JPanel jpExit = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        jpExit.setBackground(new Color(0,0,0,0));
-        jpExit.add(jpgblExit);
-        this.add(jpExit, BorderLayout.SOUTH);
 
         //Panell que té els botons per iniciar el joc amb el mode desitjat
         JPanel jpgblBotons = new JPanel(new GridBagLayout());
-        jpgblBotons.setBackground(new Color(0,0,0,0));
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
@@ -78,9 +61,6 @@ public class MainViewClient extends View{
         //Tenen el mateix actionCommand perque les dues accions resulten en el mateix - wtf?
         logInButton.setActionCommand("goToLogIn");
         logInButton.addActionListener(c);
-
-        logOutButton.setActionCommand("exitProgram");
-        logOutButton.addActionListener(c);
 
         jbSignIn.setActionCommand("signIn");
         jbSignIn.addActionListener(c);

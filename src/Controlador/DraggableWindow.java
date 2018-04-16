@@ -1,9 +1,12 @@
 package Controlador;
 
+import Network.NetworkManager;
 import Vista.Finestra;
+import Vista.Tray;
 
 import java.awt.event.*;
 
+import static java.awt.Frame.ICONIFIED;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
 
@@ -11,10 +14,11 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
 
         private Finestra vista;
         private int fingerX,fingerY;
+        private NetworkManager networkManager;
 
-        public DraggableWindow(Finestra f) {
+        public DraggableWindow(Finestra f, NetworkManager networkManager) {
             vista = f;
-
+            this.networkManager = networkManager;
         }
 
         @Override
@@ -72,7 +76,28 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()){
-
+                case "exitProgram":
+                    exitProgram(0);
+                    break;
+                case "maximize":
+                    if(vista.getExtendedState() == MAXIMIZED_BOTH) {
+                        vista.setExtendedState(NORMAL);
+                        vista.goCenter();
+                    }else{
+                        vista.setExtendedState(MAXIMIZED_BOTH);
+                    }
+                    break;
+                case "iconify":
+                    vista.setExtendedState(ICONIFIED);
+                    break;
             }
         }
+
+    /** Metode per a tencar el client de forma segura.*/
+    public void exitProgram(int status){
+        networkManager.requestLogOut();
+        Tray.exit();
+        System.exit(status);
     }
+
+}

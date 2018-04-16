@@ -11,6 +11,7 @@ import Vista.SettingsViews.Settings;
 import Vista.SettingsViews.SettingsView;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 public class Finestra extends JFrame {
@@ -23,16 +24,18 @@ public class Finestra extends JFrame {
     private Settings settings;
     private BlackJackView blackJackView;
     private JPanel content;
-
-
-
+    
     private JButton jbtexit;
     private JButton jbticonify;
     private JButton jbtmax;
+    private JButton jbtUser;
 
     public Finestra() {
 
         Tray.init();
+
+        setLayout(new BorderLayout());
+        setContentPane(new JLabel(new ImageIcon(AssetManager.getImage("arroba.png"))));
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(640, 480);
@@ -46,7 +49,7 @@ public class Finestra extends JFrame {
 
         requestFocus();
 
-        setIconImage(AssetManager.getImage("ico.png"));
+        setIconImage(AssetManager.getImage("icon.png"));
 
         getContentPane().setLayout(new BorderLayout());
 
@@ -77,7 +80,7 @@ public class Finestra extends JFrame {
 
 
     private void useCustomCursor() {
-        Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(AssetManager.getImage("select.png"),new Point(15,0),null);
+        Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(AssetManager.getImage("mouse.png"),new Point(15,0),null);
         setCursor(cursor);
     }
 
@@ -94,6 +97,16 @@ public class Finestra extends JFrame {
 
     public void addController(Controller c, DraggableWindow dw) {
         Tray.addController(c);
+
+        jbtexit.setActionCommand("exitProgram");
+        jbtexit.addActionListener(dw);
+        jbticonify.setActionCommand("iconify");
+        jbticonify.addActionListener(dw);
+        jbtmax.setActionCommand("maximize");
+        jbtmax.addActionListener(dw);
+
+        jbtUser.setActionCommand("settings");
+        jbtUser.addActionListener(c);
 
         mainView.addController(c);
         logInView.addController(c);
@@ -161,19 +174,25 @@ public class Finestra extends JFrame {
     }
 
     private void generateTopBar() {
-        JPanel topBar = new JPanel();
+        JPanel topBar = new JPanel(new BorderLayout());
 
-        jbtexit = new JButton(new ImageIcon(AssetManager.getImage("test.png")));
-        jbticonify = new JButton(new ImageIcon(AssetManager.getImage("test.png")));
+        JPanel rightOptions = new JPanel();
+        jbtexit = new JButton();
+        jbticonify = new JButton();
         jbtmax = new JButton();
+        jbtUser = new JButton();
 
         addButtonTop(jbtexit,"exitOnRest.png","exitOnMouse.png");
         addButtonTop(jbticonify,"minimize.png","minimizeOnMouse.png");
         addButtonTop(jbtmax,"maximize.png","maximizeOnMouse.png");
+        addButtonTop(jbtUser,"user.png","userOnMouse.png");
 
-        topBar.add(jbticonify);
-        topBar.add(jbtmax);
-        topBar.add(jbtexit);
+        rightOptions.add(jbticonify);
+        rightOptions.add(jbtmax);
+        rightOptions.add(jbtexit);
+
+        topBar.add(jbtUser, BorderLayout.WEST);
+        topBar.add(rightOptions, BorderLayout.EAST);
 
         getContentPane().add(topBar,BorderLayout.NORTH);
     }
@@ -187,6 +206,6 @@ public class Finestra extends JFrame {
         boto.setIcon(new ImageIcon(AssetManager.getImage(normal)));
         boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(normal)));
         boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(onSelection)));
-        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
+        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(normal)));
     }
 }

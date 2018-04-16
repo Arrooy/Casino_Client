@@ -18,10 +18,8 @@ public class AddMoneyView extends View {
 
     public AddMoneyView(){
         this.setLayout(new BorderLayout());
-        this.setBackground(new Color(0,0,0,0));
 
         JPanel jpMoneyView = new JPanel(new GridBagLayout());
-        jpMoneyView.setBackground(new Color(0,0,0,0));
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -52,16 +50,14 @@ public class AddMoneyView extends View {
         c.gridy = 0;
         c.insets = new Insets(0,20,20,0);
         jlErrorMoney = new JLabel("Above the limit amount");
-        jlErrorMoney.setForeground(new Color(0, 0, 0, 0));
         jpMoneyView.add(jlErrorMoney, c);
 
         c.gridy = 1;
         jlErrorPassword = new JLabel("Wrong password");
-        jlErrorPassword.setForeground(new Color(0, 0, 0, 0));
         jpMoneyView.add(jlErrorPassword, c);
 
         jlAddOK = new JLabel("Transaction OK");
-        jlAddOK.setForeground(new Color(0, 0, 0, 0));
+
         c.gridy = 4;
         c.gridx = 1;
         c.ipadx = 50;
@@ -98,11 +94,11 @@ public class AddMoneyView extends View {
     }
     /** Controla el missatge d'error*/
     public void showErrorMoney(){
-        this.jlErrorMoney.setForeground(new Color(201, 25, 25));
+        this.jlErrorMoney.setForeground(new Color(125, 28, 37));
     }
     /** Controla el missatge d'error*/
     public void showErrorPassword(){
-        this.jlErrorPassword.setForeground(new Color(201, 25, 25));
+        this.jlErrorPassword.setForeground(new Color(125, 28, 37));
     }
     /** Controla el missatge de Transaction OK*/
     public void showAddOK(){ this.jlAddOK.setForeground(Color.GREEN); }

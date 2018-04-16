@@ -20,18 +20,17 @@ public class SignInView extends View {
     public SignInView(){
 
         this.setLayout(new BorderLayout());
-        this.setBackground(new Color(0,0,0,0));
 
         //Label missatge error
         JPanel jpGeneric = new JPanel(new GridBagLayout());
-        jpGeneric.setBackground(new Color(0,0,0,0));
+
         jlErrorMessage = new JLabel("Error");
         jlErrorMessage.setHorizontalAlignment(JLabel.CENTER);
-        jlErrorMessage.setForeground(new Color(0, 0, 0, 0));
+
 
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblBack = new JPanel(new GridBagLayout());
-        jpgblBack.setBackground(new Color(0,0,0,0));
+
         GridBagConstraints c = new GridBagConstraints();
         //Marges
         c.insets = new Insets(20,20,0,0);
@@ -41,15 +40,12 @@ public class SignInView extends View {
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));
-        jpBack.setBackground(new Color(0,0,0,0));
         jpBack.add(jpgblBack);
         this.add(jpBack, BorderLayout.SOUTH);
 
         //Panell que té el títol de la pantalla a dalt a la dreta al mig
         JPanel jpTitle = new JPanel();
-        jpTitle.setBackground(new Color(0,0,0,0));
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
-        jpgblTitle.setBackground(new Color(0,0,0,0));
         JLabel jlTitle = new JLabel("Sign In");
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
         //Marges
@@ -134,7 +130,7 @@ public class SignInView extends View {
 
     public void setError(String error) {
         jlErrorMessage.setText(error);
-        jlErrorMessage.setForeground(new Color(201, 25, 25));
+        jlErrorMessage.setForeground(new Color(125, 28, 37));
     }
 
     @Override

@@ -14,7 +14,6 @@ public class SettingsView extends JPanel {
 
 
     public SettingsView(){
-        this.setBackground(new Color(0,0,0,0));
         this.layout = new CardLayout();
         this.setLayout(layout);
 
