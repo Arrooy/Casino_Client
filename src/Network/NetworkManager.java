@@ -119,6 +119,10 @@ public class NetworkManager extends Thread {
         user = null;
     }
 
+    public void transactionOK(boolean ok){
+        controller.transactionOK(ok);
+    }
+
     @Override
     public void run() {
         while(true) {

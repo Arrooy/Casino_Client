@@ -117,6 +117,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 finestra.setSettingsView(e.getActionCommand());
                 addMoneyView.noErrorPassword();
                 addMoneyView.noErrorMoney();
+                addMoneyView.noTransactionOK();
                 break;
             case"SETTINGS - walletEvolution":
                 finestra.setSettingsView(e.getActionCommand());
@@ -125,8 +126,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 //setNewPassword(passwordChangeView.getNewPassword());
                 //passwordChangeView.getPassword();
                 //TODO update password
-
-
                 break;
             case "ADD MONEY":
                 addMoney();
@@ -145,21 +144,29 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         String password = addMoneyView.getPassword();
 
         boolean tOK = true;
-        /*if(false){
-            addMoneyView.showErrorMoney();
-            tOK = false;
-        }else{*/
-        //    addMoneyView.noErrorMoney();
-        //}
         if(password.equals(user.getPassword())){
             addMoneyView.noErrorPassword();
         } else {
             addMoneyView.showErrorPassword();
+            addMoneyView.noTransactionOK();
             tOK = false;
         }
         if(tOK){
             Transaction transaction = new Transaction("deposit", user.getUsername(), deposit,0);
             new Transmission(transaction, networkManager);
+            addMoneyView.showAddOK();
+        }
+    }
+
+    public void transactionOK(boolean ok){
+        if (ok) {
+            addMoneyView.showAddOK();
+            addMoneyView.noErrorMoney();
+            System.out.println("OK");
+        } else {
+            addMoneyView.noTransactionOK();
+            addMoneyView.showErrorMoney();
+            System.out.println("KO");
         }
     }
 
