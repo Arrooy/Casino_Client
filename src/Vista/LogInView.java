@@ -95,6 +95,7 @@ public class LogInView extends View {
         jbAccept = new JButton("Accept");
         jbAccept.setFocusable(false);
 
+
         c.gridy = 4;
         c.gridx = 0;
         c.gridwidth = 3;

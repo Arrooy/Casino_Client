@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.*;
 
-public class SignInView extends View {
+public class SignInView extends View implements PasswordConfirm {
 
     private JButton jbBack;
     private JTextField jtfName;
@@ -14,7 +14,8 @@ public class SignInView extends View {
     private JPasswordField jpfPassword;
     private JPasswordField jpfConfirmPassword;
     private JButton jbAccept;
-
+    private JLabel jlStrength;
+    private JProgressBar jpbStrength;
     private JLabel jlErrorMessage;
 
     public SignInView(){
@@ -23,8 +24,7 @@ public class SignInView extends View {
 
         //Label missatge error
         JPanel jpGeneric = new JPanel(new GridBagLayout());
-
-        jlErrorMessage = new JLabel("Error");
+        jlErrorMessage = new JLabel("");
         jlErrorMessage.setHorizontalAlignment(JLabel.CENTER);
 
 
@@ -74,20 +74,21 @@ public class SignInView extends View {
         jpgblInfo.add(jlPassword, c);
 
         c.gridy = 3;
-        c.insets = new Insets(0,0,0,10);
+        c.insets = new Insets(0,0,20,10);
         jpgblInfo.add(jlConfirmPassword, c);
 
         //S'afegeixen els camps per omplir
         jtfName = new JTextField();
         jtfEmail = new JTextField();
-        jpfPassword = new JPasswordField();
-        jpfConfirmPassword = new JPasswordField();
+        jpfPassword = new JPasswordField(20);
+        jpfConfirmPassword = new JPasswordField(20);
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
         c.gridx = 1;
         c.ipadx = 200;
-        c.gridwidth = 2;
+        c.gridwidth = 3;
+        c.fill = GridBagConstraints.HORIZONTAL;
 
         jpgblInfo.add(jtfName, c);
 
@@ -98,50 +99,70 @@ public class SignInView extends View {
         jpgblInfo.add(jpfPassword, c);
 
         c.gridy = 3;
-        c.insets = new Insets(0,0,0,0);
+        c.insets = new Insets(0,0,20,0);
         jpgblInfo.add(jpfConfirmPassword, c);
 
         //S'afegeix el botó per acceptar la info introduida
         jbAccept = new JButton("Accept");
         jbAccept.setFocusable(false);
+        jbAccept.setEnabled(false);
 
-        c.gridy = 5;
+        c = new GridBagConstraints();
+        c.gridy = 4;
+        c.gridx = 0;
+
+        this.jlStrength = new JLabel("");
+        c.insets = new Insets(0,0,20,10);
+        jpgblInfo.add(jlStrength, c);
+
+        c = new GridBagConstraints();
+        c.gridy = 4;
+        c.gridx = 1;
+        c.ipadx = 150;
+        c.gridwidth = 2;
+        c.insets = new Insets(0,0,20,0);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        this.jpbStrength = new JProgressBar();
+        this.jpbStrength.setMinimum(0);
+        this.jpbStrength.setMaximum(40);
+        jpgblInfo.add(jpbStrength, c);
+
+        c.gridy = 6;
         c.gridx = 0;
         c.gridwidth = 3;
         c.insets = new Insets(20,0,0,0);
-
         jpgblInfo.add(jbAccept, c);
+
+        c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.insets = new Insets(0,0,20,0);
+        jpGeneric.add(jlErrorMessage, c);
 
         c.gridy = 1;
         c.gridx = 0;
         c.gridwidth = 1;
         c.insets = new Insets(0,0,0,0);
+        c.anchor = GridBagConstraints.CENTER;
         jpGeneric.add(jpgblInfo, c);
 
-        //S'afegeix el missatge d'error
-        c.insets = new Insets(0,0,20,0);
-        c.anchor = GridBagConstraints.CENTER;
-        c.gridy = 0;
-        c.gridx = 0;
-        jpGeneric.add(jlErrorMessage, c);
+
 
         add(jpGeneric, BorderLayout.CENTER);
     }
 
-    public void setError(String error) {
-        jlErrorMessage.setText(error);
-        jlErrorMessage.setForeground(new Color(125, 28, 37));
-    }
+
 
     @Override
     public void addController(Controller c) {
         jbBack.setActionCommand("backToMain");
         jbBack.addActionListener(c);
 
-        //private JTextField jtfName;
-        //private JTextField jtfEmail;
-        //private JPasswordField jpfPassword
-        //private JPasswordField jpfConfirmPassword;
+        this.jpfConfirmPassword.setName("SIGNIN - PASSWORD CONFIRM FIELD");
+        this.jpfConfirmPassword.addKeyListener(c);
+
+        this.jpfPassword.setName("SIGNIN - PASSWORD FIELD");
+        this.jpfPassword.addKeyListener(c);
 
         jbAccept.setActionCommand("acceptSignIn");
         jbAccept.addActionListener(c);
@@ -168,9 +189,67 @@ public class SignInView extends View {
         jtfName.setText("");
         jtfEmail.setText("");
         jpfPassword.setText("");
+        jlErrorMessage.setText((""));
+        jpfConfirmPassword.setText("");
+        jpbStrength.setValue(0);
     }
 
-    public boolean passwordIsCorrect() {
+    @Override
+    public boolean getPasswordChangeRequest() {
         return getPassword().equals(getConfirmation());
+    }
+
+    @Override
+    /** Mostra un missatge d'error*/
+    public void passwordKO(String message){
+        jlErrorMessage.setText(message);
+        jlErrorMessage.setForeground(Color.RED);
+    }
+
+    @Override
+    /** Fixa el valor del JProgress bar
+     * Depenent del "strength" actualitza color i text de l'indicador de seguretat*/
+    public void setStrength(int strength){
+        if(strength < 15){
+            jlStrength.setForeground(new Color(201, 47, 32));
+            jlStrength.setText("Weak Password");
+            jpbStrength.setForeground(new Color(227, 53, 36));
+            jpbStrength.setValue(17);
+        }else if(strength < 25){
+            jlStrength.setForeground(new Color(223, 159, 51));
+            jlStrength.setText("Average Password");
+            jpbStrength.setForeground(new Color(237, 175, 67));
+            jpbStrength.setValue(27);
+        }else{
+            jlStrength.setForeground(new Color(47, 127, 45));
+            jlStrength.setText("Strong Password");
+            jpbStrength.setForeground(new Color(47, 127, 45));
+            jpbStrength.setValue(40);
+        }
+
+    }
+    @Override
+    /** Controla la visibilitat del missatge d'error*/
+    public void manageError(boolean error){
+        if(error){
+            this.jlErrorMessage.setVisible(true);
+        }else{
+            this.jlErrorMessage.setVisible(false);
+        }
+    }
+    @Override
+    /** retorna la contrasenya que l'usuari ha introduit en el camp New Password*/
+    public String getNewPassword() {
+        return new String(jpfPassword.getPassword());
+    }
+
+    @Override
+    /** Controla el funcionament del boto que et permet sotmetrela nova contrasenya*/
+    public void canConfirm(boolean ok){
+        jbAccept.setEnabled(ok);
+    }
+
+    public String getEmail(){
+        return jtfEmail.getText();
     }
 }

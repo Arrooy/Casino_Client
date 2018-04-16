@@ -78,6 +78,7 @@ public class Transmission implements Runnable {
                 deposit();
                 break;
             default:
+                networkManager.send(msg);
         }
     }
 

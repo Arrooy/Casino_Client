@@ -100,8 +100,16 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 finestra.setSignInView();
                 break;
             case "acceptSignIn":
-                if (signInView.passwordIsCorrect()) signUp();
-                else ;//TODO: mostra error informatiu
+                if(signInView.getUsername().length() > 0 && signInView.getEmail().length() > 0){
+                    signUp();
+                    //TODO comprovar que l'usuari existeixi dins de la base de dades
+                    //TODO que el server retorni si la contrasenya es correcte
+                }else{
+                    signInView.passwordKO("Must fill in all fields");
+                    signInView.manageError(true);
+
+                }
+
                 break;
             case "settings":
                 if(user != null && !user.isGuest())
@@ -123,9 +131,18 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 finestra.setSettingsView(e.getActionCommand());
                 break;
             case "PASSWORD CHANGE  - CONFIRM PASSWORD":
-                //setNewPassword(passwordChangeView.getNewPassword());
-                //passwordChangeView.getPassword();
-                //TODO update password
+                user.setPassword(passwordChangeView.getNewPassword());
+                User userPass = new User();
+                userPass.setPassword(passwordChangeView.getNewPassword());
+                userPass.setUsername(user.getUsername());
+                userPass.setContext("change password");
+                new Transmission(userPass, networkManager);
+                System.out.println("Enviada new password de: \n" + userPass);
+
+                if(true/*TODO: check server for ok password confrmation*/){
+                    passwordChangeView.clearFields();
+                    JOptionPane.showMessageDialog(passwordChangeView, "Password Changed correctly","Password Change",  JOptionPane.INFORMATION_MESSAGE);
+                }
                 break;
             case "ADD MONEY":
                 addMoney();
@@ -248,11 +265,17 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         int strength = 0;
         switch( ((JComponent)e.getSource()).getName()){
             case "PASSWORD FIELD CHANGE - NEW PASSWORD":
-                strength = checkPassword(passwordChangeView.getNewPassword());
+                strength = checkPassword(passwordChangeView.getNewPassword(), passwordChangeView);
                 if(passwordChangeView.getPasswordChangeRequest() && strength > 0){
                     passwordChangeView.canConfirm(true);
                 }else{
-                   // passwordChangeView.passwordKO("Passwords must match");
+                    passwordChangeView.canConfirm(false);
+                    if (passwordChangeView.getNewPassword().equals(user.getPassword())){
+                        passwordChangeView.passwordKO("New and Old password must differ;");
+                    }else{
+                         passwordChangeView.passwordKO("");
+                    }
+
                 }
                 if(strength <= 0){
                     passwordChangeView.canConfirm(false);
@@ -265,17 +288,62 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
                 break;
             case "PASSWORD FIELD CHANGE - CONFIRM PASSWORD":
-                if(passwordChangeView.getPasswordChangeRequest() && checkPassword(passwordChangeView.getNewPassword()) > 0){
+                System.out.println("New: " + passwordChangeView.getNewPassword()+ ", equal: "+passwordChangeView.getPasswordChangeRequest() + ", check: " + checkPassword(passwordChangeView.getNewPassword(), passwordChangeView)) ;
+                if(passwordChangeView.getPasswordChangeRequest() && checkPassword(passwordChangeView.getNewPassword(), passwordChangeView) > 0){
                     passwordChangeView.canConfirm(true);
                     passwordChangeView.manageError(false);
-                }else{
-                    passwordChangeView.canConfirm(false);
-                    passwordChangeView.manageError(true);
-                    passwordChangeView.passwordKO("Passwords must match");
+                }else {
+                    if(checkPassword(passwordChangeView.getNewPassword(), passwordChangeView) == 0){
+                        passwordChangeView.canConfirm(false);
+                        passwordChangeView.manageError(true);
+                        if (passwordChangeView.getNewPassword().equals(user.getPassword())) {
+                            passwordChangeView.passwordKO("New and Old password must differ;");
+                        }
+                    }else if (checkPassword(passwordChangeView.getNewPassword(), passwordChangeView) < 0){
+                            passwordChangeView.canConfirm(false);
+                            passwordChangeView.manageError(true);
+
+                    }
                 }
                 break;
+            case "SIGNIN - PASSWORD FIELD":
+                //TODO Errada: al escriure le contrasenya surt com un jpsswordField on el progressbar, AJUDA
+                strength = checkPassword(signInView.getNewPassword(), signInView);
+                if(signInView.getPasswordChangeRequest() && strength > 0){
+                    signInView.canConfirm(true);
+                }else {
+                    if (strength <= 0) {
+                        signInView.canConfirm(false);
+                        signInView.setStrength(-strength);
+                        signInView.manageError(true);
+                    } else {
+                        signInView.setStrength(strength);
+                        signInView.manageError(false);
+                    }
+                }
+                break;
+            case"SIGNIN - PASSWORD CONFIRM FIELD":
+                if(signInView.getPasswordChangeRequest() && checkPassword(signInView.getNewPassword(), signInView) > 0){
+                    signInView.canConfirm(true);
+                    signInView.manageError(false);
+                }else {
+                    strength = checkPassword(signInView.getNewPassword(), signInView);
+                    if (strength <= 0) {
+                        signInView.canConfirm(false);
+                        signInView.manageError(true);
+                    }else{
+                        if(!signInView.getPasswordChangeRequest() ){
+                            signInView.canConfirm(false);
+                            signInView.passwordKO("Passwords must match");
+                            signInView.manageError(true);
+                        }
+                    }
+                }
+                break;
+
         }
     }
+
 
     /** Mostrem si el canvi de contrasenya s'ha pogut efectuar correctament
      * Retorn: < 0 : Menys de 8 caracters, retorn*-1 = strength
@@ -283,23 +351,32 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
      *       : > 0 : No hi ha error, retorn = strength
      *
      * Tambe s'actualitza el missatge d'error si n'hi ha */
-    public int checkPassword(String newPassword){
+    public int checkPassword(String newPassword, PasswordConfirm passwordConfirm){
         int strength;
         try {
             if(newPassword.length() >= 8){
                 strength = containsRequiredChars(newPassword);
                 if(isValidUTF(newPassword)){
-                    return strength;
+                   if(passwordConfirm instanceof PasswordChangeView){
+                       if(!passwordConfirm.getNewPassword().equals(user.getPassword())){
+                           return strength;
+                       }else{
+                           return 0;
+                       }
+                   }else{
+                       return strength;
+                   }
+
                 }else{
-                    passwordChangeView.passwordKO("Must contain valid UTF-8 characters");
+                    passwordConfirm.passwordKO("Must contain valid UTF-8 characters");
                     return 0;
                 }
             }else{
-                passwordChangeView.passwordKO("Must be at least 8 charcaters");
+                passwordConfirm.passwordKO("Must be at least 8 charcaters");
                 return -(int)(newPassword.length()*(float)1.75);
             }
         }catch (Exception e) {
-            passwordChangeView.passwordKO(e.getMessage());
+            passwordConfirm.passwordKO(e.getMessage());
             return 0;
         }
     }
@@ -310,9 +387,19 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
         try {
             cs.decode(ByteBuffer.wrap(string.getBytes()));
+
+            for(char c: string.toCharArray()){
+                if(Character.isSpaceChar(c)){
+                    return false;
+                }else if(!Character.isDefined(c)){
+                    return false;
+                }
+            }
+            System.out.println("UTF: true");
             return true;
         }
         catch(CharacterCodingException e){
+            System.out.println("UTF: false");
             return false;
         }
     }
@@ -339,16 +426,11 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 specialChars++;
             }
         }
-        if(number <= 0 || upperCase <= 0 || lowerCase <= 0 ){
-            throw new Exception("Must contain at least: number, Upper and Lower case character.");
+        if(number <= 0 || upperCase <= 0 || lowerCase <= 0 || (upperCase + lowerCase < 6)){
+            throw new Exception("Required: 1 number, 6 characters, 1 upper and lower case.");
         }else{
-            relativeStrength = (int)(((length - number)*(length - upperCase)*(length-lowerCase)*(length-specialChars))/(float)(length*length*length)*10);
+            relativeStrength = (int)((((length - number)*(length - upperCase)*(length-lowerCase)*(length-specialChars))/(float)(length*length*length))*10);
             return relativeStrength;
         }
-
-
     }
-
-
-
 }
