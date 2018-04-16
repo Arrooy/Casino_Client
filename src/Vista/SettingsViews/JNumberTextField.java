@@ -13,11 +13,11 @@ public class JNumberTextField extends JTextField {
         return;
     }
     /** En cas d'introduir algo que no sigui un nombre, aquest caracter es consumeix*/
-        public int getNumber() {
-            int result = -1;
+        public long getNumber() {
+            long result = -1;
             String text = getText();
             if (text != null && !"".equals(text)) {
-                result = Integer.valueOf(text);
+                result = Long.valueOf(text);
             }
             return result;
         }

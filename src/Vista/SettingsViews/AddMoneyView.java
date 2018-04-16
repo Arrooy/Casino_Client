@@ -84,7 +84,7 @@ public class AddMoneyView extends View {
     }
 
     /** Retorna la quantitat de diners que es desitgen introduir*/
-    public int getAmount(){
+    public long getAmount(){
         return jntfAmount.getNumber();
     }
 
