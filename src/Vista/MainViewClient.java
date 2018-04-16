@@ -17,9 +17,8 @@ public class MainViewClient extends View{
      */
 
     public MainViewClient(){
-        setBackground(new Color(0,0,0,0));
-
         this.setLayout(new BorderLayout());
+        this.setBackground(new Color(0,0,0,0));
 
         logOutButton = new JButton("EXIT");
         logOutButton.setFocusable(false);
@@ -27,13 +26,14 @@ public class MainViewClient extends View{
 
         //Panell per col·locar el botó exit a la part baixa a l'esquerra
         JPanel jpgblExit = new JPanel(new GridBagLayout());
-
+        jpgblExit.setBackground(new Color(0,0,0,0));
         GridBagConstraints c = new GridBagConstraints();
         //Marges
         c.insets = new Insets(0,20,20,0);
         c.fill = GridBagConstraints.BOTH;
         jpgblExit.add(logOutButton, c);
         JPanel jpExit = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        jpExit.setBackground(new Color(0,0,0,0));
         jpExit.add(jpgblExit);
         this.add(jpExit, BorderLayout.SOUTH);
 

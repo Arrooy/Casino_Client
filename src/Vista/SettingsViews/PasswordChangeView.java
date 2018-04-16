@@ -21,6 +21,7 @@ public class PasswordChangeView extends View {
 
     public  PasswordChangeView(){
         this.setLayout(new BorderLayout());
+        this.setBackground(new Color(0,0,0,0));
 
         jlCheckPassword = new JLabel();
         jpfConfirmPassword = new JPasswordField(20);
@@ -35,6 +36,7 @@ public class PasswordChangeView extends View {
 
 
         JPanel jpPasswordChange = new JPanel();
+        jpPasswordChange.setBackground(new Color(0,0,0,0));
         jpPasswordChange.setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();

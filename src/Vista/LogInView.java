@@ -21,15 +21,18 @@ public class LogInView extends View {
      */
     public LogInView(){
         this.setLayout(new BorderLayout());
+        this.setBackground(new Color(0,0,0,0));
 
         //Label missatge error
         JPanel jpGeneric = new JPanel(new GridBagLayout());
+        jpGeneric.setBackground(new Color(0,0,0,0));
         jlErrorMessage = new JLabel("Error");
         jlErrorMessage.setHorizontalAlignment(JLabel.CENTER);
         jlErrorMessage.setForeground(new Color(0, 0, 0, 0));
 
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblBack = new JPanel(new GridBagLayout());
+        jpgblBack.setBackground(new Color(0,0,0,0));
         GridBagConstraints c = new GridBagConstraints();
         //Marges
         c.insets = new Insets(20,20,20,0);
@@ -39,12 +42,15 @@ public class LogInView extends View {
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        jpBack.setBackground(new Color(0,0,0,0));
         jpBack.add(jpgblBack);
         this.add(jpBack, BorderLayout.SOUTH);
 
         //Panell que té el títol de la pantalla a dalt a la dreta al mig
         JPanel jpTitle = new JPanel();
+        jpTitle.setBackground(new Color(0,0,0,0));
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
+        jpgblTitle.setBackground(new Color(0,0,0,0));
         JLabel jlTitle = new JLabel("Log In");
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
 
@@ -56,6 +62,7 @@ public class LogInView extends View {
 
         //Panell amb els camps d'UserName, Password i l'opció de Remember me centrats al mig de la pantalla
         JPanel jpgblInfo = new JPanel(new GridBagLayout());
+        jpgblInfo.setBackground(new Color(0,0,0,0));
         JLabel jlName = new JLabel("UserName:");
         JLabel jlPassword = new JLabel("Password:");
         jcbRememberLogIn = new JCheckBox("Remember user");

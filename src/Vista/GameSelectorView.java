@@ -16,9 +16,11 @@ public class GameSelectorView extends View {
     public GameSelectorView(){
 
         this.setLayout(new BorderLayout());
+        this.setBackground(new Color(0,0,0,0));
 
         //Panell per col·locar el botó LogOut a la part baixa a l'esquerra
         JPanel jpgblBack = new JPanel(new GridBagLayout());
+        jpgblBack.setBackground(new Color(0,0,0,0));
         GridBagConstraints c = new GridBagConstraints();
         //Marges
         c.insets = new Insets(20,20,20,0);
@@ -28,12 +30,15 @@ public class GameSelectorView extends View {
         jpgblBack.add(jbLogOut, c);
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        jpBack.setBackground(new Color(0,0,0,0));
         jpBack.add(jpgblBack);
         this.add(jpBack, BorderLayout.SOUTH);
 
         //Panell que té el títol de la pantalla a dalt a la dreta al mig
         JPanel jpTitle = new JPanel();
+        jpTitle.setBackground(new Color(0,0,0,0));
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
+        jpgblTitle.setBackground(new Color(0,0,0,0));
         JLabel jlTitle = new JLabel("GAMES");
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 24));
         //Marges
@@ -44,6 +49,7 @@ public class GameSelectorView extends View {
 
         //Panell amb els botons dels jocs centrats al mig de la pantalla
         JPanel jpgblBotons = new JPanel(new GridBagLayout());
+        jpgblBotons.setBackground(new Color(0,0,0,0));
         jbBlackJack = new JButton("BLACKJACK");
         jbBlackJack.setFocusable(false);
         jbHorseRace = new JButton("HORSE RACE");

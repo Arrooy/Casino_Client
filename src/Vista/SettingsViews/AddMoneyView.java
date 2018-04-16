@@ -18,7 +18,10 @@ public class AddMoneyView extends View {
 
     public AddMoneyView(){
         this.setLayout(new BorderLayout());
+        this.setBackground(new Color(0,0,0,0));
+
         JPanel jpMoneyView = new JPanel(new GridBagLayout());
+        jpMoneyView.setBackground(new Color(0,0,0,0));
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
