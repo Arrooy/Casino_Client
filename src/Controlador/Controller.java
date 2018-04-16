@@ -16,7 +16,7 @@ import java.nio.charset.CharsetDecoder;
 
 /** Controlador del client*/
 
-public class Controller implements ActionListener, WindowListener, MouseListener, ComponentListener, KeyListener{
+public class Controller implements ActionListener, WindowListener, ComponentListener, KeyListener{
 
     /** Finestra grafica del client*/
     private Finestra finestra;
@@ -38,11 +38,13 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
     /** Responsable de la connectivitat amb el servidor*/
     private NetworkManager networkManager;
+    private DraggableWindow draggableWindow;
 
     /** Inicialitza un nou controlador i realitza les relacions amb la vista i el gestor de la connectivitat*/
-    public Controller(Finestra finestra, NetworkManager networkManager) {
+    public Controller(Finestra finestra, NetworkManager networkManager,DraggableWindow draggableWindow) {
         this.networkManager = networkManager;
         this.finestra = finestra;
+        this.draggableWindow = draggableWindow;
     }
 
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
@@ -76,7 +78,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
             case "logIn":
                 //S'intenta fer logIn al servidor amb les credencials introduides
                 networkManager.logIn(logInView.getUsername(), logInView.getPassword());
-                user.setUsername(logInView.getUsername());
+                //user.setUsername(logInView.getUsername());
                 break;
             case "logOut":
                 //S'intenta desconectar-se del servidor
@@ -206,8 +208,9 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     }
 
     public void initBlackJack() {
+        System.out.println("INIT BLACKJACK REQUESTED");
         //crea el controlador de la nova partida amb un nou model
-        BJController = new BlackJackController(blackJackView,networkManager);
+        BJController = new BlackJackController(blackJackView,networkManager,draggableWindow);
         finestra.setBlackJackView();
     }
 
@@ -233,16 +236,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
     public void windowActivated(WindowEvent e) {}
     @Override
     public void windowDeactivated(WindowEvent e) {}
-    @Override
-    public void mouseClicked(MouseEvent e) {}
-    @Override
-    public void mousePressed(MouseEvent e) {}
-    @Override
-    public void mouseReleased(MouseEvent e) {}
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-    @Override
-    public void mouseExited(MouseEvent e) {}
+
 
     @Override
     public void componentResized(ComponentEvent e) {

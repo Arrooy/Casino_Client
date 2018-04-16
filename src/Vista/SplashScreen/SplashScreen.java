@@ -40,7 +40,7 @@ public class SplashScreen implements GraphicsController, Runnable{
         aux.setSize(350,475);
         vista.getContentPane().add(aux);
         //Es crea el panell per pintar l'animacio i es configura per ocupar tot el JFrame
-        backGround = new GraphicsManager(aux,this);
+        backGround = new GraphicsManager(aux,this,null);
         backGround.setClearColor(Color.black);
 
         //Iniciem la carrega d'arxius del casino

@@ -61,4 +61,8 @@ public class Baralla {
         String nomCarta = carta.isGirada() ? carta.getReverseName() : carta.getCardName();
         return cartes.get(nomCarta);
     }
+
+    public static BufferedImage getRandomCard() {
+        return (BufferedImage)cartes.values().toArray()[(int)(Math.random() *cartes.size())];
+    }
 }

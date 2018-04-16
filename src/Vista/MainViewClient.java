@@ -17,6 +17,8 @@ public class MainViewClient extends View{
      */
 
     public MainViewClient(){
+        setBackground(new Color(0,0,0,0));
+
         this.setLayout(new BorderLayout());
 
         logOutButton = new JButton("EXIT");
@@ -25,6 +27,7 @@ public class MainViewClient extends View{
 
         //Panell per col·locar el botó exit a la part baixa a l'esquerra
         JPanel jpgblExit = new JPanel(new GridBagLayout());
+
         GridBagConstraints c = new GridBagConstraints();
         //Marges
         c.insets = new Insets(0,20,20,0);
@@ -36,6 +39,7 @@ public class MainViewClient extends View{
 
         //Panell que té els botons per iniciar el joc amb el mode desitjat
         JPanel jpgblBotons = new JPanel(new GridBagLayout());
+        jpgblBotons.setBackground(new Color(0,0,0,0));
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;

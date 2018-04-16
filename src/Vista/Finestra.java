@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.Controller;
+import Controlador.DraggableWindow;
 import Controlador.Game_Controlers.BlackJackController;
 import Model.AssetManager;
 import Model.User;
@@ -21,6 +22,13 @@ public class Finestra extends JFrame {
     private SignInView signInView;
     private Settings settings;
     private BlackJackView blackJackView;
+    private JPanel content;
+
+
+
+    private JButton jbtexit;
+    private JButton jbticonify;
+    private JButton jbtmax;
 
     public Finestra() {
 
@@ -40,8 +48,11 @@ public class Finestra extends JFrame {
 
         setIconImage(AssetManager.getImage("ico.png"));
 
+        getContentPane().setLayout(new BorderLayout());
+
+        content = new JPanel();
         layout = new CardLayout();
-        getContentPane().setLayout(layout);
+        content.setLayout(layout);
 
         mainView = new MainViewClient();
         logInView = new LogInView();
@@ -50,12 +61,24 @@ public class Finestra extends JFrame {
         settings = new Settings();
         blackJackView = new BlackJackView();
 
-        add("main", mainView);
-        add("logIn", logInView);
-        add("gameSelectorView", gameSelectorView);
-        add("signIn", signInView);
-        add("settings", settings);
-        add("blackJack", blackJackView);
+        content.add("main", mainView);
+        content.add("logIn", logInView);
+        content.add("gameSelectorView", gameSelectorView);
+        content.add("signIn", signInView);
+        content.add("settings", settings);
+        content.add("blackJack", blackJackView);
+
+        getContentPane().add(content,BorderLayout.CENTER);
+        generateTopBar();
+
+        useCustomCursor();
+        setUndecorated(true);
+    }
+
+
+    private void useCustomCursor() {
+        Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(AssetManager.getImage("select.png"),new Point(15,0),null);
+        setCursor(cursor);
     }
 
     /*
@@ -65,11 +88,11 @@ public class Finestra extends JFrame {
     private void checkFullScreen() {
         if(getExtendedState() != MAXIMIZED_BOTH) {
             System.out.println("Full screen no esta disponible, tirant de minimitzada.");
-            setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2);
+            goCenter();
         }
     }
 
-    public void addController(Controller c) {
+    public void addController(Controller c, DraggableWindow dw) {
         Tray.addController(c);
 
         mainView.addController(c);
@@ -87,34 +110,36 @@ public class Finestra extends JFrame {
         c.setBlackJackView(blackJackView);
 
 
-        addWindowListener(c);
+        addWindowListener(dw);
+        addMouseMotionListener(dw);
+
         addComponentListener(c);
-        addMouseListener(c);
     }
 
     public void setMainView() {
-        layout.show(getContentPane(), "main");
+        layout.show(content, "main");
     }
 
     public void setLogInView() {
-        layout.show(getContentPane(), "logIn");
+        layout.show(content, "logIn");
     }
 
     public void setGameSelector(boolean guest) {
-        layout.show(getContentPane(), "gameSelectorView");
+        layout.show(content, "gameSelectorView");
         gameSelectorView.enableButtons(guest);
     }
 
     public void setSignInView() {
-        layout.show(getContentPane(), "signIn");
+        layout.show(content, "signIn");
     }
+
 
     public User getSignUpUser() {
         return new User(signInView.getUsername(), signInView.getPassword(), signInView.getMail(), Transmission.CONTEXT_SIGNUP);
     }
 
     public void setBlackJackView() {
-        layout.show(getContentPane(), "blackJack");
+        layout.show(content, "blackJack");
     }
 
     public LogInView getLogInView() {
@@ -127,8 +152,41 @@ public class Finestra extends JFrame {
 
     /** Escollim la vista dels settings*/
     public void setSettingsView(String s) {
-        layout.show(getContentPane(), "settings");
+        layout.show(content, "settings");
         settings.showSetting(s);
     }
 
+    public void goCenter() {
+        setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2);
+    }
+
+    private void generateTopBar() {
+        JPanel topBar = new JPanel();
+
+        jbtexit = new JButton(new ImageIcon(AssetManager.getImage("test.png")));
+        jbticonify = new JButton(new ImageIcon(AssetManager.getImage("test.png")));
+        jbtmax = new JButton();
+
+        addButtonTop(jbtexit,"exitOnRest.png","exitOnMouse.png");
+        addButtonTop(jbticonify,"minimize.png","minimizeOnMouse.png");
+        addButtonTop(jbtmax,"maximize.png","maximizeOnMouse.png");
+
+        topBar.add(jbticonify);
+        topBar.add(jbtmax);
+        topBar.add(jbtexit);
+
+        getContentPane().add(topBar,BorderLayout.NORTH);
+    }
+
+    private void addButtonTop(JButton boto, String normal,String onSelection){
+        boto.setBorderPainted(false);
+        boto.setBorder(null);
+        boto.setFocusable(false);
+        boto.setMargin(new Insets(0, 0, 0, 0));
+        boto.setContentAreaFilled(false);
+        boto.setIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(onSelection)));
+        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
+    }
 }

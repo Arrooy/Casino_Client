@@ -18,6 +18,7 @@ public class SignInView extends View {
     private JLabel jlErrorMessage;
 
     public SignInView(){
+
         this.setLayout(new BorderLayout());
 
         //Label missatge error

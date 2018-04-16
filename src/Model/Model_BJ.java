@@ -40,8 +40,9 @@ public class Model_BJ {
     }
 
     public void giraIA() {
-        for(Card card : IACards){
-            card.setGirada(false);
+        int arraySize = IACards.size();
+        for(int i = 0; i < arraySize; i++){
+            IACards.get(i).setGirada(false);
         }
     }
 
