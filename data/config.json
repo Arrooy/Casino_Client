@@ -1,7 +1,4 @@
 {
- "LogUsername": "gerardPlanella",
  "PortServidor": 2525,
- "IpServidor": "127.0.0.1",
- "IsLoggedIn": true,
- "#LogPassword": "4AnrZEH29qpKyycG07ir4oklpKqN/n1q"
+ "IpServidor": "127.0.0.1"
 }

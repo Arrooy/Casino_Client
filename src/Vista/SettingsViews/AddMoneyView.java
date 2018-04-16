@@ -14,6 +14,7 @@ public class AddMoneyView extends View {
     private JPasswordField jpfPassword;
     private JLabel jlErrorMoney;
     private JLabel jlErrorPassword;
+    private JLabel jlAddOK;
 
     public AddMoneyView(){
         this.setLayout(new BorderLayout());
@@ -56,6 +57,16 @@ public class AddMoneyView extends View {
         jlErrorPassword.setForeground(new Color(0, 0, 0, 0));
         jpMoneyView.add(jlErrorPassword, c);
 
+        jlAddOK = new JLabel("Transaction OK");
+        jlAddOK.setForeground(new Color(0, 0, 0, 0));
+        c.gridy = 4;
+        c.gridx = 1;
+        c.ipadx = 50;
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.CENTER;
+        c.insets = new Insets(20,45,0,0);
+        jpMoneyView.add(jlAddOK, c);
+
         c.gridx = 1;
         c.gridy = 3;
         c.insets = new Insets(0,0,0,0);
@@ -90,14 +101,16 @@ public class AddMoneyView extends View {
     public void showErrorPassword(){
         this.jlErrorPassword.setForeground(new Color(201, 25, 25));
     }
+    /** Controla el missatge de Transaction OK*/
+    public void showAddOK(){ this.jlAddOK.setForeground(Color.GREEN); }
     /** Indica que no hi ha error*/
     public void noErrorMoney(){
         this.jlErrorMoney.setForeground(new Color(0, 0, 0, 0));
     }
     /** Indica que no hi ha error*/
-    public void noErrorPassword(){
-        this.jlErrorPassword.setForeground(new Color(0, 0, 0, 0));
-    }
+    public void noErrorPassword(){ this.jlErrorPassword.setForeground(new Color(0, 0, 0, 0)); }
+    /** Indica que la transacció no s'ha fet*/
+    public void noTransactionOK(){ this.jlAddOK.setForeground(new Color(0, 0, 0, 0)); }
 
 
 
