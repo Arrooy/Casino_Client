@@ -1,6 +1,7 @@
 package Vista.SettingsViews;
 
 import Controlador.Controller;
+import Vista.SwingModifications.IconPasswordField;
 import Vista.PasswordConfirm;
 import Vista.View;
 
@@ -11,14 +12,23 @@ import java.awt.*;
 
 
 
-public class PasswordChangeView extends View implements PasswordConfirm {
-    private JPasswordField jpfNewPassword;
-    private JPasswordField jpfConfirmPassword;
+public class PasswordChangeView extends View implements PasswordConfirm{
+
+    private static final String TOOL_TIP_NEW_PASSWORD = "Your new password";
+    private static final String TOOL_TIP_CONFIRM_PASSWORD = "Repeat the same password";
+
+    private static final String NEW_PASSWORD_HINT = "New password";
+    private static final String CONFIRM_PASSWORD_HINT = "Confirm password";
+
+    private final static char PASSWORD_CHAR = '*';
+
+    private IconPasswordField jpfNewPassword;
+    private IconPasswordField jpfConfirmPassword;
     private JButton jbConfirmPassword;
     private JLabel  jlCheckPassword;
     private JLabel jlStrength;
     private JProgressBar jpbStrength;
-    private final static char PASSWORD_CHAR = '卐';
+
 
     public  PasswordChangeView(){
         this.setLayout(new BorderLayout());
@@ -26,8 +36,8 @@ public class PasswordChangeView extends View implements PasswordConfirm {
         JPanel jpGeneric = new JPanel(new GridBagLayout());
 
         jlCheckPassword = new JLabel();
-        jpfConfirmPassword = new JPasswordField(20);
-        jpfNewPassword = new JPasswordField(20);
+        jpfConfirmPassword = new IconPasswordField("padlockBad.png",CONFIRM_PASSWORD_HINT,20,TOOL_TIP_CONFIRM_PASSWORD);
+        jpfNewPassword = new IconPasswordField("padlockBad.png",NEW_PASSWORD_HINT,20,TOOL_TIP_NEW_PASSWORD);
         jpfConfirmPassword.setMaximumSize(jpfConfirmPassword.getSize());
         jpfNewPassword.setMaximumSize(jpfNewPassword.getSize());
         jpfNewPassword.setEchoChar(PASSWORD_CHAR);
@@ -134,8 +144,8 @@ public class PasswordChangeView extends View implements PasswordConfirm {
         jbConfirmPassword.setActionCommand("PASSWORD CHANGE  - CONFIRM PASSWORD");
     }
 
-    @Override
     /** Mostra un missatge d'error*/
+    @Override
     public void passwordKO(String message){
         jlCheckPassword.setText(message);
         jlCheckPassword.setForeground(Color.RED);
@@ -192,8 +202,17 @@ public class PasswordChangeView extends View implements PasswordConfirm {
 
     @Override
     /** Controla el funcionament del boto que et permet sotmetrela nova contrasenya*/
-   public void canConfirm(boolean ok){
-        jbConfirmPassword.setEnabled(ok);
+   public void canConfirm(boolean ok) {
+       jbConfirmPassword.setEnabled(ok);
+
+       //Es modifica l'icono de la PasswordField per a indicar error
+       if (ok){
+           jpfNewPassword.setIcon("padlockGood.png");
+           jpfConfirmPassword.setIcon("padlockGood.png");
+       }else {
+           jpfNewPassword.setIcon("padlockBad.png");
+           jpfConfirmPassword.setIcon("padlockBad.png");
+       }
    }
 
     public void clearFields(){

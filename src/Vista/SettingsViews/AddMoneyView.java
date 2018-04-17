@@ -1,6 +1,7 @@
 package Vista.SettingsViews;
 
 import Controlador.Controller;
+import Vista.SwingModifications.IconPasswordField;
 import Vista.View;
 
 import javax.swing.*;
@@ -9,9 +10,17 @@ import java.awt.*;
 //TODO arreglar missatges error money i log in, sign in
 
 public class AddMoneyView extends View {
+
+    //TODO: mirar aixo
+    private static final String TOOL_TIP_PASSWORD = "Your password";
+    private static final String TOOL_TIP_AMOUNT = "How much money do you want?";
+
+    private static final String AMOUNT_HINT = "Choose Amount";
+    private static final String PASSWORD_HINT = "Password";
+
     private JButton jbAddMoney;
     private JNumberTextField jntfAmount;
-    private JPasswordField jpfPassword;
+    private IconPasswordField jpfPassword;
     private JLabel jlErrorMoney;
     private JLabel jlErrorPassword;
     private JLabel jlAddOK;
@@ -37,11 +46,11 @@ public class AddMoneyView extends View {
         c.gridy = 0;
         c.ipadx = 150;
         c.insets = new Insets(0,0,20,0);
-        jntfAmount = new JNumberTextField();
+        jntfAmount = new JNumberTextField("user.png",AMOUNT_HINT,TOOL_TIP_AMOUNT);
         jntfAmount.setEditable(true);
         jpMoneyView.add(jntfAmount, c);
 
-        jpfPassword = new JPasswordField();
+        jpfPassword = new IconPasswordField("padlockBad.png",PASSWORD_HINT,TOOL_TIP_PASSWORD);
         c.gridy = 1;
         c.ipadx = 150;
         jpMoneyView.add(jpfPassword, c);

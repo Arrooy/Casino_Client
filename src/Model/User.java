@@ -1,9 +1,12 @@
 package Model;
 
 import Network.Message;
+import Utils.Seguretat;
+
 import java.util.ArrayList;
 
 import static Network.Transmission.CONTEXT_LOGIN_GUEST;
+
 
 /** Usuari basic del casino*/
 
@@ -60,7 +63,7 @@ public class User extends Message {
         ID = Math.random();
 
         this.username = name;
-        this.password = password;
+        this.password = (String)Seguretat.encripta(password);
         this.credentialsOk = false;
 
         this.context = context;
@@ -82,7 +85,7 @@ public class User extends Message {
         ID = Math.random();
 
         this.username = username;
-        this.password = password;
+        this.password = (String)Seguretat.encripta(password);
         this.mail = mail;
 
         wallet = 0;
@@ -122,11 +125,11 @@ public class User extends Message {
     }
 
     public String getPassword() {
-        return password;
+        return (String)Seguretat.desencripta(password);
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = (String)Seguretat.encripta(password);
     }
 
     public String getMail() {

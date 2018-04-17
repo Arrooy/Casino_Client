@@ -1,6 +1,6 @@
 package Network;
 
-import Controlador.JsonManager;
+import Utils.JsonManager;
 import Model.Transaction;
 import Model.User;
 import Model.Card;

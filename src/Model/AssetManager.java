@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.awt.Image.SCALE_DEFAULT;
+
 public class AssetManager {
 
     private static Map<String, BufferedImage> imatges;
@@ -47,5 +49,10 @@ public class AssetManager {
     }
     public static Image getImage(String nom){
         return imatges.get(nom);
+    }
+
+    public static Image getImage(String nom, int width, int height) {
+
+        return imatges.get(nom).getScaledInstance(width,height,SCALE_DEFAULT);
     }
 }

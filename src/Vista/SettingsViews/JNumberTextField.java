@@ -1,11 +1,15 @@
 package Vista.SettingsViews;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.security.Key;
+import Vista.SwingModifications.IconTextField;
 
-public class JNumberTextField extends JTextField {
+import java.awt.event.KeyEvent;
+
+public class JNumberTextField extends IconTextField {
+
+    public JNumberTextField(String iconName,String hint,String toolTip){
+        super(iconName,hint,toolTip);
+    }
+
     @Override
     protected void processKeyEvent(KeyEvent e) {
         if (Character.isDigit(e.getKeyChar())) {

@@ -74,7 +74,7 @@ public class Finestra extends JFrame {
         getContentPane().add(content,BorderLayout.CENTER);
         generateTopBar();
 
-        useCustomCursor();
+       //useCustomCursor();
         setUndecorated(true);
     }
 
@@ -131,6 +131,7 @@ public class Finestra extends JFrame {
 
     public void setMainView() {
         layout.show(content, "main");
+        showUserconfig(false);
     }
 
     public void setLogInView() {
@@ -140,6 +141,7 @@ public class Finestra extends JFrame {
     public void setGameSelector(boolean guest) {
         layout.show(content, "gameSelectorView");
         gameSelectorView.enableButtons(guest);
+        showUserconfig(!guest);
     }
 
     public void setSignInView() {
@@ -185,7 +187,8 @@ public class Finestra extends JFrame {
         addButtonTop(jbtexit,"exitOnRest.png","exitOnMouse.png");
         addButtonTop(jbticonify,"minimize.png","minimizeOnMouse.png");
         addButtonTop(jbtmax,"maximize.png","maximizeOnMouse.png");
-        addButtonTop(jbtUser,"user.png","userOnMouse.png");
+        addButtonTop(jbtUser,"userConfig.png","userConfigOnMouse.png");
+        jbtUser.setVisible(false);
 
         rightOptions.add(jbticonify);
         rightOptions.add(jbtmax);
@@ -207,5 +210,8 @@ public class Finestra extends JFrame {
         boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(normal)));
         boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(onSelection)));
         boto.setPressedIcon(new ImageIcon(AssetManager.getImage(normal)));
+    }
+    public void showUserconfig(boolean visible){
+        jbtUser.setVisible(visible);
     }
 }

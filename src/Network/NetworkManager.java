@@ -1,7 +1,7 @@
 package Network;
 
 import Controlador.Controller;
-import Controlador.JsonManager;
+import Utils.JsonManager;
 import Model.Card;
 import Model.Transaction;
 import Model.User;
@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Stack;
 

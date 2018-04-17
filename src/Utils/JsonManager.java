@@ -1,4 +1,4 @@
-package Controlador;
+package Utils;
 
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.json.JSONObject;
@@ -34,9 +34,6 @@ public class JsonManager {
 
     public final static String PASSWORD_R = "#LogPassword";
 
-    /** Password de la encriptacio. Permet encriptar i desencriptar els camps del json*/
-    private final static String ENCRYPTOR_PASSWORD = "totally secret password";
-
     /**
      * LlegirJson rep un conjunt d'identificadors i
      * retorna la informació que contenen aquests identificadors del json objectiu.
@@ -63,7 +60,7 @@ public class JsonManager {
                 //Si la informacio esta encriptada, la llegim i la desencriptem
                 if(camp.contains("#")){
                     camp = camp.substring(camp.indexOf("#"));
-                    informacioExtreta[index++] = jsonObject.has(camp) ? desencriptar(jsonObject.get(camp)) : null;
+                    informacioExtreta[index++] = jsonObject.has(camp) ? Seguretat.desencripta(jsonObject.get(camp)) : null;
                 }else{
                     //Si la informacio no esta encriptada, es guarda de manera standard
                     informacioExtreta[index++] = jsonObject.has(camp) ? jsonObject.get(camp) : null;
@@ -94,7 +91,7 @@ public class JsonManager {
 
             //S'elimina el # del camp, per a guardar nomes el text
             nomCamp = nomCamp.substring(nomCamp.indexOf("#"));
-            contingut = encriptador(contingut);
+            contingut = Seguretat.encripta(contingut);
         }
 
         //S'obte el json del fitxer CONFIG_FILENAME i se li afegeix el camp
@@ -140,20 +137,6 @@ public class JsonManager {
     private static JSONObject getJSONObject() throws FileNotFoundException {
         //Es llegeix l'arxiu json sencer i es retorna en forma de JSONObject
         return  new JSONObject((new Scanner(new File("data/" + CONFIG_FILENAME)).useDelimiter("}").next()) + "}");
-    }
-
-    //Amb l'us de la llibreria Jasypt, es desencripta un text amb la password guardada en ENCRYPTOR_PASSWORD
-    private static Object desencriptar(Object text){
-        BasicTextEncryptor bte = new BasicTextEncryptor();
-        bte.setPassword(ENCRYPTOR_PASSWORD);
-        return bte.decrypt((String)text);
-    }
-
-    //Amb l'us de la llibreria Jasypt, s'encripta un text amb la password guardada en ENCRYPTOR_PASSWORD
-    private static Object encriptador(Object text){
-        BasicTextEncryptor bte = new BasicTextEncryptor();
-        bte.setPassword(ENCRYPTOR_PASSWORD);
-        return bte.encrypt((String)text);
     }
 
     /**

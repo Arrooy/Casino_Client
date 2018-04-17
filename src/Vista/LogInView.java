@@ -1,18 +1,28 @@
 package Vista;
 
 import Controlador.Controller;
+import Vista.SwingModifications.IconPasswordField;
+import Vista.SwingModifications.IconTextField;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class LogInView extends View {
 
+    //TODO: FINISH THIS
+    private final static String TOOLTIP_USERNAME_LOGIN = "Username field";
+    private final static String TOOLTIP_PASSWORD_LOGIN = "Password field";
+
+    private static final String USERNAME_HINT = "Username";
+    private static final String PASSWORD_HINT = "Password";
+
+    private final static char PASSWORD_CHAR = '*';
+
     private JButton jbAccept;
-    private JTextField jtfUsername;
-    private JPasswordField jpfPassword;
+    private IconTextField jtfUsername;
+    private IconPasswordField jpfPassword;
     private JCheckBox jcbRememberLogIn;
     private JButton jbBack;
-    private final static char PASSWORD_CHAR = '☭';
 
     private JLabel jlErrorMessage;
 
@@ -76,8 +86,8 @@ public class LogInView extends View {
         jpgblInfo.add(jcbRememberLogIn, c);
 
         //S'afegeixen els camps per omplir
-        jtfUsername = new JTextField();
-        jpfPassword = new JPasswordField();
+        jtfUsername = new IconTextField("user.png",USERNAME_HINT,TOOLTIP_USERNAME_LOGIN);
+        jpfPassword = new IconPasswordField("padlock.png",PASSWORD_HINT,TOOLTIP_PASSWORD_LOGIN);
         jpfPassword.setEchoChar(PASSWORD_CHAR);
 
         c.insets = new Insets(0,0,20,0);
@@ -130,8 +140,12 @@ public class LogInView extends View {
         jbAccept.setActionCommand("logIn");
         jbAccept.addActionListener(c);
 
-        jtfUsername.setActionCommand("logIn");
-        jtfUsername.addActionListener(c);
+
+        jpfPassword.setActionCommand("logIn");
+        jpfPassword.addActionListener(c);
+        jpfPassword.addFocusListener(c);
+
+        jtfUsername.addFocusListener(c);
 
         jbBack.setActionCommand("backToMain");
         jbBack.addActionListener(c);

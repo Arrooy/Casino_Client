@@ -2,10 +2,13 @@ package Controlador;
 
 import Controlador.Game_Controlers.BlackJackController;
 import Model.*;
+import Utils.JsonManager;
 import Vista.*;
 import Network.*;
 import Vista.GameViews.BlackJack.BlackJackView;
 import Vista.SettingsViews.*;
+import Vista.SwingModifications.IconPasswordField;
+import Vista.SwingModifications.IconTextField;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -16,7 +19,7 @@ import java.nio.charset.CharsetDecoder;
 
 /** Controlador del client*/
 
-public class Controller implements ActionListener, ComponentListener, KeyListener{
+public class Controller implements ActionListener, ComponentListener, KeyListener, FocusListener{
 
     /** Finestra grafica del client*/
     private Finestra finestra;
@@ -431,6 +434,28 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }else{
             relativeStrength = (int)((((length - number)*(length - upperCase)*(length-lowerCase)*(length-specialChars))/(float)(length*length*length))*10);
             return relativeStrength;
+        }
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        if(e.getSource() instanceof IconTextField){
+            ((IconTextField)e.getSource()).setHint(false);
+
+        }else if(e.getSource() instanceof IconPasswordField){
+            ((IconPasswordField)e.getSource()).setHint(false);
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+
+        if(e.getSource() instanceof IconTextField){
+            if(((IconTextField)e.getSource()).getText().equals(""))
+                ((IconTextField)e.getSource()).setHint(true);
+        }else if(e.getSource() instanceof IconPasswordField){
+            if(((IconPasswordField)e.getSource()).getPassword().length == 0)
+                ((IconPasswordField)e.getSource()).setHint(true);
         }
     }
 }
