@@ -104,6 +104,7 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
     public void exitProgram(int status){
         networkManager.requestLogOut();
         Tray.exit();
+        vista.dispose();
         System.exit(status);
     }
 
