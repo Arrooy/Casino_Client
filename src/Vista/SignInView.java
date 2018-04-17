@@ -1,6 +1,8 @@
 package Vista;
 
 import Controlador.Controller;
+import Vista.SwingModifications.IconPasswordField;
+import Vista.SwingModifications.IconTextField;
 
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
@@ -8,11 +10,25 @@ import java.awt.*;
 
 public class SignInView extends View implements PasswordConfirm {
 
+    private static final String USERNAME_HINT = "New username";
+    private static final String USERNAME_TOOL_TIP = "Your new username";
+
+    private static final String EMAIL_HINT = "New email";
+    private static final String EMAIL_TOOL_TIP = "Your new email name";
+
+    private static final String PASSWORD_HINT = "New password";
+    private static final String PASSWORD_TOOL_TIP = "Your new password";
+
+    private static final String PASSWORD_CONFIRM_HINT = "Repeat your password here";
+    private static final String PASSWORD_CONFIRM_TOOL_TIP = "Repeat the password introduced above";
+
     private JButton jbBack;
-    private JTextField jtfName;
-    private JTextField jtfEmail;
-    private JPasswordField jpfPassword;
-    private JPasswordField jpfConfirmPassword;
+    private IconTextField jtfName;
+    private IconTextField jtfEmail;
+
+    private IconPasswordField jpfPassword;
+    private IconPasswordField jpfConfirmPassword;
+
     private JButton jbAccept;
     private JLabel jlStrength;
     private JProgressBar jpbStrength;
@@ -78,10 +94,10 @@ public class SignInView extends View implements PasswordConfirm {
         jpgblInfo.add(jlConfirmPassword, c);
 
         //S'afegeixen els camps per omplir
-        jtfName = new JTextField();
-        jtfEmail = new JTextField();
-        jpfPassword = new JPasswordField(20);
-        jpfConfirmPassword = new JPasswordField(20);
+        jtfName = new IconTextField("user.png",USERNAME_HINT,USERNAME_TOOL_TIP);
+        jtfEmail = new IconTextField("email.png",EMAIL_HINT,EMAIL_TOOL_TIP);
+        jpfPassword = new IconPasswordField("padlock.png",PASSWORD_HINT,20,PASSWORD_TOOL_TIP);
+        jpfConfirmPassword = new IconPasswordField("padlock.png",PASSWORD_CONFIRM_HINT,20,PASSWORD_CONFIRM_TOOL_TIP);
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
@@ -146,8 +162,6 @@ public class SignInView extends View implements PasswordConfirm {
         c.anchor = GridBagConstraints.CENTER;
         jpGeneric.add(jpgblInfo, c);
 
-
-
         add(jpGeneric, BorderLayout.CENTER);
     }
 
@@ -158,11 +172,16 @@ public class SignInView extends View implements PasswordConfirm {
         jbBack.setActionCommand("backToMain");
         jbBack.addActionListener(c);
 
+        this.jtfEmail.addFocusListener(c);
+        this.jtfName.addFocusListener(c);
+
         this.jpfConfirmPassword.setName("SIGNIN - PASSWORD CONFIRM FIELD");
         this.jpfConfirmPassword.addKeyListener(c);
+        this.jpfConfirmPassword.addFocusListener(c);
 
         this.jpfPassword.setName("SIGNIN - PASSWORD FIELD");
         this.jpfPassword.addKeyListener(c);
+        this.jpfPassword.addFocusListener(c);
 
         jbAccept.setActionCommand("acceptSignIn");
         jbAccept.addActionListener(c);

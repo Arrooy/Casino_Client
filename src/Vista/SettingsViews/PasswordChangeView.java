@@ -41,8 +41,8 @@ public class PasswordChangeView extends View implements PasswordConfirm{
         JPanel jpGeneric = new JPanel(new GridBagLayout());
 
         jlCheckPassword = new JLabel();
-        jpfConfirmPassword = new IconPasswordField("padlockBad.png",CONFIRM_PASSWORD_HINT,20,TOOL_TIP_CONFIRM_PASSWORD);
-        jpfNewPassword = new IconPasswordField("padlockBad.png",NEW_PASSWORD_HINT,20,TOOL_TIP_NEW_PASSWORD);
+        jpfConfirmPassword = new IconPasswordField("padlock.png",CONFIRM_PASSWORD_HINT,20,TOOL_TIP_CONFIRM_PASSWORD);
+        jpfNewPassword = new IconPasswordField("padlock.png",NEW_PASSWORD_HINT,20,TOOL_TIP_NEW_PASSWORD);
         jpfConfirmPassword.setMaximumSize(jpfConfirmPassword.getSize());
         jpfNewPassword.setMaximumSize(jpfNewPassword.getSize());
         jpfNewPassword.setEchoChar(PASSWORD_CHAR);
@@ -123,8 +123,11 @@ public class PasswordChangeView extends View implements PasswordConfirm{
     public void addController(Controller c) {
         jpfConfirmPassword.addKeyListener(c);
         jpfNewPassword.addKeyListener(c);
+
         jbConfirmPassword.addActionListener(c);
 
+        jpfConfirmPassword.addFocusListener(c);
+        jpfNewPassword.addFocusListener(c);
 
         jpfNewPassword.setName("PASSWORD FIELD CHANGE - NEW PASSWORD");
         jpfConfirmPassword.setName("PASSWORD FIELD CHANGE - CONFIRM PASSWORD");

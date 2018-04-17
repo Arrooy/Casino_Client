@@ -30,30 +30,16 @@ public class Finestra extends JFrame {
     private JButton jbtmax;
     private JButton jbtUser;
 
+    private JPanel topBar;
+
     public Finestra() {
 
         Tray.init();
 
-        setLayout(new BorderLayout());
-        setContentPane(new JLabel(new ImageIcon(AssetManager.getImage("arroba.png"))));
-
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setSize(640, 480);
-
-        //Try to fullScreen
-        setExtendedState(MAXIMIZED_BOTH);
-        checkFullScreen();
-
-        setMinimumSize(new Dimension(BlackJackView.MIN_SCREEN_WIDTH, BlackJackView.MIN_SCREEN_HEIGHT));
-        System.out.println("[FRAME]: "+ getMinimumSize().width + " - " + getMinimumSize().height);
-
-        requestFocus();
-
-        setIconImage(AssetManager.getImage("icon.png"));
-
         getContentPane().setLayout(new BorderLayout());
 
         content = new JPanel();
+       // content.add(new JLabel(new ImageIcon(AssetManager.getImage("background.jpg"))));
         layout = new CardLayout();
         content.setLayout(layout);
 
@@ -74,8 +60,20 @@ public class Finestra extends JFrame {
         getContentPane().add(content,BorderLayout.CENTER);
         generateTopBar();
 
-       //useCustomCursor();
+       //useCustomCursor();*/
         setUndecorated(true);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setSize(640, 480);
+
+        //Try to fullScreen
+        setExtendedState(MAXIMIZED_BOTH);
+        checkFullScreen();
+
+        setMinimumSize(new Dimension(300, 540));
+
+        requestFocus();
+
+        setIconImage(AssetManager.getImage("icon.png"));
     }
 
 
@@ -114,7 +112,6 @@ public class Finestra extends JFrame {
         signInView.addController(c);
         settings.addController(c);
 
-
         c.setMainView(mainView);
         c.setLogInView(logInView);
         c.setSignInView(signInView);
@@ -122,9 +119,10 @@ public class Finestra extends JFrame {
         c.setGameSelectorView(gameSelectorView);
         c.setBlackJackView(blackJackView);
 
-
         addWindowListener(dw);
-        addMouseMotionListener(dw);
+
+        topBar.addMouseListener(dw);
+        topBar.addMouseMotionListener(dw);
 
         addComponentListener(c);
     }
@@ -176,13 +174,14 @@ public class Finestra extends JFrame {
     }
 
     private void generateTopBar() {
-        JPanel topBar = new JPanel(new BorderLayout());
+        topBar = new JPanel(new BorderLayout());
 
         JPanel rightOptions = new JPanel();
         jbtexit = new JButton();
         jbticonify = new JButton();
         jbtmax = new JButton();
         jbtUser = new JButton();
+
 
         addButtonTop(jbtexit,"exitOnRest.png","exitOnMouse.png");
         addButtonTop(jbticonify,"minimize.png","minimizeOnMouse.png");

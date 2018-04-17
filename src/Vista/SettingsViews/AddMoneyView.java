@@ -40,11 +40,11 @@ public class AddMoneyView extends View {
         c.gridy = 0;
         c.ipadx = 150;
         c.insets = new Insets(0,0,20,0);
-        jntfAmount = new JNumberTextField("user.png",AMOUNT_HINT,TOOL_TIP_AMOUNT);
+        jntfAmount = new JNumberTextField("money.png",AMOUNT_HINT,TOOL_TIP_AMOUNT);
         jntfAmount.setEditable(true);
         jpMoneyView.add(jntfAmount, c);
 
-        jpfPassword = new IconPasswordField("padlockBad.png",PASSWORD_HINT,TOOL_TIP_PASSWORD);
+        jpfPassword = new IconPasswordField("padlock.png",PASSWORD_HINT,TOOL_TIP_PASSWORD);
         c.gridy = 1;
         c.ipadx = 150;
         jpMoneyView.add(jpfPassword, c);
@@ -84,6 +84,9 @@ public class AddMoneyView extends View {
     public void addController(Controller c) {
         jbAddMoney.addActionListener(c);
         jbAddMoney.setActionCommand("ADD MONEY");
+
+        jntfAmount.addFocusListener(c);
+        jpfPassword.addFocusListener(c);
     }
 
     /** Retorna la quantitat de diners que es desitgen introduir*/

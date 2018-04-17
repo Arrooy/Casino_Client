@@ -275,7 +275,10 @@ public class BlackJackController implements GraphicsController {
         }
     }
 
-    private void renderGame(Graphics g) {
+    private void renderGame(Graphics g1) {
+        Graphics2D g = (Graphics2D)g1;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+
         System.out.println("GameOver : " + gameOver);
         if(model.IAHasCards()) {
             int arraySize = model.getIACards().size();

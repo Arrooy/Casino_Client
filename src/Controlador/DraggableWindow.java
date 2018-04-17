@@ -4,13 +4,14 @@ import Network.NetworkManager;
 import Vista.Finestra;
 import Vista.Tray;
 
+import javax.swing.*;
 import java.awt.event.*;
 
 import static java.awt.Frame.ICONIFIED;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
 
-public class DraggableWindow implements MouseMotionListener,WindowListener,ActionListener {
+public class DraggableWindow implements MouseMotionListener,WindowListener,ActionListener,MouseListener {
 
         private Finestra vista;
         private int fingerX,fingerY;
@@ -23,13 +24,15 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            if(vista.getExtendedState() == MAXIMIZED_BOTH){
+
+            if (vista.getExtendedState() == MAXIMIZED_BOTH) {
                 vista.setExtendedState(NORMAL);
                 vista.goCenter();
                 fingerX = vista.getWidth() / 2;
                 fingerY = e.getY();
             }
-            vista.setLocation(e.getXOnScreen() - fingerX,e.getYOnScreen() - fingerY);
+            vista.setLocation(e.getXOnScreen() - fingerX, e.getYOnScreen() - fingerY);
+
         }
 
         @Override
@@ -80,18 +83,22 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
                     exitProgram(0);
                     break;
                 case "maximize":
-                    if(vista.getExtendedState() == MAXIMIZED_BOTH) {
-                        vista.setExtendedState(NORMAL);
-                        vista.goCenter();
-                    }else{
-                        vista.setExtendedState(MAXIMIZED_BOTH);
-                    }
+                    toogleFullScreen();
                     break;
                 case "iconify":
                     vista.setExtendedState(ICONIFIED);
                     break;
             }
         }
+
+    private void toogleFullScreen() {
+        if(vista.getExtendedState() == MAXIMIZED_BOTH) {
+            vista.setExtendedState(NORMAL);
+            vista.goCenter();
+        }else{
+            vista.setExtendedState(MAXIMIZED_BOTH);
+        }
+    }
 
     /** Metode per a tencar el client de forma segura.*/
     public void exitProgram(int status){
@@ -100,4 +107,30 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
         System.exit(status);
     }
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(e.getClickCount() >= 2){
+            toogleFullScreen();
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
 }

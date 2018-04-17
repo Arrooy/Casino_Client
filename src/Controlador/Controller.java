@@ -441,7 +441,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     public void focusGained(FocusEvent e) {
         if(e.getSource() instanceof IconTextField){
             ((IconTextField)e.getSource()).setHint(false);
-
         }else if(e.getSource() instanceof IconPasswordField){
             ((IconPasswordField)e.getSource()).setHint(false);
         }

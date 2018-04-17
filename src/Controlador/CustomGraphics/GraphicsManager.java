@@ -113,10 +113,9 @@ public class GraphicsManager implements Runnable {
         if (JPanelObjectiu.getMouseListeners().length == 0)
             JPanelObjectiu.addMouseListener(c);
 
-        if (JPanelObjectiu.getMouseMotionListeners().length == 0){
+        if (JPanelObjectiu.getMouseMotionListeners().length == 0)
             JPanelObjectiu.addMouseMotionListener(c);
-            JPanelObjectiu.addMouseMotionListener(dw);
-        }
+
 
 
         if (JPanelObjectiu.getKeyListeners().length == 0)
