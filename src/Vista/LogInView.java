@@ -18,6 +18,9 @@ public class LogInView extends View {
 
     private final static char PASSWORD_CHAR = '*';
 
+    private final static Color GRANA = new Color(125, 28, 37);
+    private final static Color TRANSPARENT = new Color(0,0,0,0);
+
     private JButton jbAccept;
     private IconTextField jtfUsername;
     private IconPasswordField jpfPassword;
@@ -66,22 +69,12 @@ public class LogInView extends View {
 
         //Panell amb els camps d'UserName, Password i l'opció de Remember me centrats al mig de la pantalla
         JPanel jpgblInfo = new JPanel(new GridBagLayout());
-        JLabel jlName = new JLabel("UserName:");
-        JLabel jlPassword = new JLabel("Password:");
         jcbRememberLogIn = new JCheckBox("Remember user");
         jcbRememberLogIn.setFocusable(false);
 
         //S'afegeixen les etiquetes
-        c.gridy = 1;
-        c.gridx = 0;
-        c.insets = new Insets(0,0,20,10);
-        jpgblInfo.add(jlName, c);
-
-        c.gridy = 2;
-        jpgblInfo.add(jlPassword, c);
-
         c.gridy = 3;
-        c.gridx = 1;
+        c.gridx = 0;
         c.insets = new Insets(0,0,0,0);
         jpgblInfo.add(jcbRememberLogIn, c);
 
@@ -90,11 +83,10 @@ public class LogInView extends View {
         jpfPassword = new IconPasswordField("padlock.png",PASSWORD_HINT,TOOLTIP_PASSWORD_LOGIN);
         jpfPassword.setEchoChar(PASSWORD_CHAR);
 
-        c.insets = new Insets(0,0,20,0);
         c.gridy = 1;
-        c.gridx = 1;
+        c.gridx = 0;
+        c.insets = new Insets(0,0,20,0);
         c.ipadx = 200;
-        c.gridwidth = 2;
 
         jpgblInfo.add(jtfUsername, c);
 
@@ -105,17 +97,14 @@ public class LogInView extends View {
         jbAccept = new JButton("Accept");
         jbAccept.setFocusable(false);
 
-
         c.gridy = 4;
         c.gridx = 0;
-        c.gridwidth = 3;
         c.insets = new Insets(20,0,0,0);
 
         jpgblInfo.add(jbAccept, c);
 
         c.gridy = 1;
         c.gridx = 0;
-        c.gridwidth = 1;
         c.insets = new Insets(0,0,0,0);
         jpGeneric.add(jpgblInfo, c);
 
@@ -124,7 +113,7 @@ public class LogInView extends View {
         c.anchor = GridBagConstraints.CENTER;
         c.gridy = 0;
         c.gridx = 0;
-        jlErrorMessage.setForeground(new Color(0,0,0,0));
+        jlErrorMessage.setForeground(TRANSPARENT);
         jpGeneric.add(jlErrorMessage, c);
 
         add(jpGeneric, BorderLayout.CENTER);
@@ -132,7 +121,7 @@ public class LogInView extends View {
 
     public void setError(String error) {
         jlErrorMessage.setText(error);
-        jlErrorMessage.setForeground(new Color(125, 28, 37));
+        jlErrorMessage.setForeground(GRANA);
     }
 
     @Override

@@ -18,6 +18,10 @@ public class AddMoneyView extends View {
     private static final String AMOUNT_HINT = "Choose Amount";
     private static final String PASSWORD_HINT = "Password";
 
+    private final static Color GRANA = new Color(125, 28, 37);
+    private final static Color VERD = new Color(25, 151, 6);
+    private final static Color TRANSPARENT = new Color(0,0,0,0);
+
     private JButton jbAddMoney;
     private JNumberTextField jntfAmount;
     private IconPasswordField jpfPassword;
@@ -34,16 +38,6 @@ public class AddMoneyView extends View {
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets (0,0,20,20);
-        JLabel jlMoneyLabel = new JLabel("Choose Amount: ");
-        jpMoneyView.add(jlMoneyLabel, c);
-
-        JLabel jlPassword = new JLabel("Password: ");
-        c.gridy = 1;
-        jpMoneyView.add(jlPassword, c);
-
-        c.gridx = 1;
-        c.gridy = 0;
         c.ipadx = 150;
         c.insets = new Insets(0,0,20,0);
         jntfAmount = new JNumberTextField("user.png",AMOUNT_HINT,TOOL_TIP_AMOUNT);
@@ -55,7 +49,7 @@ public class AddMoneyView extends View {
         c.ipadx = 150;
         jpMoneyView.add(jpfPassword, c);
 
-        c.gridx = 2;
+        c.gridx = 1;
         c.gridy = 0;
         c.insets = new Insets(0,20,20,0);
         jlErrorMoney = new JLabel("Above the limit amount ");
@@ -68,14 +62,14 @@ public class AddMoneyView extends View {
         jlAddOK = new JLabel("Transaction OK");
 
         c.gridy = 4;
-        c.gridx = 1;
+        c.gridx = 0;
         c.ipadx = 50;
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.CENTER;
         c.insets = new Insets(20,45,0,0);
         jpMoneyView.add(jlAddOK, c);
 
-        c.gridx = 1;
+        c.gridx = 0;
         c.gridy = 3;
         c.insets = new Insets(0,0,0,0);
         c.ipadx = 50;
@@ -104,24 +98,20 @@ public class AddMoneyView extends View {
     /** Controla el missatge d'error*/
     public void showErrorMoney(String t){
         this.jlErrorMoney.setText(t);
-        this.jlErrorMoney.setForeground(new Color(125, 28, 37));
+        this.jlErrorMoney.setForeground(GRANA);
     }
     /** Controla el missatge d'error*/
     public void showErrorPassword(){
-        this.jlErrorPassword.setForeground(new Color(125, 28, 37));
+        this.jlErrorPassword.setForeground(GRANA);
     }
     /** Controla el missatge de Transaction OK*/
-    public void showAddOK(){ this.jlAddOK.setForeground(new Color(25, 151, 6)); }
+    public void showAddOK(){ this.jlAddOK.setForeground(VERD); }
     /** Indica que no hi ha error*/
     public void noErrorMoney(){
-        this.jlErrorMoney.setForeground(new Color(0, 0, 0, 0));
+        this.jlErrorMoney.setForeground(TRANSPARENT);
     }
     /** Indica que no hi ha error*/
-    public void noErrorPassword(){ this.jlErrorPassword.setForeground(new Color(0, 0, 0, 0)); }
+    public void noErrorPassword(){ this.jlErrorPassword.setForeground(TRANSPARENT); }
     /** Indica que la transacció no s'ha fet*/
-    public void noTransactionOK(){ this.jlAddOK.setForeground(new Color(0, 0, 0, 0)); }
-
-
-
-
+    public void noTransactionOK(){ this.jlAddOK.setForeground(TRANSPARENT); }
 }

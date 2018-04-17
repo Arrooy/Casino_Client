@@ -22,6 +22,11 @@ public class PasswordChangeView extends View implements PasswordConfirm{
 
     private final static char PASSWORD_CHAR = '*';
 
+    private final static Color GRANA = new Color(125, 28, 37);
+    private final static Color VERD = new Color(25, 151, 6);
+    private final static Color GROC = new Color(237, 175, 67);
+    private final static Color TRANSPARENT = new Color(0,0,0,0);
+
     private IconPasswordField jpfNewPassword;
     private IconPasswordField jpfConfirmPassword;
     private JButton jbConfirmPassword;
@@ -52,58 +57,45 @@ public class PasswordChangeView extends View implements PasswordConfirm{
         jpPasswordChange.setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        c.insets = new Insets(0,0, 20, 20);
-        jpPasswordChange.add(new JLabel("New Password"), c);
-
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridy = 0;
-        c.gridx = 2;
+        c.gridx = 0;
         c.insets = new Insets(0,0,20,0);
-        c.gridwidth = 3;
         jpfNewPassword.setText("");
         jpPasswordChange.add(this.jpfNewPassword, c);
 
-        c = new GridBagConstraints();
-        c.gridy = 1;
         c.gridx = 0;
-        c.insets = new Insets(0,0,20,20);
-        jpPasswordChange.add(new JLabel("Confirm Password"), c);
-
-        c.gridx = 2;
         c.gridy = 1;
-        c.gridwidth = 3;
         c.insets = new Insets(0,0,20,0);
         c.fill = GridBagConstraints.HORIZONTAL;
         jpPasswordChange.add(this.jpfConfirmPassword, c);
 
-
         c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 5;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,0,20,0);
-        this.jlCheckPassword.setText("");
+        this.jlCheckPassword.setText("Check");
+        this.jlCheckPassword.setPreferredSize(new Dimension(300,15));
+        this.jlCheckPassword.setForeground(TRANSPARENT);
         jpGeneric.add(this.jlCheckPassword, c);
         //TODO: com faig que no em canvii la mida del Jlabel i els JPasswordfields depenent del missatge que posi?
 
-        jlStrength = new JLabel("");
+        jlStrength = new JLabel("Strength");
+        jlStrength.setForeground(TRANSPARENT);
+        jlStrength.setPreferredSize(new Dimension(150,15));
         c = new GridBagConstraints();
-        c.insets = new Insets(0,0,20,10);
-        c.gridy = 4;
-        c.gridx = 0;
+        c.insets = new Insets(0,10,20,0);
+        c.gridy = 2;
+        c.gridx = 1;
         c.gridwidth = 1;
         jpPasswordChange.add(jlStrength, c);
 
-
         c = new GridBagConstraints();
         c.insets = new Insets(0,0,20,0);
-        c.gridy = 4;
-        c.gridx = 1;
+        c.gridy = 2;
+        c.gridx = 0;
         c.ipadx = 100 ;
-        c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
         jpbStrength = new JProgressBar(0, 40);
 
@@ -111,24 +103,19 @@ public class PasswordChangeView extends View implements PasswordConfirm{
         jpbStrength.setForeground(Color.GREEN);
         jpPasswordChange.add(jpbStrength, c);
 
-
-
         c = new GridBagConstraints();
-        c.gridx = 2;
-        c.gridy = 5;
-        c.gridwidth = 1;
+        c.gridx = 0;
+        c.gridy = 3;
         c.insets = new Insets(0,0,0,0);
-        c.fill = GridBagConstraints.HORIZONTAL;
         jpPasswordChange.add(jbConfirmPassword, c);
 
         c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 1;
-        c.insets = new Insets(10,0,0,0);
+        c.insets = new Insets(0,0,0,0);
         jpGeneric.add(jpPasswordChange, c);
 
         this.add(jpGeneric, BorderLayout.CENTER);
-
     }
 
 
@@ -148,9 +135,7 @@ public class PasswordChangeView extends View implements PasswordConfirm{
     @Override
     public void passwordKO(String message){
         jlCheckPassword.setText(message);
-        jlCheckPassword.setForeground(Color.RED);
-
-
+        jlCheckPassword.setForeground(GRANA);
     }
 
     @Override
@@ -168,19 +153,19 @@ public class PasswordChangeView extends View implements PasswordConfirm{
      * Depenent del "strength" actualitza color i text de l'indicador de seguretat*/
     public void setStrength(int strength){
         if(strength < 15){
-            jlStrength.setForeground(new Color(201, 47, 32));
+            jlStrength.setForeground(GRANA);
             jlStrength.setText("Weak Password");
-            jpbStrength.setForeground(new Color(227, 53, 36));
+            jpbStrength.setForeground(GRANA);
             jpbStrength.setValue(17);
         }else if(strength < 25){
-            jlStrength.setForeground(new Color(223, 159, 51));
+            jlStrength.setForeground(GROC);
             jlStrength.setText("Average Password");
-            jpbStrength.setForeground(new Color(237, 175, 67));
+            jpbStrength.setForeground(GROC);
             jpbStrength.setValue(27);
         }else{
-            jlStrength.setForeground(new Color(47, 127, 45));
+            jlStrength.setForeground(VERD);
             jlStrength.setText("Strong Password");
-            jpbStrength.setForeground(new Color(47, 127, 45));
+            jpbStrength.setForeground(VERD);
             jpbStrength.setValue(40);
         }
 
@@ -189,9 +174,9 @@ public class PasswordChangeView extends View implements PasswordConfirm{
     /** Controla la visibilitat del missatge d'error*/
    public void manageError(boolean error){
         if(error){
-            this.jlCheckPassword.setVisible(true);
+            this.jlCheckPassword.setForeground(GRANA);
         }else{
-            this.jlCheckPassword.setVisible(false);
+            this.jlCheckPassword.setForeground(TRANSPARENT);
         }
    }
     @Override
@@ -204,7 +189,6 @@ public class PasswordChangeView extends View implements PasswordConfirm{
     /** Controla el funcionament del boto que et permet sotmetrela nova contrasenya*/
    public void canConfirm(boolean ok) {
        jbConfirmPassword.setEnabled(ok);
-
        //Es modifica l'icono de la PasswordField per a indicar error
        if (ok){
            jpfNewPassword.setIcon("padlockGood.png");
