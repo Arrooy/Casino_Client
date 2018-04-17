@@ -12,11 +12,11 @@ public class JNumberTextField extends IconTextField {
 
     @Override
     protected void processKeyEvent(KeyEvent e) {
-        if (Character.isDigit(e.getKeyChar())) {
+        System.out.println(e.getKeyChar() + " " + e.getKeyCode());
+        if(Character.isDigit(e.getKeyChar()) || e.getKeyChar() < 32 || e.getKeyChar() == 127)
             super.processKeyEvent(e);
-        }
-        e.consume();
-        return;
+        else
+            e.consume();
     }
 
     /** En cas d'introduir algo que no sigui un nombre, aquest caracter es consumeix*/
