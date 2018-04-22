@@ -26,13 +26,13 @@ public class GraphicsManager implements Runnable {
      * @param c Controlador que gestiona les interaccions(Mouse&Key listeners) de la persona amb el custom rendering panel.
      */
 
-    public GraphicsManager(JPanel PanellObjectiu, GraphicsController c,DraggableWindow dw) {
+    public GraphicsManager(JPanel PanellObjectiu, GraphicsController c, DraggableWindow dw) {
         clearColor = Color.white;
 
         if(PanellObjectiu.getWidth() == 0 || PanellObjectiu.getHeight() == 0)
             System.out.println("Error ultrafatal. El panell que mhas donat no te mida especificada!"); //ets un primo arroyo
         JPanelObjectiu = PanellObjectiu;
-        JPanelObjectiu.setBackground(Color.BLACK);
+        JPanelObjectiu.setBackground(Color.white);
         JPanelObjectiu.setFocusable(true);
         JPanelObjectiu.requestFocus();
         registraControllador(c,dw);
@@ -90,11 +90,14 @@ public class GraphicsManager implements Runnable {
     private void prepareGameImage() {
         if(image == null){
             image = JPanelObjectiu.createImage(JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+            //System.out.println(image);
         }
 
-        Graphics g = image.getGraphics();
-        g.setColor(clearColor);
-        g.fillRect(0, 0,JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+        if (image != null) {
+            Graphics g = image.getGraphics();
+            g.setColor(clearColor);
+            g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+        }
     }
 
     public void exit() {
@@ -103,6 +106,11 @@ public class GraphicsManager implements Runnable {
 
     private void renderGameImage(Graphics g) {
         if (image != null) {
+            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY);
+
             g.drawImage(image, 0, 0, null);
         }
         g.dispose();

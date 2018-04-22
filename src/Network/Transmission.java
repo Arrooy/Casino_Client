@@ -84,6 +84,14 @@ public class Transmission implements Runnable {
 
     private void deposit() {
         networkManager.send(msg);
+        Message mssg = networkManager.read(msg.getID());
+
+        if (mssg instanceof User && ((User) mssg).areCredentialsOk()) {
+            //TODO: poser missatge succssesful vista de add Money
+        } else {
+            //TODO: poser missatge error vista de add Money
+        }
+        //TODO: arreglar
         User res = (User) networkManager.read(msg.getID());
         //TODO senyor Miquel aquesta merda de les credentialsOK peta mu mal
         boolean ok = res.areCredentialsOk();
