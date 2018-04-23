@@ -192,14 +192,6 @@ public class PasswordChangeView extends View implements PasswordConfirm{
     /** Controla el funcionament del boto que et permet sotmetrela nova contrasenya*/
    public void canConfirm(boolean ok) {
        jbConfirmPassword.setEnabled(ok);
-       //Es modifica l'icono de la PasswordField per a indicar error
-       if (ok){
-           jpfNewPassword.setIcon("padlockGood.png");
-           jpfConfirmPassword.setIcon("padlockGood.png");
-       }else {
-           jpfNewPassword.setIcon("padlockBad.png");
-           jpfConfirmPassword.setIcon("padlockBad.png");
-       }
    }
 
     public void clearFields(){
