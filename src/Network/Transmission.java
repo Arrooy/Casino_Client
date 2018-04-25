@@ -20,6 +20,8 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_BJ_FINISH_USER = "blackjackFinish";
     public static final String CONTEXT_TRANSACTION = "transaction";
     public static final String CONTEXT_GET_COINS = "userCoins";
+    public static final String CONTEXT_HR_INIT = "horseRaceInit";
+
 
 
     private Message msg;
@@ -77,9 +79,16 @@ public class Transmission implements Runnable {
             case "deposit":
                 deposit();
                 break;
+            case CONTEXT_HR_INIT:
+                horseRaceRequestTimes();
+                break;
             default:
                 networkManager.send(msg);
         }
+    }
+
+    private void horseRaceRequestTimes() {
+
     }
 
     private void deposit() {
