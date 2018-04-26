@@ -40,7 +40,7 @@ public class SplashScreen implements GraphicsController, Runnable{
         aux.setSize(350,475);
         vista.getContentPane().add(aux);
         //Es crea el panell per pintar l'animacio i es configura per ocupar tot el JFrame
-        backGround = new GraphicsManager(aux,this,null);
+        backGround = new GraphicsManager(aux,this);
         backGround.setClearColor(Color.black);
 
         //Iniciem la carrega d'arxius del casino
@@ -117,7 +117,9 @@ public class SplashScreen implements GraphicsController, Runnable{
     }
 
     @Override
-    public void render(Graphics g) {
+    public void render(Graphics gb) {
+        Graphics2D g = (Graphics2D) gb;
+
         g.setColor(textColor);
         g.setFont(new Font(g.getFont().getFontName(),Font.PLAIN,15));
         FontMetrics metrics = g.getFontMetrics(g.getFont());
@@ -133,9 +135,8 @@ public class SplashScreen implements GraphicsController, Runnable{
             y = (int) y1(currentTime - i*100/numberOfLines);
             y1 = (int) y2(currentTime - i*100/numberOfLines);
 
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setStroke(new BasicStroke(stroke[i]));
-            g2.draw(new Line2D.Float(x1, y1,x,y));
+            g.setStroke(new BasicStroke(stroke[i]));
+            g.draw(new Line2D.Float(x1, y1,x,y));
         }
     }
 

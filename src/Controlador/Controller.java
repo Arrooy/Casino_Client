@@ -6,6 +6,7 @@ import Utils.JsonManager;
 import Vista.*;
 import Network.*;
 import Vista.GameViews.BlackJack.BlackJackView;
+import Vista.MainFrame.Finestra;
 import Vista.SettingsViews.*;
 import Vista.SwingModifications.IconPasswordField;
 import Vista.SwingModifications.IconTextField;
@@ -234,7 +235,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     public void initBlackJack() {
         System.out.println("INIT BLACKJACK REQUESTED");
         //crea el controlador de la nova partida amb un nou model
-        BJController = new BlackJackController(blackJackView,networkManager,draggableWindow);
+        if(BJController == null)
+            BJController = new BlackJackController(blackJackView,networkManager);
+        else
+            BJController.initGame();
         finestra.setBlackJackView();
     }
 

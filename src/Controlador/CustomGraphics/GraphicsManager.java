@@ -26,7 +26,7 @@ public class GraphicsManager implements Runnable {
      * @param c Controlador que gestiona les interaccions(Mouse&Key listeners) de la persona amb el custom rendering panel.
      */
 
-    public GraphicsManager(JPanel PanellObjectiu, GraphicsController c, DraggableWindow dw) {
+    public GraphicsManager(JPanel PanellObjectiu, GraphicsController c) {
         clearColor = Color.white;
 
         if(PanellObjectiu.getWidth() == 0 || PanellObjectiu.getHeight() == 0)
@@ -35,7 +35,7 @@ public class GraphicsManager implements Runnable {
         JPanelObjectiu.setBackground(Color.white);
         JPanelObjectiu.setFocusable(true);
         JPanelObjectiu.requestFocus();
-        registraControllador(c,dw);
+        registraControllador(c);
         controlador_extern = c;
 
         initGame();
@@ -116,15 +116,13 @@ public class GraphicsManager implements Runnable {
         g.dispose();
     }
 
-    private void registraControllador(GraphicsController c, DraggableWindow dw) {
+    private void registraControllador(GraphicsController c) {
 
         if (JPanelObjectiu.getMouseListeners().length == 0)
             JPanelObjectiu.addMouseListener(c);
 
         if (JPanelObjectiu.getMouseMotionListeners().length == 0)
             JPanelObjectiu.addMouseMotionListener(c);
-
-
 
         if (JPanelObjectiu.getKeyListeners().length == 0)
             JPanelObjectiu.addKeyListener(c);

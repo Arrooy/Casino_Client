@@ -69,4 +69,10 @@ public class Model_BJ {
         return valueDisplayUser;
     }
 
+    public void clearData() {
+        userCards.clear();
+        IACards.clear();
+        valueDisplayUser = 0;
+        valueDisplayIa = 0;
+    }
 }

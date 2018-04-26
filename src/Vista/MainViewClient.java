@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.Controller;
+import Model.AssetManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,9 +48,15 @@ public class MainViewClient extends View{
         c.gridy = 2;
         c.insets = new Insets(0,0,0,0);
         jpgblBotons.add(jbGuest, c);
-
+        jpgblBotons.setOpaque(false);
         this.add(jpgblBotons, BorderLayout.CENTER);
+        setOpaque(false);
     }
+
+//    @Override
+//    public void paintComponent(Graphics g) {
+//        super.paintComponent(g);
+//    }
 
     /** Afegeix el controlador del programa a la vista*/
     @Override

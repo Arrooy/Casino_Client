@@ -37,6 +37,7 @@ public class LogInView extends View {
 
         //Label missatge error
         JPanel jpGeneric = new JPanel(new GridBagLayout());
+        jpGeneric.setOpaque(false);
 
         jlErrorMessage = new JLabel("Error");
         jlErrorMessage.setHorizontalAlignment(JLabel.CENTER);
@@ -44,6 +45,8 @@ public class LogInView extends View {
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblBack = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
+        jpgblBack.setOpaque(false);
+
         //Marges
         c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
@@ -53,11 +56,16 @@ public class LogInView extends View {
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));
         jpBack.add(jpgblBack);
+        jpBack.setOpaque(false);
+
         this.add(jpBack, BorderLayout.SOUTH);
 
         //Panell que té el títol de la pantalla a dalt a la dreta al mig
         JPanel jpTitle = new JPanel();
+        jpTitle.setOpaque(false);
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
+        jpgblTitle.setOpaque(false);
+
         JLabel jlTitle = new JLabel("Log In");
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
 
@@ -69,7 +77,10 @@ public class LogInView extends View {
 
         //Panell amb els camps d'UserName, Password i l'opció de Remember me centrats al mig de la pantalla
         JPanel jpgblInfo = new JPanel(new GridBagLayout());
+        jpgblInfo.setOpaque(false);
+
         jcbRememberLogIn = new JCheckBox("Remember user");
+        jcbRememberLogIn.setOpaque(false);
         jcbRememberLogIn.setFocusable(false);
 
         //S'afegeixen les etiquetes
@@ -117,6 +128,7 @@ public class LogInView extends View {
         jpGeneric.add(jlErrorMessage, c);
 
         add(jpGeneric, BorderLayout.CENTER);
+        setOpaque(false);
     }
 
     public void setError(String error) {

@@ -59,19 +59,33 @@ public class BlackJackController implements GraphicsController {
 
     private AnimacioConjuntCartes animacio;
 
-    public BlackJackController(BlackJackView blackJackView, NetworkManager networkManager, DraggableWindow dw){
+    private DraggableWindow dw;
+    private boolean stopMusicOneTime;
+
+    public BlackJackController(BlackJackView blackJackView, NetworkManager networkManager){
         this.model = new Model_BJ();
         this.networkManager = networkManager;
         this.blackJackView  = blackJackView;
 
+        gameOverText = "Game Over";
+        subText = "GG bro";
+        stopMusicOneTime = true;
+
+        initGame();
+    }
+
+    public void initGame(){
         lastClick = 0;
         gameOver = false;
         usuariDone = false;
+        stopMusicOneTime = true;
+
+        this.model.clearData();
 
         userScore = "0";
         IAScore = "0";
 
-        this.gp = new GraphicsManager(blackJackView,this,dw);
+        this.gp = new GraphicsManager(blackJackView,this);
         gp.setClearColor(Color.red);
         lastCard = 0;
 
@@ -79,12 +93,12 @@ public class BlackJackController implements GraphicsController {
         AnimationTimer = System.currentTimeMillis();
     }
 
+
     public void updateSizeBJ(){
         gp.resize(blackJackView.getWidth(),blackJackView.getHeight());
     }
 
     public void newBJCard(Card cartaResposta, Controller c) {
-
 
         if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER)){
             model.giraIA();
@@ -109,20 +123,22 @@ public class BlackJackController implements GraphicsController {
         }else if(cartaResposta.getDerrota().equals("IA")) {
             exitGame(c);
         }
-        System.out.println("Card: " + cartaResposta.getCardName() + "GAMEOVER? " + gameOver);
+        System.out.println("Card: " + cartaResposta.getCardName() + "  GAMEOVER? " + gameOver);
     }
 
     private void exitGame(Controller c){
-        lastClick = 0;
         gameOver = true;
         try {
-            sleep(1500);
+            sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        gameOver = false;
         gp.exit();
         c.showGamesView();
+    }
+
+    private void exitInGame(){
+        gp.exit();
     }
 
     @Override
@@ -159,8 +175,6 @@ public class BlackJackController implements GraphicsController {
                 }
                 lastClick = System.currentTimeMillis();
             }
-        }else{
-            System.out.println("We are on game over");
         }
     }
 
@@ -201,6 +215,10 @@ public class BlackJackController implements GraphicsController {
         if(System.currentTimeMillis() - AnimationTimer <= ANIMATION_TIME){
             updateAnimation();
         }else {
+            if(stopMusicOneTime) {
+                Sounds.stopOneAudioFile("cardShuffle.wav");
+                stopMusicOneTime = false;
+            }
             updateCardsPosition(model.getIACards(), MARGIN_TOP, 1);
             updateCardsPosition(model.getUserCards(), blackJackView.getSize().height - CARD_HEIGHT - MARGIN_BOTTOM, -1);
         }
@@ -267,9 +285,9 @@ public class BlackJackController implements GraphicsController {
 
     @Override
     public void render(Graphics g) {
-
         if(System.currentTimeMillis() - AnimationTimer <= ANIMATION_TIME){
             renderAnimation(g);
+
         }else{
             renderGame(g);
         }
@@ -279,30 +297,38 @@ public class BlackJackController implements GraphicsController {
         Graphics2D g = (Graphics2D)g1;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
-        System.out.println("GameOver : " + gameOver);
-        if(model.IAHasCards()) {
+        if(gameOver){
+
+            g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 30));
+            FontMetrics metrics = g.getFontMetrics(g.getFont());
+
+            g.setColor(new Color(100,200,100,100));
+            g.drawRect(0,0,blackJackView.getWidth(),blackJackView.getHeight());
+
+            g.setColor(new Color(255,255,255,100));
+            g.drawString(gameOverText,blackJackView.getWidth()/2 - metrics.stringWidth(gameOverText)/2,blackJackView.getHeight()/3);
+            g.drawString(subText,blackJackView.getWidth()/2 - metrics.stringWidth(subText)/2,(int)((float)blackJackView.getHeight()/2.5));
+
+            g.drawString("User final score :" + userScore, 100, blackJackView.getHeight() / 2);
+            g.drawString("IA final score: " + IAScore, blackJackView.getWidth() - 100, blackJackView.getHeight() / 2);
+        }
+
+        if (model.IAHasCards()) {
             int arraySize = model.getIACards().size();
-            for(int i = 0; i < arraySize; i++){
+            for (int i = 0; i < arraySize; i++) {
                 Card card = model.getIACards().get(i);
                 g.drawImage(Baralla.findImage(card), card.getX(), card.getY(), null);
             }
         }
-        if(model.userHasCards()) {
+        if (model.userHasCards()) {
             int arraySize = model.getUserCards().size();
-            for(int i = 0; i < arraySize; i++){
+            for (int i = 0; i < arraySize; i++) {
                 Card card = model.getUserCards().get(i);
                 g.drawImage(Baralla.findImage(card), card.getX(), card.getY(), null);
             }
         }
 
-        g.setFont(new Font(g.getFont().getFontName(),Font.BOLD,30));
-        FontMetrics metrics = g.getFontMetrics(g.getFont());
-
-        if(gameOver){
-            g.drawString(gameOverText,blackJackView.getWidth()/2 - metrics.stringWidth(gameOverText)/2,blackJackView.getHeight()/3);
-            g.drawString(subText,blackJackView.getWidth()/2 - metrics.stringWidth(subText)/2,(int)((float)blackJackView.getHeight()/2.5));
-        }
-        g.drawString("User :" + userScore,100,blackJackView.getHeight()/2);
-        g.drawString("IA: " + IAScore,blackJackView.getWidth() - 100,blackJackView.getHeight()/2);
+        g.drawString("User :" + userScore, 100, blackJackView.getHeight() / 2);
+        g.drawString("IA: " + IAScore, blackJackView.getWidth() - 100, blackJackView.getHeight() / 2);
     }
 }

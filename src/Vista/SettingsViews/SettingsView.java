@@ -26,7 +26,7 @@ public class SettingsView extends JPanel {
         this.add("WALLETEVOLUTION", this.walletEvolutionView);
         this.add("ADDMONEY", this.addMoneyView);
 
-
+        setOpaque(false);
     }
 
     public void addController(Controller c){

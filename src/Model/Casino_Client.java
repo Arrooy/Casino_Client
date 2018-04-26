@@ -2,7 +2,7 @@ package Model;
 import Controlador.Controller;
 import Controlador.DraggableWindow;
 import Network.*;
-import Vista.Finestra;
+import Vista.MainFrame.Finestra;
 import Vista.SplashScreen.SplashScreen;
 
 public class Casino_Client {

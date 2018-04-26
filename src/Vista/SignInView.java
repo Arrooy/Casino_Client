@@ -40,12 +40,14 @@ public class SignInView extends View implements PasswordConfirm {
 
         //Label missatge error
         JPanel jpGeneric = new JPanel(new GridBagLayout());
+        jpGeneric.setOpaque(false);
+
         jlErrorMessage = new JLabel("");
         jlErrorMessage.setHorizontalAlignment(JLabel.CENTER);
 
-
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblBack = new JPanel(new GridBagLayout());
+        jpgblBack.setOpaque(false);
 
         GridBagConstraints c = new GridBagConstraints();
         //Marges
@@ -56,12 +58,18 @@ public class SignInView extends View implements PasswordConfirm {
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        jpBack.setOpaque(false);
+
         jpBack.add(jpgblBack);
         this.add(jpBack, BorderLayout.SOUTH);
 
         //Panell que té el títol de la pantalla a dalt a la dreta al mig
         JPanel jpTitle = new JPanel();
+        jpTitle.setOpaque(false);
+
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
+        jpgblTitle.setOpaque(false);
+
         JLabel jlTitle = new JLabel("Sign In");
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
         //Marges
@@ -72,7 +80,8 @@ public class SignInView extends View implements PasswordConfirm {
 
         //Panell amb els camps d'UserName, email, Password i confirmar Password centrats al mig de la pantalla
         JPanel jpgblInfo = new JPanel(new GridBagLayout());
-        jpgblInfo.setBackground(new Color(0,0,0,0));
+        jpgblInfo.setOpaque(false);
+
         c.insets = new Insets(0,0,20,10);
         JLabel jlName = new JLabel("UserName:");
         JLabel jlEmail = new JLabel("e-mail:");
@@ -163,6 +172,7 @@ public class SignInView extends View implements PasswordConfirm {
         jpGeneric.add(jpgblInfo, c);
 
         add(jpGeneric, BorderLayout.CENTER);
+        setOpaque(false);
     }
 
 

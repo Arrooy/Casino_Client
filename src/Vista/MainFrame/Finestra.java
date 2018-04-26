@@ -1,4 +1,4 @@
-package Vista;
+package Vista.MainFrame;
 
 import Controlador.Controller;
 import Controlador.DraggableWindow;
@@ -6,15 +6,22 @@ import Controlador.Game_Controlers.BlackJackController;
 import Model.AssetManager;
 import Model.User;
 import Network.Transmission;
+import Vista.*;
 import Vista.GameViews.BlackJack.BlackJackView;
 import Vista.SettingsViews.Settings;
 import Vista.SettingsViews.SettingsView;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class Finestra extends JFrame {
+
+    private final Color COLOR_TOP_BAR = new Color(54, 57, 66);
+
+    private final int MIN_WIDTH = 300;
+    private final int MIN_HEIGHT = 300;
 
     private CardLayout layout;
     private MainViewClient mainView;
@@ -32,16 +39,23 @@ public class Finestra extends JFrame {
 
     private JPanel topBar;
 
+//    g.drawImage(AssetManager.getImage("background.jpg"),0,0,null);
+//        g.setColor(Color.red);
+//        g.drawOval(10,10,50,50);
+
     public Finestra() {
 
         Tray.init();
 
-        getContentPane().setLayout(new BorderLayout());
+        PanelWithBackGround MainPane = new PanelWithBackGround(new BorderLayout());
+        MainPane.setOpaque(false);
 
         content = new JPanel();
-       // content.add(new JLabel(new ImageIcon(AssetManager.getImage("background.jpg"))));
+        content.setOpaque(false);
+
         layout = new CardLayout();
         content.setLayout(layout);
+
 
         mainView = new MainViewClient();
         logInView = new LogInView();
@@ -57,8 +71,9 @@ public class Finestra extends JFrame {
         content.add("settings", settings);
         content.add("blackJack", blackJackView);
 
-        getContentPane().add(content,BorderLayout.CENTER);
-        generateTopBar();
+        MainPane.add(content,BorderLayout.CENTER);
+
+        generateTopBar(MainPane);
 
        //useCustomCursor();*/
         setUndecorated(true);
@@ -69,11 +84,18 @@ public class Finestra extends JFrame {
         setExtendedState(MAXIMIZED_BOTH);
         checkFullScreen();
 
-        setMinimumSize(new Dimension(300, 540));
-
         requestFocus();
 
         setIconImage(AssetManager.getImage("icon.png"));
+
+        ComponentResizer cr = new ComponentResizer();
+        cr.registerComponent(this);
+        cr.setSnapSize(new Dimension(10, 10));
+        cr.setMinimumSize(new Dimension(MIN_WIDTH,MIN_HEIGHT));
+
+        MainPane.setBorder(new LineBorder(COLOR_TOP_BAR, 3));
+
+        add(MainPane,BorderLayout.CENTER);
     }
 
 
@@ -173,8 +195,10 @@ public class Finestra extends JFrame {
         setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2);
     }
 
-    private void generateTopBar() {
+    private void generateTopBar(JPanel MainPanel) {
         topBar = new JPanel(new BorderLayout());
+
+        topBar.setBackground(COLOR_TOP_BAR);
 
         JPanel rightOptions = new JPanel();
         jbtexit = new JButton();
@@ -193,10 +217,16 @@ public class Finestra extends JFrame {
         rightOptions.add(jbtmax);
         rightOptions.add(jbtexit);
 
-        topBar.add(jbtUser, BorderLayout.WEST);
+        rightOptions.setBackground(COLOR_TOP_BAR);
+        JPanel leftOptions = new JPanel();
+        leftOptions.add(jbtUser);
+
+        leftOptions.setBackground(COLOR_TOP_BAR);
+
+        topBar.add(leftOptions, BorderLayout.WEST);
         topBar.add(rightOptions, BorderLayout.EAST);
 
-        getContentPane().add(topBar,BorderLayout.NORTH);
+        MainPanel.add(topBar,BorderLayout.NORTH);
     }
 
     private void addButtonTop(JButton boto, String normal,String onSelection){

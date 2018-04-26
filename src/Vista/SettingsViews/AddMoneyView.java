@@ -33,6 +33,7 @@ public class AddMoneyView extends View {
         this.setLayout(new BorderLayout());
 
         JPanel jpMoneyView = new JPanel(new GridBagLayout());
+        jpMoneyView.setOpaque(false);
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -78,8 +79,9 @@ public class AddMoneyView extends View {
         jpMoneyView.add(jbAddMoney, c);
 
         add(jpMoneyView, BorderLayout.CENTER);
-
+        setOpaque(false);
     }
+
     @Override
     public void addController(Controller c) {
         jbAddMoney.addActionListener(c);

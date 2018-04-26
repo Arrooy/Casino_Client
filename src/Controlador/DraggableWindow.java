@@ -1,10 +1,9 @@
 package Controlador;
 
 import Network.NetworkManager;
-import Vista.Finestra;
+import Vista.MainFrame.Finestra;
 import Vista.Tray;
 
-import javax.swing.*;
 import java.awt.event.*;
 
 import static java.awt.Frame.ICONIFIED;
@@ -32,7 +31,6 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
                 fingerY = e.getY();
             }
             vista.setLocation(e.getXOnScreen() - fingerX, e.getYOnScreen() - fingerY);
-
         }
 
         @Override
@@ -103,6 +101,7 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
     /** Metode per a tencar el client de forma segura.*/
     public void exitProgram(int status){
         networkManager.requestLogOut();
+
         Tray.exit();
         vista.dispose();
         System.exit(status);

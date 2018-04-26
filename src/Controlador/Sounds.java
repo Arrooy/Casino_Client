@@ -44,6 +44,12 @@ public class Sounds extends Thread {
         audios.forEach((nom,clip)->{if (clip.isRunning()) clip.stop();});
     }
 
+    public static void stopOneAudioFile(String file){
+        //parem tots els clips de la llista d'audios
+        audios.get(file).stop();
+    }
+
+
     public static void play(String fileName){
 
         //System.out.println("[SOUND]: " + fileName);

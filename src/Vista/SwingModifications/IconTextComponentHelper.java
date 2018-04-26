@@ -6,6 +6,7 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 
 public class IconTextComponentHelper {
+
     private static final int ICON_SPACING = 3;
 
     private Border mBorder;
@@ -50,4 +51,5 @@ public class IconTextComponentHelper {
     private void resetBorder() {
         mTextComponent.setBorder(mOrigBorder);
     }
+
 }

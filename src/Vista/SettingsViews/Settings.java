@@ -19,20 +19,29 @@ public class Settings extends View {
         this.setLayout(new BorderLayout());
 
         JPanel jpDivisor = new JPanel();
+        jpDivisor.setOpaque(false);
 
         jpDivisor.setLayout(new GridLayout(1, 2));
 
         //Panell de l'esquerra que conté tots els botons
         JPanel jpLeft = new JPanel();
+        jpLeft.setOpaque(false);
+
         jpLeft.setLayout(new BorderLayout());
 
         this.settingsView = new SettingsView();
 
         //Panell que té el títol de la pantalla a dalt a la dreta a l
         JPanel jpTitle = new JPanel();
+        jpTitle.setOpaque(false);
+
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
+        jpgblTitle.setOpaque(false);
+
         GridBagConstraints c = new GridBagConstraints();
         JLabel jlTitle = new JLabel("SETTINGS");
+        jlTitle.setOpaque(false);
+
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 24));
 
         //Marges
@@ -47,16 +56,21 @@ public class Settings extends View {
 
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblExit = new JPanel(new GridBagLayout());
+        jpgblExit.setOpaque(false);
+
         //Marges
         c.insets = new Insets(0,20,20,0);
         c.fill = GridBagConstraints.BOTH;
         jpgblExit.add(jbBack, c);
         JPanel jpExit = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        jpExit.setOpaque(false);
+
         jpExit.add(jpgblExit);
         this.add(jpExit, BorderLayout.SOUTH);
 
         //Panell que té els botons per accedir a les diferents opcions
         JPanel jpgblBotons = new JPanel(new GridBagLayout());
+        jpgblBotons.setOpaque(false);
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
@@ -84,12 +98,12 @@ public class Settings extends View {
         jpDivisor.add(jpLeft, 0);
         jpDivisor.add(settingsView, 1);
         this.add(jpDivisor, BorderLayout.CENTER);
-
+        setOpaque(false);
     }
+
     public SettingsView getSettingsView() {
         return settingsView;
     }
-
 
     public void addController(Controller c) {
 

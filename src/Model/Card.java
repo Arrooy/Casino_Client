@@ -35,12 +35,18 @@ public class Card extends Message {
     /** Indica si l'usuari ha perdut la partida o no. En el cas de ser empat, equival a empat*/
     private String derrota;
 
+    /** Indica quants As té el jugador valent 11*/
+    private int valent11;
+
+
     /** Crea una nova carta per a iniciar el blackJack*/
     public Card(String cardName, String context, Stack<String> nomCartes, boolean ownerIA){
         forIA = ownerIA;
 
         girada = false;
         value = 0;
+
+        valent11 = 0;
 
         this.nomCartes = nomCartes;
         this.cardName = cardName;
@@ -55,6 +61,8 @@ public class Card extends Message {
 
         girada = false;
         value = 0;
+
+        valent11 = 0;
 
         this.nomCartes = null;
         this.cardName = cardName;
@@ -146,5 +154,13 @@ public class Card extends Message {
 
     public String getDerrota() {
         return derrota;
+    }
+
+    public int getValent11() {
+        return valent11;
+    }
+
+    public void setValent11(int valent11) {
+        this.valent11 = valent11;
     }
 }

@@ -39,6 +39,7 @@ public class PasswordChangeView extends View implements PasswordConfirm{
         this.setLayout(new BorderLayout());
 
         JPanel jpGeneric = new JPanel(new GridBagLayout());
+        jpGeneric.setOpaque(false);
 
         jlCheckPassword = new JLabel();
         jpfConfirmPassword = new IconPasswordField("padlock.png",CONFIRM_PASSWORD_HINT,20,TOOL_TIP_CONFIRM_PASSWORD);
@@ -52,8 +53,9 @@ public class PasswordChangeView extends View implements PasswordConfirm{
         jbConfirmPassword.setFocusable(false);
         jbConfirmPassword.setEnabled(false);
 
-
         JPanel jpPasswordChange = new JPanel();
+        jpPasswordChange.setOpaque(false);
+
         jpPasswordChange.setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
@@ -116,6 +118,7 @@ public class PasswordChangeView extends View implements PasswordConfirm{
         jpGeneric.add(jpPasswordChange, c);
 
         this.add(jpGeneric, BorderLayout.CENTER);
+        setOpaque(false);
     }
 
 
