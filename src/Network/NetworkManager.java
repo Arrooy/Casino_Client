@@ -5,7 +5,7 @@ import Utils.JsonManager;
 import Model.Card;
 import Model.Transaction;
 import Model.User;
-import Vista.SplashScreen.SplashScreen;
+import Controlador.SplashScreen;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -1,7 +1,7 @@
 package Model;
 
 import Controlador.Sounds;
-import Vista.SplashScreen.SplashScreen;
+import Controlador.SplashScreen;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,6 +20,7 @@ public class AssetManager {
 
     public static void loadData(SplashScreen splashScreen) {
         Baralla.loadContent(splashScreen);
+        Chips.load(splashScreen);
         loadImatges(splashScreen);
         Sounds.loadAllSounds(splashScreen);
     }
@@ -37,6 +38,7 @@ public class AssetManager {
                 try {
                     img = ImageIO.read(foto);
                 } catch (IOException e) {
+                    e.printStackTrace();
                     System.out.println("Error llegint " + foto.getName());
                     splashScreen.stop();
                 }

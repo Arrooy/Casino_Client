@@ -12,5 +12,6 @@ public class SplashScreenVista extends JFrame {
         setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2);
         setVisible(true);
         requestFocus();
+        setAlwaysOnTop(true);
     }
 }

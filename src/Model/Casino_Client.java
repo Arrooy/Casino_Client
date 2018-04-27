@@ -3,7 +3,7 @@ import Controlador.Controller;
 import Controlador.DraggableWindow;
 import Network.*;
 import Vista.MainFrame.Finestra;
-import Vista.SplashScreen.SplashScreen;
+import Controlador.SplashScreen;
 
 public class Casino_Client {
     public static void main(String[] args) {

@@ -1,6 +1,7 @@
 package Controlador.CustomGraphics;
 
 import Controlador.DraggableWindow;
+import Model.AssetManager;
 
 import java.awt.*;
 import javax.swing.*;
@@ -18,6 +19,8 @@ public class GraphicsManager implements Runnable {
     private GraphicsController controlador_extern;
 
     private Color clearColor;
+
+    private Image clearImage;
 
     /**
      * Crea un gestor per a controlar els grafics custom d'un jpanel extern.
@@ -44,6 +47,11 @@ public class GraphicsManager implements Runnable {
     /** Modifica el color del fons al borrar el contingut cada frame*/
     public void setClearColor(Color clearColor) {
         this.clearColor = clearColor;
+    }
+
+    /** Modifica la imatge del fons al borrar el contingut cada frame*/
+    public void setClearImage(Image clearImage) {
+        this.clearImage = clearImage;
     }
 
     public void resize(int width, int height) {
@@ -90,13 +98,16 @@ public class GraphicsManager implements Runnable {
     private void prepareGameImage() {
         if(image == null){
             image = JPanelObjectiu.createImage(JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
-            //System.out.println(image);
         }
 
         if (image != null) {
             Graphics g = image.getGraphics();
-            g.setColor(clearColor);
-            g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+            if(clearImage == null) {
+                g.setColor(clearColor);
+                g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+            }else{
+                g.drawImage(clearImage,0,0,null);
+            }
         }
     }
 
@@ -104,16 +115,21 @@ public class GraphicsManager implements Runnable {
         running = false;
     }
 
-    private void renderGameImage(Graphics g) {
+    private void renderGameImage(Graphics g1) {
         if (image != null) {
-            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+
+            Graphics2D g = (Graphics2D)g1;
+
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
-            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_RENDERING,
+
+            g.setRenderingHint(RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY);
 
             g.drawImage(image, 0, 0, null);
         }
-        g.dispose();
+
+        g1.dispose();
     }
 
     private void registraControllador(GraphicsController c) {

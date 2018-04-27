@@ -1,8 +1,9 @@
-package Vista.SplashScreen;
+package Controlador;
 
 import Controlador.CustomGraphics.GraphicsController;
 import Controlador.CustomGraphics.GraphicsManager;
 import Model.AssetManager;
+import Vista.SplashScreen.SplashScreenVista;
 
 import javax.swing.*;
 import java.awt.*;
@@ -156,10 +157,12 @@ public class SplashScreen implements GraphicsController, Runnable{
     }
 
     public void stop() {
-        while(true){
-            System.out.println("ERROR");
-        }
+        backGround.exit();
+        vista.dispose();
+        System.out.println("Lectura dels assets incorrecte.");
+        System.exit(0);
     }
+
     public float map(float value, float istart, float istop, float ostart, float ostop) {
         return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
     }

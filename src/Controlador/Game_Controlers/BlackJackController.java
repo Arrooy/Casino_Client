@@ -5,6 +5,7 @@ import Controlador.CustomGraphics.GraphicsController;
 import Controlador.DraggableWindow;
 import Controlador.Sounds;
 
+import Model.AssetManager;
 import Model.Baralla;
 import Model.Card;
 import Model.Model_BJ;
@@ -61,6 +62,7 @@ public class BlackJackController implements GraphicsController {
 
     private DraggableWindow dw;
     private boolean stopMusicOneTime;
+    private Controller controller;
 
     public BlackJackController(BlackJackView blackJackView, NetworkManager networkManager){
         this.model = new Model_BJ();
@@ -68,7 +70,7 @@ public class BlackJackController implements GraphicsController {
         this.blackJackView  = blackJackView;
 
         gameOverText = "Game Over";
-        subText = "GG bro";
+        subText = "Click to exit the game";
         stopMusicOneTime = true;
 
         initGame();
@@ -89,6 +91,9 @@ public class BlackJackController implements GraphicsController {
         gp.setClearColor(Color.red);
         lastCard = 0;
 
+        gp.setClearImage(AssetManager.getImage("bj_background.jpg"));
+
+
         animacio = new AnimacioConjuntCartes(1,100, 100, 150, 0.95,blackJackView.getWidth(),blackJackView.getHeight());
         AnimationTimer = System.currentTimeMillis();
     }
@@ -98,14 +103,16 @@ public class BlackJackController implements GraphicsController {
         gp.resize(blackJackView.getWidth(),blackJackView.getHeight());
     }
 
-    public void newBJCard(Card cartaResposta, Controller c) {
+    public synchronized void newBJCard(Card cartaResposta, Controller c) {
+        if(controller == null)
+            controller = c;
 
         if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER)){
             model.giraIA();
         }
 
         if(cartaResposta.getDerrota().equals("user-instant")) {
-            exitGame(c);
+            gameOver = true;
         }else{
             model.addCard(cartaResposta);
         }
@@ -119,22 +126,16 @@ public class BlackJackController implements GraphicsController {
             if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER))
                 networkManager.newCardForIaTurn();
         }else if(cartaResposta.getDerrota().equals("user")) {
-            exitGame(c);
+            gameOver = true;
         }else if(cartaResposta.getDerrota().equals("IA")) {
-            exitGame(c);
+            gameOver = true;
         }
         System.out.println("Card: " + cartaResposta.getCardName() + "  GAMEOVER? " + gameOver);
     }
 
-    private void exitGame(Controller c){
-        gameOver = true;
-        try {
-            sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private void exitGame(){
         gp.exit();
-        c.showGamesView();
+        controller.showGamesView();
     }
 
     private void exitInGame(){
@@ -175,6 +176,8 @@ public class BlackJackController implements GraphicsController {
                 }
                 lastClick = System.currentTimeMillis();
             }
+        }else{
+            exitGame();
         }
     }
 
