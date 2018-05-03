@@ -16,6 +16,8 @@ import Controlador.CustomGraphics.GraphicsManager;
 
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -64,10 +66,14 @@ public class BlackJackController implements GraphicsController {
     private boolean stopMusicOneTime;
     private Controller controller;
 
+    private boolean firstTimeOpened;
+
     public BlackJackController(BlackJackView blackJackView, NetworkManager networkManager){
         this.model = new Model_BJ();
         this.networkManager = networkManager;
         this.blackJackView  = blackJackView;
+
+        this.firstTimeOpened = true;
 
         gameOverText = "Game Over";
         subText = "Click to exit the game";
@@ -91,11 +97,11 @@ public class BlackJackController implements GraphicsController {
         gp.setClearColor(Color.red);
         lastCard = 0;
 
-        gp.setClearImage(AssetManager.getImage("bj_background.jpg"));
-
-
-        animacio = new AnimacioConjuntCartes(1,100, 100, 150, 0.95,blackJackView.getWidth(),blackJackView.getHeight());
-        AnimationTimer = System.currentTimeMillis();
+        gp.setClearImage(AssetManager.getImage("BJbackground.png"));
+        if(firstTimeOpened) {
+            animacio = new AnimacioConjuntCartes(1, 100, 100, 150, 0.95, blackJackView.getWidth(), blackJackView.getHeight());
+            AnimationTimer = System.currentTimeMillis();
+        }
     }
 
 
@@ -135,6 +141,7 @@ public class BlackJackController implements GraphicsController {
 
     private void exitGame(){
         gp.exit();
+        firstTimeOpened = false;
         controller.showGamesView();
     }
 
@@ -158,27 +165,8 @@ public class BlackJackController implements GraphicsController {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
     public void mousePressed(MouseEvent e) {
 
-        if(!gameOver){
-            //Es vigila un possible doble click accidental
-            if(System.currentTimeMillis() - lastClick > MIN_BUTTON_SPEED ){
-                System.out.println("Button pressed BJ: " + e.getButton());
-                if(e.getButton() == 1){
-                    networkManager.newBlackJackCard(false);
-                }else{
-                    networkManager.newCardForIaTurn();
-                }
-                lastClick = System.currentTimeMillis();
-            }
-        }else{
-            exitGame();
-        }
     }
 
     @Override
@@ -290,16 +278,29 @@ public class BlackJackController implements GraphicsController {
     public void render(Graphics g) {
         if(System.currentTimeMillis() - AnimationTimer <= ANIMATION_TIME){
             renderAnimation(g);
-
         }else{
+            if(model.areCardsLoaded())
             renderGame(g);
         }
+    }
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(gameOver){
+            exitGame();
+        }
+        networkManager.newBlackJackCard(false);
+        networkManager.newCardForIaTurn();
     }
 
     private void renderGame(Graphics g1) {
         Graphics2D g = (Graphics2D)g1;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
+        drawCards(g);
+        //drawButtons(g);
+        //drawChips(g);
         if(gameOver){
 
             g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 30));
@@ -313,9 +314,26 @@ public class BlackJackController implements GraphicsController {
             g.drawString(subText,blackJackView.getWidth()/2 - metrics.stringWidth(subText)/2,(int)((float)blackJackView.getHeight()/2.5));
 
             g.drawString("User final score :" + userScore, 100, blackJackView.getHeight() / 2);
-            g.drawString("IA final score: " + IAScore, blackJackView.getWidth() - 100, blackJackView.getHeight() / 2);
-        }
+            g.drawString("IA final score: " + IAScore, blackJackView.getWidth() - 100 - metrics.stringWidth(("IA final score: " + IAScore)), blackJackView.getHeight() / 2);
 
+        }else{
+            g.drawString("User :" + userScore, 100, blackJackView.getHeight() / 2);
+            g.drawString("IA: " + IAScore, blackJackView.getWidth() - 100, blackJackView.getHeight() / 2);
+        }
+    }
+
+    private void drawButtons(Graphics2D g) {
+        g.setColor(new Color(200,200,100));
+
+        g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20));
+        FontMetrics metrics = g.getFontMetrics(g.getFont());
+
+        g.drawString("asd",metrics.stringWidth("asd"),blackJackView.getHeight() - 150);
+        g.fillRect(10,blackJackView.getHeight() - 125,10 + metrics.stringWidth("asd"),blackJackView.getHeight() - 175);
+
+    }
+
+    private void drawCards(Graphics2D g) {
         if (model.IAHasCards()) {
             int arraySize = model.getIACards().size();
             for (int i = 0; i < arraySize; i++) {
@@ -330,8 +348,6 @@ public class BlackJackController implements GraphicsController {
                 g.drawImage(Baralla.findImage(card), card.getX(), card.getY(), null);
             }
         }
-
-        g.drawString("User :" + userScore, 100, blackJackView.getHeight() / 2);
-        g.drawString("IA: " + IAScore, blackJackView.getWidth() - 100, blackJackView.getHeight() / 2);
     }
+
 }

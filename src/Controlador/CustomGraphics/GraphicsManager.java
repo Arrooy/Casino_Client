@@ -106,9 +106,10 @@ public class GraphicsManager implements Runnable {
                 g.setColor(clearColor);
                 g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
             }else{
-                g.drawImage(clearImage,0,0,null);
+                g.drawImage(clearImage,0,0,JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight(),null);
             }
         }
+
     }
 
     public void exit() {
@@ -127,6 +128,11 @@ public class GraphicsManager implements Runnable {
                     RenderingHints.VALUE_RENDER_QUALITY);
 
             g.drawImage(image, 0, 0, null);
+
+//            for(Component c : JPanelObjectiu.getComponents()){
+//                g.drawImage(c.createImage(c.getWidth(),c.getHeight()),c.getLocation().x,c.getLocation().y,null);
+//            }
+
         }
 
         g1.dispose();

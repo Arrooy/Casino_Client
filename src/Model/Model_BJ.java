@@ -75,4 +75,8 @@ public class Model_BJ {
         valueDisplayUser = 0;
         valueDisplayIa = 0;
     }
+
+    public boolean areCardsLoaded() {
+        return IACards.size() + userCards.size() >= 4;
+    }
 }

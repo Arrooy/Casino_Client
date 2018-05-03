@@ -40,5 +40,4 @@ public class Chips {
     public static BufferedImage getChip(String name){
         return chips.get(name);
     }
-
 }
