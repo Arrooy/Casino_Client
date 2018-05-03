@@ -289,9 +289,13 @@ public class BlackJackController implements GraphicsController {
     public void mouseClicked(MouseEvent e) {
         if(gameOver){
             exitGame();
+        }else {
+            if (e.getButton() == 1) {
+                networkManager.newBlackJackCard(false);
+            } else {
+                networkManager.newCardForIaTurn();
+            }
         }
-        networkManager.newBlackJackCard(false);
-        networkManager.newCardForIaTurn();
     }
 
     private void renderGame(Graphics g1) {
