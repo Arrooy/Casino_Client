@@ -20,7 +20,7 @@ public class Casino_Client {
         DraggableWindow controladorFinestra = new DraggableWindow(finestra,networkManager);
 
         //Es crea el controlador del sistema i es relacionen controlador amb vista i controlador amb network
-        Controller controller = new Controller(finestra, networkManager,controladorFinestra);
+        Controller controller = new Controller(finestra, networkManager,controladorFinestra, finestra.getHorseRaceView());
 
         //Es crea l'enllaç vista amb controlador
         finestra.addController(controller,controladorFinestra);

@@ -1,20 +1,37 @@
 package Controlador.Game_Controlers;
 
 import Controlador.CustomGraphics.GraphicsController;
+import Controlador.CustomGraphics.GraphicsManager;
+import Controlador.DraggableWindow;
+import Network.NetworkManager;
+import Vista.GameViews.HorseRaceView;
+import Vista.MainFrame.Finestra;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class HorseRaceController implements GraphicsController {
+public class HorseRaceController implements GraphicsController, ActionListener {
 
-    private static final int INICI = 1;
-    private static final int JOC = 2;
-    private static final int GAME_OVER = 3;
-    private static final int APOSTA = 4;
+    private GraphicsManager graphicsManager;
+    private NetworkManager networkManager;
+    private HorseRaceView horseRaceView;
+    private Finestra finestra;
 
 
 
+    public HorseRaceController(HorseRaceView horseRaceView, NetworkManager networkManager, DraggableWindow draggableWindow, Finestra finestra){
+        this.horseRaceView = horseRaceView;
+        this.networkManager = networkManager;
+        //this.graphicsManager = new GraphicsManager(this.horseRaceView,this);
+        this.finestra = finestra;
+
+
+
+
+    }
 
     @Override
     public void init() {
@@ -23,17 +40,14 @@ public class HorseRaceController implements GraphicsController {
 
     @Override
     public void update(float delta) {
-
     }
 
     @Override
     public void render(Graphics g) {
-
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
@@ -79,5 +93,16 @@ public class HorseRaceController implements GraphicsController {
     @Override
     public void mouseMoved(MouseEvent e) {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()){
+            case"HORSES-Back":
+                System.out.println("yus");
+                finestra.setGameSelector(false); //Un guest no podra jugar a cavalls
+                networkManager.exitHorses();
+
+        }
     }
 }

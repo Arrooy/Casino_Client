@@ -1,11 +1,13 @@
 package Controlador;
 
 import Controlador.Game_Controlers.BlackJackController;
+import Controlador.Game_Controlers.HorseRaceController;
 import Model.*;
 import Utils.JsonManager;
 import Vista.*;
 import Network.*;
 import Vista.GameViews.BlackJack.BlackJackView;
+import Vista.GameViews.HorseRaceView;
 import Vista.MainFrame.Finestra;
 import Vista.SettingsViews.*;
 import Vista.SwingModifications.IconPasswordField;
@@ -36,6 +38,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     private BlackJackView blackJackView;
 
     private BlackJackController BJController;
+    private HorseRaceView horseRaceView;
+    private HorseRaceController horseRaceController;
+
 
     /** Usuari que controla el client*/
     private User user;
@@ -45,10 +50,13 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     private DraggableWindow draggableWindow;
 
     /** Inicialitza un nou controlador i realitza les relacions amb la vista i el gestor de la connectivitat*/
-    public Controller(Finestra finestra, NetworkManager networkManager,DraggableWindow draggableWindow) {
+    public Controller(Finestra finestra, NetworkManager networkManager,DraggableWindow draggableWindow, HorseRaceView horseRaceView) {
         this.networkManager = networkManager;
         this.finestra = finestra;
         this.draggableWindow = draggableWindow;
+        this.horseRaceView = horseRaceView;
+        this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager, this.draggableWindow, this.finestra);
+        this.horseRaceView.addHorseController(this.horseRaceController);
     }
 
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
@@ -94,8 +102,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             case "roulette":
                     //Codi per a usuaris normals
                 break;
-            case "horse":
-                    //Codi per a usuaris normals
+            case "horseRace":
+                finestra.setHorseRaceView();
+                networkManager.sendHorseRaceRequest();
                 break;
             case "blackJack":
                 networkManager.initBlackJack(Baralla.getNomCartes());
@@ -246,6 +255,15 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.blackJackView = blackJackView;
     }
 
+
+    public void setHorseRaceView(HorseRaceView horseRaceView){
+        this.horseRaceView = horseRaceView;
+    }
+
+    public void initHorses (){
+        System.out.println("INIT HORSES REQUESTED");
+        finestra.setHorseRaceView();
+    }
     @Override
     public void componentResized(ComponentEvent e) {
         if(BJController != null)

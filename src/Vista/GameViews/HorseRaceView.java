@@ -1,6 +1,7 @@
 package Vista.GameViews;
 
 import Controlador.Controller;
+import Controlador.Game_Controlers.HorseRaceController;
 import Model.HorseRace_Model.Horse;
 import Vista.View;
 
@@ -97,8 +98,13 @@ public class HorseRaceView extends View {
 
     @Override
     public void addController(Controller c) {
-        this.jbBack.setActionCommand("HORSES BACK");
 
-        this.jbBack.addActionListener(c);
+    }
+
+
+
+    public void addHorseController(HorseRaceController horseRaceController){
+        this.jbBack.setActionCommand("HORSES-Back");
+        this.jbBack.addActionListener(horseRaceController);
     }
 }

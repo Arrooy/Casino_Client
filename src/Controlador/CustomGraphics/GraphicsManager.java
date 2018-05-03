@@ -61,6 +61,7 @@ public class GraphicsManager implements Runnable {
     private void initGame() {
         controlador_extern.init();
         running = true;
+
         thread = new Thread(this, "Game Thread");
         thread.start();
     }

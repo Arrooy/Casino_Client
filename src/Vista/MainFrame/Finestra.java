@@ -8,6 +8,7 @@ import Model.User;
 import Network.Transmission;
 import Vista.*;
 import Vista.GameViews.BlackJack.BlackJackView;
+import Vista.GameViews.HorseRaceView;
 import Vista.SettingsViews.Settings;
 import Vista.SettingsViews.SettingsView;
 
@@ -30,6 +31,7 @@ public class Finestra extends JFrame {
     private SignInView signInView;
     private Settings settings;
     private BlackJackView blackJackView;
+    private HorseRaceView horseRaceView;
     private JPanel content;
     
     private JButton jbtexit;
@@ -63,6 +65,7 @@ public class Finestra extends JFrame {
         signInView = new SignInView();
         settings = new Settings();
         blackJackView = new BlackJackView();
+        this.horseRaceView = new HorseRaceView();
 
         content.add("main", mainView);
         content.add("logIn", logInView);
@@ -70,6 +73,7 @@ public class Finestra extends JFrame {
         content.add("signIn", signInView);
         content.add("settings", settings);
         content.add("blackJack", blackJackView);
+        content.add("horseRace", horseRaceView);
 
         MainPane.add(content,BorderLayout.CENTER);
 
@@ -133,6 +137,7 @@ public class Finestra extends JFrame {
         gameSelectorView.addController(c);
         signInView.addController(c);
         settings.addController(c);
+        horseRaceView.addController(c);
 
         c.setMainView(mainView);
         c.setLogInView(logInView);
@@ -175,6 +180,11 @@ public class Finestra extends JFrame {
 
     public void setBlackJackView() {
         layout.show(content, "blackJack");
+    }
+
+
+    public void setHorseRaceView(){
+        layout.show(content, "horseRace");
     }
 
     public LogInView getLogInView() {
@@ -242,5 +252,9 @@ public class Finestra extends JFrame {
     }
     public void showUserconfig(boolean visible){
         jbtUser.setVisible(visible);
+    }
+
+    public HorseRaceView getHorseRaceView() {
+        return this.horseRaceView;
     }
 }

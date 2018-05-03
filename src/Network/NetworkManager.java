@@ -1,6 +1,9 @@
 package Network;
 
 import Controlador.Controller;
+import Model.HorseRace_Model.HorseBet;
+import Model.HorseRace_Model.HorseMessage;
+import Model.HorseRace_Model.HorseSchedule;
 import Utils.JsonManager;
 import Model.Card;
 import Model.Transaction;
@@ -292,7 +295,8 @@ public class NetworkManager extends Thread {
      * Envia al servidor una petició de SignUp per a un usuari concret
      * @param user
      */
-    public void requestSignUp(User user) {
+    public void
+    requestSignUp(User user) {
         new Transmission(user, this);
     }
 
@@ -346,5 +350,18 @@ public class NetworkManager extends Thread {
 
     public void newCardForIaTurn() {
         new Transmission(new Card("",CONTEXT_BJ_FINISH_USER,true),this);
+    }
+
+
+    public void sendHorseRaceRequest() {
+        HorseMessage horseMessage = new HorseMessage((HorseSchedule) null, "Connect");
+        horseMessage.setID(user.getID());
+        new Transmission(horseMessage, this);
+    }
+
+    public void exitHorses() {
+        HorseMessage horseMessage = new HorseMessage((HorseSchedule) null, "Disconnect");
+        horseMessage.setID(user.getID());
+        new Transmission(horseMessage, this);
     }
 }

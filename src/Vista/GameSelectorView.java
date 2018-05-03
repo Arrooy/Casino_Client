@@ -108,7 +108,7 @@ public class GameSelectorView extends View {
         jbLogOut.setActionCommand("logOut");
         jbLogOut.addActionListener(c);
 
-        jbHorseRace.setActionCommand("horse");
+        jbHorseRace.setActionCommand("horseRace");
         jbHorseRace.addActionListener(c);
 
         jbBlackJack.setActionCommand("blackJack");
