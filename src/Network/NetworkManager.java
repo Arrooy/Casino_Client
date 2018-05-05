@@ -267,6 +267,28 @@ public class NetworkManager extends Thread {
         return null;
     }
 
+    /** TODO: no se escriure nois, algu majuda?
+     * Com la lectura del sevidor es fa constantment de manera paral·lela, el funcionament de read varia bastant.
+     * Read es limita a buscar un missatge identificat amb el contexte rebut per parametres dins del conjunt de missatges
+     * rebuts pel client, guardats a la llista lectures.
+     * @param context Context del missatge
+     * @return Si read no troba el missatge que es desitja, retorna null. De lo contrari retorna el missatge.
+     */
+    public Message readContext(String context){
+        //Es miren tots els missatges registrats fins el moment
+        for(int index = 0; index < lectures.size(); index++){
+            Message message = lectures.get(index);
+            //Si el missatge de l'iteracio conte l'id que es buscava, es retorna l'objecte.
+            if(message != null && message.getContext().equals(context)) {
+                lectures.remove(message);
+                System.out.println(message.getContext());
+                return message;
+            }
+        }
+        //Si no s'ha trobat l'ID, es retorna null;
+        return null;
+    }
+
     /** Inicialitza l'usuari un cop aquest s'ha autentificat*/
     public void setUser(User user) {
         this.user = user;
@@ -353,12 +375,14 @@ public class NetworkManager extends Thread {
     }
 
 
+    /**Metode per indicar al servidor de que volem jugar als cavalls*/
     public void sendHorseRaceRequest() {
         HorseMessage horseMessage = new HorseMessage((HorseSchedule) null, "Connect");
         horseMessage.setID(user.getID());
         new Transmission(horseMessage, this);
     }
 
+    /**Metode que indica al servidor que ens desconectem de la cursa de cavalls*/
     public void exitHorses() {
         HorseMessage horseMessage = new HorseMessage((HorseSchedule) null, "Disconnect");
         horseMessage.setID(user.getID());

@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+
+/**Classe que permet la representacio d'un cavall*/
 public class Horse {
     private Point position;
     private BufferedImage[] images;

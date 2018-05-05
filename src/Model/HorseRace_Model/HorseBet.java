@@ -2,16 +2,18 @@ package Model.HorseRace_Model;
 
 import java.io.Serializable;
 
+/**Classe que representa una aposta en les carreres de cavalls*/
 public class HorseBet implements Serializable {
     private long bet;
     private int horse;
-    private long ID;
+    private double ID;
+    private boolean betOK;
 
-    public long getID() {
+    public double getID() {
         return ID;
     }
 
-    public void setID(long ID) {
+    public void setID(double ID) {
         this.ID = ID;
     }
 
@@ -31,10 +33,23 @@ public class HorseBet implements Serializable {
         this.horse = horse;
     }
 
-    public HorseBet (long bet, int horse, long ID){
+    public HorseBet (long bet, int horse, double ID){
         this.bet = bet;
         this.horse = horse;
         this.ID = ID;
     }
 
+
+    public HorseBet(boolean betOK){
+        this.betOK = betOK;
+    }
+
+
+    public boolean isBetOK() {
+        return betOK;
+    }
+
+    public void setBetOK(boolean betOK) {
+        this.betOK = betOK;
+    }
 }

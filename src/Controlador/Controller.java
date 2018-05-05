@@ -55,7 +55,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.finestra = finestra;
         this.draggableWindow = draggableWindow;
         this.horseRaceView = horseRaceView;
-        this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager, this.draggableWindow, this.finestra);
+        this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager, this.finestra);
         this.horseRaceView.addHorseController(this.horseRaceController);
     }
 
@@ -105,6 +105,8 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             case "horseRace":
                 finestra.setHorseRaceView();
                 networkManager.sendHorseRaceRequest();
+                horseRaceController.play();
+                System.out.println("Play");
                 break;
             case "blackJack":
                 networkManager.initBlackJack(Baralla.getNomCartes());
@@ -207,6 +209,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     public void setUser(User u){
         user = u;
+        horseRaceController.setUser(u);
     }
 
     public void newBJCard(Card cartaResposta) {

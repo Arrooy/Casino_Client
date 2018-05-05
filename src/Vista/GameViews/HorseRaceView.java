@@ -8,6 +8,7 @@ import Vista.View;
 import javax.swing.*;
 import java.awt.*;
 
+/**Vista per la cursa de la carrera dels cavalls*/
 public class HorseRaceView extends View {
     private static final int INITIAL_X = 0;
     private static final int INITIAL_Y= 0;
@@ -24,19 +25,17 @@ public class HorseRaceView extends View {
     private JPanel jpBets;
     private Horse[] horses;
     private JButton jbBack;
+    private long betAmount;
+    private int betHorse;
 
     public HorseRaceView (){
-        /*horses = new Horse[NUM_HORSES];
-        for(int i = 0; i < 12; i++){
-            horses[i] = new Horse(i%12, new Point(INITIAL_X, INITIAL_Y), HORSE_WIDTH, HORSE_HEIGHT , false);
-        }
-*/
         this.setLayout(new BorderLayout());
 
         this.jpEast = new JPanel(new GridBagLayout());
         this.jpCenter = new JPanel(new GridBagLayout());
         this.jpSouth = new JPanel(new GridBagLayout());
         this.jpTrack = new JPanel(new BorderLayout());
+        this.jpTrack.setSize(600,300);
         this.jpBets = new JPanel(new BorderLayout());
 
         JLabel jlProba = new JLabel("Cavalls");
@@ -83,14 +82,6 @@ public class HorseRaceView extends View {
     }
 
 
-
-    public void initHorses(){
-        for(int i = 0; i < 12; i++){
-            horses[i] = new Horse(i + 1,new Point(INITIAL_X, INITIAL_Y + i*HORSE_SEPARATION), HORSE_WIDTH, HORSE_HEIGHT,true );
-            //TODO CONTINUE
-        }
-    }
-
     public JPanel getTrack(){
         return this.jpTrack;
     }
@@ -101,10 +92,17 @@ public class HorseRaceView extends View {
 
     }
 
-
-
+    /**Metode que ens permet afegir un controlador per gestionar la vista*/
     public void addHorseController(HorseRaceController horseRaceController){
         this.jbBack.setActionCommand("HORSES-Back");
         this.jbBack.addActionListener(horseRaceController);
+    }
+
+    public long getBetAmount() {
+        return this.betAmount;
+    }
+
+    public int getBetHorse() {
+        return this.betHorse;
     }
 }

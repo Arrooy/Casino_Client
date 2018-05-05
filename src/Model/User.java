@@ -180,4 +180,5 @@ public class User extends Message {
     public void setGuest(boolean guest) {
         isGuest = guest;
     }
+
 }

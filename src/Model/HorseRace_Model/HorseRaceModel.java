@@ -1,15 +1,16 @@
 package Model.HorseRace_Model;
 
 
-
-public class Model_HorseRace {
+/**Model de la cursa de cavalls*/
+public class HorseRaceModel {
     HorseSchedule horseSchedule;
     HorseBet horseBet;
     Horse[] horses;
 
 
-    public Model_HorseRace (){
+    public HorseRaceModel(){
         horses = new Horse[12];
+
     }
 
 
