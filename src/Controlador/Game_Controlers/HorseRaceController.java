@@ -102,7 +102,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         HorseMessage horseMessage;
         if(play){
             if(!isRacing && !waitCountdown.isCounting()){
-                //TODO: mostra missatge esperant a que acabi countdown
+                //TODO: mostra missatge esperant a que acabi antiga carrera
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-Countdown");
                 if(horseMessage != null){
                     this.waitCountdown.newCount(horseMessage.getTimeForRace());
@@ -177,8 +177,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     @Override
     public void render(Graphics g) {
-        //TODO: Aqui cal fer que s'actualitzi la posicio dels caballs
-
+        if(isRacing){
+            //TODO: Aqui cal fer que s'actualitzi la posicio dels caballs
+            //TODO: Mostrar temps per acabar carrera amb raceCountdown.getCount()
+        }
     }
 
     @Override
