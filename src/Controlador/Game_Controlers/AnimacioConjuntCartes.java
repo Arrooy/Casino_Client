@@ -1,5 +1,6 @@
 package Controlador.Game_Controlers;
 
+import Model.AssetManager;
 import Model.Baralla;
 
 import java.awt.*;
@@ -34,6 +35,7 @@ public class AnimacioConjuntCartes {
         }
     }
     public void displayCards(Graphics g) {
+        g.drawImage(AssetManager.getImage("BJbackground.png"),0,0,width,height,null);
         for (int i = boles.size() - 1; i >= 0; i--) {
             boles.get(i).display(g);
         }

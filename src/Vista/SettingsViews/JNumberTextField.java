@@ -12,7 +12,6 @@ public class JNumberTextField extends IconTextField {
 
     @Override
     protected void processKeyEvent(KeyEvent e) {
-        System.out.println(e.getKeyChar() + " " + e.getKeyCode());
         if(Character.isDigit(e.getKeyChar()) || e.getKeyChar() < 32 || e.getKeyChar() == 127)
             super.processKeyEvent(e);
         else

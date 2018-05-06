@@ -91,20 +91,24 @@ public class Transmission implements Runnable {
 
     }
 
+    //La mano màgica del tet arroyo :D
     private void deposit() {
         networkManager.send(msg);
-        Message mssg = networkManager.read(msg.getID());
+        User user = null;//(User) networkManager.read(msg.getID());
+        try {
+            user = (User) waitResponse(msg);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Crash at " + user.getUsername());
 
-        if (mssg instanceof User && ((User) mssg).areCredentialsOk()) {
+        if (user.areCredentialsOk()) {
             //TODO: poser missatge succssesful vista de add Money
         } else {
             //TODO: poser missatge error vista de add Money
         }
-        //TODO: arreglar
-        User res = (User) networkManager.read(msg.getID());
-        //TODO senyor Miquel aquesta merda de les credentialsOK peta mu mal
-        boolean ok = res.areCredentialsOk();
-        networkManager.transactionOK(ok);
+
+        networkManager.transactionOK(user.areCredentialsOk());
     }
 
     private void transaction(){
@@ -119,7 +123,14 @@ public class Transmission implements Runnable {
             networkManager.send(carta);
 
             Card cartaResposta = (Card) waitResponse(carta);
-            networkManager.newBJCard(cartaResposta);
+
+            if(cartaResposta.getContext().equals(CONTEXT_BJ_INIT) && !cartaResposta.isBetOk()) {
+                networkManager.displayError("Not enought money!","Impossible to bet that high!");
+                networkManager.showGamesView();
+            }else{
+                networkManager.newBJCard(cartaResposta);
+            }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

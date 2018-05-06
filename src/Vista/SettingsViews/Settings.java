@@ -131,7 +131,6 @@ public class Settings extends View {
         }else{
             this.settingsView.setVisible(true);
             setSetting(s);
-
         }
 
     }

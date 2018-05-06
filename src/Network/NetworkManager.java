@@ -335,8 +335,8 @@ public class NetworkManager extends Thread {
         new Transmission(userAux, this);
     }
 
-    public void initBlackJack(Stack<String> nomCartes) {
-        Card card = new Card("",Transmission.CONTEXT_BJ_INIT,nomCartes,false);
+    public void initBlackJack(Stack<String> nomCartes,long bet) {
+        Card card = new Card("",bet,Transmission.CONTEXT_BJ_INIT,nomCartes,false);
         new Transmission(card,this);
     }
 
@@ -387,5 +387,9 @@ public class NetworkManager extends Thread {
         HorseMessage horseMessage = new HorseMessage((HorseSchedule) null, "Disconnect");
         horseMessage.setID(user.getID());
         new Transmission(horseMessage, this);
+    }
+
+    public void showGamesView() {
+        controller.showGamesView();
     }
 }

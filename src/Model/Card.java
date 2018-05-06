@@ -38,10 +38,21 @@ public class Card extends Message {
     /** Indica quants As té el jugador valent 11*/
     private int valent11;
 
+    /** Valor de l'aposta que vol realitzar l'usuari*/
+    private long bet;
+
+    /** Indica si la aposta es correcte*/
+    private boolean isBetOk;
+
+    /** Valor de la wallet actual del usuari, nomes de lectura per al client*/
+    private long wallet;
 
     /** Crea una nova carta per a iniciar el blackJack*/
-    public Card(String cardName, String context, Stack<String> nomCartes, boolean ownerIA){
+    public Card(String cardName,long bet, String context, Stack<String> nomCartes, boolean ownerIA){
         forIA = ownerIA;
+
+        this.bet = bet;
+        this.isBetOk = false;
 
         girada = false;
         value = 0;
@@ -53,6 +64,8 @@ public class Card extends Message {
         ID = Math.random();
         reverseName = null;
         this.context = context;
+
+        this.y = -300;
     }
 
     /** Crea una carta basica, per a robar de la baralla en el blackJack*/
@@ -69,6 +82,8 @@ public class Card extends Message {
         ID = Math.random();
         reverseName = null;
         this.context = context;
+
+        this.y = -300;
     }
 
     /** GETTERS I SETTERS*/
@@ -162,5 +177,27 @@ public class Card extends Message {
 
     public void setValent11(int valent11) {
         this.valent11 = valent11;
+    }
+    public long getBet() {
+        return bet;
+    }
+
+    public void setBet(int bet) {
+        this.bet = bet;
+    }
+    public boolean isBetOk() {
+        return isBetOk;
+    }
+
+    public void setBetOk(boolean betOk) {
+        isBetOk = betOk;
+    }
+
+    public long getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(long wallet) {
+        this.wallet = wallet;
     }
 }

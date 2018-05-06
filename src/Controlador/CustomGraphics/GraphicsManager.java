@@ -1,8 +1,5 @@
 package Controlador.CustomGraphics;
 
-import Controlador.DraggableWindow;
-import Model.AssetManager;
-
 import java.awt.*;
 import javax.swing.*;
 
@@ -47,11 +44,6 @@ public class GraphicsManager implements Runnable {
     /** Modifica el color del fons al borrar el contingut cada frame*/
     public void setClearColor(Color clearColor) {
         this.clearColor = clearColor;
-    }
-
-    /** Modifica la imatge del fons al borrar el contingut cada frame*/
-    public void setClearImage(Image clearImage) {
-        this.clearImage = clearImage;
     }
 
     public void resize(int width, int height) {
@@ -106,8 +98,6 @@ public class GraphicsManager implements Runnable {
             if(clearImage == null) {
                 g.setColor(clearColor);
                 g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
-            }else{
-                g.drawImage(clearImage,0,0,JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight(),null);
             }
         }
 
@@ -129,11 +119,6 @@ public class GraphicsManager implements Runnable {
                     RenderingHints.VALUE_RENDER_QUALITY);
 
             g.drawImage(image, 0, 0, null);
-
-//            for(Component c : JPanelObjectiu.getComponents()){
-//                g.drawImage(c.createImage(c.getWidth(),c.getHeight()),c.getLocation().x,c.getLocation().y,null);
-//            }
-
         }
 
         g1.dispose();
@@ -149,6 +134,9 @@ public class GraphicsManager implements Runnable {
 
         if (JPanelObjectiu.getKeyListeners().length == 0)
             JPanelObjectiu.addKeyListener(c);
+    }
+    public void requestFocus(){
+        JPanelObjectiu.requestFocus();
     }
 
 }

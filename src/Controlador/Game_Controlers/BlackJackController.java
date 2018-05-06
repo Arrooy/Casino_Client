@@ -16,25 +16,17 @@ import Controlador.CustomGraphics.GraphicsManager;
 
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 
 import static Model.Model_BJ.*;
+import static Network.Transmission.CONTEXT_BJ_INIT;
 import static java.lang.Thread.sleep;
 
 public class BlackJackController implements GraphicsController {
 
     private final static int MIN_BUTTON_SPEED = 320;
-    private static final String USER_LOST_TEXT = "Has perdut";
-    private static final String IA_LOST_TEXT = "Has ganyat!";
-    private static final String USER_LOST_TEXT_INSTANT = "Derrota...";
-
-    private static final String SUB_USER_LOST_TEXT = "Has perdut";
-    private static final String SUB_IA_LOST_TEXT = "Has ganyat!";
-    private static final String SUB_USER_LOST_TEXT_INSTANT = "Per a guanyar, has de superar el valor del teu contrincant";
 
     private final long ANIMATION_TIME = 3000;
     private long AnimationTimer;
@@ -67,6 +59,10 @@ public class BlackJackController implements GraphicsController {
     private Controller controller;
 
     private boolean firstTimeOpened;
+    private long bet;
+    private long moneyToSpend;
+    private final char MONEY_SYMBOL = '€';
+
 
     public BlackJackController(BlackJackView blackJackView, NetworkManager networkManager){
         this.model = new Model_BJ();
@@ -87,6 +83,7 @@ public class BlackJackController implements GraphicsController {
         gameOver = false;
         usuariDone = false;
         stopMusicOneTime = true;
+        moneyToSpend = 0;
 
         this.model.clearData();
 
@@ -94,10 +91,9 @@ public class BlackJackController implements GraphicsController {
         IAScore = "0";
 
         this.gp = new GraphicsManager(blackJackView,this);
-        gp.setClearColor(Color.red);
+        gp.setClearColor(Color.green);
         lastCard = 0;
 
-        gp.setClearImage(AssetManager.getImage("BJbackground.png"));
         if(firstTimeOpened) {
             animacio = new AnimacioConjuntCartes(1, 100, 100, 150, 0.95, blackJackView.getWidth(), blackJackView.getHeight());
             AnimationTimer = System.currentTimeMillis();
@@ -110,6 +106,12 @@ public class BlackJackController implements GraphicsController {
     }
 
     public synchronized void newBJCard(Card cartaResposta, Controller c) {
+
+        if(cartaResposta.getContext().equals(CONTEXT_BJ_INIT)){
+            bet = cartaResposta.getBet();
+            moneyToSpend = cartaResposta.getWallet();
+        }
+
         if(controller == null)
             controller = c;
 
@@ -118,12 +120,12 @@ public class BlackJackController implements GraphicsController {
         }
 
         if(cartaResposta.getDerrota().equals("user-instant")) {
+            gameOverText = "You loose " + bet + MONEY_SYMBOL;
+            subText = "Click to exit the game";
             gameOver = true;
         }else{
             model.addCard(cartaResposta);
         }
-
-        System.out.println("Adding scores: User " + model.getValueUser() + " ----- IA " + model.getValueIA());
 
         userScore = String.valueOf(model.getValueUser());
         IAScore = String.valueOf(model.getValueIA());
@@ -132,16 +134,18 @@ public class BlackJackController implements GraphicsController {
             if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER))
                 networkManager.newCardForIaTurn();
         }else if(cartaResposta.getDerrota().equals("user")) {
+            gameOverText = "You loose " + bet + MONEY_SYMBOL;
+            subText = "Click to exit the game";
             gameOver = true;
         }else if(cartaResposta.getDerrota().equals("IA")) {
+            gameOverText = "You win " + bet + MONEY_SYMBOL;
+            subText = "Click to exit the game";
             gameOver = true;
         }
-        System.out.println("Card: " + cartaResposta.getCardName() + "  GAMEOVER? " + gameOver);
     }
 
     private void exitGame(){
         gp.exit();
-        firstTimeOpened = false;
         controller.showGamesView();
     }
 
@@ -151,17 +155,35 @@ public class BlackJackController implements GraphicsController {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        if(firstTimeOpened) {
+            firstTimeOpened = false;
+        }else{
+            if(gameOver) {
+                if(e.getKeyChar() == 'r' || e.getKeyChar() == 'R'){
+                    networkManager.initBlackJack(Baralla.getNomCartes(), controller.manageBJBet());
+                    gp.exit();
+                }else{
+                    exitGame();
+                }
+            }else{
+                if (e.getKeyChar() == '+') {
+                        networkManager.newBlackJackCard(false);
+                        Sounds.play("cardPlace1.wav");
+                } else if(e.getKeyChar() == ' ') {
+                        networkManager.newCardForIaTurn();
+                }
+            }
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        if(e.getKeyCode() == 27 && gameOver)
+            exitGame();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
     }
 
     @Override
@@ -191,8 +213,6 @@ public class BlackJackController implements GraphicsController {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
     }
 
 
@@ -210,6 +230,7 @@ public class BlackJackController implements GraphicsController {
                 Sounds.stopOneAudioFile("cardShuffle.wav");
                 stopMusicOneTime = false;
             }
+            gp.requestFocus();
             updateCardsPosition(model.getIACards(), MARGIN_TOP, 1);
             updateCardsPosition(model.getUserCards(), blackJackView.getSize().height - CARD_HEIGHT - MARGIN_BOTTOM, -1);
         }
@@ -230,10 +251,6 @@ public class BlackJackController implements GraphicsController {
     private void renderAnimation(Graphics g) {
         if(animacio != null) {
             animacio.displayCards(g);
-            g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, blackJackView.getWidth() / 9));
-            FontMetrics metrics = g.getFontMetrics(g.getFont());
-            g.setColor(new Color(200, 100, 50));
-            g.drawString("Loading", blackJackView.getWidth() / 2 - metrics.stringWidth("Loading") / 2, blackJackView.getHeight() / 2);
         }
     }
 
@@ -280,60 +297,74 @@ public class BlackJackController implements GraphicsController {
             renderAnimation(g);
         }else{
             if(model.areCardsLoaded())
-            renderGame(g);
+                renderGame(g);
         }
     }
 
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(gameOver){
-            exitGame();
-        }else {
-            if (e.getButton() == 1) {
-                networkManager.newBlackJackCard(false);
-            } else {
-                networkManager.newCardForIaTurn();
+        if(firstTimeOpened){
+            firstTimeOpened = false;
+
+        }else{
+            if(gameOver){
+                exitGame();
             }
         }
     }
 
     private void renderGame(Graphics g1) {
         Graphics2D g = (Graphics2D)g1;
+        int width = blackJackView.getWidth();
+        int height = blackJackView.getHeight();
+
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g.drawImage(AssetManager.getImage("BJbackground.png"),0,0,width,height,null);
 
-        drawCards(g);
-        //drawButtons(g);
-        //drawChips(g);
-        if(gameOver){
-
-            g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 30));
-            FontMetrics metrics = g.getFontMetrics(g.getFont());
-
-            g.setColor(new Color(100,200,100,100));
-            g.drawRect(0,0,blackJackView.getWidth(),blackJackView.getHeight());
-
-            g.setColor(new Color(255,255,255,100));
-            g.drawString(gameOverText,blackJackView.getWidth()/2 - metrics.stringWidth(gameOverText)/2,blackJackView.getHeight()/3);
-            g.drawString(subText,blackJackView.getWidth()/2 - metrics.stringWidth(subText)/2,(int)((float)blackJackView.getHeight()/2.5));
-
-            g.drawString("User final score :" + userScore, 100, blackJackView.getHeight() / 2);
-            g.drawString("IA final score: " + IAScore, blackJackView.getWidth() - 100 - metrics.stringWidth(("IA final score: " + IAScore)), blackJackView.getHeight() / 2);
-
+        if(firstTimeOpened){
+            showHowToPlay(g,width,height);
         }else{
-            g.drawString("User :" + userScore, 100, blackJackView.getHeight() / 2);
-            g.drawString("IA: " + IAScore, blackJackView.getWidth() - 100, blackJackView.getHeight() / 2);
+            drawCards(g);
+            if(gameOver){
+                g.setColor(new Color(20,20,20,230));
+                g.fillRect(0,0,width,height);
+
+                g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, width/10));
+                FontMetrics metrics = g.getFontMetrics(g.getFont());
+
+                g.setColor(new Color(255,255,255));
+                g.drawString(gameOverText,width/2 - metrics.stringWidth(gameOverText)/2,height/3);
+
+                g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, width/40));
+                metrics = g.getFontMetrics(g.getFont());
+
+                g.drawString("Press R to restart",75,(int)((float)height/1.5));
+
+                g.drawString("Press ESC to exit",width - metrics.stringWidth(subText),(int)((float)height/1.5));
+                g.drawString("User final score :" + userScore, 75, height / 2);
+                g.drawString("IA final score: " + IAScore, width - 100 - metrics.stringWidth(("IA final score: " + IAScore)), height / 2);
+
+            }else{
+                g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, width/50));
+                FontMetrics metrics = g.getFontMetrics(g.getFont());
+
+                g.drawString("Cards score :" + userScore, 50, height / 2);
+                g.drawString("Bet: " + bet, width - 75 - metrics.stringWidth(("Bet: " + bet)), 75);
+                g.drawString("User wallet: " + moneyToSpend, 50, height - metrics.getAscent() * 2);
+            }
         }
     }
 
-    private void drawButtons(Graphics2D g) {
-        g.setColor(new Color(200,200,100));
-
-        g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20));
-        FontMetrics metrics = g.getFontMetrics(g.getFont());
-
-        g.drawString("asd",metrics.stringWidth("asd"),blackJackView.getHeight() - 150);
-        g.fillRect(10,blackJackView.getHeight() - 125,10 + metrics.stringWidth("asd"),blackJackView.getHeight() - 175);
+    private void showHowToPlay(Graphics2D g,int width,int height) {
+        g.setColor(new Color(20,20,20,230));
+        g.fillRect(0,0,width,height);
+        Image image = AssetManager.getImage("tutoBJ.png");
+        if(image.getWidth(null) > blackJackView.getWidth() || blackJackView.getHeight() < image.getHeight(null)){
+            g.drawImage(image,0,0,blackJackView.getWidth(),blackJackView.getHeight(),null);
+        }else{
+            g.drawImage(image,width/2 - image.getWidth(null)/2,10,null);
+        }
 
     }
 

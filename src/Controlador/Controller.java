@@ -109,7 +109,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 System.out.println("Play");
                 break;
             case "blackJack":
-                networkManager.initBlackJack(Baralla.getNomCartes());
+                System.out.println("INIT BLACKJACK REQUESTED");
+                networkManager.initBlackJack(Baralla.getNomCartes(),manageBJBet());
+                finestra.showUserconfig(false);
                 break;
             case "goSignIn":
                 finestra.setSignInView();
@@ -166,11 +168,26 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
+    public long manageBJBet() {
+        long value = -1;
+
+        do {
+            try {
+                value = Long.parseLong(blackJackView.showInputDialog());
+            } catch (NumberFormatException error) {
+               blackJackView.showDialog("Wallet Error","Only numbers were expected");
+            }
+        }while(value == -1);
+        return value;
+    }
+
     public void showFinestra() {
         finestra.setVisible(true);
         finestra.requestFocus();
     }
 
+
+    //TODO: GESTIO SERVIDOR, NO CLIENT! MILLORAR TRASMISION DE CONTEXT deposit.
     private void addMoney() {
         long deposit = addMoneyView.getAmount();
         String password = addMoneyView.getPassword();
@@ -245,12 +262,14 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     }
 
     public void initBlackJack() {
-        System.out.println("INIT BLACKJACK REQUESTED");
+
+
         //crea el controlador de la nova partida amb un nou model
         if(BJController == null)
             BJController = new BlackJackController(blackJackView,networkManager);
         else
             BJController.initGame();
+
         finestra.setBlackJackView();
     }
 
