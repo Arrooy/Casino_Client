@@ -39,6 +39,17 @@ public class AddMoneyView extends View {
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         c.gridy = 0;
+        c.insets = new Insets(10,20,10,25);
+        JLabel jlaux = new JLabel("Strut");
+        jlaux.setForeground(TRANSPARENT);
+        jpMoneyView.add(jlaux, c);
+
+        c.gridx = 1;
+        JLabel jlaux1 = new JLabel("Strut");
+        jlaux1.setForeground(TRANSPARENT);
+        jpMoneyView.add(jlaux1,c);
+
+        c.gridy = 1;
         c.ipadx = 150;
         c.insets = new Insets(0,0,20,0);
         jntfAmount = new JNumberTextField("money.png",AMOUNT_HINT,TOOL_TIP_AMOUNT);
@@ -46,32 +57,32 @@ public class AddMoneyView extends View {
         jpMoneyView.add(jntfAmount, c);
 
         jpfPassword = new IconPasswordField("padlock.png",PASSWORD_HINT,TOOL_TIP_PASSWORD);
-        c.gridy = 1;
+        c.gridy = 2;
         c.ipadx = 150;
         jpMoneyView.add(jpfPassword, c);
 
-        c.gridx = 1;
-        c.gridy = 0;
+        c.gridx = 2;
+        c.gridy = 1;
         c.insets = new Insets(0,20,20,0);
         jlErrorMoney = new JLabel("Above the limit amount ");
         jpMoneyView.add(jlErrorMoney, c);
 
-        c.gridy = 1;
+        c.gridy = 2;
         jlErrorPassword = new JLabel("Wrong password");
         jpMoneyView.add(jlErrorPassword, c);
 
         jlAddOK = new JLabel("Transaction OK");
 
-        c.gridy = 4;
-        c.gridx = 0;
+        c.gridy = 5;
+        c.gridx = 1;
         c.ipadx = 50;
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.CENTER;
         c.insets = new Insets(20,45,0,0);
         jpMoneyView.add(jlAddOK, c);
 
-        c.gridx = 0;
-        c.gridy = 3;
+        c.gridx = 1;
+        c.gridy = 4;
         c.insets = new Insets(0,0,0,0);
         c.ipadx = 50;
         jbAddMoney = new JButton("ADD");
@@ -125,6 +136,8 @@ public class AddMoneyView extends View {
         noErrorPassword();
         noTransactionOK();
         jpfPassword.setText("");
+        jpfPassword.setHint(true);
         jntfAmount.setText("");
+        jntfAmount.setHint(true);
     }
 }

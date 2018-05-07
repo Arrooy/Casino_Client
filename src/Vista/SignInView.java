@@ -22,6 +22,11 @@ public class SignInView extends View implements PasswordConfirm {
     private static final String PASSWORD_CONFIRM_HINT = "Repeat your password here";
     private static final String PASSWORD_CONFIRM_TOOL_TIP = "Repeat the password introduced above";
 
+    private final static Color GRANA = new Color(125, 28, 37);
+    private final static Color VERD = new Color(25, 151, 6);
+    private final static Color GROC = new Color(237, 175, 67);
+    private final static Color TRANSPARENT = new Color(0,0,0,0);
+
     private JButton jbBack;
     private IconTextField jtfName;
     private IconTextField jtfEmail;
@@ -111,7 +116,7 @@ public class SignInView extends View implements PasswordConfirm {
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
         c.gridx = 1;
-        c.ipadx = 200;
+        c.ipadx = 100;
         c.gridwidth = 3;
         c.fill = GridBagConstraints.HORIZONTAL;
 
@@ -143,8 +148,8 @@ public class SignInView extends View implements PasswordConfirm {
         c = new GridBagConstraints();
         c.gridy = 4;
         c.gridx = 1;
-        c.ipadx = 150;
-        c.gridwidth = 2;
+        c.ipadx = 100;
+        c.gridwidth = 3;
         c.insets = new Insets(0,0,20,0);
         c.fill = GridBagConstraints.HORIZONTAL;
         this.jpbStrength = new JProgressBar();
@@ -153,14 +158,15 @@ public class SignInView extends View implements PasswordConfirm {
         jpgblInfo.add(jpbStrength, c);
 
         c.gridy = 6;
-        c.gridx = 0;
-        c.gridwidth = 3;
+        c.gridx = 1;
+        c.gridwidth = 1;
         c.insets = new Insets(20,0,0,0);
         jpgblInfo.add(jbAccept, c);
 
         c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
+        c.gridwidth = 3;
         c.insets = new Insets(0,0,20,0);
         jpGeneric.add(jlErrorMessage, c);
 
@@ -216,9 +222,12 @@ public class SignInView extends View implements PasswordConfirm {
 
     public void clearFields() {
         jtfName.setText("");
+        jtfName.setHint(true);
         jtfEmail.setText("");
+        jtfEmail.setHint(true);
         jpfPassword.setText("");
-        jlErrorMessage.setText((""));
+        jpfConfirmPassword.setHint(true);
+        jlErrorMessage.setForeground(TRANSPARENT);
         jpfConfirmPassword.setText("");
         jpbStrength.setValue(0);
     }
@@ -232,7 +241,7 @@ public class SignInView extends View implements PasswordConfirm {
     /** Mostra un missatge d'error*/
     public void passwordKO(String message){
         jlErrorMessage.setText(message);
-        jlErrorMessage.setForeground(Color.RED);
+        jlErrorMessage.setForeground(GRANA);
     }
 
     @Override
@@ -240,19 +249,19 @@ public class SignInView extends View implements PasswordConfirm {
      * Depenent del "strength" actualitza color i text de l'indicador de seguretat*/
     public void setStrength(int strength){
         if(strength < 15){
-            jlStrength.setForeground(new Color(201, 47, 32));
+            jlStrength.setForeground(GRANA);
             jlStrength.setText("Weak Password");
-            jpbStrength.setForeground(new Color(227, 53, 36));
+            jpbStrength.setForeground(GRANA);
             jpbStrength.setValue(17);
         }else if(strength < 25){
-            jlStrength.setForeground(new Color(223, 159, 51));
+            jlStrength.setForeground(GROC);
             jlStrength.setText("Average Password");
-            jpbStrength.setForeground(new Color(237, 175, 67));
+            jpbStrength.setForeground(GROC);
             jpbStrength.setValue(27);
         }else{
-            jlStrength.setForeground(new Color(47, 127, 45));
+            jlStrength.setForeground(VERD);
             jlStrength.setText("Strong Password");
-            jpbStrength.setForeground(new Color(47, 127, 45));
+            jpbStrength.setForeground(VERD);
             jpbStrength.setValue(40);
         }
 
@@ -261,9 +270,9 @@ public class SignInView extends View implements PasswordConfirm {
     /** Controla la visibilitat del missatge d'error*/
     public void manageError(boolean error){
         if(error){
-            this.jlErrorMessage.setVisible(true);
+            this.jlErrorMessage.setForeground(GRANA);
         }else{
-            this.jlErrorMessage.setVisible(false);
+            this.jlErrorMessage.setForeground(TRANSPARENT);
         }
     }
     @Override

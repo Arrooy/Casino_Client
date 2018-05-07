@@ -165,9 +165,11 @@ public class LogInView extends View {
 
     public void clearFields() {
         jpfPassword.setText("");
+        jpfPassword.setHint(true);
         jtfUsername.setText("");
+        jtfUsername.setHint(true);
         jcbRememberLogIn.setSelected(false);
-        jlErrorMessage.setText("");
+        jlErrorMessage.setForeground(TRANSPARENT);
     }
 
     public String getUsername() {

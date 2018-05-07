@@ -199,7 +199,9 @@ public class PasswordChangeView extends View implements PasswordConfirm{
 
     public void clearFields(){
        jpfNewPassword.setText("");
+       jpfNewPassword.setHint(true);
        jpfConfirmPassword.setText("");
+       jpfConfirmPassword.setHint(true);
        jlCheckPassword.setText("");
        jlStrength.setText("");
        jpbStrength.setValue(0);
