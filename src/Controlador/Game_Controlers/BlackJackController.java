@@ -24,27 +24,22 @@ import static Model.Model_BJ.*;
 import static Network.Transmission.CONTEXT_BJ_INIT;
 import static java.lang.Thread.sleep;
 
+/** Gestiona el joc blackJack */
+
 public class BlackJackController implements GraphicsController {
 
-    private final static int MIN_BUTTON_SPEED = 320;
-
+    private final char MONEY_SYMBOL = '€';
     private final long ANIMATION_TIME = 3000;
+
     private long AnimationTimer;
-
-    private static final int INICI = 1;
-    private static final int JOC = 2;
-    private static final int GAME_OVER = 2;
-
 
     private BlackJackView blackJackView;
     private NetworkManager networkManager;
-    private int mouseX,mouseY;
     private GraphicsManager gp;
+
     private Model_BJ model;
-    private long lastClick;
     private long lastCard;
 
-    private boolean usuariDone;
     private boolean gameOver;
     private String gameOverText;
     private String subText;
@@ -54,14 +49,12 @@ public class BlackJackController implements GraphicsController {
 
     private AnimacioConjuntCartes animacio;
 
-    private DraggableWindow dw;
     private boolean stopMusicOneTime;
     private Controller controller;
 
     private boolean firstTimeOpened;
     private long bet;
     private long moneyToSpend;
-    private final char MONEY_SYMBOL = '€';
 
 
     public BlackJackController(BlackJackView blackJackView, NetworkManager networkManager){
@@ -79,9 +72,7 @@ public class BlackJackController implements GraphicsController {
     }
 
     public void initGame(){
-        lastClick = 0;
         gameOver = false;
-        usuariDone = false;
         stopMusicOneTime = true;
         moneyToSpend = 0;
 
@@ -133,12 +124,17 @@ public class BlackJackController implements GraphicsController {
         if(cartaResposta.getDerrota().equals("false")){
             if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER))
                 networkManager.newCardForIaTurn();
+
         }else if(cartaResposta.getDerrota().equals("user")) {
             gameOverText = "You loose " + bet + MONEY_SYMBOL;
             subText = "Click to exit the game";
             gameOver = true;
         }else if(cartaResposta.getDerrota().equals("IA")) {
-            gameOverText = "You win " + bet + MONEY_SYMBOL;
+            if(model.getValueUser() == 21) {
+                gameOverText = "You win " + bet * 1.5 + MONEY_SYMBOL;
+            }else{
+                gameOverText = "You win " + bet * 2.0 + MONEY_SYMBOL;
+            }
             subText = "Click to exit the game";
             gameOver = true;
         }
@@ -181,40 +177,6 @@ public class BlackJackController implements GraphicsController {
         if(e.getKeyCode() == 27 && gameOver)
             exitGame();
     }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-    }
-
 
     @Override
     public void init() {
@@ -351,7 +313,7 @@ public class BlackJackController implements GraphicsController {
 
                 g.drawString("Cards score :" + userScore, 50, height / 2);
                 g.drawString("Bet: " + bet, width - 75 - metrics.stringWidth(("Bet: " + bet)), 75);
-                g.drawString("User wallet: " + moneyToSpend, 50, height - metrics.getAscent() * 2);
+                g.drawString("User wallet: " + moneyToSpend + "[" + (moneyToSpend - bet) + " / " + (moneyToSpend + bet*1.5) + "]", 50, height - metrics.getAscent() * 2);
             }
         }
     }
@@ -385,4 +347,37 @@ public class BlackJackController implements GraphicsController {
         }
     }
 
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    }
 }
+

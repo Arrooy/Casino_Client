@@ -371,6 +371,11 @@ public class NetworkManager extends Thread {
     }
 
     public void newCardForIaTurn() {
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         new Transmission(new Card("",CONTEXT_BJ_FINISH_USER,true),this);
     }
 
@@ -392,4 +397,5 @@ public class NetworkManager extends Thread {
     public void showGamesView() {
         controller.showGamesView();
     }
+
 }

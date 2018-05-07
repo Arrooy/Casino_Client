@@ -49,8 +49,6 @@ public class Sounds extends Thread {
 
 
     public static void play(String fileName){
-
-        //System.out.println("[SOUND]: " + fileName);
         Clip clip = audios.get(fileName);
         if(clip.isRunning()) clip.stop();
 

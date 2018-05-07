@@ -34,7 +34,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     private Settings settings;
     private SettingsView settingsView;
     private PasswordChangeView passwordChangeView;
-    private WalletEvolutionView walletEvolutionView;
+    private Top5View top5View;
     private BlackJackView blackJackView;
 
     private BlackJackController BJController;
@@ -101,11 +101,13 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 break;
             case "roulette":
                     //Codi per a usuaris normals
+                finestra.showUserconfig(false);
                 break;
             case "horseRace":
                 finestra.setHorseRaceView();
                 networkManager.sendHorseRaceRequest();
                 horseRaceController.play();
+                finestra.showUserconfig(false);
                 System.out.println("Play");
                 break;
             case "blackJack":
@@ -146,7 +148,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 addMoneyView.noErrorMoney();
                 addMoneyView.noTransactionOK();
                 break;
-            case"SETTINGS - walletEvolution":
+            case "SETTINGS - WALLETEVOLUTION":
                 finestra.setSettingsView(e.getActionCommand());
                 break;
             case "PASSWORD CHANGE  - CONFIRM PASSWORD":
@@ -254,7 +256,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     public void setSettings(Settings settings) {
         this.settings = settings;
         this.passwordChangeView = settings.getPasswordChangeView();
-        this.walletEvolutionView = settings.getWalletEvolutionView();
+        this.top5View = settings.getWalletEvolutionView();
         this.addMoneyView = settings.getAddMoneyView();
         this.settingsView = settings.getSettingsView();
     }
@@ -288,6 +290,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         System.out.println("INIT HORSES REQUESTED");
         finestra.setHorseRaceView();
     }
+
     @Override
     public void componentResized(ComponentEvent e) {
         if(BJController != null)
@@ -444,11 +447,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                     return false;
                 }
             }
-            System.out.println("UTF: true");
             return true;
         }
         catch(CharacterCodingException e){
-            System.out.println("UTF: false");
             return false;
         }
     }
@@ -494,7 +495,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     @Override
     public void focusLost(FocusEvent e) {
-
         if(e.getSource() instanceof IconTextField){
             if(((IconTextField)e.getSource()).getText().equals(""))
                 ((IconTextField)e.getSource()).setHint(true);

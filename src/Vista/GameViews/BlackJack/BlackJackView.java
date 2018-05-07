@@ -11,7 +11,7 @@ public class BlackJackView extends JPanel{
     }
 
     public String showInputDialog() {
-       return JOptionPane.showInputDialog(this,"How much money do you want to bet?","Bet menu",JOptionPane.INFORMATION_MESSAGE);
+       return JOptionPane.showInputDialog(this,"How much money do you want to bet?\nThe minimum bet is 10€","Bet menu",JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void showDialog(String title,String message) {

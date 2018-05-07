@@ -9,7 +9,7 @@ import java.awt.*;
 public class SettingsView extends JPanel {
     private CardLayout layout;
     private PasswordChangeView passwordChangeView;
-    private WalletEvolutionView walletEvolutionView;
+    private Top5View top5View;
     private AddMoneyView addMoneyView;
 
 
@@ -18,12 +18,12 @@ public class SettingsView extends JPanel {
         this.setLayout(layout);
 
         this.passwordChangeView = new PasswordChangeView();
-        this.walletEvolutionView = new WalletEvolutionView();
+        this.top5View = new Top5View();
         this.addMoneyView = new AddMoneyView();
 
 
         this.add("CHANGEPASSWORD", this.passwordChangeView);
-        this.add("WALLETEVOLUTION", this.walletEvolutionView);
+        this.add("WALLETEVOLUTION", this.top5View);
         this.add("ADDMONEY", this.addMoneyView);
 
         setOpaque(false);
@@ -31,7 +31,6 @@ public class SettingsView extends JPanel {
 
     public void addController(Controller c){
         this.passwordChangeView.addController(c);
-        this.walletEvolutionView.addController(c);
         this.addMoneyView.addController(c);
     }
 
@@ -40,8 +39,8 @@ public class SettingsView extends JPanel {
         return passwordChangeView;
     }
 
-    public WalletEvolutionView getWalletEvolutionView() {
-        return walletEvolutionView;
+    public Top5View getTop5View() {
+        return top5View;
     }
 
     public AddMoneyView getAddMoneyView() {
@@ -58,7 +57,7 @@ public class SettingsView extends JPanel {
             case"SETTINGS - changePass":
                 layout.show(this, "CHANGEPASSWORD");
                 break;
-            case"SETTINGS - walletEvolution":
+            case"SETTINGS - WALLETEVOLUTION":
                 layout.show(this, "WALLETEVOLUTION");
                 break;
 

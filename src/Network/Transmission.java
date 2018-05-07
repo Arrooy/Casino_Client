@@ -125,7 +125,7 @@ public class Transmission implements Runnable {
             Card cartaResposta = (Card) waitResponse(carta);
 
             if(cartaResposta.getContext().equals(CONTEXT_BJ_INIT) && !cartaResposta.isBetOk()) {
-                networkManager.displayError("Not enought money!","Impossible to bet that high!");
+                networkManager.displayError("Money error","Impossible to place that bet!");
                 networkManager.showGamesView();
             }else{
                 networkManager.newBJCard(cartaResposta);

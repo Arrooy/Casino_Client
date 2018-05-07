@@ -1,7 +1,6 @@
 package Vista.SettingsViews;
 
 import Controlador.Controller;
-import Vista.Tray;
 import Vista.View;
 
 import javax.swing.*;
@@ -118,7 +117,7 @@ public class Settings extends View {
         jbAddMoney.setActionCommand("SETTINGS - addMoneyButton");
         jbAddMoney.addActionListener(c);
 
-        jbWalletEvolution.setActionCommand("SETTINGS - walletEvolution");
+        jbWalletEvolution.setActionCommand("SETTINGS - WALLETEVOLUTION");
         jbWalletEvolution.addActionListener(c);
 
     }
@@ -140,8 +139,8 @@ public class Settings extends View {
     }
 
 
-    public WalletEvolutionView getWalletEvolutionView() {
-        return settingsView.getWalletEvolutionView();
+    public Top5View getWalletEvolutionView() {
+        return settingsView.getTop5View();
     }
 
     public PasswordChangeView getPasswordChangeView() {
