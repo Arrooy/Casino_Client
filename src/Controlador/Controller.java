@@ -136,9 +136,11 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 finestra.setGameSelector(user.isGuest());
                 break;
             case"SETTINGS - changePass":
+                passwordChangeView.clearFields();
                 finestra.setSettingsView(e.getActionCommand());
                 break;
             case"SETTINGS - addMoneyButton":
+                addMoneyView.clearView();
                 finestra.setSettingsView(e.getActionCommand());
                 addMoneyView.noErrorPassword();
                 addMoneyView.noErrorMoney();

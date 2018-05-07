@@ -119,4 +119,12 @@ public class AddMoneyView extends View {
     public void noErrorPassword(){ this.jlErrorPassword.setForeground(TRANSPARENT); }
     /** Indica que la transacció no s'ha fet*/
     public void noTransactionOK(){ this.jlAddOK.setForeground(TRANSPARENT); }
+
+    public void clearView(){
+        noErrorMoney();
+        noErrorPassword();
+        noTransactionOK();
+        jpfPassword.setText("");
+        jntfAmount.setText("");
+    }
 }
