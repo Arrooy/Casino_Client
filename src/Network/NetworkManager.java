@@ -1,6 +1,7 @@
 package Network;
 
 import Controlador.Controller;
+import Controlador.Sounds;
 import Model.HorseRace_Model.HorseBet;
 import Model.HorseRace_Model.HorseMessage;
 import Model.HorseRace_Model.HorseSchedule;
@@ -336,8 +337,10 @@ public class NetworkManager extends Thread {
     }
 
     public void initBlackJack(Stack<String> nomCartes,long bet) {
-        Card card = new Card("",bet,Transmission.CONTEXT_BJ_INIT,nomCartes,false);
-        new Transmission(card,this);
+        if(bet != 0){
+            Card card = new Card("",bet,Transmission.CONTEXT_BJ_INIT,nomCartes,false);
+            new Transmission(card,this);
+        }
     }
 
     public void newBlackJackCard(boolean forIa) {
@@ -371,6 +374,7 @@ public class NetworkManager extends Thread {
     }
 
     public void newCardForIaTurn() {
+        Sounds.play("cardPlace1.wav");
         try {
             sleep(500);
         } catch (InterruptedException e) {

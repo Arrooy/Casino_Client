@@ -176,10 +176,15 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         long value = -1;
 
         do {
+            String res = blackJackView.showInputDialog();
             try {
-                value = Long.parseLong(blackJackView.showInputDialog());
+                value = Long.parseLong(res);
             } catch (NumberFormatException error) {
-               blackJackView.showDialog("Wallet Error","Only numbers were expected");
+               if(res == null){
+                   value = 0;
+               }else {
+                   blackJackView.showDialog("Wallet Error","Only numbers were expected");
+               }
             }
         }while(value == -1);
         return value;
