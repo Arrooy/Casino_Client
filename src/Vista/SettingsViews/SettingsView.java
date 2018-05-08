@@ -1,6 +1,7 @@
 package Vista.SettingsViews;
 
 import Controlador.Controller;
+import Model.WalletEvolutionMessage;
 
 
 import javax.swing.*;
@@ -62,5 +63,9 @@ public class SettingsView extends JPanel {
                 break;
 
         }
+    }
+
+    public void updateWallet(WalletEvolutionMessage newWallet) {
+        top5View.updateWallet(newWallet);
     }
 }

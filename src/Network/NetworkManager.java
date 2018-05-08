@@ -5,6 +5,7 @@ import Controlador.Sounds;
 import Model.HorseRace_Model.HorseBet;
 import Model.HorseRace_Model.HorseMessage;
 import Model.HorseRace_Model.HorseSchedule;
+import Model.WalletEvolutionMessage;
 import Utils.JsonManager;
 import Model.Card;
 import Model.Transaction;
@@ -116,6 +117,7 @@ public class NetworkManager extends Thread {
 
     /** Completa el tencament de la sessio actual despres de rebre la confirmacio per part del servidor*/
     private void logOut(){
+        controller.exit();
         conectatAmbServidor = false;
         lectures = new ArrayList<>();
         user = null;
@@ -402,4 +404,11 @@ public class NetworkManager extends Thread {
         controller.showGamesView();
     }
 
+    public void getWalletEvolution() {
+        new Transmission(new WalletEvolutionMessage(),this);
+    }
+
+    public void updateWalletEvolution(WalletEvolutionMessage newWallet) {
+        controller.updateWalletEvolution(newWallet);
+    }
 }

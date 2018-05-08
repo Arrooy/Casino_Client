@@ -126,7 +126,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 }else{
                     signInView.passwordKO("Must fill in all fields");
                     signInView.manageError(true);
-
                 }
 
                 break;
@@ -149,6 +148,8 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 addMoneyView.noTransactionOK();
                 break;
             case "SETTINGS - WALLETEVOLUTION":
+                System.out.println("REQUESTING WALLET EVOLUTION");
+                networkManager.getWalletEvolution();
                 finestra.setSettingsView(e.getActionCommand());
                 break;
             case "PASSWORD CHANGE  - CONFIRM PASSWORD":
@@ -507,5 +508,13 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             if(((IconPasswordField)e.getSource()).getPassword().length == 0)
                 ((IconPasswordField)e.getSource()).setHint(true);
         }
+    }
+
+    public void updateWalletEvolution(WalletEvolutionMessage newWallet) {
+        finestra.updateWallet(newWallet);
+    }
+
+    public void exit() {
+        BJController.exitInGame();
     }
 }

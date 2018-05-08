@@ -5,6 +5,7 @@ import Controlador.DraggableWindow;
 import Controlador.Game_Controlers.BlackJackController;
 import Model.AssetManager;
 import Model.User;
+import Model.WalletEvolutionMessage;
 import Network.Transmission;
 import Vista.*;
 import Vista.GameViews.BlackJack.BlackJackView;
@@ -256,5 +257,9 @@ public class Finestra extends JFrame {
 
     public HorseRaceView getHorseRaceView() {
         return this.horseRaceView;
+    }
+
+    public void updateWallet(WalletEvolutionMessage newWallet) {
+        settings.updateWallet(newWallet);
     }
 }

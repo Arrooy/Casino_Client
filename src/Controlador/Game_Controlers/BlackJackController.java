@@ -22,6 +22,9 @@ import java.util.LinkedList;
 import static Model.Model_BJ.*;
 import static Network.Transmission.CONTEXT_BJ_INIT;
 
+
+//TODO: ANIMACIO SEMPRE AL APRETAR EL BOTO.
+
 /** Gestiona el joc blackJack, la seva animacio inicial, el tutorial i el gameOver */
 
 public class BlackJackController implements GraphicsController {
@@ -199,30 +202,37 @@ public class BlackJackController implements GraphicsController {
         controller.showGamesView();
     }
 
+    public void exitInGame(){
+        gp.exit();
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
-        //En el cas d'estar mostrant el tutorial i premer una tecla, fem desapareixer aquest
-        if(firstTimeOpened) {
-            firstTimeOpened = false;
-        }else{
-            //En el cas de estar en la gameOverScreen i apretar una tecla es surt del joc
-            if(gameOver) {
-                //Si la tecla es la r, es crea una nova partida
-                if(e.getKeyChar() == 'r' || e.getKeyChar() == 'R'){
-                    networkManager.initBlackJack(Baralla.getNomCartes(), controller.manageBJBet());
-                    gp.exit();
-                }else{
-                    exitGame();
-                }
-            }else{
-                //En el cas d'estar dins d'una partida i apretar el '+' es solicita una nova carta
-                if (e.getKeyChar() == '+') {
+        if (System.currentTimeMillis() - AnimationTimer > ANIMATION_TIME) {
+
+            //En el cas d'estar mostrant el tutorial i premer una tecla, fem desapareixer aquest
+            if (firstTimeOpened) {
+                firstTimeOpened = false;
+            } else {
+                //En el cas de estar en la gameOverScreen i apretar una tecla es surt del joc
+                if (gameOver) {
+                    //Si la tecla es la r, es crea una nova partida
+                    if (e.getKeyChar() == 'r' || e.getKeyChar() == 'R') {
+                        networkManager.initBlackJack(Baralla.getNomCartes(), controller.manageBJBet());
+                        gp.exit();
+                    } else {
+                        exitGame();
+                    }
+                } else {
+                    //En el cas d'estar dins d'una partida i apretar el '+' es solicita una nova carta
+                    if (e.getKeyChar() == '+') {
                         networkManager.newBlackJackCard(false);
                         //Es reprodueix el soroll de la carta
                         Sounds.play("cardPlace1.wav");
-                } else if(e.getKeyChar() == ' ') {
+                    } else if (e.getKeyChar() == ' ') {
                         //En el cas de apretar l'espai, es pasa el torn a la IA
                         networkManager.newCardForIaTurn();
+                    }
                 }
             }
         }
@@ -271,7 +281,7 @@ public class BlackJackController implements GraphicsController {
     //Gestiona la generacio de cartes a l'animacio inicial
     private void updateAnimation() {
         //Cada 100 ms s'afegeix una nova carta a l'animacio inicial
-        if(System.currentTimeMillis() - lastCard >= 100){
+        if(System.currentTimeMillis() - lastCard >= 150){
             //Si l'animacio ja s'ha creat, afegeix una carta
             if(animacio != null)
                 animacio.add(0,0, 125, 0.97, blackJackView.getWidth(), blackJackView.getHeight());
@@ -353,14 +363,16 @@ public class BlackJackController implements GraphicsController {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        //Si l'usuari esta al tutorial inicial, i fa click, aquest desapareix
-        if(firstTimeOpened){
-            firstTimeOpened = false;
+        if (System.currentTimeMillis() - AnimationTimer > ANIMATION_TIME) {
+            //Si l'usuari esta al tutorial inicial, i fa click, aquest desapareix
+            if(firstTimeOpened){
+                firstTimeOpened = false;
 
-        }else{
-            //Si l'usuari esta en el gameOver i fa click, es surt del joc
-            if(gameOver){
-                exitGame();
+            }else{
+                //Si l'usuari esta en el gameOver i fa click, es surt del joc
+                if(gameOver){
+                    exitGame();
+                }
             }
         }
     }

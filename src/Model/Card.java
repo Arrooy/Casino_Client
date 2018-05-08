@@ -18,6 +18,7 @@ public class Card extends Message {
     /** Defineix el identificador del missatge. Util per quan s'envia amb el networkManager*/
     private final double ID;
 
+    /** Context del missatge*/
     private String context;
 
     private Stack<String> nomCartes;

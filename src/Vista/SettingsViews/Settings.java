@@ -1,6 +1,7 @@
 package Vista.SettingsViews;
 
 import Controlador.Controller;
+import Model.WalletEvolutionMessage;
 import Vista.View;
 
 import javax.swing.*;
@@ -149,5 +150,9 @@ public class Settings extends View {
 
     public AddMoneyView getAddMoneyView() {
         return settingsView.getAddMoneyView();
+    }
+
+    public void updateWallet(WalletEvolutionMessage newWallet) {
+        settingsView.updateWallet(newWallet);
     }
 }
