@@ -259,7 +259,7 @@ public class NetworkManager extends Thread {
      */
     public Message read(double ID){
         //Es miren tots els missatges registrats fins el moment
-        for(int index = 0; index < lectures.size(); index++){
+        for(int index = lectures.size() - 1; index >= 0; index--){
             Message message = lectures.get(index);
             //Si el missatge de l'iteracio conte l'id que es buscava, es retorna l'objecte.
             if(message != null && message.getID() == ID) {
@@ -280,7 +280,7 @@ public class NetworkManager extends Thread {
      */
     public Message readContext(String context){
         //Es miren tots els missatges registrats fins el moment
-        for(int index = 0; index < lectures.size(); index++){
+        for(int index = lectures.size() - 1; index >= 0; index--){
             Message message = lectures.get(index);
             //Si el missatge de l'iteracio conte l'id que es buscava, es retorna l'objecte.
             if(message != null && message.getContext().equals(context)) {
