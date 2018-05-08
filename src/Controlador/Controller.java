@@ -56,7 +56,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.draggableWindow = draggableWindow;
         this.horseRaceView = horseRaceView;
         this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager, this.finestra);
-        this.horseRaceView.addHorseController(this.horseRaceController);
+
     }
 
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
@@ -120,9 +120,17 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 break;
             case "acceptSignIn":
                 if(signInView.getUsername().length() > 0 && signInView.getEmail().length() > 0){
-                    signUp();
+                    User user_aux = new User();
+                    user_aux.setPassword(signInView.getPassword());
+                    new Transmission(user_aux, networkManager);
                     //TODO comprovar que l'usuari existeixi dins de la base de dades
-                    //TODO que el server retorni si la contrasenya es correcte
+                    //TODO comprovar password desde server
+                    if(true/*networkManager.passwordOK()*/){
+                        signUp();
+                    }else{
+                        signInView.passwordKO("Password rejected");
+                        signInView.manageError(true);
+                    }
                 }else{
                     signInView.passwordKO("Must fill in all fields");
                     signInView.manageError(true);
@@ -160,16 +168,18 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 userPass.setContext("change password");
                 new Transmission(userPass, networkManager);
                 System.out.println("Enviada new password de: \n" + userPass);
-
-                if(true/*TODO: check server for ok password confrmation*/){
+                //TODO comprovar password desde server
+                if(true/*networkManager.passwordOK()*/){
                     passwordChangeView.clearFields();
                     JOptionPane.showMessageDialog(passwordChangeView, "Password Changed correctly","Password Change",  JOptionPane.INFORMATION_MESSAGE);
+                }else {
+                    passwordChangeView.clearFields();
+                    passwordChangeView.passwordKO("El servidor no ha acceptat la contrasenya");
                 }
                 break;
             case "ADD MONEY":
                 addMoney();
                 break;
-
         }
     }
 
@@ -299,14 +309,16 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     @Override
     public void componentResized(ComponentEvent e) {
-        if(BJController != null)
-            BJController.updateSizeBJ();
+        if(BJController != null) BJController.updateSizeBJ();
+        if(horseRaceController != null) horseRaceController.updateSize();
+
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
         if(BJController != null)
             BJController.updateSizeBJ();
+
     }
 
     @Override
@@ -515,6 +527,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     }
 
     public void exit() {
+        HorseRaceController.exit();
         BJController.exitInGame();
     }
 }

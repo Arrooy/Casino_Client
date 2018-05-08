@@ -6,26 +6,26 @@ public class Countdown extends Thread {
     private long count;
     private boolean isCounting;
 
-    private static final int COUNTRATE = 50;
+    private static final int COUNTRATE = 100;
 
     public Countdown(){
         this.isCounting = false;
         this.count = 0;
+        this.start();
     }
 
 
     @Override
     public void run() {
         try {
-            while (true) {
-                if (isCounting) {
-                   sleep(50);
-                   this.count-=50;
-                   if(this.count <= 0){
-                       this.count = 0;
-                       this.isCounting = false;
-                   }
+            while(true){
+                if(isCounting) {
+                    this.count-=COUNTRATE;
+                    if(this.count <= 0){
+                        this.count = 0;
+                    }
                 }
+                sleep(COUNTRATE);
             }
         } catch (InterruptedException e) {
             System.out.println("Countdown error");

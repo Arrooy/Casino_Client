@@ -1,6 +1,7 @@
 package Network;
 
 import Controlador.Controller;
+import Controlador.Game_Controlers.HorseRaceController;
 import Controlador.Sounds;
 import Model.HorseRace_Model.HorseBet;
 import Model.HorseRace_Model.HorseMessage;
@@ -395,6 +396,7 @@ public class NetworkManager extends Thread {
 
     /**Metode que indica al servidor que ens desconectem de la cursa de cavalls*/
     public void exitHorses() {
+        HorseRaceController.exit();
         HorseMessage horseMessage = new HorseMessage((HorseSchedule) null, "Disconnect");
         horseMessage.setID(user.getID());
         new Transmission(horseMessage, this);

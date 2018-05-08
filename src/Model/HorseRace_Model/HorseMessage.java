@@ -68,6 +68,9 @@ public class HorseMessage extends Message {
         return this.horseResult;
     }
 
+    public void setHorseSchedule(HorseSchedule horseSchedule) {
+        this.horseSchedule = horseSchedule;
+    }
 
     @Override
     public String getContext() {
@@ -87,3 +90,5 @@ public class HorseMessage extends Message {
         return this.horseSchedule;
     }
 }
+
+
