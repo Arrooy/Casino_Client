@@ -528,6 +528,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     public void exit() {
         HorseRaceController.exit();
-        BJController.exitInGame();
+        if(BJController != null)
+            BJController.exitInGame();
     }
 }
