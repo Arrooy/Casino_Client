@@ -50,20 +50,6 @@ public class User extends Message {
     }
 
     /**
-     * Crea un usuari a partir d'unaltre
-     * Aquest usuari se li adjudica un Identificador d'unaltre missatge
-     */
-    public User(User user, double id) {
-        this.context = user.getContext();
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.setCredentialsOk(user.areCredentialsOk());
-        this.setGuest(user.isGuest());
-
-        ID = id;
-    }
-
-    /**
      * Crea un usuari amb un nom i una password.
      * Aquest usuari se li adjudica un IdentificadorAleatori per a una millor comunicacio client - servidor.
      * El constructor es refereix a un usuari ja registrat prèviament.

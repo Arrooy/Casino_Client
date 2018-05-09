@@ -8,27 +8,42 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/** Sounds gestiona els sorolls i la musica del casino*/
 public class Sounds extends Thread {
 
+    /** Localitzacio dels sounds a l'interior de la carpeta d'assets*/
+    private static final String PATH = "./Assets/Audio";
+
+    /** Diccionari d'audios carregats*/
     private static Map<String, Clip> audios;
 
+    /**
+     * Carrega tots els audios de la carpeta especificada en PATH
+     * @param splashScreen
+     */
     public static void loadAllSounds(SplashScreen splashScreen){
+
         audios = new HashMap<>();
 
-
-        File carpetaAssetsCartes = new File("./Assets/Audio");
+        //Es llegeix la carpeta especificada en PATH
+        File carpetaAssetsCartes = new File(PATH);
         File[] listOfFiles = carpetaAssetsCartes.listFiles();
 
+        //Si la carpeta no esta buida
         if (listOfFiles != null) {
+            //Es carregan tots els audios
             for (File soundFile : listOfFiles) {
                 try {
                     AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
-                    // Get a sound clip resource.
+
+                    // Agafem el resource del audio clip.
                     Clip clip = AudioSystem.getClip();
-                    // Open audio clip and load samples from the audio input stream.
-                    clip.open(audioIn);//TODO: INFORMARSE DE SI AIXO ESTA BE FERHO AQUI O ES MILLOR FERHO CADA COP QUE EES FA PLAY
+
+                    // S'obre el audio i es guarda
+                    clip.open(audioIn);
                     audios.put(soundFile.getName(),clip);
+
+                    //S'indica el progres de audios carregats
                     splashScreen.infoMessage("Loaded " + audios.size() + " sound clips.");
                 }catch (Exception e){
                     e.printStackTrace();
@@ -37,29 +52,52 @@ public class Sounds extends Thread {
         }
     }
 
+    /**
+     * Para tots els audios del sistema
+     */
     public static void stopAllAudio(){
         //parem tots els clips de la llista d'audios
         audios.forEach((nom,clip)->{if (clip.isRunning()) clip.stop();});
     }
 
+    /**
+     * Para el audio file
+     * @param file nom del audio que es vol aturar
+     */
     public static void stopOneAudioFile(String file){
-        //parem tots els clips de la llista d'audios
         audios.get(file).stop();
     }
 
-
+    /**
+     * Reprodueix un audio guardat en el sistema
+     * @param fileName nom del audio que es vol reproduir
+     */
     public static void play(String fileName){
+        //S'agafa l'audio del diccionari
         Clip clip = audios.get(fileName);
+
+        //En el cas d'estar reproduint-se, s'atura
         if(clip.isRunning()) clip.stop();
 
+        //Es torna a la posicio inicial del clip
         clip.setFramePosition(0);
+
+        //S'inicia l'audio
         clip.start();
     }
 
+    /**
+     * Reprodueix l'audio filename indefinidament
+     * @param fileName nom del audio que es vol reproduir
+     */
     public static void songNoEnd(String fileName){
         audios.get(fileName).loop(Clip.LOOP_CONTINUOUSLY);
     }
 
+    /**
+     * Espera a que un audio acabi de reproduir-se
+     * @param nomFitxer nom del fitxer al que es vol esperar
+     */
     public static void waitFor(String nomFitxer) {
         Clip clip = audios.get(nomFitxer);
         while(clip.isRunning()){
@@ -69,6 +107,5 @@ public class Sounds extends Thread {
                 e.printStackTrace();
             }
         }
-
     }
 }

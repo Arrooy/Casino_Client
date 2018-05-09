@@ -4,6 +4,8 @@ import Network.Message;
 
 import java.util.Stack;
 
+
+/** Carta per a jugar al blackJack*/
 public class Card extends Message {
 
     /** Nom de la imatge de la carta*/
@@ -21,6 +23,7 @@ public class Card extends Message {
     /** Context del missatge*/
     private String context;
 
+    /** Conjunt de cartes de la baralla*/
     private Stack<String> nomCartes;
 
     /** Indica si la carta es per a un jugador o per a la ia.*/
@@ -48,7 +51,14 @@ public class Card extends Message {
     /** Valor de la wallet actual del usuari, nomes de lectura per al client*/
     private long wallet;
 
-    /** Crea una nova carta per a iniciar el blackJack*/
+    /**
+     * Crea una nova carta per a iniciar el blackJack
+     * @param cardName nom de la carta
+     * @param bet aposta que ha realitzat l'usuari al inici de la partida
+     * @param context context de la carta. Indica la situacio en la que s'ha llançat la carta
+     * @param nomCartes nom de totes les cartes de la baralla
+     * @param ownerIA indica si la carta es per a la IA
+     */
     public Card(String cardName,long bet, String context, Stack<String> nomCartes, boolean ownerIA){
         forIA = ownerIA;
 
@@ -66,10 +76,16 @@ public class Card extends Message {
         reverseName = null;
         this.context = context;
 
+        //Es defineix una coordenada fora de la pantalla, per no mostrar la carta directament al carregarla al tauler
         this.y = -300;
     }
 
-    /** Crea una carta basica, per a robar de la baralla en el blackJack*/
+    /**
+     * Crea una carta basica, per a robar de la baralla en el blackJack
+     * @param cardName nom de la carta
+     * @param context context de la carta. Indica la situacio en la que s'ha llançat la carta
+     * @param ownerIA indica si la carta es per a la IA
+     */
     public Card(String cardName, String context, boolean ownerIA){
         forIA = ownerIA;
 
@@ -84,6 +100,7 @@ public class Card extends Message {
         reverseName = null;
         this.context = context;
 
+        //Es defineix una coordenada fora de la pantalla, per no mostrar la carta directament al carregarla al tauler
         this.y = -300;
     }
 

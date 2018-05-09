@@ -124,10 +124,6 @@ public class NetworkManager extends Thread {
         user = null;
     }
 
-    public void transactionOK(int type){
-        controller.transactionOK(type);
-    }
-
     @Override
     public void run() {
         while(true) {
@@ -257,6 +253,7 @@ public class NetworkManager extends Thread {
      * @param ID Identificador del missatge que es vol buscar.
      * @return Si read no troba el missatge que es desitja, retorna null. De lo contrari retorna el missatge.
      */
+
     public Message read(double ID){
         //Es miren tots els missatges registrats fins el moment
         for(int index = lectures.size() - 1; index >= 0; index--){
@@ -270,7 +267,6 @@ public class NetworkManager extends Thread {
         //Si no s'ha trobat l'ID, es retorna null;
         return null;
     }
-
     /*
      * Com la lectura del sevidor es fa constantment de manera paral·lela, el funcionament de read varia bastant.
      * Read es limita a buscar un missatge identificat amb el contexte rebut per parametres dins del conjunt de missatges
@@ -278,6 +274,7 @@ public class NetworkManager extends Thread {
      * @param context Context del missatge
      * @return Si read no troba el missatge que es desitja, retorna null. De lo contrari retorna el missatge.
      */
+
     public Message readContext(String context){
         //Es miren tots els missatges registrats fins el moment
         for(int index = lectures.size() - 1; index >= 0; index--){
@@ -292,7 +289,6 @@ public class NetworkManager extends Thread {
         //Si no s'ha trobat l'ID, es retorna null;
         return null;
     }
-
     /** Inicialitza l'usuari un cop aquest s'ha autentificat*/
     public void setUser(User user) {
         this.user = user;
@@ -341,6 +337,7 @@ public class NetworkManager extends Thread {
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
 
     //TODO mirar transaction OK MERI
+
     public void doTransaction(long money){
         Transaction transaction = new Transaction(Transmission.CONTEXT_TRANSACTION, user.getUsername(), money, 0);
         new Transmission(transaction, this);
@@ -350,7 +347,6 @@ public class NetworkManager extends Thread {
         User userAux = new User(user.getUsername(), user.getPassword(), user.getMail(), Transmission.CONTEXT_GET_COINS);
         new Transmission(userAux, this);
     }
-
     public void initBlackJack(Stack<String> nomCartes,long bet) {
         if(bet != 0){
             Card card = new Card("",bet,Transmission.CONTEXT_BJ_INIT,nomCartes,false);
@@ -414,10 +410,16 @@ public class NetworkManager extends Thread {
         new Transmission(horseMessage, this);
     }
 
+    /**
+     * Mostra la vista central amb els diferents jocs de l'aplicacio
+     */
     public void showGamesView() {
         controller.showGamesView();
     }
 
+    /**
+     * Inicia una transmissio amb el servidor, solicitant la walletEvolution del usuari
+     */
     public void getWalletEvolution() {
         new Transmission(new WalletEvolutionMessage(),this);
     }
@@ -428,5 +430,9 @@ public class NetworkManager extends Thread {
 
     public void managePasswordChange(boolean result) {
         controller.manageChangePass(result);
+    }
+
+    public void transactionOK(int type){
+        controller.transactionOK(type);
     }
 }

@@ -18,6 +18,7 @@ public class Casino_Client {
         //Es defineix el gestor de connectivitat amb el servidor
         NetworkManager networkManager = new NetworkManager(splashScreen);
 
+        //Es crea el controlador de tamany per a la finestra
         DraggableWindow controladorFinestra = new DraggableWindow(finestra,networkManager);
 
         //Es crea el controlador del sistema i es relacionen controlador amb vista i controlador amb network
