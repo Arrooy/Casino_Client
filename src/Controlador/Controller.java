@@ -1,13 +1,18 @@
 package Controlador;
 
+import Controlador.CustomGraphics.GraphicsManager;
 import Controlador.Game_Controlers.BlackJackController;
 import Controlador.Game_Controlers.HorseRaceController;
+import Controlador.Game_Controlers.RouletteController;
 import Model.*;
 import Utils.JsonManager;
 import Vista.*;
 import Network.*;
+//import Vista.Finestra;
 import Vista.GameViews.BlackJack.BlackJackView;
+import Vista.GameViews.Roulette.RouletteView;
 import Vista.GameViews.HorseRaceView;
+//import Vista.MainFrame.Finestra;
 import Vista.MainFrame.Finestra;
 import Vista.SettingsViews.*;
 import Vista.SwingModifications.IconPasswordField;
@@ -24,6 +29,10 @@ import java.nio.charset.CharsetDecoder;
 
 public class Controller implements ActionListener, ComponentListener, KeyListener, FocusListener{
 
+    /** Dimensions de la finestra en tot moment */
+    private static int windowWidth;
+    private static int windowHeight;
+
     /** Finestra grafica del client*/
     private Finestra finestra;
     private MainViewClient mainView;
@@ -36,6 +45,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     private PasswordChangeView passwordChangeView;
     private Top5View top5View;
     private BlackJackView blackJackView;
+
+    private RouletteView rouletteView;
+    private GraphicsManager rouletteGraphicsManager;
 
     private BlackJackController BJController;
     private HorseRaceView horseRaceView;
@@ -102,6 +114,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             case "roulette":
                     //Codi per a usuaris normals
                 finestra.showUserconfig(false);
+                setRoulette();
                 break;
             case "horseRace":
                 finestra.setHorseRaceView();
@@ -246,6 +259,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     }
     public void setSignInView(SignInView signInView) {this.signInView = signInView;}
     public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
+    public void setRouletteView(RouletteView rouletteView) {
+        this.rouletteView = rouletteView;
+    }
 
     public void setSettings(Settings settings) {
         this.settings = settings;
@@ -258,11 +274,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         logInView.clearFields();
         signInView.clearFields();
         finestra.setGameSelector(user.isGuest());
+        gameSelectorView.updateUI();
     }
 
     public void initBlackJack() {
-
-
         //crea el controlador de la nova partida amb un nou model
         if(BJController == null)
             BJController = new BlackJackController(blackJackView,networkManager);
@@ -291,6 +306,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         if(BJController != null) BJController.updateSizeBJ();
         if(horseRaceController != null) horseRaceController.updateSize();
 
+        if(BJController != null) BJController.updateSizeBJ();
+        if(rouletteView != null) rouletteView.updateSize(false);
+        windowWidth = finestra.getWidth();
+        windowHeight = finestra.getHeight();
     }
 
     @Override
@@ -298,6 +317,26 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         if(BJController != null)
             BJController.updateSizeBJ();
 
+        if(BJController != null) BJController.updateSizeBJ();
+        if(rouletteView != null) rouletteView.updateSize(true);
+        windowWidth = finestra.getWidth();
+        windowHeight = finestra.getHeight();
+    }
+
+    /**
+     * Metodes genèrics per a obtenir amb facilitat les dimensions de la finestra
+     * @return Dimensions de la finestra
+     */
+    public static int getWinWidth() {
+        return windowWidth;
+    }
+
+    /**
+     * Metodes genèrics per a obtenir amb facilitat les dimensions de la finestra
+     * @return Dimensions de la finestra
+     */
+    public static int getWinHeight() {
+        return windowHeight;
     }
 
     @Override
@@ -499,6 +538,21 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             if(((IconPasswordField)e.getSource()).getPassword().length == 0)
                 ((IconPasswordField)e.getSource()).setHint(true);
         }
+    }
+
+    private void setRoulette() {
+        //RouletteView rouletteView = new RouletteView();
+        RouletteController rouletteController = new RouletteController(600, 600, networkManager);
+        rouletteGraphicsManager = new GraphicsManager(rouletteView, rouletteController);
+
+        networkManager.initRoulette(rouletteController);
+        finestra.setRouletteView();
+    }
+
+    public void endGraphics() {
+        if (rouletteGraphicsManager != null) rouletteGraphicsManager.exit();
+        networkManager.endRoulette();
+
     }
 
     public void updateWalletEvolution(WalletEvolutionMessage newWallet) {

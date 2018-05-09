@@ -30,16 +30,16 @@ public class MainViewClient extends View{
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
 
-        logInButton = new JButton("LOGINLOKO");
-        logInButton.setPreferredSize(new Dimension(150,30));
-//        configButton(logInButton,"logIn.png","logInOnMouse.png");
+        logInButton = new JButton();
+        //logInButton.setPreferredSize(new Dimension(150,30));
+        configButton(logInButton,"LOGIN_NO_SOMBRA.png","LOGIN_SOMBRA.png");
 
-        jbSignIn = new JButton("SIGNIN?");
-//        configButton(jbSignIn,"signIn.png","signInOnMouse.png");
-        jbSignIn.setPreferredSize(new Dimension(150,30));
-        jbGuest = new JButton("RISAS EL GUEST");
-        //configButton(jbGuest,"guest.png","guestOnMouse.png");
-        jbGuest.setPreferredSize(new Dimension(150,30));
+        jbSignIn = new JButton();
+        configButton(jbSignIn,"SIGNIN_NO_SOMBRA.png","SIGNIN_SOMBRA.png");
+        //jbSignIn.setPreferredSize(new Dimension(150,30));
+        jbGuest = new JButton();
+        configButton(jbGuest,"GUEST_NO_SOMBRA.png","GUEST_SOMBRA.png");
+        //jbGuest.setPreferredSize(new Dimension(150,30));
 
         jpgblBotons.add(logInButton, c);
 
@@ -88,6 +88,7 @@ public class MainViewClient extends View{
         boto.setFocusable(false);
         boto.setMargin(new Insets(0, 0, 0, 0));
         boto.setContentAreaFilled(false);
+
         boto.setIcon(new ImageIcon(AssetManager.getImage(onSelection)));
         boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(onSelection)));
         boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(onSelection)));

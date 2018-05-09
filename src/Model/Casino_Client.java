@@ -1,13 +1,35 @@
 package Model;
 import Controlador.Controller;
+import Controlador.CustomGraphics.GraphicsManager;
 import Controlador.DraggableWindow;
+import Controlador.Game_Controlers.RouletteController;
 import Network.*;
+//import Vista.MainFrame.Finestra;
 import Utils.Seguretat;
 import Vista.MainFrame.Finestra;
 import Controlador.SplashScreen;
+import Vista.MainFrame.Finestra;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class Casino_Client {
     public static void main(String[] args) {
+
+        /*
+        JFrame jFrame = new JFrame();
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        jFrame.setVisible(true);
+        jFrame.setSize(600, 600);
+
+        JPanel jPanel = new JPanel(new BorderLayout());
+        jPanel.setSize(600, 600);
+        jFrame.add(jPanel);
+
+        //Posar la ruleta ja en la finestra
+
+        new GraphicsManager(jPanel, new RouletteController(jFrame.getWidth(), jFrame.getHeight()), null);*/
+
 
         //Es carreguen totes les dades del joc
         SplashScreen splashScreen = new SplashScreen();

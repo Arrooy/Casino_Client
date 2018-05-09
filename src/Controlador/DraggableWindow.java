@@ -1,6 +1,7 @@
 package Controlador;
 
 import Network.NetworkManager;
+//import Vista.MainFrame.Finestra;
 import Vista.MainFrame.Finestra;
 import Vista.Tray;
 
@@ -118,6 +119,10 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
     /** Metode per a tencar el client de forma segura.*/
     public void exitProgram(int status){
         networkManager.requestLogOut();
+
+
+        networkManager.getController().endGraphics();
+
         Tray.exit();
         vista.dispose();
         System.exit(status);

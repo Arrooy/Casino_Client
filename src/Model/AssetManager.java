@@ -63,11 +63,25 @@ public class AssetManager {
         }
     }
 
+    public static Font getEFont() {
+        try {
+            Font font = Font.createFont(Font.TRUETYPE_FONT, new File("./Assets/Fonts/ELEPHNT.TTF")).deriveFont(20f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./Assets/Fonts/ELEPHNT.TTF")));
+            return font;
+        } catch (IOException|FontFormatException e) {
+            System.out.println("No funciona la font");
+            e.printStackTrace();
+        }
+        return new Font("Comic Sans", Font.PLAIN, 20);
+    }
+
     /**
      * Retorna una imatge de la UI
      * @param nom nom de la imatge que es vol obtenir
      * @return imatge solicitada
      */
+
     public static Image getImage(String nom){
         return imatges.get(nom);
     }

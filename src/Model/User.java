@@ -1,7 +1,6 @@
 package Model;
 
 import Network.Message;
-import Network.Transmission;
 import Utils.Seguretat;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class User extends Message {
      */
     public User() {
         ID = Math.random();
-        this.context = Transmission.CONTEXT_LOGIN_GUEST;
+        this.context = "loginGuest";
         isGuest = true;
     }
 

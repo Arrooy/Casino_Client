@@ -2,10 +2,13 @@ package Network;
 
 import Controlador.Controller;
 import Controlador.Game_Controlers.HorseRaceController;
+import Controlador.Game_Controlers.RouletteController;
 import Controlador.Sounds;
 import Model.HorseRace_Model.HorseBet;
 import Model.HorseRace_Model.HorseMessage;
 import Model.HorseRace_Model.HorseSchedule;
+import Model.RouletteModel.RouletteBetMessage;
+import Model.RouletteModel.RouletteMessage;
 import Model.WalletEvolutionMessage;
 import Utils.JsonManager;
 import Model.Card;
@@ -68,6 +71,8 @@ public class NetworkManager extends Thread {
     /** Indica el nombre de cops que el client ha intentat reconectarse amb el servidor*/
     private int nTryConnect;
 
+    private RouletteManager rouletteManager;
+
     /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.
      * @param splashScreen pantalla de carrega del sistema
      */
@@ -83,6 +88,7 @@ public class NetworkManager extends Thread {
         PORT = (int) configuracio[1];
 
         autoLogin = configuracio[2] != null && (boolean)configuracio[2];
+        rouletteManager = new RouletteManager(this);
 
         start();
     }
@@ -140,6 +146,7 @@ public class NetworkManager extends Thread {
                 //es guarden en la llista de lectures.
                 try {
                     Message missatge = (Message) ois.readObject();
+                    System.out.println("[DEBUG] Context: " + missatge.getContext());
 
                     //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
                     if(ServidorVolDesconnectarAquestClient(missatge))
@@ -241,7 +248,7 @@ public class NetworkManager extends Thread {
         try {
             oos.writeObject(objectToSend);
         } catch (IOException e) {
-            System.out.println("IMPOSSIBLE ENVIAR MISSATGE!\n\n");
+            System.out.println("IMPOSSIBLE ENVIAR MISSATGE!\n");
             e.printStackTrace();
         }
     }
@@ -267,6 +274,28 @@ public class NetworkManager extends Thread {
         //Si no s'ha trobat l'ID, es retorna null;
         return null;
     }
+
+    public Message waitForContext(String context) {
+        while (true) {
+            for (int i = 0; i < lectures.size(); i++) if (lectures.get(i).getContext().equals(context)) {
+                Message m = lectures.get(i);
+                lectures.remove(i);
+
+                System.out.println("[ROULETTE] Context finder: Trobat");
+
+                return m;
+            }
+
+            //petit sleep per no maltractar el pc
+            try {
+                sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /** TODO: no se escriure nois, algu majuda?
     /*
      * Com la lectura del sevidor es fa constantment de manera paral·lela, el funcionament de read varia bastant.
      * Read es limita a buscar un missatge identificat amb el contexte rebut per parametres dins del conjunt de missatges
@@ -394,6 +423,20 @@ public class NetworkManager extends Thread {
         new Transmission(new Card("",CONTEXT_BJ_FINISH_USER,true),this);
     }
 
+    public void initRoulette(RouletteController c) {
+        rouletteManager = new RouletteManager(this);
+        System.gc();
+        rouletteManager.init(c);
+    }
+
+    public void endRoulette() {
+        rouletteManager.disconnect();
+    }
+
+    public Controller getController() {
+        return controller;
+    }
+
 
     /**Metode per indicar al servidor de que volem jugar als cavalls*/
     public void sendHorseRaceRequest() {
@@ -434,5 +477,16 @@ public class NetworkManager extends Thread {
 
     public void transactionOK(int type){
         controller.transactionOK(type);
+    }
+    public void betToRoulette(RouletteBetMessage msg) {
+        rouletteManager.bet(msg);
+    }
+
+    public void exitRoulette() {
+        new Transmission(new RouletteMessage(1), this);
+        controller.endGraphics();
+        showGamesView();
+        System.gc();
+
     }
 }

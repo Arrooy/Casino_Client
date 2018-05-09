@@ -116,4 +116,8 @@ public class Transaction extends Message {
     public void setType(int type) {
         this.type = type;
     }
+
+    public void setGain(long gain) {
+        this.gain = gain;
+    }
 }

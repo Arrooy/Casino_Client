@@ -8,7 +8,9 @@ import Model.WalletEvolutionMessage;
 import Network.Transmission;
 import Vista.*;
 import Vista.GameViews.BlackJack.BlackJackView;
+import Vista.GameViews.Roulette.RouletteView;
 import Vista.GameViews.HorseRaceView;
+import Vista.MainFrame.ComponentResizer;
 import Vista.SettingsViews.Settings;
 
 import javax.swing.*;
@@ -31,7 +33,8 @@ public class Finestra extends JFrame {
     private BlackJackView blackJackView;
     private HorseRaceView horseRaceView;
     private JPanel content;
-    
+    private RouletteView rouletteView;
+
     private JButton jbtexit;
     private JButton jbticonify;
     private JButton jbtmax;
@@ -58,6 +61,7 @@ public class Finestra extends JFrame {
         signInView = new SignInView();
         settings = new Settings();
         blackJackView = new BlackJackView();
+        rouletteView = new RouletteView();
         this.horseRaceView = new HorseRaceView();
 
         content.add("main", mainView);
@@ -66,6 +70,7 @@ public class Finestra extends JFrame {
         content.add("signIn", signInView);
         content.add("settings", settings);
         content.add("blackJack", blackJackView);
+        content.add("roulette", rouletteView);
         content.add("horseRace", horseRaceView);
 
         MainPane.add(content,BorderLayout.CENTER);
@@ -138,6 +143,7 @@ public class Finestra extends JFrame {
         c.setSettings(settings);
         c.setGameSelectorView(gameSelectorView);
         c.setBlackJackView(blackJackView);
+        c.setRouletteView(rouletteView);
 
         addWindowListener(dw);
 
@@ -173,6 +179,10 @@ public class Finestra extends JFrame {
 
     public void setBlackJackView() {
         layout.show(content, "blackJack");
+    }
+
+    public void setRouletteView() {
+        layout.show(content, "roulette");
     }
 
 

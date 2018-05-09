@@ -1,5 +1,6 @@
 package Network;
 
+import Model.RouletteModel.RouletteBetMessage;
 import Model.WalletEvolutionMessage;
 import Utils.JsonManager;
 import Model.Transaction;
@@ -22,6 +23,7 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_TRANSACTION = "transaction";
     public static final String CONTEXT_GET_COINS = "userCoins";
     public static final String CONTEXT_HR_INIT = "horseRaceInit";
+
     public static final String CONTEXT_WALLET_EVOLUTION = "walletEvolution";
     public static final String CONTEXT_CHANGE_PASSWORD = "change password";
 
@@ -88,6 +90,9 @@ public class Transmission implements Runnable {
             case CONTEXT_CHANGE_PASSWORD:
                 changePassword();
                 break;
+            case "rouletteBet":
+                rouletteBet((RouletteBetMessage) msg);
+                break;
             default:
                 networkManager.send(msg);
         }
@@ -112,6 +117,19 @@ public class Transmission implements Runnable {
             WalletEvolutionMessage newWallet = (WalletEvolutionMessage) waitResponse(msg);
             networkManager.updateWalletEvolution(newWallet);
         }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void rouletteBet(RouletteBetMessage msg) {
+        if (msg.getCellID() >= 0) networkManager.send(msg);
+
+        try {
+            msg = (RouletteBetMessage) waitResponse(msg);
+
+            if (msg.isSuccessful()) networkManager.betToRoulette(msg);
+
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -205,7 +223,7 @@ public class Transmission implements Runnable {
     }
 
     /** Espera a que el servidor respongui una peticio. Es mira cada 100ms si ha arribat la resposta*/
-    private Message waitResponse(Message SolicitudEnviada) throws InterruptedException {
+    public Message waitResponse(Message SolicitudEnviada) throws InterruptedException {
         Message resposta;
 
         do {

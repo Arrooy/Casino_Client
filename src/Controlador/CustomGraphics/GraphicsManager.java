@@ -20,16 +20,22 @@ public class GraphicsManager implements Runnable {
     /** Color que s'estableix de fons cada nou frame*/
     private Color clearColor;
 
+    private Image clearImage;
+
+    private int width, height;
+
     /**
      * Crea un gestor per a controlar els grafics custom d'un jpanel extern.
      *
      * @param PanellObjectiu Panell on s'enganxará l'imatge resultant del update i render. MOLT IMPORTANT QUE EL PANELL TINGUI MIDA!
-     * @param c Controlador que gestiona les interaccions(Mouse&Key listeners) de la persona amb el custom rendering panel.
+     * @param c              Controlador que gestiona les interaccions(Mouse&Key listeners) de la persona amb el custom rendering panel.
      */
 
     public GraphicsManager(JPanel PanellObjectiu, GraphicsController c) {
         clearColor = Color.white;
 
+        if (PanellObjectiu.getWidth() == 0 || PanellObjectiu.getHeight() == 0)
+            System.out.println("Error ultrafatal. El panell que mhas donat no te mida especificada!"); //ets un primo arroyo
         JPanelObjectiu = PanellObjectiu;
         JPanelObjectiu.setBackground(Color.white);
         JPanelObjectiu.setFocusable(true);
@@ -37,18 +43,24 @@ public class GraphicsManager implements Runnable {
         registraControllador(c);
         controlador_extern = c;
 
+        width = 0;
+        height = 0;
+
         initGame();
     }
 
-    /** Modifica el color del fons al borrar el contingut cada frame*/
+    /**
+     * Modifica el color del fons al borrar el contingut cada frame
+     */
     public void setClearColor(Color clearColor) {
         this.clearColor = clearColor;
     }
 
     public void resize(int width, int height) {
-        image = JPanelObjectiu.createImage(width,height);
+        image = JPanelObjectiu.createImage(width, height);
         JPanelObjectiu.updateUI();
     }
+
     private void initGame() {
         controlador_extern.init();
         running = true;
@@ -77,7 +89,6 @@ public class GraphicsManager implements Runnable {
                 e.printStackTrace();
             }
         }
-
     }
 
     private void updateAndRender(long deltaMillis) {
@@ -88,23 +99,42 @@ public class GraphicsManager implements Runnable {
     }
 
     private void prepareGameImage() {
-        if(image == null){
+        int w = width <= 0 ? JPanelObjectiu.getWidth() : width;
+        int h = height <= 0 ? JPanelObjectiu.getHeight() : height;
+        if (image == null) {
             image = JPanelObjectiu.createImage(JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+        }
+        if (image.getWidth(null) != width || image.getHeight(null) != height) {
+            image = JPanelObjectiu.createImage(w, h);
         }
 
         if (image != null) {
             Graphics g = image.getGraphics();
             g.setColor(clearColor);
             g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+            g.fillRect(0, 0, width, height);//JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+        }
+        //TODO:Revisar
+        if (clearImage == null) {
+            image.getGraphics().setColor(clearColor);
+            image.getGraphics().fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
         }
     }
 
+  /*          g.setColor(clearColor);
+            g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+        }
+    }*/
+
     public void exit() {
         running = false;
+        Graphics g = image.getGraphics();
+        g.clearRect(0, 0, width, height);
+       // System.out.println("borra");
     }
 
     private void renderGameImage(Graphics g1) {
-        if (image != null) {
+        if (image != null && g1 != null) {
 
             Graphics2D g = (Graphics2D)g1;
 
@@ -135,4 +165,11 @@ public class GraphicsManager implements Runnable {
         JPanelObjectiu.requestFocus();
     }
 
+    public void updateSize(int width, int height, boolean fully){
+        this.width = width;
+        this.height = height;
+        JPanelObjectiu.setPreferredSize(new Dimension(width, height));
+        if(fully)
+            image = JPanelObjectiu.createImage(width, height);
+    }
 }
