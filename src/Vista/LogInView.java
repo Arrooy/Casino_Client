@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.Controller;
+import Model.AssetManager;
 import Vista.SwingModifications.IconPasswordField;
 import Vista.SwingModifications.IconTextField;
 
@@ -50,8 +51,9 @@ public class LogInView extends View {
         //Marges
         c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
-        jbBack = new JButton("BACK");
-        jbBack.setFocusable(false);
+        jbBack = new JButton();
+        configButton(jbBack,"back.png","backOnMouse.png");
+
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -91,6 +93,7 @@ public class LogInView extends View {
 
         //S'afegeixen els camps per omplir
         jtfUsername = new IconTextField("user.png",USERNAME_HINT,TOOLTIP_USERNAME_LOGIN);
+        jtfUsername.requestFocus();
         jpfPassword = new IconPasswordField("padlock.png",PASSWORD_HINT,TOOLTIP_PASSWORD_LOGIN);
         jpfPassword.setEchoChar(PASSWORD_CHAR);
 
@@ -105,8 +108,8 @@ public class LogInView extends View {
         jpgblInfo.add(jpfPassword, c);
 
         //S'afegeix el botó per acceptar la info introduida
-        jbAccept = new JButton("Accept");
-        jbAccept.setFocusable(false);
+        jbAccept = new JButton();
+        configButton(jbAccept,"accept.png","acceptOnMouse.png");
 
         c.gridy = 4;
         c.gridx = 0;
@@ -185,4 +188,15 @@ public class LogInView extends View {
         return jcbRememberLogIn.isSelected();
     }
 
+    private void configButton(JButton boto, String normal,String onSelection){
+        boto.setBorderPainted(false);
+        boto.setBorder(null);
+        boto.setFocusable(false);
+        boto.setMargin(new Insets(0, 0, 0, 0));
+        boto.setContentAreaFilled(false);
+        boto.setIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
+    }
 }

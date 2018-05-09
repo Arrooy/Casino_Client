@@ -2,7 +2,6 @@ package Vista.MainFrame;
 
 import Controlador.Controller;
 import Controlador.DraggableWindow;
-import Controlador.Game_Controlers.BlackJackController;
 import Model.AssetManager;
 import Model.User;
 import Model.WalletEvolutionMessage;
@@ -11,10 +10,8 @@ import Vista.*;
 import Vista.GameViews.BlackJack.BlackJackView;
 import Vista.GameViews.HorseRaceView;
 import Vista.SettingsViews.Settings;
-import Vista.SettingsViews.SettingsView;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
@@ -42,10 +39,6 @@ public class Finestra extends JFrame {
 
     private JPanel topBar;
 
-//    g.drawImage(AssetManager.getImage("background.jpg"),0,0,null);
-//        g.setColor(Color.red);
-//        g.drawOval(10,10,50,50);
-
     public Finestra() {
 
         Tray.init();
@@ -58,7 +51,6 @@ public class Finestra extends JFrame {
 
         layout = new CardLayout();
         content.setLayout(layout);
-
 
         mainView = new MainViewClient();
         logInView = new LogInView();
@@ -218,10 +210,10 @@ public class Finestra extends JFrame {
         jbtUser = new JButton();
 
 
-        addButtonTop(jbtexit,"exitOnRest.png","exitOnMouse.png");
-        addButtonTop(jbticonify,"minimize.png","minimizeOnMouse.png");
-        addButtonTop(jbtmax,"maximize.png","maximizeOnMouse.png");
-        addButtonTop(jbtUser,"userConfig.png","userConfigOnMouse.png");
+        configButton(jbtexit,"exitOnRest.png","exitOnMouse.png");
+        configButton(jbticonify,"minimize.png","minimizeOnMouse.png");
+        configButton(jbtmax,"maximize.png","maximizeOnMouse.png");
+        configButton(jbtUser,"userConfig.png","userConfigOnMouse.png");
         jbtUser.setVisible(false);
 
         rightOptions.add(jbticonify);
@@ -240,7 +232,7 @@ public class Finestra extends JFrame {
         MainPanel.add(topBar,BorderLayout.NORTH);
     }
 
-    private void addButtonTop(JButton boto, String normal,String onSelection){
+    private void configButton(JButton boto, String normal, String onSelection){
         boto.setBorderPainted(false);
         boto.setBorder(null);
         boto.setFocusable(false);
@@ -251,6 +243,7 @@ public class Finestra extends JFrame {
         boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(onSelection)));
         boto.setPressedIcon(new ImageIcon(AssetManager.getImage(normal)));
     }
+
     public void showUserconfig(boolean visible){
         jbtUser.setVisible(visible);
     }

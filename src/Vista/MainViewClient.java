@@ -30,15 +30,16 @@ public class MainViewClient extends View{
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
 
-        logInButton = new JButton("LOGIN");
-        logInButton.setFocusable(false);
-        logInButton.setPreferredSize(new Dimension(150,30));
-        jbSignIn = new JButton("SINGIN");
-        jbSignIn.setFocusable(false);
-        jbSignIn.setPreferredSize(new Dimension(150,30));
-        jbGuest = new JButton("GUEST");
-        jbGuest.setFocusable(false);
-        jbGuest.setPreferredSize(new Dimension(150,30));
+        logInButton = new JButton();
+//        logInButton.setPreferredSize(new Dimension(150,30));
+        configButton(logInButton,"logIn.png","logInOnMouse.png");
+
+        jbSignIn = new JButton();
+        configButton(jbSignIn,"signIn.png","signInOnMouse.png");
+//        jbSignIn.setPreferredSize(new Dimension(150,30));
+        jbGuest = new JButton();
+        configButton(jbGuest,"guest.png","guestOnMouse.png");
+        //jbGuest.setPreferredSize(new Dimension(150,30));
 
         jpgblBotons.add(logInButton, c);
 
@@ -52,11 +53,6 @@ public class MainViewClient extends View{
         this.add(jpgblBotons, BorderLayout.CENTER);
         setOpaque(false);
     }
-
-//    @Override
-//    public void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//    }
 
     /** Afegeix el controlador del programa a la vista*/
     @Override
@@ -85,5 +81,16 @@ public class MainViewClient extends View{
         //Retorna true si
         //Retorn false no
         return JOptionPane.showConfirmDialog(null,message,"Are you sure?",JOptionPane.YES_NO_OPTION) == 0;
+    }
+    private void configButton(JButton boto, String normal,String onSelection){
+        boto.setBorderPainted(false);
+        boto.setBorder(null);
+        boto.setFocusable(false);
+        boto.setMargin(new Insets(0, 0, 0, 0));
+        boto.setContentAreaFilled(false);
+        boto.setIcon(new ImageIcon(AssetManager.getImage(onSelection)));
+        boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(onSelection)));
+        boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(onSelection)));
+        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(normal)));
     }
 }

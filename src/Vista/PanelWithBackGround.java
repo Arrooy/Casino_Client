@@ -15,6 +15,6 @@ public class PanelWithBackGround extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(AssetManager.getImage("background.jpg"),0,0,null);
+        g.drawImage(AssetManager.getImage("background.png"),0,0,null);
     }
 }

@@ -87,6 +87,8 @@ public class BlackJackController implements GraphicsController {
     private long moneyToSpend;
     private boolean dontjumpFirstIteration;
 
+    private boolean showTutorial;
+
     /** Crea un controlador del blackjack*/
     public BlackJackController(BlackJackView blackJackView, NetworkManager networkManager){
         this.model = new Model_BJ();
@@ -94,7 +96,7 @@ public class BlackJackController implements GraphicsController {
         this.blackJackView  = blackJackView;
 
         this.firstTimeOpened = true;
-
+        this.showTutorial = true;
 
         //S'inicialitzan els textos del GameOver
         gameOverText = "Game Over";
@@ -110,6 +112,7 @@ public class BlackJackController implements GraphicsController {
         stopMusicOneTime = true;
         moneyToSpend = 0;
 
+        this.firstTimeOpened = true;
         dontjumpFirstIteration = false;
 
         //Es borren les cartes guardades del model
@@ -200,6 +203,7 @@ public class BlackJackController implements GraphicsController {
     private void exitGame(){
         gp.exit();
         controller.showGamesView();
+        updateSizeBJ();
     }
 
     public void exitInGame(){
@@ -213,6 +217,7 @@ public class BlackJackController implements GraphicsController {
             //En el cas d'estar mostrant el tutorial i premer una tecla, fem desapareixer aquest
             if (firstTimeOpened) {
                 firstTimeOpened = false;
+                showTutorial = false;
             } else {
                 //En el cas de estar en la gameOverScreen i apretar una tecla es surt del joc
                 if (gameOver) {
@@ -367,7 +372,7 @@ public class BlackJackController implements GraphicsController {
             //Si l'usuari esta al tutorial inicial, i fa click, aquest desapareix
             if(firstTimeOpened){
                 firstTimeOpened = false;
-
+                showTutorial= false;
             }else{
                 //Si l'usuari esta en el gameOver i fa click, es surt del joc
                 if(gameOver){
@@ -392,7 +397,7 @@ public class BlackJackController implements GraphicsController {
         g.drawImage(AssetManager.getImage("BJbackground.png"),0,0,width,height,null);
 
         //En el cas de ser el primer cop que s'obra el joc, es mostra el tutorial
-        if(firstTimeOpened){
+        if(showTutorial){
             showHowToPlay(g,width,height);
         }else{
             //De lo contrari, es pinten les cartes

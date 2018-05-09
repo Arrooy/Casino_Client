@@ -120,17 +120,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 break;
             case "acceptSignIn":
                 if(signInView.getUsername().length() > 0 && signInView.getEmail().length() > 0){
-                    User user_aux = new User();
-                    user_aux.setPassword(signInView.getPassword());
-                    new Transmission(user_aux, networkManager);
-                    //TODO comprovar que l'usuari existeixi dins de la base de dades
-                    //TODO comprovar password desde server
-                    if(true/*networkManager.passwordOK()*/){
-                        signUp();
-                    }else{
-                        signInView.passwordKO("Password rejected");
-                        signInView.manageError(true);
-                    }
+                    signUp();
                 }else{
                     signInView.passwordKO("Must fill in all fields");
                     signInView.manageError(true);
@@ -161,25 +151,22 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 finestra.setSettingsView(e.getActionCommand());
                 break;
             case "PASSWORD CHANGE  - CONFIRM PASSWORD":
-                user.setPassword(passwordChangeView.getNewPassword());
-                User userPass = new User();
-                userPass.setPassword(passwordChangeView.getNewPassword());
-                userPass.setUsername(user.getUsername());
-                userPass.setContext("change password");
+                User userPass = new User(user.getUsername(),passwordChangeView.getNewPassword(),Transmission.CONTEXT_CHANGE_PASSWORD);
                 new Transmission(userPass, networkManager);
-                System.out.println("Enviada new password de: \n" + userPass);
-                //TODO comprovar password desde server
-                if(true/*networkManager.passwordOK()*/){
-                    passwordChangeView.clearFields();
-                    JOptionPane.showMessageDialog(passwordChangeView, "Password Changed correctly","Password Change",  JOptionPane.INFORMATION_MESSAGE);
-                }else {
-                    passwordChangeView.clearFields();
-                    passwordChangeView.passwordKO("El servidor no ha acceptat la contrasenya");
-                }
                 break;
             case "ADD MONEY":
                 addMoney();
                 break;
+        }
+    }
+
+    public void manageChangePass(boolean approved){
+        if(approved){
+            passwordChangeView.clearFields();
+            JOptionPane.showMessageDialog(passwordChangeView, "Password Changed correctly","Password Change",  JOptionPane.INFORMATION_MESSAGE);
+        }else {
+            passwordChangeView.clearFields();
+            passwordChangeView.passwordKO("El servidor no ha acceptat la contrasenya");
         }
     }
 
@@ -206,41 +193,32 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         finestra.requestFocus();
     }
 
-
-    //TODO: GESTIO SERVIDOR, NO CLIENT! MILLORAR TRASMISION DE CONTEXT deposit.
     private void addMoney() {
         long deposit = addMoneyView.getAmount();
         String password = addMoneyView.getPassword();
 
-        boolean tOK = true;
         if(deposit == -1){
-            //addMoneyView.showErrorMoney("Above the limit amount ");
             addMoneyView.showErrorMoney("Choose an amount       ");
-            tOK = false;
         }else{
             addMoneyView.noErrorMoney();
-        }
-        if(password.equals(user.getPassword())){
-            addMoneyView.noErrorPassword();
-        } else {
-            addMoneyView.showErrorPassword();
-            addMoneyView.noTransactionOK();
-            tOK = false;
-        }
-        if(tOK){
             Transaction transaction = new Transaction("deposit", user.getUsername(), deposit,0);
+            transaction.setPassword(password);
             new Transmission(transaction, networkManager);
-            addMoneyView.showAddOK();
         }
     }
 
-    public void transactionOK(boolean ok){
-        if (ok) {
+    public void transactionOK(int type){
+        if (type == 0) {
             addMoneyView.showAddOK();
             addMoneyView.noErrorMoney();
-        } else {
+        } else if(type == 1) {
+            addMoneyView.noErrorMoney();
             addMoneyView.noTransactionOK();
-            addMoneyView.showErrorMoney("Above the limit amount ");
+            addMoneyView.showErrorMoney("Above the limit amount");
+        }else{
+            addMoneyView.noErrorMoney();
+            addMoneyView.noTransactionOK();
+            addMoneyView.showErrorPassword();
         }
     }
 
@@ -278,6 +256,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     }
     public void showGamesView() {
         logInView.clearFields();
+        signInView.clearFields();
         finestra.setGameSelector(user.isGuest());
     }
 

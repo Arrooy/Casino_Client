@@ -2,6 +2,7 @@ package Model;
 import Controlador.Controller;
 import Controlador.DraggableWindow;
 import Network.*;
+import Utils.Seguretat;
 import Vista.MainFrame.Finestra;
 import Controlador.SplashScreen;
 

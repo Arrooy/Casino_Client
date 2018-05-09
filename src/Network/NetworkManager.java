@@ -69,7 +69,7 @@ public class NetworkManager extends Thread {
     private int nTryConnect;
 
     /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.
-     * @param splashScreen
+     * @param splashScreen pantalla de carrega del sistema
      */
     public NetworkManager(SplashScreen splashScreen) {
         this.splashScreen = splashScreen;
@@ -124,8 +124,8 @@ public class NetworkManager extends Thread {
         user = null;
     }
 
-    public void transactionOK(boolean ok){
-        controller.transactionOK(ok);
+    public void transactionOK(int type){
+        controller.transactionOK(type);
     }
 
     @Override
@@ -250,7 +250,7 @@ public class NetworkManager extends Thread {
         }
     }
 
-    /** TODO: no se escriure nois, algu majuda?
+    /*
      * Com la lectura del sevidor es fa constantment de manera paral·lela, el funcionament de read varia bastant.
      * Read es limita a buscar un missatge identificat amb l'ID rebut per parametres dins del conjunt de missatges
      * rebuts pel client, guardats a la llista lectures.
@@ -271,7 +271,7 @@ public class NetworkManager extends Thread {
         return null;
     }
 
-    /** TODO: no se escriure nois, algu majuda?
+    /*
      * Com la lectura del sevidor es fa constantment de manera paral·lela, el funcionament de read varia bastant.
      * Read es limita a buscar un missatge identificat amb el contexte rebut per parametres dins del conjunt de missatges
      * rebuts pel client, guardats a la llista lectures.
@@ -323,7 +323,19 @@ public class NetworkManager extends Thread {
      */
     public void
     requestSignUp(User user) {
-        new Transmission(user, this);
+
+        //Si el client no esta connectat al servidor, es connecta
+        if(!conectatAmbServidor){
+            connectarAmbServidor();
+        }
+        if(conectatAmbServidor) {
+            //Configurem el signIn i enviem la solicitud al servidor
+            new Transmission( user, this);
+        }else{
+            System.out.println("No hi ha connexio amb el server");
+        }
+
+
     }
 
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
@@ -412,5 +424,9 @@ public class NetworkManager extends Thread {
 
     public void updateWalletEvolution(WalletEvolutionMessage newWallet) {
         controller.updateWalletEvolution(newWallet);
+    }
+
+    public void managePasswordChange(boolean result) {
+        controller.manageChangePass(result);
     }
 }

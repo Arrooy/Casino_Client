@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.Controller;
+import Model.AssetManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,6 +43,7 @@ public class GameSelectorView extends View {
         jpgblTitle.setOpaque(false);
         JLabel jlTitle = new JLabel("GAMES");
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 24));
+
         //Marges
         c.insets = new Insets(20,0,0,0);
         jpgblTitle.add(jlTitle, c);
@@ -52,12 +54,15 @@ public class GameSelectorView extends View {
         JPanel jpgblBotons = new JPanel(new GridBagLayout());
         jpgblBotons.setOpaque(false);
 
-        jbBlackJack = new JButton("BLACKJACK");
-        jbBlackJack.setFocusable(false);
-        jbHorseRace = new JButton("HORSE RACE");
-        jbHorseRace.setFocusable(false);
-        jbRoulette = new JButton("ROULETTE");
-        jbRoulette.setFocusable(false);
+        jbBlackJack = new JButton();
+        configButton(jbBlackJack,"blackJackButton.png","blackJackButtonOnMouse.png","blackJackButton.png");
+
+        jbHorseRace = new JButton();
+        configButton(jbHorseRace,"horseButton.png","horseButtonOnMouse.png","horseButtonDisabled.png");
+
+        jbRoulette = new JButton();
+        configButton(jbRoulette,"rouletteButton.png","rouletteButtonOnMouse.png","rouletteButtonDisabled.png");
+
         //Marges
         c.insets = new Insets(0,0,0,20);
 
@@ -116,5 +121,18 @@ public class GameSelectorView extends View {
 
         jbRoulette.setActionCommand("roulette");
         jbRoulette.addActionListener(c);
+    }
+
+    private void configButton(JButton boto, String normal, String onSelection, String disabled){
+        boto.setBorderPainted(false);
+        boto.setBorder(null);
+        boto.setFocusable(false);
+        boto.setMargin(new Insets(0, 0, 0, 0));
+        boto.setContentAreaFilled(false);
+
+        boto.setIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(disabled)));
+        boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
     }
 }

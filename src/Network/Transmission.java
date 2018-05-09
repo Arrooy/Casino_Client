@@ -23,7 +23,7 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_GET_COINS = "userCoins";
     public static final String CONTEXT_HR_INIT = "horseRaceInit";
     public static final String CONTEXT_WALLET_EVOLUTION = "walletEvolution";
-
+    public static final String CONTEXT_CHANGE_PASSWORD = "change password";
 
     private Message msg;
     private String context;
@@ -52,7 +52,7 @@ public class Transmission implements Runnable {
 
             case CONTEXT_SIGNUP:
                 if(!updateConnection()){
-                    //TODO: ERROR SIGN IN!!!!!!
+                    System.out.println("SIGNIN ERROR - FESME GRAFIC!");
                 }
                 break;
 
@@ -74,7 +74,6 @@ public class Transmission implements Runnable {
                 //Todo fer get coins MERI
                 break;
             case CONTEXT_TRANSACTION:
-                //Todo revisar MERI
                 transaction();
                 break;
             case "deposit":
@@ -86,8 +85,23 @@ public class Transmission implements Runnable {
             case CONTEXT_WALLET_EVOLUTION:
                 walletEvolution();
                 break;
+            case CONTEXT_CHANGE_PASSWORD:
+                changePassword();
+                break;
             default:
                 networkManager.send(msg);
+        }
+    }
+
+    private void changePassword() {
+        try {
+            System.out.println("Enviada new password");
+            networkManager.send(msg);
+
+            User response = (User) waitResponse(msg);
+            networkManager.managePasswordChange(response.areCredentialsOk());
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -106,31 +120,37 @@ public class Transmission implements Runnable {
 
     }
 
-    //La mano màgica del tet arroyo :D
+
     private void deposit() {
-        networkManager.send(msg);
-        User user = null;//(User) networkManager.read(msg.getID());
         try {
-            user = (User) waitResponse(msg);
+            networkManager.send(msg);
+
+            //La resposta del servidor
+            Transaction response = (Transaction) waitResponse(msg);
+
+            if(response.isTransactionOk()){
+                networkManager.transactionOK(0);
+            }else{
+                if(response.getType() > 3){
+                    networkManager.transactionOK(2);
+                }else{
+                    networkManager.transactionOK(1);
+                }
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Crash at " + user.getUsername());
-
-        if (user.areCredentialsOk()) {
-            //TODO: poser missatge succssesful vista de add Money
-        } else {
-            //TODO: poser missatge error vista de add Money
-        }
-
-        networkManager.transactionOK(user.areCredentialsOk());
     }
 
     private void transaction(){
+
         Transaction transaction = (Transaction) msg;
+        //S'envia la transaccio al servidor
         networkManager.send(transaction);
+
     }
 
+    /** Demana una carta al servidor i l'afegeix al tauler*/
     private void blackJackRequestCard() {
         try {
             Card carta = (Card) msg;
@@ -152,7 +172,7 @@ public class Transmission implements Runnable {
     }
 
     /**
-     * login o logout
+     * Gestiona el logIn i el log out de l'usuari
      */
     private boolean updateConnection() {
         try {
@@ -168,6 +188,7 @@ public class Transmission implements Runnable {
             //Si la resposta del servidor indica que tot es correcte. Es completa el logIn
             if(responseUser.areCredentialsOk()){
                 finishUpdate(responseUser);
+
                 return true;
             } else {
                 //De lo contari, s'indica al usuari que s'ha equivocat
