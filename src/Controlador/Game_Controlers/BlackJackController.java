@@ -22,9 +22,6 @@ import java.util.LinkedList;
 import static Model.Model_BJ.*;
 import static Network.Transmission.CONTEXT_BJ_INIT;
 
-
-//TODO: ANIMACIO SEMPRE AL APRETAR EL BOTO.
-
 /** Gestiona el joc blackJack, la seva animacio inicial, el tutorial i el gameOver */
 
 public class BlackJackController implements GraphicsController {

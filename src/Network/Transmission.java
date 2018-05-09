@@ -154,15 +154,19 @@ public class Transmission implements Runnable {
     private void blackJackRequestCard() {
         try {
             Card carta = (Card) msg;
-
+            //S'envia la carta
             networkManager.send(carta);
 
+            //S'espera a la resposta del servidor
             Card cartaResposta = (Card) waitResponse(carta);
 
+            //Si la carta resposta es una de les 4 inicials i la aposta proposada es incorrecte
             if(cartaResposta.getContext().equals(CONTEXT_BJ_INIT) && !cartaResposta.isBetOk()) {
+                //Es mostra error
                 networkManager.displayError("Money error","Impossible to place that bet!");
                 networkManager.showGamesView();
             }else{
+                //S'afegeix la carta al model del joc
                 networkManager.newBJCard(cartaResposta);
             }
 

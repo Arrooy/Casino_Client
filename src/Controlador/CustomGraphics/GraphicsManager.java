@@ -9,15 +9,16 @@ public class GraphicsManager implements Runnable {
     private Thread thread;
 
     private boolean running;
+
     private Image image;
 
+    /** Panell que sera pintat*/
     private JPanel JPanelObjectiu;
 
     private GraphicsController controlador_extern;
 
+    /** Color que s'estableix de fons cada nou frame*/
     private Color clearColor;
-
-    private Image clearImage;
 
     /**
      * Crea un gestor per a controlar els grafics custom d'un jpanel extern.
@@ -29,8 +30,6 @@ public class GraphicsManager implements Runnable {
     public GraphicsManager(JPanel PanellObjectiu, GraphicsController c) {
         clearColor = Color.white;
 
-        if(PanellObjectiu.getWidth() == 0 || PanellObjectiu.getHeight() == 0)
-            System.out.println("Error ultrafatal. El panell que mhas donat no te mida especificada!"); //ets un primo arroyo
         JPanelObjectiu = PanellObjectiu;
         JPanelObjectiu.setBackground(Color.white);
         JPanelObjectiu.setFocusable(true);
@@ -95,12 +94,9 @@ public class GraphicsManager implements Runnable {
 
         if (image != null) {
             Graphics g = image.getGraphics();
-            if(clearImage == null) {
-                g.setColor(clearColor);
-                g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
-            }
+            g.setColor(clearColor);
+            g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
         }
-
     }
 
     public void exit() {
