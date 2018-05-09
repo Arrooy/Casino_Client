@@ -30,16 +30,16 @@ public class MainViewClient extends View{
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
 
-        logInButton = new JButton();
-//        logInButton.setPreferredSize(new Dimension(150,30));
-        configButton(logInButton,"logIn.png","logInOnMouse.png");
+        logInButton = new JButton("LOGINLOKO");
+        logInButton.setPreferredSize(new Dimension(150,30));
+//        configButton(logInButton,"logIn.png","logInOnMouse.png");
 
-        jbSignIn = new JButton();
-        configButton(jbSignIn,"signIn.png","signInOnMouse.png");
-//        jbSignIn.setPreferredSize(new Dimension(150,30));
-        jbGuest = new JButton();
-        configButton(jbGuest,"guest.png","guestOnMouse.png");
-        //jbGuest.setPreferredSize(new Dimension(150,30));
+        jbSignIn = new JButton("SIGNIN?");
+//        configButton(jbSignIn,"signIn.png","signInOnMouse.png");
+        jbSignIn.setPreferredSize(new Dimension(150,30));
+        jbGuest = new JButton("RISAS EL GUEST");
+        //configButton(jbGuest,"guest.png","guestOnMouse.png");
+        jbGuest.setPreferredSize(new Dimension(150,30));
 
         jpgblBotons.add(logInButton, c);
 

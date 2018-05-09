@@ -54,14 +54,14 @@ public class GameSelectorView extends View {
         JPanel jpgblBotons = new JPanel(new GridBagLayout());
         jpgblBotons.setOpaque(false);
 
-        jbBlackJack = new JButton();
-        configButton(jbBlackJack,"blackJackButton.png","blackJackButtonOnMouse.png","blackJackButton.png");
+        jbBlackJack = new JButton("vlakYak");
+        //configButton(jbBlackJack,"blackJackButton.png","blackJackButtonOnMouse.png","blackJackButton.png");
 
-        jbHorseRace = new JButton();
-        configButton(jbHorseRace,"horseButton.png","horseButtonOnMouse.png","horseButtonDisabled.png");
+        jbHorseRace = new JButton("Jorses");
+        //configButton(jbHorseRace,"horseButton.png","horseButtonOnMouse.png","horseButtonDisabled.png");
 
-        jbRoulette = new JButton();
-        configButton(jbRoulette,"rouletteButton.png","rouletteButtonOnMouse.png","rouletteButtonDisabled.png");
+        jbRoulette = new JButton("Perejil");
+        //configButton(jbRoulette,"rouletteButton.png","rouletteButtonOnMouse.png","rouletteButtonDisabled.png");
 
         //Marges
         c.insets = new Insets(0,0,0,20);

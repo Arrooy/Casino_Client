@@ -7,7 +7,6 @@ import Utils.Seguretat;
 import java.util.ArrayList;
 
 /** Usuari basic del casino*/
-
 public class User extends Message {
 
     /** Defineix el identificador del missatge. Util per quan s'envia amb el networkManager*/

@@ -51,8 +51,8 @@ public class LogInView extends View {
         //Marges
         c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
-        jbBack = new JButton();
-        configButton(jbBack,"back.png","backOnMouse.png");
+        jbBack = new JButton("BACK");
+        //configButton(jbBack,"back.png","backOnMouse.png");
 
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra
@@ -108,8 +108,8 @@ public class LogInView extends View {
         jpgblInfo.add(jpfPassword, c);
 
         //S'afegeix el botó per acceptar la info introduida
-        jbAccept = new JButton();
-        configButton(jbAccept,"accept.png","acceptOnMouse.png");
+        jbAccept = new JButton("Accept");
+        //configButton(jbAccept,"accept.png","acceptOnMouse.png");
 
         c.gridy = 4;
         c.gridx = 0;
