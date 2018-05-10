@@ -17,15 +17,6 @@ public class RouletteView extends View {
         setPreferredSize(new Dimension(600, 600));
     }
 
-    public void updateSize(boolean full) {
-        if (graphicsManager != null) {
-            rouletteController.updateSize(getWidth(), getHeight());
-
-            graphicsManager.updateSize(this.getWidth(), this.getHeight(), full);
-            updateUI();
-        }
-    }
-
     @Override
     public void addController(Controller c) {
         addComponentListener(c);

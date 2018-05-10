@@ -67,6 +67,7 @@ public class GraphicsManager implements Runnable {
 
         thread = new Thread(this, "Game Thread");
         thread.start();
+        JPanelObjectiu.requestFocus();
     }
 
     @Override

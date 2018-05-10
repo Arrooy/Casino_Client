@@ -47,6 +47,8 @@ public class Finestra extends JFrame {
 
         Tray.init();
 
+        setMinimumSize(new Dimension(700, 700));
+
         PanelWithBackGround MainPane = new PanelWithBackGround(new BorderLayout());
         MainPane.setOpaque(false);
 
@@ -273,6 +275,10 @@ public class Finestra extends JFrame {
 
     public void updateWallet(WalletEvolutionMessage newWallet) {
         settings.updateWallet(newWallet);
+    }
+
+    public void requestRouletteFocus() {
+        rouletteView.requestFocus();
     }
 
     public void changeMuteIcon(boolean muted){

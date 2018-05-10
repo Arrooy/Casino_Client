@@ -47,7 +47,7 @@ public class RouletteManager extends Thread {
 
             roulette.setParams(shot.getRouletteVel(), shot.getBallVel(), shot.getShotOff());
             RouletteController.updateNextTime((long) shot.getTimeTillNext());
-            roulette.start();
+            roulette.shoot();
 
             waitTillNext(Math.max(0, (long) shot.getTimeTillNext() - Timestamp.from(Instant.now()).getTime() - 10));
         }
@@ -62,12 +62,12 @@ public class RouletteManager extends Thread {
         try {
             sleep(time);
         } catch (InterruptedException e) {
-            //TODO: resoldre excepcio degudament
-            e.printStackTrace();
+            System.out.println("[ROULETTE THREAD]: SLEEP INTERRUPTED");
         }
     }
 
     public void disconnect() {
+        interrupt();
         connected = false;
     }
 

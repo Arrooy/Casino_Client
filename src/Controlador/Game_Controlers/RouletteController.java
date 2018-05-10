@@ -144,12 +144,7 @@ public class RouletteController implements GraphicsController {
 
     @Override
     public void render(Graphics g) {
-//        g.drawString(vel + "", 10, 10);
-        //g.setFont(new Font("Elephant", Font.PLAIN, 20));
         Graphics2D g2d = (Graphics2D) g;
-
-        //g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g.setColor(Color.white);
 
@@ -157,7 +152,7 @@ public class RouletteController implements GraphicsController {
 
         double offset = backAnim ? 20/(Math.pow((System.nanoTime() - roffTimer)/1000000000 - 2, 4)) : 20/(Math.pow((System.nanoTime() - roffTimer)/1000000000 +0.4, 4));
         int cx = Controller.getWinWidth()/2;
-        int cy = Controller.getWinHeight()/2 - 70 - (int)offset;
+        int cy = 370 - (int)offset;
 
         g.setFont(font.deriveFont(15f));
         g.setColor(Color.red);
@@ -172,36 +167,12 @@ public class RouletteController implements GraphicsController {
 
         g2d.rotate(-rang, cx, cy);
 
-       /* g.setColor(Color.white);
-        g.drawOval(cx - 104, cy - 104, 208, 208);
-        g.drawOval(cx - 100, cy - 100, 200, 200);
-        g.drawOval(cx - 100, cy - 100, 200, 200);
-
-        g.drawLine(cx - 3, cy - 3, cx + 3, cy + 3);
-        g.drawLine(cx - 3, cy + 3, cx + 3, cy - 3);*/
-
-        /*int in = 0;
-        for (GRect r: bars) {
-         //   r.render(g, (int) rx, (int) ry);
-            int w = g.getFontMetrics().getStringBounds("" + in, g).getBounds().width;
-            int h = g.getFontMetrics().getStringBounds("" + in, g).getBounds().height;
-            g.setColor(Color.red);
-            g.drawString("" + ((in + shotOff) % MAXCELLS),
-                    (int) ((r.getX1() - 300) * 2 + cx + (r.getX1() - cx/2)*0.15) - w/2, (int) ((r.getY1() - 300) * 2 + cy + (r.getY1() - cy/2)*0.15) + h/2);
-            in++;
-
-           // g.setColor(new Color(240, 191, 31, 100));
-           // g.drawLine((int) r.getX1(), (int) r.getY1(), (int)rx/2, (int)ry/2);
-           // g.drawLine((int) r.getX3(), (int) r.getY3(), (int)rx/2, (int)ry/2);
-        }*/
-
         if (!hideRoulette) ball.render(g, cx, cy, 200);
 
         g.setColor(Color.white);
         g.drawString(nextTimeToString(), 10, 80);
 
         if (winnerE) g.drawString("" + getWinner(), (int)rx/2, (int)ry*4/5);
-
     }
 
     public void setWinner(int winer) {
@@ -262,9 +233,7 @@ public class RouletteController implements GraphicsController {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
     public void mouseEntered(MouseEvent e) {}
@@ -274,65 +243,6 @@ public class RouletteController implements GraphicsController {
     public void mouseDragged(MouseEvent e) {}
     @Override
     public void mouseMoved(MouseEvent e) {}
-
-    /**
-     * @deprecated
-     */
-    public void updateSize(int width, int height) {
-        //this.width = width;
-        //this.height = height;
-
-        System.out.println(width + " x " + height);
-    }
-
-    public void start() {
-        //TODO: fer animacio de com cau la ruleta
-        shoot();
-    }
-
-    //TODO: Convertir en constant
-    private int[] rouletteAdapter() {
-        int[] table = new int[37];
-        table[0] = 0;
-        table[1] = 32;
-        table[2] = 15;
-        table[3] = 19;
-        table[4] = 4;
-        table[5] = 21;
-        table[6] = 2;
-        table[7] = 25;
-        table[8] = 17;
-        table[9] = 34;
-        table[10] = 6;
-        table[11] = 27;
-        table[12] = 13;
-        table[13] = 36;
-        table[14] = 11;
-        table[15] = 30;
-        table[16] = 8;
-        table[17] = 23;
-        table[18] = 10;
-        table[19] = 5;
-        table[20] = 24;
-        table[21] = 26;
-        table[22] = 33;
-        table[23] = 1;
-        table[24] = 20;
-        table[25] = 14;
-        table[26] = 31;
-        table[27] = 9;
-        table[28] = 22;
-        table[29] = 18;
-        table[30] = 29;
-        table[31] = 7;
-        table[32] = 28;
-        table[33] = 12;
-        table[34] = 35;
-        table[35] = 3;
-        table[36] = 26;
-
-        return table;
-    }
 
     public void bet(long bet, int cellID) {
         table.bet(bet, cellID);

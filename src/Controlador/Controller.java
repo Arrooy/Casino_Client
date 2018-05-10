@@ -307,7 +307,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         if(horseRaceController != null) horseRaceController.updateSize();
 
         if(BJController != null) BJController.updateSizeBJ();
-        if(rouletteView != null) rouletteView.updateSize(false);
         windowWidth = finestra.getWidth();
         windowHeight = finestra.getHeight();
     }
@@ -318,7 +317,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             BJController.updateSizeBJ();
 
         if(BJController != null) BJController.updateSizeBJ();
-        if(rouletteView != null) rouletteView.updateSize(true);
         windowWidth = finestra.getWidth();
         windowHeight = finestra.getHeight();
     }
@@ -544,6 +542,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         //RouletteView rouletteView = new RouletteView();
         RouletteController rouletteController = new RouletteController(600, 600, networkManager);
         rouletteGraphicsManager = new GraphicsManager(rouletteView, rouletteController);
+        finestra.requestRouletteFocus();
 
         networkManager.initRoulette(rouletteController);
         finestra.setRouletteView();
