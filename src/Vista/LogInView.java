@@ -52,7 +52,7 @@ public class LogInView extends View {
         c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
         jbBack = new JButton();
-        //TODO//configButton(jbBack,"back.png","backOnMouse.png");
+        configButton(jbBack,"BACK_SOMBRA.png","BACK_NO_SOMBRA.png");
 
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra

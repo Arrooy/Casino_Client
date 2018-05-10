@@ -17,11 +17,16 @@ public class Sounds extends Thread {
     /** Diccionari d'audios carregats*/
     private static Map<String, Clip> audios;
 
+    /** Indica si els l'audio esta activat*/
+    private static boolean muted;
+
     /**
      * Carrega tots els audios de la carpeta especificada en PATH
      * @param splashScreen
      */
     public static void loadAllSounds(SplashScreen splashScreen){
+        //Al iniciar el programa, s'activa la musica
+        muted = false;
 
         audios = new HashMap<>();
 
@@ -73,17 +78,19 @@ public class Sounds extends Thread {
      * @param fileName nom del audio que es vol reproduir
      */
     public static void play(String fileName){
-        //S'agafa l'audio del diccionari
-        Clip clip = audios.get(fileName);
+        if(!muted) {
+            //S'agafa l'audio del diccionari
+            Clip clip = audios.get(fileName);
 
-        //En el cas d'estar reproduint-se, s'atura
-        if(clip.isRunning()) clip.stop();
+            //En el cas d'estar reproduint-se, s'atura
+            if (clip.isRunning()) clip.stop();
 
-        //Es torna a la posicio inicial del clip
-        clip.setFramePosition(0);
+            //Es torna a la posicio inicial del clip
+            clip.setFramePosition(0);
 
-        //S'inicia l'audio
-        clip.start();
+            //S'inicia l'audio
+            clip.start();
+        }
     }
 
     /**
@@ -91,7 +98,7 @@ public class Sounds extends Thread {
      * @param fileName nom del audio que es vol reproduir
      */
     public static void songNoEnd(String fileName){
-        audios.get(fileName).loop(Clip.LOOP_CONTINUOUSLY);
+        if(!muted)audios.get(fileName).loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     /**
@@ -106,6 +113,19 @@ public class Sounds extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static boolean isMuted() {
+        return muted;
+    }
+
+    public static void setMuted(boolean muted) {
+        Sounds.muted = muted;
+        if(muted){
+            Sounds.stopAllAudio();
+        }else{
+            Sounds.songNoEnd("wii.wav");
         }
     }
 }

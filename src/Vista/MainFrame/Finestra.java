@@ -41,6 +41,7 @@ public class Finestra extends JFrame {
     private JButton jbtUser;
 
     private JPanel topBar;
+    private JButton jbtMute;
 
     public Finestra() {
 
@@ -122,13 +123,19 @@ public class Finestra extends JFrame {
 
         jbtexit.setActionCommand("exitProgram");
         jbtexit.addActionListener(dw);
+
         jbticonify.setActionCommand("iconify");
         jbticonify.addActionListener(dw);
+
         jbtmax.setActionCommand("maximize");
         jbtmax.addActionListener(dw);
 
+        jbtMute.setActionCommand("mute");
+        jbtMute.addActionListener(dw);
+
         jbtUser.setActionCommand("settings");
         jbtUser.addActionListener(c);
+
 
         mainView.addController(c);
         logInView.addController(c);
@@ -218,12 +225,13 @@ public class Finestra extends JFrame {
         jbticonify = new JButton();
         jbtmax = new JButton();
         jbtUser = new JButton();
-
+        jbtMute = new JButton();
 
         configButton(jbtexit,"exitOnRest.png","exitOnMouse.png");
         configButton(jbticonify,"minimize.png","minimizeOnMouse.png");
         configButton(jbtmax,"maximize.png","maximizeOnMouse.png");
         configButton(jbtUser,"userConfig.png","userConfigOnMouse.png");
+        configButton(jbtMute,"mute.png","muteOnMouse.png");
         jbtUser.setVisible(false);
 
         rightOptions.add(jbticonify);
@@ -233,6 +241,7 @@ public class Finestra extends JFrame {
         rightOptions.setBackground(COLOR_TOP_BAR);
         JPanel leftOptions = new JPanel();
         leftOptions.add(jbtUser);
+        leftOptions.add(jbtMute);
 
         leftOptions.setBackground(COLOR_TOP_BAR);
 
@@ -264,5 +273,13 @@ public class Finestra extends JFrame {
 
     public void updateWallet(WalletEvolutionMessage newWallet) {
         settings.updateWallet(newWallet);
+    }
+
+    public void changeMuteIcon(boolean muted){
+        if(muted){
+            configButton(jbtMute,"muted.png","mutedOnMouse.png");
+        }else{
+            configButton(jbtMute,"mute.png","muteOnMouse.png");
+        }
     }
 }

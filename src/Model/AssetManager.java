@@ -63,9 +63,9 @@ public class AssetManager {
         }
     }
 
-    public static Font getEFont() {
+    public static Font getEFont(int size) {
         try {
-            Font font = Font.createFont(Font.TRUETYPE_FONT, new File("./Assets/Fonts/ELEPHNT.TTF")).deriveFont(20f);
+            Font font = Font.createFont(Font.TRUETYPE_FONT, new File("./Assets/Fonts/ELEPHNT.TTF")).deriveFont((float)size);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./Assets/Fonts/ELEPHNT.TTF")));
             return font;

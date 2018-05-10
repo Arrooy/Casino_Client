@@ -74,9 +74,6 @@ public class BlackJackController implements GraphicsController {
     /** Controlador principal del programa*/
     private Controller controller;
 
-    /** Controla si es el primer cop que s'obra el joc, s'utiltiza per ensenyar l'animacio nomes 1 cop.*/
-    private boolean firstTimeOpened;
-
     /** Aposta plantejada per l'usuari*/
     private long bet;
 
@@ -86,19 +83,22 @@ public class BlackJackController implements GraphicsController {
 
     private boolean showTutorial;
 
+    private boolean animationIsOver;
+
     /** Crea un controlador del blackjack*/
     public BlackJackController(BlackJackView blackJackView, NetworkManager networkManager){
         this.model = new Model_BJ();
         this.networkManager = networkManager;
         this.blackJackView  = blackJackView;
 
-        this.firstTimeOpened = true;
         this.showTutorial = true;
 
         //S'inicialitzan els textos del GameOver
         gameOverText = "Game Over";
         subText = "Click to exit the game";
         stopMusicOneTime = true;
+
+        animationIsOver = false;
 
         //S'inicia el grahpics manager i s'inicia lanimacio principal.
         initGame();
@@ -109,9 +109,9 @@ public class BlackJackController implements GraphicsController {
         stopMusicOneTime = true;
         moneyToSpend = 0;
 
-        this.firstTimeOpened = true;
         dontjumpFirstIteration = false;
 
+        animationIsOver = false;
         //Es borren les cartes guardades del model
         this.model.clearData();
 
@@ -123,12 +123,11 @@ public class BlackJackController implements GraphicsController {
         gp.setClearColor(Color.red);
         lastCard = 0;
 
-        //En el cas de ser el primer cop en obrir el joc, es presenta l'animacio inicial
-        if(firstTimeOpened) {
-            animacio = new AnimacioConjuntCartes(1, 100, 100, 150, 0.95, blackJackView.getWidth(), blackJackView.getHeight());
-            AnimationTimer = System.currentTimeMillis();
-        }
+        //Es presenta l'animacio inicial
+        animacio = new AnimacioConjuntCartes(1, 100, 100, 150, 0.95, blackJackView.getWidth(), blackJackView.getHeight());
+        AnimationTimer = System.currentTimeMillis();
     }
+
     /** Cada cop que la finestra canvia de tamany es crida aquesta funcio. Serverix per a mantenir el panell de pintat
      * del mateix tamany que la vista*/
     public void updateSizeBJ(){
@@ -209,11 +208,11 @@ public class BlackJackController implements GraphicsController {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        if (System.currentTimeMillis() - AnimationTimer > ANIMATION_TIME) {
+        System.out.println("Key pressed" + e.getKeyChar());
+        if (animationIsOver) {
 
             //En el cas d'estar mostrant el tutorial i premer una tecla, fem desapareixer aquest
-            if (firstTimeOpened) {
-                firstTimeOpened = false;
+            if (showTutorial){
                 showTutorial = false;
             } else {
                 //En el cas de estar en la gameOverScreen i apretar una tecla es surt del joc
@@ -229,6 +228,7 @@ public class BlackJackController implements GraphicsController {
                     //En el cas d'estar dins d'una partida i apretar el '+' es solicita una nova carta
                     if (e.getKeyChar() == '+') {
                         networkManager.newBlackJackCard(false);
+
                         //Es reprodueix el soroll de la carta
                         Sounds.play("cardPlace1.wav");
                     } else if (e.getKeyChar() == ' ') {
@@ -267,6 +267,7 @@ public class BlackJackController implements GraphicsController {
                 //De lo contrari, es para la musica
                 if (stopMusicOneTime) {
                     Sounds.stopOneAudioFile("cardShuffle.wav");
+                    animationIsOver = true;
                     stopMusicOneTime = false;
                 }
                 //Es demana focus al teclat
@@ -367,8 +368,7 @@ public class BlackJackController implements GraphicsController {
     public void mouseClicked(MouseEvent e) {
         if (System.currentTimeMillis() - AnimationTimer > ANIMATION_TIME) {
             //Si l'usuari esta al tutorial inicial, i fa click, aquest desapareix
-            if(firstTimeOpened){
-                firstTimeOpened = false;
+            if(showTutorial){
                 showTutorial= false;
             }else{
                 //Si l'usuari esta en el gameOver i fa click, es surt del joc

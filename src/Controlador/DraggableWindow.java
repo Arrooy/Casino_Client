@@ -91,7 +91,6 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         //Gestio dels botons de la part superior de la finestra,on es troba normalment la decoration de windows
         switch (e.getActionCommand()){
             case "exitProgram":
@@ -102,6 +101,10 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
                 break;
             case "iconify":
                 vista.setExtendedState(ICONIFIED);
+                break;
+            case "mute":
+                Sounds.setMuted(!Sounds.isMuted());
+                vista.changeMuteIcon(Sounds.isMuted());
                 break;
         }
     }

@@ -31,15 +31,13 @@ public class MainViewClient extends View{
         c.anchor = GridBagConstraints.CENTER;
 
         logInButton = new JButton();
-        //logInButton.setPreferredSize(new Dimension(150,30));
-        configButton(logInButton,"LOGIN_NO_SOMBRA.png","LOGIN_SOMBRA.png");
+        configButton(logInButton,"LOGIN_SOMBRA.png","LOGIN_NO_SOMBRA.png");
 
         jbSignIn = new JButton();
-        configButton(jbSignIn,"SIGNIN_NO_SOMBRA.png","SIGNIN_SOMBRA.png");
-        //jbSignIn.setPreferredSize(new Dimension(150,30));
+        configButton(jbSignIn,"SIGNIN_SOMBRA.png","SIGNIN_NO_SOMBRA.png");
+
         jbGuest = new JButton();
-        configButton(jbGuest,"GUEST_NO_SOMBRA.png","GUEST_SOMBRA.png");
-        //jbGuest.setPreferredSize(new Dimension(150,30));
+        configButton(jbGuest,"GUEST_SOMBRA.png","GUEST_NO_SOMBRA.png");
 
         jpgblBotons.add(logInButton, c);
 

@@ -68,7 +68,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.draggableWindow = draggableWindow;
         this.horseRaceView = horseRaceView;
         this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager, this.finestra);
-
+        Sounds.songNoEnd("wii.wav");
     }
 
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
@@ -194,7 +194,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                if(res == null){
                    value = 0;
                }else {
-                   blackJackView.showDialog("Wallet Error","Only numbers were expected");
+                   blackJackView.showDialog("Bet error","Only numbers are expected as a bet");
                }
             }
         }while(value == -1);

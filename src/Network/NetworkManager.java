@@ -261,7 +261,7 @@ public class NetworkManager extends Thread {
      * @return Si read no troba el missatge que es desitja, retorna null. De lo contrari retorna el missatge.
      */
 
-    public Message read(double ID){
+    public synchronized Message read(double ID){
         //Es miren tots els missatges registrats fins el moment
         for(int index = lectures.size() - 1; index >= 0; index--){
             Message message = lectures.get(index);
