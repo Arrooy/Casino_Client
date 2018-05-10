@@ -1,22 +1,34 @@
 package Vista.SettingsViews;
 
 
+import Model.AssetManager;
 import Model.WalletEvolutionMessage;
 
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 
 public class Top5View extends JPanel {
 
     private JTable table;
+    private final static Color TRANSPARENT = new Color(0,0,0,0);
+    private final static Color CREMA = new Color (218, 204, 164);
+    private final static Color GRANA = new Color(125, 28, 37);
+    private final static Color VERD = new Color(25, 151, 6);
+    private final static Color GROC = new Color(237, 175, 67);
+    private final static Color MARRO = new Color(56,37,19);
+    private final static Color VERDFOSC = new Color(104,125,72, 255);
+
     private static final String[] columnNames = {"Game",
-            "Money before",
-            "Money after"};
+                                                "Money before",
+                                                "Money after"};
 
     public Top5View(){
         this.setLayout(new BorderLayout());
+        this.setOpaque(false);
 
         JPanel jPanelGridTaula = new JPanel(new GridBagLayout());
+        jPanelGridTaula.setOpaque(false);
         jPanelGridTaula.setBorder(BorderFactory.createEmptyBorder());
         GridBagConstraints c = new GridBagConstraints();
         c.gridy = 0;
@@ -28,6 +40,15 @@ public class Top5View extends JPanel {
         data[0][1] = "Loading";
         data[0][2] = "Loading";
         table = new JTable(data,columnNames);
+        table.setBackground(VERDFOSC);
+        table.setGridColor(MARRO);
+        JTableHeader header = table.getTableHeader();
+        header.setBackground(MARRO);
+        header.setForeground(GROC);
+        header.setFont(AssetManager.getEFont(15));
+        header.setBorder(BorderFactory.createLineBorder(MARRO));
+
+        table.setForeground(GROC);
         table.setColumnSelectionAllowed(false);
         table.setFocusable(false);
         table.setEnabled(false);
@@ -35,7 +56,10 @@ public class Top5View extends JPanel {
         table.setDefaultEditor(Object.class, null);
 
         JScrollPane jScrollPane = new JScrollPane(table);
+        jScrollPane.setOpaque(false);
         jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        JScrollBar jScrollBar = jScrollPane.getVerticalScrollBar();
+        jScrollBar.setOpaque(false);
         jScrollPane.setBorder(BorderFactory.createEmptyBorder());
         jPanelGridTaula.add(jScrollPane, c);
 

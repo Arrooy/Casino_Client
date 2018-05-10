@@ -1,11 +1,11 @@
 package Vista;
 
 import Controlador.Controller;
+import Model.AssetManager;
 import Vista.SwingModifications.IconPasswordField;
 import Vista.SwingModifications.IconTextField;
 
 import javax.swing.*;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.*;
 
 public class SignInView extends View implements PasswordConfirm {
@@ -22,6 +22,7 @@ public class SignInView extends View implements PasswordConfirm {
     private static final String PASSWORD_CONFIRM_HINT = "Repeat your password here";
     private static final String PASSWORD_CONFIRM_TOOL_TIP = "Repeat the password introduced above";
 
+    private final static Color CREMA = new Color (218, 204, 164);
     private final static Color GRANA = new Color(125, 28, 37);
     private final static Color VERD = new Color(25, 151, 6);
     private final static Color GROC = new Color(237, 175, 67);
@@ -56,10 +57,11 @@ public class SignInView extends View implements PasswordConfirm {
 
         GridBagConstraints c = new GridBagConstraints();
         //Marges
-        c.insets = new Insets(20,20,0,0);
+        c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
-        jbBack = new JButton("BACK");
-        jbBack.setFocusable(false);
+        jbBack = new JButton();
+        configButton(jbBack,"BACK_NO_SOMBRA.png","BACK_SOMBRA.png");
+
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -77,7 +79,8 @@ public class SignInView extends View implements PasswordConfirm {
 
         JLabel jlTitle = new JLabel("Sign In");
         //TODO: setFont ADRIA
-        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
+        jlTitle.setFont(AssetManager.getEFont(100));
+        jlTitle.setForeground(CREMA);
         //Marges
         c.insets = new Insets(20,0,0,0);
         jpgblTitle.add(jlTitle, c);
@@ -90,9 +93,17 @@ public class SignInView extends View implements PasswordConfirm {
 
         c.insets = new Insets(0,0,20,10);
         JLabel jlName = new JLabel("UserName:");
+        jlName.setForeground(CREMA);
+        jlName.setFont(AssetManager.getEFont(15));
         JLabel jlEmail = new JLabel("e-mail:");
+        jlEmail.setForeground(CREMA);
+        jlEmail.setFont(AssetManager.getEFont(15));
         JLabel jlPassword = new JLabel("Password:");
+        jlPassword.setForeground(CREMA);
+        jlPassword.setFont(AssetManager.getEFont(15));
         JLabel jlConfirmPassword = new JLabel("Confirm Password:");
+        jlConfirmPassword.setForeground(CREMA);
+        jlConfirmPassword.setFont(AssetManager.getEFont(15));
 
         //S'afegeixen les etiquetes
         c.gridy = 0;
@@ -134,8 +145,8 @@ public class SignInView extends View implements PasswordConfirm {
         jpgblInfo.add(jpfConfirmPassword, c);
 
         //S'afegeix el botó per acceptar la info introduida
-        jbAccept = new JButton("Accept");
-        jbAccept.setFocusable(false);
+        jbAccept = new JButton();
+        configButton(jbAccept,"ACCEPT_NO_SOMBRA.png","ACCEPT_SOMBRA.png");
         jbAccept.setEnabled(false);
 
         c = new GridBagConstraints();
@@ -290,5 +301,17 @@ public class SignInView extends View implements PasswordConfirm {
 
     public String getEmail(){
         return jtfEmail.getText();
+    }
+
+    private void configButton(JButton boto, String normal,String onSelection){
+        boto.setBorderPainted(false);
+        boto.setBorder(null);
+        boto.setFocusable(false);
+        boto.setMargin(new Insets(0, 0, 0, 0));
+        boto.setContentAreaFilled(false);
+        boto.setIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
     }
 }

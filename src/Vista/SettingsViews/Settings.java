@@ -1,6 +1,7 @@
 package Vista.SettingsViews;
 
 import Controlador.Controller;
+import Model.AssetManager;
 import Model.WalletEvolutionMessage;
 import Vista.View;
 
@@ -13,6 +14,8 @@ public class Settings extends View {
     private JButton jbAddMoney;
     private JButton jbWalletEvolution;
     private SettingsView settingsView;
+
+    private final static Color CREMA = new Color (218, 204, 164);
 
     public Settings(){
 
@@ -43,7 +46,8 @@ public class Settings extends View {
         jlTitle.setOpaque(false);
 
         //TODO: setFont ADRIA
-        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
+        jlTitle.setFont(AssetManager.getEFont(100));
+        jlTitle.setForeground(CREMA);
 
         //Marges
         c.insets = new Insets(20,0,0,0);
@@ -51,9 +55,8 @@ public class Settings extends View {
         jpTitle.add(jpgblTitle);
         this.add(jpTitle, BorderLayout.NORTH);
 
-        jbBack = new JButton("BACK");
-        jbBack.setFocusable(false);
-        jbBack.setPreferredSize(new Dimension(100,30));
+        jbBack = new JButton();
+        configButton(jbBack,"BACK_NO_SOMBRA.png","BACK_SOMBRA.png");
 
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblExit = new JPanel(new GridBagLayout());
@@ -78,12 +81,12 @@ public class Settings extends View {
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
 
-        jbChangePassword = new JButton("CHANGE PASSWORD");
-        jbChangePassword.setFocusable(false);
-        jbAddMoney = new JButton("ADD MONEY");
-        jbAddMoney.setFocusable(false);
-        jbWalletEvolution = new JButton("WALLET EVOLUTION");
-        jbWalletEvolution.setFocusable(false);
+        jbChangePassword = new JButton();
+        configButton(jbChangePassword, "CHANGELEPASWORD_NO_SOMBRA.png", "CHANGELEPASWORD_SOMBRA.png");
+        jbAddMoney = new JButton();
+        configButton(jbAddMoney, "ADDMONEY_NO_SOMBRA.png", "ADDMONEY_SOMBRA.png");
+        jbWalletEvolution = new JButton();
+        //configButton(jbWalletEvolution, "", "");
 
         jpgblBotons.add(jbChangePassword, c);
 
@@ -155,5 +158,17 @@ public class Settings extends View {
 
     public void updateWallet(WalletEvolutionMessage newWallet) {
         settingsView.updateWallet(newWallet);
+    }
+
+    private void configButton(JButton boto, String normal,String onSelection){
+        boto.setBorderPainted(false);
+        boto.setBorder(null);
+        boto.setFocusable(false);
+        boto.setMargin(new Insets(0, 0, 0, 0));
+        boto.setContentAreaFilled(false);
+        boto.setIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
     }
 }

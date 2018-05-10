@@ -19,6 +19,7 @@ public class LogInView extends View {
 
     private final static char PASSWORD_CHAR = '*';
 
+    private final static Color CREMA = new Color (218, 204, 164);
     private final static Color GRANA = new Color(125, 28, 37);
     private final static Color TRANSPARENT = new Color(0,0,0,0);
 
@@ -52,8 +53,7 @@ public class LogInView extends View {
         c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
         jbBack = new JButton();
-        configButton(jbBack,"BACK_SOMBRA.png","BACK_NO_SOMBRA.png");
-
+        configButton(jbBack,"BACK_NO_SOMBRA.png","BACK_SOMBRA.png");
         jpgblBack.add(jbBack, c);
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -70,7 +70,8 @@ public class LogInView extends View {
 
         JLabel jlTitle = new JLabel("Log In");
         //TODO: setFont ADRIA
-        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
+        jlTitle.setForeground(CREMA);
+        jlTitle.setFont(AssetManager.getEFont(100));
 
         //Marges
         c.insets = new Insets(20,0,0,0);
@@ -85,6 +86,8 @@ public class LogInView extends View {
         jcbRememberLogIn = new JCheckBox("Remember user");
         jcbRememberLogIn.setOpaque(false);
         jcbRememberLogIn.setFocusable(false);
+        jcbRememberLogIn.setForeground(CREMA);
+        jcbRememberLogIn.setFont(AssetManager.getEFont(15));
 
         //S'afegeixen les etiquetes
         c.gridy = 3;
@@ -110,7 +113,7 @@ public class LogInView extends View {
 
         //S'afegeix el botó per acceptar la info introduida
         jbAccept = new JButton();
-        //TODO//configButton(jbAccept,"accept.png","acceptOnMouse.png");
+        configButton(jbAccept,"ACCEPT_NO_SOMBRA.png","ACCEPT_SOMBRA.png");
 
         c.gridy = 4;
         c.gridx = 0;

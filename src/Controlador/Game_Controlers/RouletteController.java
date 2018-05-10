@@ -91,7 +91,7 @@ public class RouletteController implements GraphicsController {
         rouletteImage = AssetManager.getImage("Rulet.png");
         background = AssetManager.getImage("casino ruleta sin marco.png");
         boardImage = AssetManager.getImage("marco ruleta MAS PEQE 2.png");
-        font = AssetManager.getEFont();
+        font = AssetManager.getEFont(20);
 
         hideRoulette = true;
         backAnim = false;

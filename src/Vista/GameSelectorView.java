@@ -14,6 +14,8 @@ public class GameSelectorView extends View {
     private JButton jbBlackJack;
     private JButton jbRoulette;
 
+    private final static Color CREMA = new Color (218, 204, 164);
+
     public GameSelectorView(){
 
         this.setLayout(new BorderLayout());
@@ -26,8 +28,8 @@ public class GameSelectorView extends View {
         //Marges
         c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
-        jbLogOut = new JButton("LOGOUT");
-        jbLogOut.setFocusable(false);
+        jbLogOut = new JButton();
+        //configButton(jbLogOut,"LOGOUT_NO_SOMBRA.png", "LOGOUT_SOMBRA.png", "LOGOUT_SOMBRA.png");
         jpgblBack.add(jbLogOut, c);
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -43,7 +45,8 @@ public class GameSelectorView extends View {
         jpgblTitle.setOpaque(false);
         JLabel jlTitle = new JLabel("GAMES");
         //TODO: setFont ADRIA
-        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
+        jlTitle.setFont(AssetManager.getEFont(100));
+        jlTitle.setForeground(CREMA);
 
         //Marges
         c.insets = new Insets(20,0,0,0);
@@ -56,13 +59,13 @@ public class GameSelectorView extends View {
         jpgblBotons.setOpaque(false);
 
         jbBlackJack = new JButton();
-     //   configButton(jbBlackJack,"blackJackButton.png","blackJackButtonOnMouse.png","blackJackButton.png");
+        configButton(jbBlackJack,"BJ.png","BJS.png","BJN.png");
 
         jbHorseRace = new JButton();
-     //   configButton(jbHorseRace,"horseButton.png","horseButtonOnMouse.png","horseButtonDisabled.png");
+        configButton(jbHorseRace,"HR.png","HRS.png","HRN.png");
 
         jbRoulette = new JButton();
-     //   configButton(jbRoulette,"rouletteButton.png","rouletteButtonOnMouse.png","rouletteButtonDisabled.png");
+        configButton(jbRoulette,"R.png","RS.png","RN.png");
 
         //Marges
         c.insets = new Insets(0,0,0,20);
@@ -82,6 +85,7 @@ public class GameSelectorView extends View {
         //S'afegeix el botó per accedir a la configuració de l'usuari
         jbSettings = new JButton("Settings");
         jbSettings.setFocusable(false);
+        //TODO: posar imatge boto settings
 
         c.gridy = 1;
         c.gridx = 1;
