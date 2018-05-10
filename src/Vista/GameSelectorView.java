@@ -42,7 +42,8 @@ public class GameSelectorView extends View {
         JPanel jpgblTitle = new JPanel(new GridBagLayout());
         jpgblTitle.setOpaque(false);
         JLabel jlTitle = new JLabel("GAMES");
-        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 24));
+        //TODO: setFont ADRIA
+        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
 
         //Marges
         c.insets = new Insets(20,0,0,0);

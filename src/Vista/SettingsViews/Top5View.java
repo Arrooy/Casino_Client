@@ -15,6 +15,14 @@ public class Top5View extends JPanel {
 
     public Top5View(){
         this.setLayout(new BorderLayout());
+
+        JPanel jPanelGridTaula = new JPanel(new GridBagLayout());
+        jPanelGridTaula.setBorder(BorderFactory.createEmptyBorder());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridy = 0;
+        c.insets = new Insets(0, 0, 10, 0);
+        c.fill = GridBagConstraints.CENTER;
+
         Object [][] data = new Object[1][3];
         data[0][0] = "Loading";
         data[0][1] = "Loading";
@@ -22,13 +30,16 @@ public class Top5View extends JPanel {
         table = new JTable(data,columnNames);
         table.setColumnSelectionAllowed(false);
         table.setFocusable(false);
-        table.setPreferredScrollableViewportSize(new Dimension(400,150));
+        table.setEnabled(false);
+        table.setPreferredScrollableViewportSize(new Dimension(400,400));
         table.setDefaultEditor(Object.class, null);
 
         JScrollPane jScrollPane = new JScrollPane(table);
         jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        jScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        jPanelGridTaula.add(jScrollPane, c);
 
-        add(jScrollPane,BorderLayout.CENTER);
+        add(jPanelGridTaula,BorderLayout.CENTER);
     }
 
     public void updateWallet(WalletEvolutionMessage newWallet) {

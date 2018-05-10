@@ -69,6 +69,7 @@ public class LogInView extends View {
         jpgblTitle.setOpaque(false);
 
         JLabel jlTitle = new JLabel("Log In");
+        //TODO: setFont ADRIA
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
 
         //Marges

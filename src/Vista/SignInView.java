@@ -76,6 +76,7 @@ public class SignInView extends View implements PasswordConfirm {
         jpgblTitle.setOpaque(false);
 
         JLabel jlTitle = new JLabel("Sign In");
+        //TODO: setFont ADRIA
         jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
         //Marges
         c.insets = new Insets(20,0,0,0);

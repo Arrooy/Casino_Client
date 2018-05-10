@@ -42,7 +42,8 @@ public class Settings extends View {
         JLabel jlTitle = new JLabel("SETTINGS");
         jlTitle.setOpaque(false);
 
-        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 24));
+        //TODO: setFont ADRIA
+        jlTitle.setFont(new Font("ArialBlack", Font.BOLD, 100));
 
         //Marges
         c.insets = new Insets(20,0,0,0);
