@@ -42,13 +42,14 @@ public class Top5View extends JPanel {
         table = new JTable(data,columnNames);
         table.setBackground(VERDFOSC);
         table.setGridColor(MARRO);
+        table.setForeground(CREMA);
+
         JTableHeader header = table.getTableHeader();
         header.setBackground(MARRO);
-        header.setForeground(GROC);
+        header.setForeground(CREMA);
         header.setFont(AssetManager.getEFont(15));
         header.setBorder(BorderFactory.createLineBorder(MARRO));
 
-        table.setForeground(GROC);
         table.setColumnSelectionAllowed(false);
         table.setFocusable(false);
         table.setEnabled(false);

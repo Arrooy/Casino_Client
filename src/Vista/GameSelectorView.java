@@ -29,7 +29,7 @@ public class GameSelectorView extends View {
         c.insets = new Insets(20,20,20,0);
         c.fill = GridBagConstraints.BOTH;
         jbLogOut = new JButton();
-        //configButton(jbLogOut,"LOGOUT_NO_SOMBRA.png", "LOGOUT_SOMBRA.png", "LOGOUT_SOMBRA.png");
+        configButton(jbLogOut,"LGLGOUT.png", "LGOUTS.png", "LGOUTS.png");
         jpgblBack.add(jbLogOut, c);
         //Flow Layout per a que el botó quedi a l'esquerra
         JPanel jpBack = new JPanel(new FlowLayout(FlowLayout.LEADING));

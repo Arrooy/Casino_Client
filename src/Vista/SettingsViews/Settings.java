@@ -86,7 +86,7 @@ public class Settings extends View {
         jbAddMoney = new JButton();
         configButton(jbAddMoney, "ADDMONEY_NO_SOMBRA.png", "ADDMONEY_SOMBRA.png");
         jbWalletEvolution = new JButton();
-        //configButton(jbWalletEvolution, "", "");
+        configButton(jbWalletEvolution, "WE.png", "WES.png");
 
         jpgblBotons.add(jbChangePassword, c);
 
