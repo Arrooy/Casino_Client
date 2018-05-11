@@ -405,13 +405,13 @@ public class BlackJackController implements GraphicsController {
                 g.setColor(new Color(20,20,20,230));
                 g.fillRect(0,0,width,height);
 
-                g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, width/10));
+                g.setFont(AssetManager.getEFont(width/10));
                 FontMetrics metrics = g.getFontMetrics(g.getFont());
 
-                g.setColor(new Color(255,255,255));
+                g.setColor(new Color(216, 202, 168));
                 g.drawString(gameOverText,width/2 - metrics.stringWidth(gameOverText)/2,height/3);
 
-                g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, width/40));
+                g.setFont(AssetManager.getEFont(width/40));
                 metrics = g.getFontMetrics(g.getFont());
 
                 g.drawString("Press R to restart",75,(int)((float)height/1.5));
@@ -422,13 +422,15 @@ public class BlackJackController implements GraphicsController {
 
             }else{
                 //Si la partida no ha acabat, es mostra informacio bàsica de la UI
-                g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, width/50));
+                g.setFont(AssetManager.getEFont(width/50));
                 FontMetrics metrics = g.getFontMetrics(g.getFont());
 
+                g.setColor(new Color(216, 202, 168));
+
                 g.drawString("Cards score :" + userScore, width - metrics.stringWidth(("Cards score :" + userScore)) - 15, height - metrics.getAscent() * 2);
-                g.drawString("Bet: " + bet, 50, 75);
-                g.drawString("User wallet: " + moneyToSpend, 50, height - metrics.getAscent() * 4);
-                g.drawString("Profit: " + bet * 2.0, 50, height - metrics.getAscent() * 2);
+                g.drawString("Bet: " + bet + MONEY_SYMBOL, 50, 75);
+                g.drawString("User wallet: " + moneyToSpend + MONEY_SYMBOL, 50, height - metrics.getAscent() * 4);
+                g.drawString("Profit: " + bet * 2.0 + MONEY_SYMBOL, 50, height - metrics.getAscent() * 2);
 
             }
         }
@@ -439,6 +441,7 @@ public class BlackJackController implements GraphicsController {
         g.setColor(new Color(20,20,20,230));
         g.fillRect(0,0,width,height);
         Image image = AssetManager.getImage("tutoBJ.png");
+
         if(image.getWidth(null) > blackJackView.getWidth() || blackJackView.getHeight() < image.getHeight(null)){
             g.drawImage(image,0,0,blackJackView.getWidth(),blackJackView.getHeight(),null);
         }else{

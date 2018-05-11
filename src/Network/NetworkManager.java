@@ -15,6 +15,7 @@ import Model.Card;
 import Model.Transaction;
 import Model.User;
 import Controlador.SplashScreen;
+import Utils.Seguretat;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -102,7 +103,7 @@ public class NetworkManager extends Thread {
         }
         if(conectatAmbServidor) {
             //Configurem el logIn i enviem la solicitud al servidor
-            User user = new User((String)credentials[0],(String)credentials[1],Transmission.CONTEXT_LOGIN);
+            User user = new User((String)credentials[0],(String)Seguretat.desencripta(credentials[1]),Transmission.CONTEXT_LOGIN);
             new Transmission( user, this);
         }else{
             System.out.println("No hi ha connexio amb el server");

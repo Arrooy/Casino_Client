@@ -207,6 +207,7 @@ public class Transmission implements Runnable {
 
             //Esperem a una resposta del servidor
             User responseUser = (User) waitResponse(usuariIntent);
+
             //Si la resposta del servidor indica que tot es correcte. Es completa el logIn
             if(responseUser.areCredentialsOk()){
                 finishUpdate(responseUser);
@@ -248,7 +249,6 @@ public class Transmission implements Runnable {
             //El borrem del json si existeix
             JsonManager.removeRemember();
         }
-
         networkManager.enterToGames();
     }
 }
