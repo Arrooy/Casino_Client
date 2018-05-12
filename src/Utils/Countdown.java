@@ -4,6 +4,7 @@ package Utils;
 /**Classe que permet comptar enrere, en arribar a 0 para de comptar*/
 public class Countdown extends Thread {
     private long count;
+    private long startTime;
     private boolean isCounting;
 
     private static final int COUNTRATE = 100;
@@ -20,7 +21,8 @@ public class Countdown extends Thread {
         try {
             while(true){
                 if(isCounting) {
-                    this.count-=COUNTRATE;
+                    this.count-=(System.currentTimeMillis() - startTime);
+                    startTime = System.currentTimeMillis();
                     if(this.count <= 0){
                         this.count = 0;
                     }
@@ -43,6 +45,7 @@ public class Countdown extends Thread {
     /**Metode per reiniciar el comptatge*/
     public void newCount(long count){
         this.count = count;
+        this.startTime = System.currentTimeMillis();
         this.isCounting = true;
     }
 

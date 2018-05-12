@@ -29,6 +29,27 @@ import java.util.stream.StreamSupport;
 /**Controlador de la cursa de cavalls*/
 public class HorseRaceController implements GraphicsController, ActionListener {
 
+    private final static Color GRANA = new Color(125, 28, 37);
+    private final static Color GREY = new Color(49, 63, 47);
+
+
+    private static final int MAX_HORSES = 12;
+    private static final int SECTIONS = 5;
+    private static final double HORSE_START_X = 0.252;
+    private static final double HORSE_START_Y = 0.026;
+    private static final double TIME_MESSAGE_Y = 0.23;
+    private static final double TIME_MESSAGE_X = 0.048;
+    private static final double WINNER_MESSAGE_X = TIME_MESSAGE_X;
+    private static final double WINNER_MESSAGE_Y = TIME_MESSAGE_Y + 0.035;
+    private static final double WALLET_MESSAGE_X = TIME_MESSAGE_X;
+    private static final double WALLET_MESSAGE_Y = WINNER_MESSAGE_Y + 0.035;
+    private static final double BET_TITLE_X = TIME_MESSAGE_X;
+    private static final double BET_TITLE_Y = 0.7;
+    private static final double BET_STATUS_X = BET_TITLE_X;
+    private static final double BET_STATUS_Y = BET_TITLE_Y + 0.035;
+    private static final double BET_RESULT_X = BET_TITLE_X;
+    private static final double BET_RESULT_Y = BET_STATUS_Y + 0.06;
+
     private static GraphicsManager graphicsManager;
     private NetworkManager networkManager;
     private HorseRaceView horseRaceView;
@@ -43,6 +64,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private boolean betResult;
     private boolean firstRace;
     private boolean oncePerRace;
+    private boolean betOK;
 
     private Countdown waitCountdown;
     private Countdown raceCountdown;
@@ -53,16 +75,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private int[] horseFrames;
 
     private int winner;
-
     private long animationRate;
     private long prize;
     private long betAmount;
-
-
-    private static final int MAX_HORSES = 12;
-    private static final int SECTIONS = 5;
-    private static final double HORSE_START_X = 0.252;
-    private static final double HORSE_START_Y = 0.026;
+    private int betHorse;
 
     private Font font;
 
@@ -117,9 +133,11 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.betResult = false;
         this.firstRace = true;
         this.oncePerRace = true;
+        this.betHorse = 0;
+        this.betOK = false;
         waitCountdown.stopCount();
         raceCountdown.stopCount();
-        startYourHorses();
+        endYourHorses();
         font = AssetManager.getEFont(20);
 
     }
@@ -130,6 +148,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     public void play() {
         setGraphics();
         this.play = true;
+        this.betHorse = 0;
+        this.betOK = false;
         this.isRacing = false;
         this.isBetting = false;
         this.isCountDown = false;
@@ -137,6 +157,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.oncePerRace = true;
         waitCountdown.stopCount();
         raceCountdown.stopCount();
+        endYourHorses();
     }
 
     /**
@@ -163,6 +184,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.isCountDown = true;
                     this.oncePerRace = true;
                     this.waitCountdown.newCount(horseMessage.getTimeForRace());
+                    endYourHorses();
                 }
             } else if (!isRacing && waitCountdown.isCounting()) {
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-Schedule");
@@ -181,15 +203,14 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                 if (isBetting) {
                     horseMessage = (HorseMessage) networkManager.readContext("HORSES-BetConfirm");
                     if (horseMessage != null) {
-                        boolean betOK = horseMessage.getHorseBet().isBetOK();
+                        betOK = horseMessage.getHorseBet().isBetOK();
                         if (betOK) {
-                            new Transaction("HorseBet", user.getUsername(), -horseMessage.getHorseBet().getBet(), 1);
-                            //TODO: Mostra missatge de aposta correcte
+                            betAmount = horseMessage.getHorseBet().getBet();
+                            betHorse = horseMessage.getHorseBet().getHorse() + 1;
+                            new Transaction("HorseBet", user.getUsername(), -betAmount, 1);
 
-                        } else {
-                            //TODO: Mostra missatge aposta incorrecte
-                            isBetting = false;
-
+                        }else{
+                            betResult = false;
                         }
                     }
 
@@ -214,17 +235,12 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     if (isBetting) {
                         betResult = true;
                     }
-                    this.winner = horseMessage.getHorseResult().getWinner();
+                    this.winner = horseMessage.getHorseResult().getWinner() + 1;
                     prize = horseMessage.getHorseResult().getPrize();
                     if (prize == 0) {
-                        //TODO: Missatge no ha guanyat
                     } else {
                         new Transaction("HorseBet", user.getUsername(), prize, 1);
-                        //TODO: Mostra missatge que ha guanyat aposta
                     }
-
-                    //TODO: Mostra missatge guanyador = horseMessage.getHorseResult().getWinner();
-
                 }
             }
         }
@@ -239,16 +255,28 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         }
     }
 
+    public void endYourHorses(){
+        for (int horse = 0; horse < MAX_HORSES; horse++) {
+            horsePositions[horse] = new Point((int) (HORSE_START_X * horseRaceView.getWidth()), (int) (HORSE_START_Y * (float) horseRaceView.getHeight() + horse * 0.074 * (float) horseRaceView.getHeight()));
+            horseFrames[horse] = 2;
+        }
+    }
+
     @Override
     public void render(Graphics g) {
         g.drawImage(AssetManager.getImage("HORSES-PANEL.png"), 0, 0, horseRaceView.getWidth(), horseRaceView.getHeight(), null);
         for (int horse = 0; horse < MAX_HORSES; horse++) {
             g.drawImage(AssetManager.getImage("horse" + horse % 6 + "_" + horseFrames[horse] + ".png", (int) (horseRaceView.getWidth() / 14.44), (int) (horseRaceView.getHeight() / 10.4)), horsePositions[horse].x, horsePositions[horse].y, null);
         }
+        g.setFont(font.deriveFont(15f));
+        g.setColor(GREY);
+        g.drawString("Press \"Esc\" to exit." , (int)(0.01), (int)(horseRaceView.getHeight()*0.03));
+        g.setFont(font.deriveFont(20f));
+        g.setColor(Color.white);
+        g.drawString("Bet:" , (int)(horseRaceView.getWidth()*BET_TITLE_X), (int)(horseRaceView.getHeight()*BET_TITLE_Y));
+        g.drawString("Wallet: " + this.user.getWallet() , (int)(horseRaceView.getWidth()*WALLET_MESSAGE_X), (int)(horseRaceView.getHeight()*WALLET_MESSAGE_Y));
         if (isRacing && raceCountdown.isCounting()) {
-            //TODO: Aqui cal fer que s'actualitzi la posicio dels caballs
-            //TODO: Mostrar temps per acabar carrera amb raceCountdown.getCount()
-            if (System.currentTimeMillis() - animationRate > 150) {
+            if (System.currentTimeMillis() - animationRate > 50) {
                 for (int i = 0; i < horseFrames.length; i++) {
                     horseFrames[i]++;
                     if (horseFrames[i] > 6)
@@ -257,40 +285,66 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                 animationRate = System.currentTimeMillis();
             }
             if(raceCountdown.isCounting()){
-                g.drawString("RACE TIME: " + raceCountdown.getCount() / 1000, 40, 40);
-            }
+                if(raceCountdown.getCount() < 10/1000){
+                    g.drawString(("Race: 0" + raceCountdown.getCount() / 1000 + "s"),(int)(horseRaceView.getWidth()*TIME_MESSAGE_X) ,  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
 
+                }else{
+                    g.drawString(("Race: " + (raceCountdown.getCount() / 1000 + "s")),(int)(horseRaceView.getWidth()*TIME_MESSAGE_X) ,  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
+
+                }
+             }
         } else {
             if (isCountDown && waitCountdown.getCount() > 0) {
-                g.drawString("Time for next race: " + waitCountdown.getCount() / 1000, 40, 20);
+                if(waitCountdown.getCount() < 10/1000){
+                    g.drawString("Wait: 0" + (waitCountdown.getCount() / 1000) + "s",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X) ,  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
+
+                }else{
+                    g.drawString("Wait: " + (waitCountdown.getCount() / 1000) + "s",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X),  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
+
+                }
             }
         }
         if (!isRacing&&!isCountDown&&!waitCountdown.isCounting()&&!raceCountdown.isCounting() && firstRace ) {
-            //TODO Mostrar missatge esperant a que acabi una carrera
-            g.drawString("Waiting for race to finish...", 40, 60);
+            g.setFont(font.deriveFont(10f));
+            g.drawString("Race: ...",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X),  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
         }
 
         if (isBetting) {
-            g.drawString("You have bet", 40, 80);
-            //TODO Mostrar aposta
+            if(this.betOK){
+                g.setFont(font.deriveFont(18f));
+                g.drawString("Amount: " + betAmount , (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y )));
+                g.drawString("Horse: " + betHorse, (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y + 0.03)));
+            }else{
+                g.setFont(font.deriveFont(18f));
+                g.setColor(GRANA);
+                g.drawString("Insufficient funds", (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*BET_STATUS_Y));
+                g.setColor(Color.white);
+            }
+         }else{
+            g.setFont(font.deriveFont(18f));
+            g.drawString("Amount: " , (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y )));
+            g.drawString("Horse: " , (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y + 0.03)));
         }
         if (isCountDown && betResult) {
+            g.setFont(font.deriveFont(18f));
             if (prize == 0) {
-                g.drawString("Has perdut l'aposta", 40, 100);
+                g.drawString("Bet Lost", (int)(horseRaceView.getWidth()*BET_RESULT_X), (int)(horseRaceView.getHeight()*BET_RESULT_Y));
             } else {
-                g.drawString("Has guanyat  " + prize, 40, 100);
+                g.drawString("Prize:  " + prize, (int)(horseRaceView.getWidth()*BET_RESULT_X), (int)(horseRaceView.getHeight()*BET_RESULT_Y));
             }
-
-            //TODO Mostrar missatge recompensa aposta
-
         }
-
+        g.setFont(font.deriveFont(20f));
         if(isCountDown && !firstRace ){
-            g.drawString("Ha guanyat " + winner, 40, 120);
+            g.drawString("Winner: Horse " + winner, (int)(horseRaceView.getWidth()*WINNER_MESSAGE_X), (int)(horseRaceView.getHeight()*WINNER_MESSAGE_Y));
+        }else{
+            g.drawString("Winner: ", (int)(horseRaceView.getWidth()*WINNER_MESSAGE_X), (int)(horseRaceView.getHeight()*WINNER_MESSAGE_Y));
+
         }
 
         if(!isRacing && !raceCountdown.isCounting() && !waitCountdown.isCounting()){
-            g.drawString("Començant carrera..." , 40, 140);
+            g.setFont(font.deriveFont(20f));
+            g.drawString("Wait: ...",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X),  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
+
         }
 
 
