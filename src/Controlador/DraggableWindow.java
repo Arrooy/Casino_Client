@@ -5,6 +5,7 @@ import Network.NetworkManager;
 import Vista.MainFrame.Finestra;
 import Vista.Tray;
 
+import javax.swing.*;
 import java.awt.event.*;
 
 import static java.awt.Frame.ICONIFIED;
@@ -146,7 +147,8 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        System.out.println("Tamo asiendo update");
+        SwingUtilities.updateComponentTreeUI(vista);
     }
 
     @Override

@@ -93,8 +93,27 @@ public class Transmission implements Runnable {
             case "rouletteBet":
                 rouletteBet((RouletteBetMessage) msg);
                 break;
+            case "walletRequest":
+                networkManager.send(msg);
+                requestWallet(msg);
+                break;
             default:
                 networkManager.send(msg);
+        }
+    }
+
+    /**
+     * Espera al servidor a que comuniqui el moneder de l'usuari
+     * @param msg Missatge original
+     */
+    private void requestWallet(Message msg) {
+        try {
+            System.out.println("[WALLET]: Requested");
+            Message resp = waitResponse(msg);
+            networkManager.setRouletteWallet(((User) resp).getWallet());
+            System.out.println("[WALLET]: Received (" + ((User) resp).getWallet() + ")");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

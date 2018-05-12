@@ -30,6 +30,8 @@ public class RouletteBetTable {
     }
 
     public void update() {
+        for (RouletteBetCell betCell: cells) betCell.update();
+
         cells.getFirst().updatePos(x, y + RouletteBetCell.getCellHeight());
         for (int i = 0; i < 36 + 3; i++) cells.get(i+1).updatePos(x + (1 + i / 3) * RouletteBetCell.getCellWidth(), y + (3 - i % 3) * RouletteBetCell.getCellHeight());
         for (int i = 0; i < 6; i++) cells.get(i+1+39).updatePos(x + (1 + 2*i) * RouletteBetCell.getCellWidth(), y);

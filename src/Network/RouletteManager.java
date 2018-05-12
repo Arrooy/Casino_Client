@@ -38,6 +38,8 @@ public class RouletteManager extends Thread {
             e.printStackTrace();
         }
 
+        roulette.requestWallet();
+
         RouletteController.updateNextTime((long) msg.getTimeTillNext());
         waitTillNext(Math.max(0, (long) msg.getTimeTillNext() - Timestamp.from(Instant.now()).getTime() - 10));
 
@@ -48,6 +50,7 @@ public class RouletteManager extends Thread {
             roulette.setParams(shot.getRouletteVel(), shot.getBallVel(), shot.getShotOff());
             RouletteController.updateNextTime((long) shot.getTimeTillNext());
             roulette.shoot();
+            roulette.requestWallet();
 
             waitTillNext(Math.max(0, (long) shot.getTimeTillNext() - Timestamp.from(Instant.now()).getTime() - 10));
         }
@@ -73,5 +76,11 @@ public class RouletteManager extends Thread {
 
     public void bet(RouletteBetMessage msg) {
         roulette.bet(msg.getBet(), msg.getCellID());
+        roulette.increaseBet(msg.getBet());
+    }
+
+    public void setWallet(long wallet) {
+        roulette.resetBet();
+        roulette.setWallet(wallet);
     }
 }

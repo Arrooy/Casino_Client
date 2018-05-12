@@ -3,6 +3,10 @@ package Controlador.CustomGraphics;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * TODO: Comentar degudament
+ * TODO: Passar a package Vista (Recomanació de @edetorres)
+ */
 @SuppressWarnings("serial")
 public class GraphicsManager implements Runnable {
 
@@ -79,6 +83,7 @@ public class GraphicsManager implements Runnable {
             long beforeUpdateRender = System.nanoTime();
             long deltaMillis = updateDurationMillis + sleepDurationMillis;
 
+            JPanelObjectiu.requestFocus();
             updateAndRender(deltaMillis);
 
             updateDurationMillis = (System.nanoTime() - beforeUpdateRender) / 1000000L;

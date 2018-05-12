@@ -62,7 +62,7 @@ public class RouletteBetCell {
     }
 
     public static int getCellWidth() {
-        return (int) (Controller.getWinWidth() * .05473);// cellWidth;
+        return (int) (Controller.getWinWidth() * .0537);// cellWidth;
     }
 
     public static int getCellHeight() {
@@ -70,7 +70,7 @@ public class RouletteBetCell {
     }
 
     public void update() {
-        cellWidth = (int) (Controller.getWinWidth() * .05473);
+        cellWidth = (int) (Controller.getWinWidth() * .0537);//4673
         cellHeight = (int) (Controller.getWinHeight() * .1375);
     }
 

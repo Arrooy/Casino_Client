@@ -4,16 +4,13 @@ import Controlador.Controller;
 import Controlador.Game_Controlers.HorseRaceController;
 import Controlador.Game_Controlers.RouletteController;
 import Controlador.Sounds;
+import Model.*;
 import Model.HorseRace_Model.HorseBet;
 import Model.HorseRace_Model.HorseMessage;
 import Model.HorseRace_Model.HorseSchedule;
 import Model.RouletteModel.RouletteBetMessage;
 import Model.RouletteModel.RouletteMessage;
-import Model.WalletEvolutionMessage;
 import Utils.JsonManager;
-import Model.Card;
-import Model.Transaction;
-import Model.User;
 import Controlador.SplashScreen;
 import Utils.Seguretat;
 
@@ -159,7 +156,7 @@ public class NetworkManager extends Thread {
                 }
             }
         }
-    }
+    }//Restar money bet al consultar la pasta
 
 
     /** Reconeix el missatge rebut del servidor i indica si el servidor vol la desconnexio d'aquest client*/
@@ -489,5 +486,25 @@ public class NetworkManager extends Thread {
         showGamesView();
         System.gc();
 
+    }
+
+    public void setRouletteWallet(long wallet) {
+
+        rouletteManager.setWallet(wallet);
+    }
+
+    public String[][] updateRouletteList() {
+        String[][] info = null;
+
+        for(int i = lectures.size()-1; i > 0; i--) {
+            Message msg = lectures.get(i);
+            if (msg.getContext().equals("rouletteListUpdate")) {
+                System.out.println("[ROULETTE LIST]: Updating");
+                info = ((BetList) msg).getInfo();
+                lectures.remove(msg);
+            }
+        }
+
+        return info;
     }
 }

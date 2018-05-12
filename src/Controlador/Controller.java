@@ -52,7 +52,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     private BlackJackController BJController;
     private HorseRaceView horseRaceView;
     private HorseRaceController horseRaceController;
-
+    private RouletteController rouletteController;
 
     /** Usuari que controla el client*/
     private User user;
@@ -275,6 +275,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         signInView.clearFields();
         finestra.setGameSelector(user.isGuest());
         gameSelectorView.updateUI();
+        SwingUtilities.updateComponentTreeUI(finestra);
     }
 
     public void initBlackJack() {
@@ -540,7 +541,8 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     private void setRoulette() {
         //RouletteView rouletteView = new RouletteView();
-        RouletteController rouletteController = new RouletteController(600, 600, networkManager);
+        if (rouletteController == null) rouletteController = new RouletteController(600, 600, networkManager);
+        else rouletteController.initRoulette();
         rouletteGraphicsManager = new GraphicsManager(rouletteView, rouletteController);
         finestra.requestRouletteFocus();
 
