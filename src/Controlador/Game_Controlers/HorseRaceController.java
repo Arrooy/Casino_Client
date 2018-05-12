@@ -64,6 +64,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private static final double HORSE_START_X = 0.252;
     private static final double HORSE_START_Y = 0.026;
 
+    private Font font;
+
 
     public HorseRaceController(HorseRaceView horseRaceView, NetworkManager networkManager, Finestra finestra) {
         this.horseRaceModel = new HorseRaceModel();
@@ -118,6 +120,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         waitCountdown.stopCount();
         raceCountdown.stopCount();
         startYourHorses();
+        font = AssetManager.getEFont(20);
 
     }
 
@@ -152,7 +155,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     public void update(float delta) {
         HorseMessage horseMessage;
         if (play) {
-            System.out.println(firstRace);
             if (!isRacing && !waitCountdown.isCounting()) {
                 System.out.println("teteee");
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-Countdown");
