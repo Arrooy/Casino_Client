@@ -313,7 +313,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             networkManager.exitHorses();
             stopPlay();
         }if((e.getKeyCode() == 98 || e.getKeyCode() == 66) && !isRacing){
-            horseMessage  = new HorseMessage(new HorseBet(100,10, user.getID()), "Bet");
+            horseMessage  = new HorseMessage(new HorseBet(100,10, user.getUsername()), "Bet");
             horseMessage.setID(user.getID());
             new Transmission(horseMessage, this.networkManager);
             this.isBetting = true;

@@ -6,15 +6,15 @@ import java.io.Serializable;
 public class HorseBet implements Serializable {
     private long bet;
     private int horse;
-    private double ID;
+    private String name;
     private boolean betOK;
 
-    public double getID() {
-        return ID;
+    public String getName() {
+        return name;
     }
 
-    public void setID(double ID) {
-        this.ID = ID;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getBet() {
@@ -33,10 +33,10 @@ public class HorseBet implements Serializable {
         this.horse = horse;
     }
 
-    public HorseBet (long bet, int horse, double ID){
+    public HorseBet (long bet, int horse, String name){
         this.bet = bet;
         this.horse = horse;
-        this.ID = ID;
+        this.name = name;
     }
 
 

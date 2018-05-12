@@ -1,12 +1,9 @@
 package Vista.GameViews;
 
 import Controlador.Controller;
-import Controlador.Game_Controlers.HorseRaceController;
-import Model.HorseRace_Model.Horse;
 import Vista.View;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**Vista per la cursa de la carrera dels cavalls*/
 public class HorseRaceView extends View {
