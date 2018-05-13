@@ -6,8 +6,10 @@ import Controlador.CustomGraphics.GraphicsManager;
 import Model.AssetManager;
 import Model.RouletteModel.RouletteBetMessage;
 import Model.User;
+import Network.BetGetter;
 import Network.NetworkManager;
 import Network.Transmission;
+import Vista.GameViews.Roulette.RouletteView;
 import Vista.GraphicUtils.RouletteElements.GRect;
 import Vista.GraphicUtils.RouletteElements.RouletteBall;
 import Vista.GraphicUtils.RouletteElements.RouletteBetTable;
@@ -16,7 +18,6 @@ import Vista.MainFrame.Finestra;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.AreaAveragingScaleFilter;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.LinkedList;
@@ -94,11 +95,14 @@ public class RouletteController implements GraphicsController {
     private String[][] info;
     private int listOff;
 
-    public RouletteController(int width, int height, NetworkManager networkManager) {
-        this.width = width;
-        this.height = height;
+    private RouletteView view;
+
+    public RouletteController(RouletteView view, NetworkManager networkManager) {
+        //this.width = width;
+        //this.height = height;
         this.gm = gm;
         this.networkManager = networkManager;
+        this.view = view;
 
         rx = width/2;
         ry = height/2;
@@ -349,9 +353,9 @@ public class RouletteController implements GraphicsController {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             System.out.println("ESCAPE PRESSED");
             networkManager.exitRoulette();
-        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            mode = mode == GAME_MODE ? LIST_MODE : GAME_MODE;
-        }
+        } /*else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            //mode = mode == GAME_MODE ? LIST_MODE : GAME_MODE;
+        }*/
     }
 
     public void shoot() {
@@ -380,11 +384,9 @@ public class RouletteController implements GraphicsController {
     public void mouseClicked(MouseEvent e) {}
     @Override
     public void mousePressed(MouseEvent e) {
-        if (mode == GAME_MODE) {//TODO: controlar que no s'introdueixi res que no sigui un num
-            long bet = Long.parseLong(Finestra.showInputDialog("How much do you want to bet?", "Bet on " + listBetConversion[table.getCellID(e.getX(), e.getY())]));
-
-            new Transmission(new RouletteBetMessage(bet, table.getCellID(e.getX(), e.getY())), networkManager);
-            System.out.println("[ROULETTE CELL]: " + table.getCellID(e.getX(), e.getY()));
+        if (mode == GAME_MODE) {
+            int cellID = table.getCellID(e.getX(), e.getY());
+            if (cellID >= 0) view.bet(cellID, networkManager, "How much do you want to bet?", "Bet on " + listBetConversion[cellID]);
 
             viewListPressed = e.getX() > vlx && e.getY() > vly && e.getY() < vly + viewList.getHeight(null) && e.getX() < vlx + viewList.getWidth(null);
         }

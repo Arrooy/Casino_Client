@@ -3,6 +3,8 @@ package Vista.GameViews.Roulette;
 import Controlador.Controller;
 import Controlador.CustomGraphics.GraphicsManager;
 import Controlador.Game_Controlers.RouletteController;
+import Network.BetGetter;
+import Network.NetworkManager;
 import Vista.View;
 
 import java.awt.*;
@@ -21,5 +23,9 @@ public class RouletteView extends View {
     public void addController(Controller c) {
         addComponentListener(c);
         controller = c;
+    }
+
+    public void bet(int cellID, NetworkManager networkManager, String message, String title) {
+        new BetGetter(cellID, networkManager, message, title);
     }
 }

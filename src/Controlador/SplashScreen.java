@@ -47,7 +47,7 @@ public class SplashScreen implements GraphicsController, Runnable{
         info = "Loading AssetManager...";
         textColor = Color.black;
         //Declarem el nombre de ralles de l'animacio d'inici
-        numberOfLines = (int)(Math.random() * 20) + 15;
+        numberOfLines = 1;//(int)(Math.random() * 20) + 15;
 
         //Es declaren els colors de les ralles
         colors = new Color[numberOfLines];
@@ -83,22 +83,22 @@ public class SplashScreen implements GraphicsController, Runnable{
 
     /** Formules per a calcular els 4 punts de les barres*/
     private double x2(float ti) {
-        return Math.sin(ti / 20) + 100 * Math.cos(ti / 25);
+        return Math.sin(ti / 20f) + 100f * Math.cos(ti / 25f);
     }
 
     /** Formules per a calcular els 4 punts de les barres*/
     private double y2(float t) {
-        return 20 * Math.sin(t / 10)+ 20 * Math.cos(t / 10);
+        return 20f * Math.sin(t / 10f)+ 20f * Math.cos(t / 10f);
     }
 
     /** Formules per a calcular els 4 punts de les barres*/
     private double x1(float ti) {
-        return 10 * Math.sin(ti / 80) + 10 * Math.cos(ti / 25);
+        return 10f * Math.sin(ti / 80f) + 10f * Math.cos(ti / 25f);
     }
 
     /** Formules per a calcular els 4 punts de les barres*/
     private double y1(float t) {
-        return 200 * Math.sin(t / 20)+ 10 * Math.cos(t / 60);
+        return 200f * Math.sin(t / 20f)+ 10f * Math.cos(t / 60f);
     }
 
     @Override
@@ -110,12 +110,12 @@ public class SplashScreen implements GraphicsController, Runnable{
         y1 = (int)y2(0);
 
         int aux = 0;
-        int colorSelecionado = (int)(Math.random() * 6);
+        int selectedColor = (int)(Math.random() * 6);
 
         //Es crea la configuracio de colors
         for(int i = 0;i < numberOfLines;i++) {
 
-            switch (colorSelecionado){
+            switch (selectedColor){
                 case 0:
                     colors[i] = new Color((int)map(i,0,numberOfLines,0,200),0,0);
                     break;
@@ -146,7 +146,7 @@ public class SplashScreen implements GraphicsController, Runnable{
     public void update(float delta) {
         int speed = 350;
         //S'acturalitza l'instant actual d'acord amb el delta time
-        currentTime = (long)(delta * System.nanoTime() / (float) (speed*1000));
+        currentTime = (long)(System.nanoTime() / (float) (speed*100000));
     }
 
     @Override
@@ -156,7 +156,7 @@ public class SplashScreen implements GraphicsController, Runnable{
 
         //Es printa el text infomatiu
         g.setColor(textColor);
-        g.setFont(new Font(g.getFont().getFontName(),Font.PLAIN,15));
+        g.setFont(g.getFont().deriveFont(15f));
         FontMetrics metrics = g.getFontMetrics(g.getFont());
 
         g.drawString(info,175 - metrics.stringWidth(info)/2,450);
@@ -166,10 +166,10 @@ public class SplashScreen implements GraphicsController, Runnable{
         //Es pinten totes les linies amb el seu color i grosor personalitzats
         for(int i = 0; i < numberOfLines;i++){
             g.setColor(colors[i]);
-            x = (int) x1(currentTime - i*100/numberOfLines);
-            x1 = (int) x2(currentTime - i*100/numberOfLines);
-            y = (int) y1(currentTime - i*100/numberOfLines);
-            y1 = (int) y2(currentTime - i*100/numberOfLines);
+            x = (int) x1((float)currentTime - (float)i*100f/(float)numberOfLines);
+            x1 = (int) x2((float)currentTime - (float)i*100f/(float)numberOfLines);
+            y = (int) y1((float)currentTime - (float)i*100f/(float)numberOfLines);
+            y1 = (int) y2((float)currentTime - (float)i*100f/(float)numberOfLines);
 
             g.setStroke(new BasicStroke(stroke[i]));
             g.draw(new Line2D.Float(x1, y1,x,y));
