@@ -23,7 +23,7 @@ public class PasswordChangeView extends View implements PasswordConfirm{
     private final static char PASSWORD_CHAR = '*';
 
     private final static Color GRANA = new Color(125, 28, 37);
-    private final static Color VERD = new Color(25, 151, 6);
+    private final static Color VERD = new Color(40, 73, 7);
     private final static Color GROC = new Color(237, 175, 67);
     private final static Color TRANSPARENT = new Color(0,0,0,0);
 

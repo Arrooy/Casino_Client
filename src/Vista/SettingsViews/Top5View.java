@@ -5,6 +5,7 @@ import Model.AssetManager;
 import Model.WalletEvolutionMessage;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 
@@ -14,7 +15,7 @@ public class Top5View extends JPanel {
     private final static Color TRANSPARENT = new Color(0,0,0,0);
     private final static Color CREMA = new Color (218, 204, 164);
     private final static Color GRANA = new Color(125, 28, 37);
-    private final static Color VERD = new Color(25, 151, 6);
+    private final static Color VERD = new Color(40, 73, 7);
     private final static Color GROC = new Color(237, 175, 67);
     private final static Color MARRO = new Color(56,37,19);
     private final static Color VERDFOSC = new Color(104,125,72, 255);
@@ -40,9 +41,10 @@ public class Top5View extends JPanel {
         data[0][1] = "Loading";
         data[0][2] = "Loading";
         table = new JTable(data,columnNames);
-        table.setBackground(VERDFOSC);
         table.setGridColor(MARRO);
         table.setForeground(CREMA);
+        table.setOpaque(false);
+        ((DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)).setOpaque(false);
 
         JTableHeader header = table.getTableHeader();
         header.setBackground(MARRO);
@@ -58,6 +60,7 @@ public class Top5View extends JPanel {
 
         JScrollPane jScrollPane = new JScrollPane(table);
         jScrollPane.setOpaque(false);
+        jScrollPane.getViewport().setOpaque(false);
         jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         JScrollBar jScrollBar = jScrollPane.getVerticalScrollBar();
         jScrollBar.setOpaque(false);

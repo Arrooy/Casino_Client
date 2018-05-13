@@ -24,7 +24,7 @@ public class SignInView extends View implements PasswordConfirm {
 
     private final static Color CREMA = new Color (218, 204, 164);
     private final static Color GRANA = new Color(125, 28, 37);
-    private final static Color VERD = new Color(25, 151, 6);
+    private final static Color VERD = new Color(40, 73, 7);
     private final static Color GROC = new Color(237, 175, 67);
     private final static Color TRANSPARENT = new Color(0,0,0,0);
 
@@ -48,8 +48,9 @@ public class SignInView extends View implements PasswordConfirm {
         JPanel jpGeneric = new JPanel(new GridBagLayout());
         jpGeneric.setOpaque(false);
 
-        jlErrorMessage = new JLabel("");
+        jlErrorMessage = new JLabel("Error Message");
         jlErrorMessage.setHorizontalAlignment(JLabel.CENTER);
+        jlErrorMessage.setForeground(TRANSPARENT);
 
         //Panell per col·locar el botó back a la part baixa a l'esquerra
         JPanel jpgblBack = new JPanel(new GridBagLayout());
@@ -91,34 +92,6 @@ public class SignInView extends View implements PasswordConfirm {
         JPanel jpgblInfo = new JPanel(new GridBagLayout());
         jpgblInfo.setOpaque(false);
 
-        c.insets = new Insets(0,0,20,10);
-        JLabel jlName = new JLabel("UserName:");
-        jlName.setForeground(CREMA);
-        jlName.setFont(AssetManager.getEFont(15));
-        JLabel jlEmail = new JLabel("e-mail:");
-        jlEmail.setForeground(CREMA);
-        jlEmail.setFont(AssetManager.getEFont(15));
-        JLabel jlPassword = new JLabel("Password:");
-        jlPassword.setForeground(CREMA);
-        jlPassword.setFont(AssetManager.getEFont(15));
-        JLabel jlConfirmPassword = new JLabel("Confirm Password:");
-        jlConfirmPassword.setForeground(CREMA);
-        jlConfirmPassword.setFont(AssetManager.getEFont(15));
-
-        //S'afegeixen les etiquetes
-        c.gridy = 0;
-        jpgblInfo.add(jlName, c);
-
-        c.gridy = 1;
-        jpgblInfo.add(jlEmail, c);
-
-        c.gridy = 2;
-        jpgblInfo.add(jlPassword, c);
-
-        c.gridy = 3;
-        c.insets = new Insets(0,0,20,10);
-        jpgblInfo.add(jlConfirmPassword, c);
-
         //S'afegeixen els camps per omplir
         jtfName = new IconTextField("user.png",USERNAME_HINT,USERNAME_TOOL_TIP);
         jtfEmail = new IconTextField("email.png",EMAIL_HINT,EMAIL_TOOL_TIP);
@@ -127,7 +100,7 @@ public class SignInView extends View implements PasswordConfirm {
 
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
-        c.gridx = 1;
+        c.gridx = 0;
         c.ipadx = 100;
         c.gridwidth = 3;
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -151,15 +124,16 @@ public class SignInView extends View implements PasswordConfirm {
 
         c = new GridBagConstraints();
         c.gridy = 4;
-        c.gridx = 0;
+        c.gridx = 4;
 
-        this.jlStrength = new JLabel("");
-        c.insets = new Insets(0,0,20,10);
+        this.jlStrength = new JLabel("Average Password");
+        jlStrength.setForeground(TRANSPARENT);
+        c.insets = new Insets(0,20,20,0);
         jpgblInfo.add(jlStrength, c);
 
         c = new GridBagConstraints();
         c.gridy = 4;
-        c.gridx = 1;
+        c.gridx = 0;
         c.ipadx = 100;
         c.gridwidth = 3;
         c.insets = new Insets(0,0,20,0);
@@ -171,7 +145,7 @@ public class SignInView extends View implements PasswordConfirm {
 
         c.gridy = 6;
         c.gridx = 1;
-        c.gridwidth = 1;
+        c.gridwidth = 2;
         c.insets = new Insets(20,0,0,0);
         jpgblInfo.add(jbAccept, c);
 
@@ -183,7 +157,7 @@ public class SignInView extends View implements PasswordConfirm {
         jpGeneric.add(jlErrorMessage, c);
 
         c.gridy = 1;
-        c.gridx = 0;
+        c.gridx = 1;
         c.gridwidth = 1;
         c.insets = new Insets(0,0,0,0);
         c.anchor = GridBagConstraints.CENTER;
@@ -242,6 +216,7 @@ public class SignInView extends View implements PasswordConfirm {
         jlErrorMessage.setForeground(TRANSPARENT);
         jpfConfirmPassword.setText("");
         jpbStrength.setValue(0);
+        jlStrength.setForeground(TRANSPARENT);
     }
 
     @Override
@@ -262,7 +237,7 @@ public class SignInView extends View implements PasswordConfirm {
     public void setStrength(int strength){
         if(strength < 15){
             jlStrength.setForeground(GRANA);
-            jlStrength.setText("Weak Password");
+            jlStrength.setText("Weak Password    ");
             jpbStrength.setForeground(GRANA);
             jpbStrength.setValue(17);
         }else if(strength < 25){
@@ -272,7 +247,7 @@ public class SignInView extends View implements PasswordConfirm {
             jpbStrength.setValue(27);
         }else{
             jlStrength.setForeground(VERD);
-            jlStrength.setText("Strong Password");
+            jlStrength.setText("Strong Password  ");
             jpbStrength.setForeground(VERD);
             jpbStrength.setValue(40);
         }

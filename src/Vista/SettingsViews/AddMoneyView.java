@@ -19,7 +19,7 @@ public class AddMoneyView extends View {
     private static final String PASSWORD_HINT = "Password";
 
     private final static Color GRANA = new Color(125, 28, 37);
-    private final static Color VERD = new Color(25, 151, 6);
+    private final static Color VERD = new Color(40, 73, 7);
     private final static Color TRANSPARENT = new Color(0,0,0,0);
 
     private JButton jbAddMoney;
@@ -132,9 +132,13 @@ public class AddMoneyView extends View {
     public void noTransactionOK(){ this.jlAddOK.setForeground(TRANSPARENT); }
 
     public void clearView(){
+        noTransactionOK();
+        clearFields();
+    }
+
+    public void clearFields(){
         noErrorMoney();
         noErrorPassword();
-        noTransactionOK();
         jpfPassword.setText("");
         jpfPassword.setHint(true);
         jntfAmount.setText("");

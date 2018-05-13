@@ -18,7 +18,6 @@ import Vista.MainFrame.Finestra;
 import Vista.SettingsViews.*;
 import Vista.SwingModifications.IconPasswordField;
 import Vista.SwingModifications.IconTextField;
-import com.mysql.jdbc.ConnectionProperties;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -223,8 +222,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     public void transactionOK(int type){
         if (type == 0) {
+
             addMoneyView.showAddOK();
             addMoneyView.noErrorMoney();
+            addMoneyView.clearFields();
         } else if(type == 1) {
             addMoneyView.noErrorMoney();
             addMoneyView.noTransactionOK();

@@ -83,9 +83,8 @@ public class GameSelectorView extends View {
         jpgblBotons.add(jbRoulette, c);
 
         //S'afegeix el botó per accedir a la configuració de l'usuari
-        jbSettings = new JButton("Settings");
-        jbSettings.setFocusable(false);
-        //TODO: posar imatge boto settings
+        jbSettings = new JButton();
+        configButton(jbSettings, "ST.png", "STS.png", "STS.png");
 
         c.gridy = 1;
         c.gridx = 1;
