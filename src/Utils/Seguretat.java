@@ -16,7 +16,7 @@ public class Seguretat {
     public static Object desencripta(Object text){
         BasicTextEncryptor bte = new BasicTextEncryptor();
         bte.setPassword(ENCRYPTOR_PASSWORD);
-        return "Miquel1234";//bte.decrypt((String)text);
+        return bte.decrypt((String)text);
     }
 
     /**

@@ -47,7 +47,7 @@ public class SplashScreen implements GraphicsController, Runnable{
         info = "Loading AssetManager...";
         textColor = Color.black;
         //Declarem el nombre de ralles de l'animacio d'inici
-        numberOfLines = 1;//(int)(Math.random() * 20) + 15;
+        numberOfLines = (int)(Math.random() * 20) + 15;
 
         //Es declaren els colors de les ralles
         colors = new Color[numberOfLines];
@@ -146,7 +146,7 @@ public class SplashScreen implements GraphicsController, Runnable{
     public void update(float delta) {
         int speed = 350;
         //S'acturalitza l'instant actual d'acord amb el delta time
-        currentTime = (long)(System.nanoTime() / (float) (speed*100000));
+        currentTime = (long)(System.nanoTime() / (float) (speed*58820));
     }
 
     @Override

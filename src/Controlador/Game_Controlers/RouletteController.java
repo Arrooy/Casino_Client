@@ -167,7 +167,8 @@ public class RouletteController implements GraphicsController {
         //upButtonSelected = AssetManager.getImage("SUPS.png");
         downButton = AssetManager.getImage("BAJ.png");
         //getDownButtonSelected = AssetManager.getImage("BAJS.png");
-        listTable = AssetManager.getImage("");//TODO: posar nom real
+        listTable = AssetManager.getImage("POnline.png");
+        wood = AssetManager.getImage("Num.png");
 
         vlx = 20;
         vly = Controller.getWinHeight() - viewList.getHeight(null) - 20;
@@ -188,7 +189,7 @@ public class RouletteController implements GraphicsController {
 
     public static String nextTimeToString() {
         long diff = nextTime - Timestamp.from(Instant.now()).getTime();
-        return String.format("%02d:%02d", (int) (diff / (1000 * 60)), (int) (diff / 1000 % 60));
+        return String.format("%02d", (int) (diff / 1000));
     }
 
     @Override
@@ -257,14 +258,13 @@ public class RouletteController implements GraphicsController {
     private void renderList(Graphics g) {
         g.drawImage(listBackground, 0, 0, Controller.getWinWidth(), Controller.getWinHeight(), null);
 
-        g.setColor(Color.red);
-        g.drawRect(Controller.getWinWidth()/2 - LIST_DIM/2, Controller.getWinHeight()/2 - LIST_DIM/2, LIST_DIM, LIST_DIM);
+        g.drawImage(listTable, Controller.getWinWidth()/2 - LIST_DIM/2, Controller.getWinHeight()/2 - LIST_DIM/2, null);
 
         g.drawImage(upButton, Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2 - 20, 20, 20, null);
         g.drawImage(downButton, Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2, 20, 20, null);
 
         int zx = Controller.getWinWidth()/2 - LIST_DIM/2;
-        int zy = Controller.getWinHeight()/2 - LIST_DIM/2 + 100;
+        int zy = Controller.getWinHeight()/2 - LIST_DIM/2 + 112;
 
         int[] cx = {zx + LIST_DIM/6, zx + LIST_DIM*3/6, zx + LIST_DIM*5/6};
 
@@ -309,8 +309,10 @@ public class RouletteController implements GraphicsController {
 
         if (!hideRoulette) ball.render(g, cx, cy, 200);
 
+        g.drawImage(wood, 30, 20, null);
         g.setColor(TEXT_COLOR);
-        g.drawString(nextTimeToString(), 40, 70);
+        int timwid = g.getFontMetrics().getStringBounds(nextTimeToString(), g).getBounds().width;
+        g.drawString(nextTimeToString(), 30 + (wood.getWidth(null)/2 - timwid/2), 70);
 
         if (winnerE && !hideRoulette) g.drawString("" + getWinner(), cx - 250, cy + 200);
 
