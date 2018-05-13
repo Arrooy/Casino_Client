@@ -430,16 +430,14 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     }
 
     public void updateSize(){
-        if(this.horseRaceView != null && this.graphicsManager!= null){
-            this.graphicsManager.resize(horseRaceView.getWidth(),horseRaceView.getHeight());
+        if(this.horseRaceView != null && graphicsManager!= null){
+            graphicsManager.resize(horseRaceView.getWidth(),horseRaceView.getHeight());
         }
-
     }
 
     public static void exit(){
         if(graphicsManager != null){
             graphicsManager.exit();
         }
-
     }
 }

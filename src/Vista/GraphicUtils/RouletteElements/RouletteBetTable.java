@@ -1,27 +1,21 @@
 package Vista.GraphicUtils.RouletteElements;
 
 import Controlador.Controller;
-import Vista.GraphicUtils.MoneySource;
 
 import java.awt.*;
 import java.util.LinkedList;
 
 public class RouletteBetTable {
 
-    private static final int NUMOFSOURCES = 4;//TODO: posar valor correcte
-
     private LinkedList<RouletteBetCell> cells;
-    private boolean ableToBet;
 
     private int x, y;
-
-    private MoneySource[] sources;
 
     public RouletteBetTable() {
         cells = new LinkedList<>();
 
-        x = Controller.getWinWidth()/2 - RouletteBetCell.getCellWidth() * 14 / 2 + 30;
-        y = Controller.getWinHeight()/2 - RouletteBetCell.getCellHeight() * 5 / 2 - 37;
+        x = Controller.getWinWidth()/2 - RouletteBetCell.getCellWidth() * 14 / 2 + 30 * Controller.getWinWidth() / 1440;
+        y = Controller.getWinHeight()/2 - RouletteBetCell.getCellHeight() * 5 / 2 - Controller.getWinHeight() / 837;
 
         cells.add(new RouletteBetCell(x, y + RouletteBetCell.getCellHeight(), RouletteBetCell.ZERO_CELL));
         for (int i = 0; i < 36 + 3; i++) cells.add(new RouletteBetCell(x + (1 + i / 3) * RouletteBetCell.getCellWidth(), y + (3 - i % 3) * RouletteBetCell.getCellHeight(), RouletteBetCell.NUMBER_CELL));

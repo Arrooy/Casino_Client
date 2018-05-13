@@ -1,11 +1,7 @@
 package Vista.GraphicUtils.RouletteElements;
 
 import Controlador.Controller;
-import Model.AssetManager;
-import Vista.GraphicUtils.MoneyStack;
-
 import java.awt.*;
-import java.util.LinkedList;
 
 public class RouletteBetCell {
 
@@ -17,20 +13,16 @@ public class RouletteBetCell {
     public static final int FIFTY_CELL = 2;
     public static final int THIRTY_CELL = 3;
 
-    private int x, y, type;
+    private int x, y;
     private int width, height;
 
     private long money;
 
-    private LinkedList<MoneyStack> fitxes;
-
     public RouletteBetCell(int x, int y, int type) {
         this.x = x;
         this.y = y;
-        this.type = type;
 
         money = 0;
-        fitxes = new LinkedList<>();
 
         switch (type) {
             case ZERO_CELL:
@@ -62,25 +54,20 @@ public class RouletteBetCell {
     }
 
     public static int getCellWidth() {
-        return (int) (Controller.getWinWidth() * .0537);// cellWidth;
+        return (int) (Controller.getWinWidth() * .0537);
     }
 
     public static int getCellHeight() {
-        return (int) (Controller.getWinHeight() * .1375);//cellHeight;
+        return (int) (Controller.getWinHeight() * .1375);
     }
 
     public void update() {
-        cellWidth = (int) (Controller.getWinWidth() * .0537);//4673
+        cellWidth = (int) (Controller.getWinWidth() * .0537);
         cellHeight = (int) (Controller.getWinHeight() * .1375);
     }
 
-    public void render(Graphics g) {
-        //g.setColor(Color.white);
-        //g.fillRect(x, y, width, height);
-        //g.setColor(Color.red);
+    public void render(Graphics g) { //TODO: Versio final
         g.drawRect(x, y, width, height);
-
-        //g.setFont(AssetManager.getEFont().deriveFont(12f));
         g.drawString("" + money, x + 3, y + 20);
     }
 
@@ -98,14 +85,6 @@ public class RouletteBetCell {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public int getWidth() {

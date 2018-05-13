@@ -335,7 +335,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
      * @return Dimensions de la finestra
      */
     public static int getWinHeight() {
-        return windowHeight;
+        return windowHeight - Finestra.getTopBarHeight();
     }
 
     @Override
@@ -553,7 +553,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     public void endGraphics() {
         if (rouletteGraphicsManager != null) rouletteGraphicsManager.exit();
         networkManager.endRoulette();
-
     }
 
     public void updateWalletEvolution(WalletEvolutionMessage newWallet) {

@@ -127,16 +127,10 @@ public class GraphicsManager implements Runnable {
         }
     }
 
-  /*          g.setColor(clearColor);
-            g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
-        }
-    }*/
-
     public void exit() {
         running = false;
         Graphics g = image.getGraphics();
         g.clearRect(0, 0, width, height);
-       // System.out.println("borra");
     }
 
     private void renderGameImage(Graphics g1) {

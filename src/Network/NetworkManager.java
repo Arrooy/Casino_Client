@@ -100,6 +100,7 @@ public class NetworkManager extends Thread {
         }
         if(conectatAmbServidor) {
             //Configurem el logIn i enviem la solicitud al servidor
+            System.out.println("Es string: " + credentials[1] instanceof String);
             User user = new User((String)credentials[0],(String)Seguretat.desencripta(credentials[1]),Transmission.CONTEXT_LOGIN);
             new Transmission( user, this);
         }else{
@@ -191,10 +192,10 @@ public class NetworkManager extends Thread {
 
             //Si en el json de configuracio inicial apareix l'indicador
             //d'autoLogin, s'executa el login de forma automatica.
-            if (autoLogin){
+            if (autoLogin) {
                 splashScreen.infoMessage("Logging in...");
                 logIn(JsonManager.llegirJson(JsonManager.USERNAME_R, JsonManager.PASSWORD_R));
-           }else{
+           } else {
                 //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
                 exitLoadingScreen();
             }
@@ -485,7 +486,6 @@ public class NetworkManager extends Thread {
         controller.endGraphics();
         showGamesView();
         System.gc();
-
     }
 
     public void setRouletteWallet(long wallet) {

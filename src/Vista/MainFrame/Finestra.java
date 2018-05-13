@@ -40,7 +40,7 @@ public class Finestra extends JFrame {
     private JButton jbtmax;
     private JButton jbtUser;
 
-    private JPanel topBar;
+    private static JPanel topBar;
     private JButton jbtMute;
 
     public Finestra() {
@@ -251,6 +251,10 @@ public class Finestra extends JFrame {
         topBar.add(rightOptions, BorderLayout.EAST);
 
         MainPanel.add(topBar,BorderLayout.NORTH);
+    }
+
+    public static int getTopBarHeight() {
+        return topBar.getHeight();
     }
 
     private void configButton(JButton boto, String normal, String onSelection){
