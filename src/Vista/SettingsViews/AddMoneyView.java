@@ -50,7 +50,7 @@ public class AddMoneyView extends View {
         jpMoneyView.add(jlaux1,c);
 
         c.gridy = 1;
-        c.ipadx = 150;
+        c.ipadx = 200;
         c.insets = new Insets(0,0,20,0);
         jntfAmount = new JNumberTextField("money.png",AMOUNT_HINT,TOOL_TIP_AMOUNT);
         jntfAmount.setEditable(true);
@@ -58,11 +58,12 @@ public class AddMoneyView extends View {
 
         jpfPassword = new IconPasswordField("padlock.png",PASSWORD_HINT,TOOL_TIP_PASSWORD);
         c.gridy = 2;
-        c.ipadx = 150;
+        c.ipadx = 200;
         jpMoneyView.add(jpfPassword, c);
 
         c.gridx = 2;
         c.gridy = 1;
+        c.ipadx = 200;
         c.insets = new Insets(0,20,20,0);
         jlErrorMoney = new JLabel("Above the limit amount ");
         jpMoneyView.add(jlErrorMoney, c);
