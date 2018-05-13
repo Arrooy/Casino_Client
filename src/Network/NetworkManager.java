@@ -100,7 +100,7 @@ public class NetworkManager extends Thread {
         }
         if(conectatAmbServidor) {
             //Configurem el logIn i enviem la solicitud al servidor
-            User user = new User((String)credentials[0],(String)Seguretat.desencripta(credentials[1]),Transmission.CONTEXT_LOGIN);
+            User user = new User((String)credentials[0],(String)credentials[1],Transmission.CONTEXT_LOGIN);
             new Transmission( user, this);
         }else{
             System.out.println("No hi ha connexio amb el server");
@@ -193,7 +193,8 @@ public class NetworkManager extends Thread {
             //d'autoLogin, s'executa el login de forma automatica.
             if (autoLogin){
                 splashScreen.infoMessage("Logging in...");
-                logIn(JsonManager.llegirJson(JsonManager.USERNAME_R, JsonManager.PASSWORD_R));
+                Object credentials[] = JsonManager.llegirJson(JsonManager.USERNAME_R, JsonManager.PASSWORD_R);
+                logIn(credentials[0],Seguretat.desencripta(credentials[1]));
            }else{
                 //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
                 exitLoadingScreen();

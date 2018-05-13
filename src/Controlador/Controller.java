@@ -68,7 +68,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.draggableWindow = draggableWindow;
         this.horseRaceView = horseRaceView;
         this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager, this.finestra);
-        Sounds.songNoEnd("wii.wav");
     }
 
     /** Mostra un error amb una alerta al centre de la finestra grafica*/
@@ -276,6 +275,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         finestra.setGameSelector(user.isGuest());
         gameSelectorView.updateUI();
         SwingUtilities.updateComponentTreeUI(finestra);
+        Sounds.songNoEnd("wii.wav");
     }
 
     public void initBlackJack() {
