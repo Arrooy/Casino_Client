@@ -13,7 +13,7 @@ public class RouletteBetCell {
     public static final int FIFTY_CELL = 2;
     public static final int THIRTY_CELL = 3;
 
-    private int x, y;
+    private int x, y, type;
     private int width, height;
 
     private long money;
@@ -21,6 +21,7 @@ public class RouletteBetCell {
     public RouletteBetCell(int x, int y, int type) {
         this.x = x;
         this.y = y;
+        this.type = type;
 
         money = 0;
 
@@ -54,21 +55,41 @@ public class RouletteBetCell {
     }
 
     public static int getCellWidth() {
-        return (int) (Controller.getWinWidth() * .0537);
+        return (int) (Controller.getWinWidth() * 190.3f/3508f);
     }
 
     public static int getCellHeight() {
-        return (int) (Controller.getWinHeight() * .1375);
+        return (int) (Controller.getWinHeight() * 340f/2480f);
     }
 
     public void update() {
-        cellWidth = (int) (Controller.getWinWidth() * .0537);
-        cellHeight = (int) (Controller.getWinHeight() * .1375);
+        cellWidth = getCellWidth();
+        cellHeight = getCellHeight();
+
+        switch (type) {
+            case ZERO_CELL:
+                width = getCellWidth();
+                height = 3 * getCellHeight();
+                break;
+            case NUMBER_CELL:
+                width = getCellWidth();
+                height = getCellHeight();
+                break;
+            case FIFTY_CELL:
+                width = 2 * getCellWidth();
+                height = getCellHeight();
+                break;
+            case THIRTY_CELL:
+                width = 4 * getCellWidth();
+                height = getCellHeight();
+                break;
+        }
     }
 
-    public void render(Graphics g) { //TODO: Versio final
-        g.drawRect(x, y, width, height);
-        g.drawString("" + money, x + 3, y + 20);
+    public void render(Graphics g) {
+        //g.drawRect(x, y, width, height);
+        int sw = g.getFontMetrics().getStringBounds("" + money, g).getBounds().width;
+        if (money != 0) g.drawString("" + money, x + width/2 - sw/2, y + 20);
     }
 
     public int getX() {

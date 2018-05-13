@@ -67,6 +67,8 @@ public class RouletteController implements GraphicsController {
     //private Image getDownButtonSelected;
     private Image listTable;
 
+    public static final Color TEXT_COLOR = new Color(216, 204, 163);
+
     private int vlx;
     private int vly;
     private int ebx;
@@ -253,8 +255,7 @@ public class RouletteController implements GraphicsController {
 
         g.setColor(Color.red);
         g.drawRect(Controller.getWinWidth()/2 - LIST_DIM/2, Controller.getWinHeight()/2 - LIST_DIM/2, LIST_DIM, LIST_DIM);
-        //g.drawRect(Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2 - 20, 20, 20);
-        //g.drawRect(Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2, 20, 20);
+
         g.drawImage(upButton, Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2 - 20, 20, 20, null);
         g.drawImage(downButton, Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2, 20, 20, null);
 
@@ -264,7 +265,7 @@ public class RouletteController implements GraphicsController {
         int[] cx = {zx + LIST_DIM/6, zx + LIST_DIM*3/6, zx + LIST_DIM*5/6};
 
         if (info.length != 0) {
-            g.setColor(new Color(216, 204, 163));
+            g.setColor(TEXT_COLOR);
             g.setFont(font.deriveFont(17f));
 
             for (int i = 0; i < Math.min((info.length > 0 ? info[0].length : 0), 33); i++) {
@@ -291,7 +292,7 @@ public class RouletteController implements GraphicsController {
         int cy = 370 - (int)offset;
 
         g.setFont(font.deriveFont(15f));
-        g.setColor(Color.red);
+        g.setColor(TEXT_COLOR);
         table.render(g);
 
         g.setFont(font.deriveFont(50f));
@@ -304,11 +305,16 @@ public class RouletteController implements GraphicsController {
 
         if (!hideRoulette) ball.render(g, cx, cy, 200);
 
-        g.setColor(Color.white);
-        g.drawString(nextTimeToString(), 10, 80);
+        g.setColor(TEXT_COLOR);
+        g.drawString(nextTimeToString(), 40, 70);
 
-        if (winnerE) g.drawString("" + getWinner(), (int)rx/2, (int)ry*4/5);
-        g.drawString(wallet - bet + "", 20, Controller.getWinHeight() - 70);
+        if (winnerE && !hideRoulette) g.drawString("" + getWinner(), cx - 250, cy + 200);
+
+        int walwid = g.getFontMetrics().getStringBounds("" + wallet, g).getBounds().width;
+        g.setFont(font.deriveFont(20f));
+        g.drawString("Wallet", Controller.getWinWidth()/2 - g.getFontMetrics().getStringBounds("Wallet", g).getBounds().width/2, Controller.getWinHeight() - 100);
+        g.setFont(font.deriveFont(50f));
+        g.drawString(wallet - bet + "", Controller.getWinWidth()/2 - walwid/2, Controller.getWinHeight() - 40);
 
         g.drawImage(viewListPressed ? viewListSelected : viewList, vlx, vly, null);
     }
@@ -374,8 +380,10 @@ public class RouletteController implements GraphicsController {
     public void mouseClicked(MouseEvent e) {}
     @Override
     public void mousePressed(MouseEvent e) {
-        if (mode == GAME_MODE) {
-            new Transmission(new RouletteBetMessage(100, table.getCellID(e.getX(), e.getY())), networkManager);
+        if (mode == GAME_MODE) {//TODO: controlar que no s'introdueixi res que no sigui un num
+            long bet = Long.parseLong(Finestra.showInputDialog("How much do you want to bet?", "Bet on " + listBetConversion[table.getCellID(e.getX(), e.getY())]));
+
+            new Transmission(new RouletteBetMessage(bet, table.getCellID(e.getX(), e.getY())), networkManager);
             System.out.println("[ROULETTE CELL]: " + table.getCellID(e.getX(), e.getY()));
 
             viewListPressed = e.getX() > vlx && e.getY() > vly && e.getY() < vly + viewList.getHeight(null) && e.getX() < vlx + viewList.getWidth(null);

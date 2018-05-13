@@ -47,7 +47,7 @@ public class Finestra extends JFrame {
 
         Tray.init();
 
-        setMinimumSize(new Dimension(700, 700));
+        setMinimumSize(new Dimension(729, 770));
 
         PanelWithBackGround MainPane = new PanelWithBackGround(new BorderLayout());
         MainPane.setOpaque(false);
@@ -291,5 +291,23 @@ public class Finestra extends JFrame {
         }else{
             configButton(jbtMute,"mute.png","muteOnMouse.png");
         }
+    }
+
+    /***
+     * Mostra el dialeg per a introduir l'aposta de la partida
+     * @return valor que ha proposat l'usuari per apostar
+     */
+    public static String showInputDialog(String message, String title) {
+
+        return JOptionPane.showInputDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Mostra un error al usuari
+     * @param title titol del error a mostrar
+     * @param message missatge del error a mostrar
+     */
+    public static void showDialog(String message, String title) {
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
     }
 }

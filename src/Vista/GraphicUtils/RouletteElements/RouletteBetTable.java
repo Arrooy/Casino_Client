@@ -9,13 +9,16 @@ public class RouletteBetTable {
 
     private LinkedList<RouletteBetCell> cells;
 
+    private double offx = 496f / 3508f * Controller.getWinWidth();
+    private double offy = 291f / 2480f * Controller.getWinHeight();
+
     private int x, y;
 
     public RouletteBetTable() {
         cells = new LinkedList<>();
 
-        x = Controller.getWinWidth()/2 - RouletteBetCell.getCellWidth() * 14 / 2 + 30 * Controller.getWinWidth() / 1440;
-        y = Controller.getWinHeight()/2 - RouletteBetCell.getCellHeight() * 5 / 2 - Controller.getWinHeight() / 837;
+        x = (int) offx;
+        y = (int) offy;
 
         cells.add(new RouletteBetCell(x, y + RouletteBetCell.getCellHeight(), RouletteBetCell.ZERO_CELL));
         for (int i = 0; i < 36 + 3; i++) cells.add(new RouletteBetCell(x + (1 + i / 3) * RouletteBetCell.getCellWidth(), y + (3 - i % 3) * RouletteBetCell.getCellHeight(), RouletteBetCell.NUMBER_CELL));
@@ -24,6 +27,12 @@ public class RouletteBetTable {
     }
 
     public void update() {
+        offx = 496f / 3508f * Controller.getWinWidth();
+        offy = 291f / 2480f * Controller.getWinHeight();
+
+        x = (int) offx;
+        y = (int) offy;
+
         for (RouletteBetCell betCell: cells) betCell.update();
 
         cells.getFirst().updatePos(x, y + RouletteBetCell.getCellHeight());
