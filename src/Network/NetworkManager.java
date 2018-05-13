@@ -191,7 +191,7 @@ public class NetworkManager extends Thread {
 
             //Si en el json de configuracio inicial apareix l'indicador
             //d'autoLogin, s'executa el login de forma automatica.
-            if (autoLogin){
+            if (autoLogin) {
                 splashScreen.infoMessage("Logging in...");
                 Object credentials[] = JsonManager.llegirJson(JsonManager.USERNAME_R, JsonManager.PASSWORD_R);
                 logIn(credentials[0],Seguretat.desencripta(credentials[1]));
@@ -486,7 +486,6 @@ public class NetworkManager extends Thread {
         controller.endGraphics();
         showGamesView();
         System.gc();
-
     }
 
     public void setRouletteWallet(long wallet) {

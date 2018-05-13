@@ -5,17 +5,18 @@ import Controlador.CustomGraphics.GraphicsController;
 import Controlador.CustomGraphics.GraphicsManager;
 import Model.AssetManager;
 import Model.RouletteModel.RouletteBetMessage;
-import Model.RouletteModel.RouletteMessage;
 import Model.User;
 import Network.NetworkManager;
 import Network.Transmission;
 import Vista.GraphicUtils.RouletteElements.GRect;
 import Vista.GraphicUtils.RouletteElements.RouletteBall;
 import Vista.GraphicUtils.RouletteElements.RouletteBetTable;
+import Vista.MainFrame.Finestra;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.AreaAveragingScaleFilter;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.LinkedList;
@@ -53,6 +54,26 @@ public class RouletteController implements GraphicsController {
     private Font font;
 
     private Image wood;
+
+    private Image viewList;
+    private Image viewListSelected;
+    private Image returnButton;
+    private Image returnButtonSelected;
+
+    private Image listBackground;
+    private Image upButton;
+    //private Image upButtonSelected;
+    private Image downButton;
+    //private Image getDownButtonSelected;
+    private Image listTable;
+
+    private int vlx;
+    private int vly;
+    private int ebx;
+    private int eby;
+
+    private boolean viewListPressed;
+    private boolean returnPressed;
 
     private double rx, ry, rang, roffTimer;
     private boolean backAnim, hideRoulette;
@@ -127,6 +148,26 @@ public class RouletteController implements GraphicsController {
         boardImage = AssetManager.getImage("marco ruleta MAS PEQE 2.png");
         wood = AssetManager.getImage("Num.png");
 
+        viewList = AssetManager.getImage("VG.png");
+        viewListSelected = AssetManager.getImage("VGS.png");
+        returnButton = AssetManager.getImage("EXIT_NO_SOMBRA.png");
+        returnButtonSelected = AssetManager.getImage("EXIT_SOMBRA.png");
+
+        viewListPressed = false;
+        returnPressed = false;
+
+        listBackground = AssetManager.getImage("background.png");
+        upButton = AssetManager.getImage("SUB.png");
+        //upButtonSelected = AssetManager.getImage("SUPS.png");
+        downButton = AssetManager.getImage("BAJ.png");
+        //getDownButtonSelected = AssetManager.getImage("BAJS.png");
+        listTable = AssetManager.getImage("");//TODO: posar nom real
+
+        vlx = 20;
+        vly = Controller.getWinHeight() - viewList.getHeight(null) - 20;
+        ebx = Controller.getWinWidth() - returnButton.getHeight(null) - 20;
+        eby = Controller.getWinHeight() - returnButton.getHeight(null) - 20;
+
         font = AssetManager.getEFont(50);
 
         info = new String[0][0];
@@ -146,8 +187,6 @@ public class RouletteController implements GraphicsController {
 
     @Override
     public void update(float delta) {
-
-
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -179,7 +218,15 @@ public class RouletteController implements GraphicsController {
         }
         if (backAnim && ((20/(Math.pow((System.nanoTime() - roffTimer)/1000000000 - 2, 4)) > 1000) || (System.nanoTime() - roffTimer)/1000000000 > 3)) hideRoulette = true;
 
+        vlx = 20;
+        vly = Controller.getWinHeight() - viewList.getHeight(null) - 20;
+        ebx = Controller.getWinWidth() - returnButton.getWidth(null) - 20;
+        eby = Controller.getWinHeight() - returnButton.getHeight(null) - 20;
+
         table.update();
+
+        String[][] aux = networkManager.updateRouletteList();
+        info = aux == null ? info : aux;
     }
 
     @Override
@@ -198,32 +245,33 @@ public class RouletteController implements GraphicsController {
                 break;
         }
 
-        g.drawRect(20, Controller.getWinHeight()/2 - 20, 40,40);
-        g.drawRect(Controller.getWinWidth() - 100, Controller.getWinHeight() - 100, 30,30);
+        g.drawImage(returnPressed ? returnButtonSelected : returnButton, ebx, eby, null);
     }
 
     private void renderList(Graphics g) {
+        g.drawImage(listBackground, 0, 0, Controller.getWinWidth(), Controller.getWinHeight(), null);
+
         g.setColor(Color.red);
         g.drawRect(Controller.getWinWidth()/2 - LIST_DIM/2, Controller.getWinHeight()/2 - LIST_DIM/2, LIST_DIM, LIST_DIM);
-        g.drawRect(Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2 - 20, 20, 20);
-        g.drawRect(Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2, 20, 20);
+        //g.drawRect(Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2 - 20, 20, 20);
+        //g.drawRect(Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2, 20, 20);
+        g.drawImage(upButton, Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2 - 20, 20, 20, null);
+        g.drawImage(downButton, Controller.getWinWidth()/2 + LIST_DIM/2 - 10, Controller.getWinHeight()/2, 20, 20, null);
 
         int zx = Controller.getWinWidth()/2 - LIST_DIM/2;
         int zy = Controller.getWinHeight()/2 - LIST_DIM/2 + 100;
 
         int[] cx = {zx + LIST_DIM/6, zx + LIST_DIM*3/6, zx + LIST_DIM*5/6};
 
-        String[][] aux = networkManager.updateRouletteList();
-        info = aux == null ? info : aux;
-
         if (info.length != 0) {
             g.setColor(new Color(216, 204, 163));
             g.setFont(font.deriveFont(17f));
+
             for (int i = 0; i < Math.min((info.length > 0 ? info[0].length : 0), 33); i++) {
                 for (int j = 0; j < 3; j++) {
-                    //System.out.println(info.length + " x " + info[0].length);
                     String s = j == 1 ? listBetConversion[Integer.parseInt(info[j][i + listOff])] : info[j][i + listOff];
                     int width = g.getFontMetrics().getStringBounds(s, g).getBounds().width / 2;
+
                     g.drawString(s, cx[j] - width, zy + 18 * i);
                 }
             }
@@ -261,6 +309,8 @@ public class RouletteController implements GraphicsController {
 
         if (winnerE) g.drawString("" + getWinner(), (int)rx/2, (int)ry*4/5);
         g.drawString(wallet - bet + "", 20, Controller.getWinHeight() - 70);
+
+        g.drawImage(viewListPressed ? viewListSelected : viewList, vlx, vly, null);
     }
 
     public void setWinner(int winer) {
@@ -283,11 +333,9 @@ public class RouletteController implements GraphicsController {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {}
     @Override
-    public void keyPressed(KeyEvent e) {
-    }
+    public void keyPressed(KeyEvent e) {}
 
     @Override
     public void keyReleased(KeyEvent e) {
@@ -329,16 +377,14 @@ public class RouletteController implements GraphicsController {
         if (mode == GAME_MODE) {
             new Transmission(new RouletteBetMessage(100, table.getCellID(e.getX(), e.getY())), networkManager);
             System.out.println("[ROULETTE CELL]: " + table.getCellID(e.getX(), e.getY()));
+
+            viewListPressed = e.getX() > vlx && e.getY() > vly && e.getY() < vly + viewList.getHeight(null) && e.getX() < vlx + viewList.getWidth(null);
         }
+        returnPressed = e.getX() > ebx && e.getX() < ebx + returnButton.getWidth(null) && e.getY() > eby && e.getY() < eby + returnButton.getHeight(null);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (e.getX() < 60 && e.getX() > 20 && e.getY() > Controller.getWinHeight()/2 - 20 && e.getY() < Controller.getWinHeight() + 20) {
-            System.out.println("Entra a " + (GAME_MODE == mode ? "Game mode" : "List mode")); //TODO:revisar
-            mode = mode == GAME_MODE ? LIST_MODE : GAME_MODE;
-            System.out.println("Entra a " + (GAME_MODE == mode ? "Game mode" : "List mode")); //TODO:revisar
-        }
         if (mode == LIST_MODE) {
             if (e.getX() > Controller.getWinWidth()/2 + LIST_DIM/2 - 10 && e.getX() < Controller.getWinWidth()/2 + LIST_DIM/2 + 10
                     && e.getY() > Controller.getWinHeight()/2 - 20 && e.getY() < Controller.getWinHeight()/2)
@@ -347,9 +393,20 @@ public class RouletteController implements GraphicsController {
                     && e.getY() > Controller.getWinHeight()/2 && e.getY() < Controller.getWinHeight()/2 + 20)
                 if (info.length > 0 && info[0].length - listOff > 33) listOff++;
 
+        } else {
+            if (e.getX() > vlx && e.getY() > vly && e.getY() < vly + viewList.getHeight(null) && e.getX() < vlx + viewList.getWidth(null))
+                mode = LIST_MODE;
         }
-        if (e.getX() > Controller.getWinWidth() - 100 && e.getX() < Controller.getWinWidth() - 70 && e.getY() > Controller.getWinHeight() - 100 && e.getY() < Controller.getWinHeight() - 70)
-            networkManager.exitRoulette();
+
+        System.out.println(Controller.getWinWidth() + " X "+ Controller.getWinHeight());
+
+        if (e.getX() > ebx && e.getX() < ebx + returnButton.getWidth(null) && e.getY() > eby && e.getY() < eby + returnButton.getHeight(null)) {
+            if (mode == GAME_MODE) networkManager.exitRoulette();
+            else mode = GAME_MODE;
+        }
+
+        returnPressed = false;
+        viewListPressed = false;
     }
 
     @Override

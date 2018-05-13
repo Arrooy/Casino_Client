@@ -152,6 +152,7 @@ public class SplashScreen implements GraphicsController, Runnable{
     @Override
     public void render(Graphics gb) {
         Graphics2D g = (Graphics2D) gb;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         //Es printa el text infomatiu
         g.setColor(textColor);
