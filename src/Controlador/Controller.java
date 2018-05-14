@@ -142,7 +142,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 break;
             case "settings":
                 if(user != null && !user.isGuest())
-                    finestra.setSettingsView("NOTHING");
+                    finestra.setSettingsView("SETTINGS - changePass");
                 break;
             case "SETTINGS - backFromSettings":
                 finestra.setGameSelector(user.isGuest());
@@ -222,12 +222,11 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     public void transactionOK(int type){
         if (type == 0) {
-
             addMoneyView.showAddOK();
             addMoneyView.noErrorMoney();
             addMoneyView.clearFields();
         } else if(type == 1) {
-            addMoneyView.noErrorMoney();
+            addMoneyView.noErrorPassword();
             addMoneyView.noTransactionOK();
             addMoneyView.showErrorMoney("Above the limit amount");
         }else{

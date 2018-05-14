@@ -1,6 +1,7 @@
 package Vista.SettingsViews;
 
 import Controlador.Controller;
+import Model.AssetManager;
 import Vista.SwingModifications.IconPasswordField;
 import Vista.View;
 
@@ -86,8 +87,8 @@ public class AddMoneyView extends View {
         c.gridy = 4;
         c.insets = new Insets(0,0,0,0);
         c.ipadx = 50;
-        jbAddMoney = new JButton("ADD");
-        jbAddMoney.setFocusable(false);
+        jbAddMoney = new JButton();
+        configButton(jbAddMoney, "ADD.png", "ADDS.png");
         jpMoneyView.add(jbAddMoney, c);
 
         add(jpMoneyView, BorderLayout.CENTER);
@@ -144,5 +145,17 @@ public class AddMoneyView extends View {
         jpfPassword.setHint(true);
         jntfAmount.setText("");
         jntfAmount.setHint(true);
+    }
+
+    private void configButton(JButton boto, String normal,String onSelection){
+        boto.setBorderPainted(false);
+        boto.setBorder(null);
+        boto.setFocusable(false);
+        boto.setMargin(new Insets(0, 0, 0, 0));
+        boto.setContentAreaFilled(false);
+        boto.setIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
     }
 }

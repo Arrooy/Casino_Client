@@ -82,7 +82,7 @@ public class Settings extends View {
         c.anchor = GridBagConstraints.CENTER;
 
         jbChangePassword = new JButton();
-        configButton(jbChangePassword, "CHANGELEPASWORD_NO_SOMBRA.png", "CHANGELEPASWORD_SOMBRA.png");
+        configButton(jbChangePassword, "CP.png", "CPS.png");
         jbAddMoney = new JButton();
         configButton(jbAddMoney, "ADDMONEY_NO_SOMBRA.png", "ADDMONEY_SOMBRA.png");
         jbWalletEvolution = new JButton();

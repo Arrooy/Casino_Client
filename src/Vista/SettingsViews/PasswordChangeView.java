@@ -1,6 +1,7 @@
 package Vista.SettingsViews;
 
 import Controlador.Controller;
+import Model.AssetManager;
 import Vista.SwingModifications.IconPasswordField;
 import Vista.PasswordConfirm;
 import Vista.View;
@@ -49,8 +50,8 @@ public class PasswordChangeView extends View implements PasswordConfirm{
         jpfNewPassword.setEchoChar(PASSWORD_CHAR);
         jpfConfirmPassword.setEchoChar(PASSWORD_CHAR);
 
-        jbConfirmPassword = new JButton("Update Password");
-        jbConfirmPassword.setFocusable(false);
+        jbConfirmPassword = new JButton();
+        configButton(jbConfirmPassword, "UP.png", "UPS.png");
         jbConfirmPassword.setEnabled(false);
 
         JPanel jpPasswordChange = new JPanel();
@@ -81,13 +82,12 @@ public class PasswordChangeView extends View implements PasswordConfirm{
         this.jlCheckPassword.setPreferredSize(new Dimension(300,15));
         this.jlCheckPassword.setForeground(TRANSPARENT);
         jpGeneric.add(this.jlCheckPassword, c);
-        //TODO: com faig que no em canvii la mida del Jlabel i els JPasswordfields depenent del missatge que posi?
 
         jlStrength = new JLabel("Strength");
         jlStrength.setForeground(TRANSPARENT);
         jlStrength.setPreferredSize(new Dimension(150,15));
         c = new GridBagConstraints();
-        c.insets = new Insets(0,10,20,0);
+        c.insets = new Insets(0,10,20,95);
         c.gridy = 2;
         c.gridx = 1;
         c.gridwidth = 1;
@@ -205,5 +205,17 @@ public class PasswordChangeView extends View implements PasswordConfirm{
        jlCheckPassword.setText("");
        jlStrength.setText("");
        jpbStrength.setValue(0);
+    }
+
+    private void configButton(JButton boto, String normal,String onSelection){
+        boto.setBorderPainted(false);
+        boto.setBorder(null);
+        boto.setFocusable(false);
+        boto.setMargin(new Insets(0, 0, 0, 0));
+        boto.setContentAreaFilled(false);
+        boto.setIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(normal)));
+        boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
     }
 }
