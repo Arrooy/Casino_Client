@@ -16,11 +16,7 @@ public class HorseRaceView extends View {
 
 
     public HorseRaceView (){
-    }
-
-
-    public JPanel getTrack(){
-        return this;
+        setFocusable(true);
     }
 
 

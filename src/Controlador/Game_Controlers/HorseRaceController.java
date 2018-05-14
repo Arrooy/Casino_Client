@@ -2,7 +2,6 @@ package Controlador.Game_Controlers;
 
 import Controlador.CustomGraphics.GraphicsController;
 import Controlador.CustomGraphics.GraphicsManager;
-import Controlador.DraggableWindow;
 import Model.AssetManager;
 import Model.HorseRace_Model.HorseBet;
 import Model.HorseRace_Model.HorseMessage;
@@ -14,17 +13,13 @@ import Network.Transmission;
 import Utils.Countdown;
 import Vista.GameViews.HorseRaceView;
 import Vista.MainFrame.Finestra;
-//import Vista.MainFrame.Finestra;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Random;
-import java.util.concurrent.CountDownLatch;
-import java.util.stream.StreamSupport;
+
 
 /**Controlador de la cursa de cavalls*/
 public class HorseRaceController implements GraphicsController, ActionListener {
@@ -35,8 +30,12 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     private static final int MAX_HORSES = 12;
     private static final int SECTIONS = 5;
-    private static final double HORSE_START_X = 0.252;
+
     private static final double HORSE_START_Y = 0.026;
+    private static final double HORSE_START_X = 0.252;
+    private static final double HORSE_SEPARATION = 0.074;
+    private static final double HORSE_END_X = 0.895;
+    private static final double HORSE_SECTION = (HORSE_END_X - HORSE_START_X) /(double)(SECTIONS); // Per reconstruir: HORSE_SECTION * section + HORSE_START_X
     private static final double TIME_MESSAGE_Y = 0.23;
     private static final double TIME_MESSAGE_X = 0.048;
     private static final double WINNER_MESSAGE_X = TIME_MESSAGE_X;
@@ -73,6 +72,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private Countdown[] horseCountdowns;
     private Point[] horsePositions;
     private int[] horseFrames;
+    private int[] horseSections;
 
     private int winner;
     private long animationRate;
@@ -81,6 +81,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private int betHorse;
 
     private Font font;
+
+
 
 
     public HorseRaceController(HorseRaceView horseRaceView, NetworkManager networkManager, Finestra finestra) {
@@ -94,10 +96,12 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.horseCountdowns = new Countdown[MAX_HORSES];
         this.horsePositions = new Point[MAX_HORSES];
         this.horseFrames = new int[MAX_HORSES];
+        this.horseSections = new int[MAX_HORSES];
         for (int i = 0; i < MAX_HORSES; i++) {
             this.horseCountdowns[i] = new Countdown();
             this.horsePositions[i] = new Point(0, 0);
             this.horseFrames[i] = 0;
+            this.horseSections[i] = 0;
         }
         this.play = false;
         this.animationRate = 0;
@@ -109,15 +113,12 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.oncePerRace = true;
     }
 
-    public boolean isPlaying() {
-        return this.play;
-    }
 
     /**
      * Inicialitza el GraphicsManager
      */
     public void setGraphics() {
-        this.graphicsManager = new GraphicsManager(this.horseRaceView.getTrack(), this);
+        this.graphicsManager = new GraphicsManager(this.horseRaceView, this);
         this.graphicsManager.setClearColor(Color.black);
     }
 
@@ -152,6 +153,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.betOK = false;
         this.isRacing = false;
         this.isBetting = false;
+        this.betResult = false;
         this.isCountDown = false;
         this.firstRace = true;
         this.oncePerRace = true;
@@ -167,7 +169,12 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.play = false;
         this.isRacing = false;
         this.isBetting = false;
+        this.isCountDown = false;
+        this.oncePerRace = false;
+        this.betResult = false;
+        this.betOK = false;
         this.graphicsManager.exit();
+        this.networkManager.exitHorses();
         waitCountdown.stopCount();
         raceCountdown.stopCount();
     }
@@ -177,16 +184,16 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         HorseMessage horseMessage;
         if (play) {
             if (!isRacing && !waitCountdown.isCounting()) {
-                System.out.println("teteee");
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-Countdown");
                 if (horseMessage != null) {
                     this.isBetting = false;
                     this.isCountDown = true;
                     this.oncePerRace = true;
+                    this.betOK = false;
                     this.waitCountdown.newCount(horseMessage.getTimeForRace());
                     endYourHorses();
                 }
-            } else if (!isRacing && waitCountdown.isCounting()) {
+            } else if (!isRacing) {
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-Schedule");
                 if (horseMessage != null) {
                     System.out.println("HORSES- Schedule received");
@@ -194,11 +201,13 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.waitCountdown.stopCount();
                     this.raceCountdown.newCount(horseRaceModel.getHorseSchedule().getRaceTime());
                     this.isRacing = true;
+                    this.oncePerRace = true;
                     this.isCountDown = false;
-                    startYourHorses();
+                    initRace();
                     //Ja podem reproduir la carrera
                 }
             } else if (isRacing) {
+                moveHorses(horsePositions, horseCountdowns, horseSections, raceCountdown);
                 this.waitCountdown.stopCount();
                 if (isBetting) {
                     horseMessage = (HorseMessage) networkManager.readContext("HORSES-BetConfirm");
@@ -231,11 +240,12 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                 if (horseMessage != null) {
                     this.isRacing = false;
                     this.firstRace = false;
+                    this.waitCountdown.stopCount();
                     System.out.println("HORSES- Done");
                     if (isBetting) {
                         betResult = true;
                     }
-                    this.winner = horseMessage.getHorseResult().getWinner() + 1;
+                    this.winner = horseMessage.getHorseResult().getWinner();
                     prize = horseMessage.getHorseResult().getPrize();
                     if (prize == 0) {
                     } else {
@@ -246,24 +256,33 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         }
     }
 
-
-    public void startYourHorses() {
+    private void initRace() {
         Random random = new Random();
-        for (int horse = 0; horse < MAX_HORSES; horse++) {
+        int section = 0;
+        for(int horse = 0; horse < MAX_HORSES; horse++){
+            horseCountdowns[horse].newCount(getTime(horse, section));
             horsePositions[horse] = new Point((int) (HORSE_START_X * horseRaceView.getWidth()), (int) (HORSE_START_Y * (float) horseRaceView.getHeight() + horse * 0.074 * (float) horseRaceView.getHeight()));
             horseFrames[horse] = random.nextInt(7);
+            horseSections[horse] = section;
         }
     }
 
+    private long getTime(int horse, int section){
+        return horseRaceModel.getHorseSchedule().getTime(horse, section);
+    }
+
+
     public void endYourHorses(){
         for (int horse = 0; horse < MAX_HORSES; horse++) {
-            horsePositions[horse] = new Point((int) (HORSE_START_X * horseRaceView.getWidth()), (int) (HORSE_START_Y * (float) horseRaceView.getHeight() + horse * 0.074 * (float) horseRaceView.getHeight()));
+            horsePositions[horse] = new Point((int) (HORSE_START_X * horseRaceView.getWidth()), (int) (HORSE_START_Y * (float) horseRaceView.getHeight() + horse * HORSE_SEPARATION * (float) horseRaceView.getHeight()));
             horseFrames[horse] = 2;
+            horseSections[horse] = 0;
         }
     }
 
     @Override
     public void render(Graphics g) {
+        //TODO Change font size in respect to window size
         g.drawImage(AssetManager.getImage("HORSES-PANEL.png"), 0, 0, horseRaceView.getWidth(), horseRaceView.getHeight(), null);
         for (int horse = 0; horse < MAX_HORSES; horse++) {
             g.drawImage(AssetManager.getImage("horse" + horse % 6 + "_" + horseFrames[horse] + ".png", (int) (horseRaceView.getWidth() / 14.44), (int) (horseRaceView.getHeight() / 10.4)), horsePositions[horse].x, horsePositions[horse].y, null);
@@ -335,7 +354,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         }
         g.setFont(font.deriveFont(20f));
         if(isCountDown && !firstRace ){
-            g.drawString("Winner: Horse " + winner, (int)(horseRaceView.getWidth()*WINNER_MESSAGE_X), (int)(horseRaceView.getHeight()*WINNER_MESSAGE_Y));
+            g.drawString("Winner: Horse " + (12 - winner), (int)(horseRaceView.getWidth()*WINNER_MESSAGE_X), (int)(horseRaceView.getHeight()*WINNER_MESSAGE_Y));
         }else{
             g.drawString("Winner: ", (int)(horseRaceView.getWidth()*WINNER_MESSAGE_X), (int)(horseRaceView.getHeight()*WINNER_MESSAGE_Y));
 
@@ -350,11 +369,23 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     }
 
-
-
-
-
-
+    private void moveHorses(Point[] horsePositions, Countdown[] horseCountdowns, int[] horseSections, Countdown raceCountdown) {
+        if(raceCountdown.isCounting()){
+            for (int horse = 0; horse < MAX_HORSES; horse++){
+                if(!horseCountdowns[horse].isCounting()){
+                    if(horseSections[horse] == SECTIONS - 1){
+                        this.raceCountdown.stopCount();
+                        break;
+                    }else {
+                        horseSections[horse] ++;
+                        horseCountdowns[horse].newCount(getTime(horse, horseSections[horse]));
+                    }
+                }else{
+                    horsePositions[horse].x = (int)(horseRaceView.getWidth() * HORSE_SECTION * (horseSections[horse]  + (double)(getTime(horse, horseSections[horse]) - horseCountdowns[horse].getCount())/(double)(getTime(horse, horseSections[horse]))) + horseRaceView.getWidth()*HORSE_START_X);
+                }
+            }
+        }
+    }
 
 
     @Override
@@ -365,10 +396,11 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     public void keyPressed(KeyEvent e) {
         HorseMessage horseMessage;
         if(e.getKeyCode() == 27){
+            //TODO No surt del joc
             finestra.setGameSelector(false); //Un guest no podra jugar a cavalls
-            networkManager.exitHorses();
             stopPlay();
         }if((e.getKeyCode() == 98 || e.getKeyCode() == 66) && !isRacing){
+            //TODO Meri: Boto apostes + panell apostes amb thread per no parar execució joc
             horseMessage  = new HorseMessage(new HorseBet(100,10, user.getUsername()), "Bet");
             horseMessage.setID(user.getID());
             new Transmission(horseMessage, this.networkManager);
@@ -385,6 +417,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         System.out.println("CLICK: x:"+ e.getPoint().x/(float)horseRaceView.getWidth() + "   y: " +  e.getPoint().y/(float)horseRaceView.getHeight());
+        System.out.println("Rel Click X:  " + (HORSE_END_X/((double)horseRaceView.getWidth()) - HORSE_START_X));
     }
 
     @Override
@@ -434,6 +467,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             graphicsManager.resize(horseRaceView.getWidth(),horseRaceView.getHeight());
         }
     }
+
 
     public static void exit(){
         if(graphicsManager != null){

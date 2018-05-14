@@ -7,7 +7,7 @@ public class Countdown extends Thread {
     private long startTime;
     private boolean isCounting;
 
-    private static final int COUNTRATE = 100;
+    private static final int COUNTRATE = 200;
 
     public Countdown(){
         this.isCounting = false;
@@ -25,6 +25,7 @@ public class Countdown extends Thread {
                     startTime = System.currentTimeMillis();
                     if(this.count <= 0){
                         this.count = 0;
+                        this.isCounting = false;
                     }
                 }
                 sleep(COUNTRATE);
@@ -40,6 +41,7 @@ public class Countdown extends Thread {
 
     public void stopCount(){
         this.isCounting = false;
+        this.count = 0;
     }
 
     /**Metode per reiniciar el comptatge*/
