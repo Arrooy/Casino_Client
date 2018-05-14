@@ -82,9 +82,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     private Font font;
 
-
-
-
     public HorseRaceController(HorseRaceView horseRaceView, NetworkManager networkManager, Finestra finestra) {
         this.horseRaceModel = new HorseRaceModel();
         this.horseRaceView = horseRaceView;
@@ -397,9 +394,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     public void keyPressed(KeyEvent e) {
         HorseMessage horseMessage;
         if(e.getKeyCode() == 27){
-            //TODO No surt del joc
-            finestra.setGameSelector(false); //Un guest no podra jugar a cavalls
             stopPlay();
+            networkManager.showGamesView();
         }if((e.getKeyCode() == 98 || e.getKeyCode() == 66) && !isRacing){
             //TODO Meri: Boto apostes + panell apostes amb thread per no parar execució joc
             horseMessage  = new HorseMessage(new HorseBet(100,10, user.getUsername()), "Bet");

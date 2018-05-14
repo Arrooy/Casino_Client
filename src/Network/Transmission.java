@@ -205,6 +205,7 @@ public class Transmission implements Runnable {
             }else{
                 //S'afegeix la carta al model del joc
                 networkManager.newBJCard(cartaResposta);
+
             }
 
         } catch (InterruptedException e) {

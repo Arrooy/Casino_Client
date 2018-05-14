@@ -148,7 +148,7 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
     @Override
     public void mouseReleased(MouseEvent e) {
         System.out.println("Tamo asiendo update");
-        SwingUtilities.updateComponentTreeUI(vista);
+        //SwingUtilities.updateComponentTreeUI(vista);
     }
 
     @Override

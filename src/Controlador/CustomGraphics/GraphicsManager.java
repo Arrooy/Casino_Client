@@ -95,6 +95,7 @@ public class GraphicsManager implements Runnable {
                 e.printStackTrace();
             }
         }
+        System.out.println("Going out of thread");
     }
 
     private void updateAndRender(long deltaMillis) {
@@ -135,19 +136,11 @@ public class GraphicsManager implements Runnable {
 
     private void renderGameImage(Graphics g1) {
         if (image != null && g1 != null) {
-
             Graphics2D g = (Graphics2D)g1;
 
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-
-            g.setRenderingHint(RenderingHints.KEY_RENDERING,
-                    RenderingHints.VALUE_RENDER_QUALITY);
-
             g.drawImage(image, 0, 0, null);
+            g1.dispose();
         }
-
-        g1.dispose();
     }
 
     private void registraControllador(GraphicsController c) {

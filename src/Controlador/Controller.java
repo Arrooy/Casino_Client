@@ -275,6 +275,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                System.out.println("HEYOU");
                 logInView.clearFields();
                 signInView.clearFields();
                 finestra.setGameSelector(user.isGuest());
