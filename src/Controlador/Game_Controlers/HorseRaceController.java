@@ -295,6 +295,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         g.drawString("Bet:" , (int)(horseRaceView.getWidth()*BET_TITLE_X), (int)(horseRaceView.getHeight()*BET_TITLE_Y));
         g.drawString("Wallet: " + this.user.getWallet() , (int)(horseRaceView.getWidth()*WALLET_MESSAGE_X), (int)(horseRaceView.getHeight()*WALLET_MESSAGE_Y));
         if (isRacing && raceCountdown.isCounting()) {
+
             if (System.currentTimeMillis() - animationRate > 50) {
                 for (int i = 0; i < horseFrames.length; i++) {
                     horseFrames[i]++;
