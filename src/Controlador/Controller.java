@@ -273,12 +273,17 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.settingsView = settings.getSettingsView();
     }
     public void showGamesView() {
-        logInView.clearFields();
-        signInView.clearFields();
-        finestra.setGameSelector(user.isGuest());
-        gameSelectorView.updateUI();
-        SwingUtilities.updateComponentTreeUI(finestra);
-        Sounds.songNoEnd("wii.wav");
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                logInView.clearFields();
+                signInView.clearFields();
+                finestra.setGameSelector(user.isGuest());
+                gameSelectorView.updateUI();
+                SwingUtilities.updateComponentTreeUI(finestra);
+                Sounds.songNoEnd("wii.wav");
+            }
+        });
     }
 
     public void initBlackJack() {
