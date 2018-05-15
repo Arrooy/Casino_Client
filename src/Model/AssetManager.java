@@ -25,7 +25,6 @@ public class AssetManager {
     /** Carrega tot el contingut del joc*/
     public static void loadData(SplashScreen splashScreen) {
         Baralla.loadContent(splashScreen);
-        Chips.load(splashScreen);
         loadImatges(splashScreen);
         Sounds.loadAllSounds(splashScreen);
     }
