@@ -36,7 +36,6 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
         //Si es fa dragg i la finestra esta fullScreen, fem la finestra petita
         if (vista.getExtendedState() == MAXIMIZED_BOTH) {
             vista.setExtendedState(NORMAL);
@@ -120,12 +119,15 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
         }
     }
 
-    /** Metode per a tencar el client de forma segura.*/
+    /**
+     * Metode per a tencar el client de forma segura.
+     * @param status indica el motiu del tencament del casino.
+     *               Si equival a 0 el tencament ha sigut intencionat.
+     *               Si equival a 1 el tencament ha sigut generat per un error.
+     */
     public void exitProgram(int status){
         networkManager.requestLogOut();
-
-
-        networkManager.getController().endGraphics();
+        networkManager.endGraphics();
 
         Tray.exit();
         vista.dispose();
@@ -147,8 +149,7 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        System.out.println("Tamo asiendo update");
-        //SwingUtilities.updateComponentTreeUI(vista);
+
     }
 
     @Override

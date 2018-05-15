@@ -55,7 +55,7 @@ public class Top5View extends JPanel {
         table.setColumnSelectionAllowed(false);
         table.setFocusable(false);
         table.setEnabled(false);
-        table.setPreferredScrollableViewportSize(new Dimension(400,400));
+        table.setPreferredScrollableViewportSize(new Dimension(400,400)); // 400 400
         table.setDefaultEditor(Object.class, null);
 
         JScrollPane jScrollPane = new JScrollPane(table);
@@ -64,7 +64,11 @@ public class Top5View extends JPanel {
         jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         JScrollBar jScrollBar = jScrollPane.getVerticalScrollBar();
         jScrollBar.setOpaque(false);
+
         jScrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+
+
         jPanelGridTaula.add(jScrollPane, c);
 
         add(jPanelGridTaula,BorderLayout.CENTER);

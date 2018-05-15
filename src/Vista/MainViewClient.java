@@ -72,7 +72,7 @@ public class MainViewClient extends View{
 
     /** Obra una finestra indicant un error*/
     public void displayError(String title,String errorText) {
-        JOptionPane.showMessageDialog(null,title,errorText,JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null,errorText,title,JOptionPane.ERROR_MESSAGE);
     }
 
     public boolean displayQuestion(String message) {
@@ -91,5 +91,16 @@ public class MainViewClient extends View{
         boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(onSelection)));
         boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(onSelection)));
         boto.setPressedIcon(new ImageIcon(AssetManager.getImage(normal)));
+    }
+
+    public boolean displayErrorConnection() {
+        Object[] options1 = {"LogOut", "Quit program"};
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Server connection lost"));
+
+        return JOptionPane.YES_OPTION == JOptionPane.showOptionDialog(this, panel, "Connection error",
+                JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+                options1, null);
     }
 }

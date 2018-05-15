@@ -23,16 +23,26 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_TRANSACTION = "transaction";
     public static final String CONTEXT_GET_COINS = "userCoins";
     public static final String CONTEXT_HR_INIT = "horseRaceInit";
-
+    public static final String CONTEXT_DEPOSIT = "deposit";
+    public static final String CONTEXT_WALLET_REQUEST = "walletRequest";
+    public static final String CONTEXT_ROULETTE_BET = "rouletteBet";
     public static final String CONTEXT_WALLET_EVOLUTION = "walletEvolution";
     public static final String CONTEXT_CHANGE_PASSWORD = "change password";
 
+    /** Missatge que es vol enviar*/
     private Message msg;
+
+    /** Context del missatge que es vol enviar*/
     private String context;
 
     /** Referencia al networkManager per a poder enviar dades al servidor*/
     private NetworkManager networkManager;
 
+    /**
+     * Crea una nova transmissio basada en un missatge.
+     * @param msg missatge que es vol enviar
+     * @param networkManager dona la possibilitat a transmitter d'enviar i llegir missatges amb el servidor
+     */
     public Transmission(Message msg, NetworkManager networkManager){
         this.networkManager = networkManager;
         this.msg = msg;
@@ -47,15 +57,11 @@ public class Transmission implements Runnable {
         switch (context) {
 
             case CONTEXT_LOGIN:
-                if (!updateConnection()) {
-                    networkManager.setLoginErrorMessage("⋙ Error, dades incorrectes");
-                }
+                if (!updateConnection()) networkManager.setLoginErrorMessage("⋙ Error, dades incorrectes");
                 break;
 
             case CONTEXT_SIGNUP:
-                if(!updateConnection()){
-                    System.out.println("SIGNIN ERROR - FESME GRAFIC!");
-                }
+                if(!updateConnection()) System.out.println("SIGNIN ERROR - FESME GRAFIC!");
                 break;
 
             case CONTEXT_LOGIN_GUEST:
@@ -72,31 +78,40 @@ public class Transmission implements Runnable {
             case CONTEXT_BJ_FINISH_USER:
                 blackJackRequestCard();
                 break;
+
             case CONTEXT_GET_COINS:
                 //Todo fer get coins MERI
                 break;
+
             case CONTEXT_TRANSACTION:
                 transaction();
                 break;
-            case "deposit":
+
+            case CONTEXT_DEPOSIT:
                 deposit();
                 break;
+
             case CONTEXT_HR_INIT:
                 horseRaceRequestTimes();
                 break;
+
             case CONTEXT_WALLET_EVOLUTION:
                 walletEvolution();
                 break;
+
             case CONTEXT_CHANGE_PASSWORD:
                 changePassword();
                 break;
-            case "rouletteBet":
+
+            case CONTEXT_ROULETTE_BET:
                 rouletteBet((RouletteBetMessage) msg);
                 break;
-            case "walletRequest":
+
+            case CONTEXT_WALLET_REQUEST:
                 networkManager.send(msg);
                 requestWallet(msg);
                 break;
+
             default:
                 networkManager.send(msg);
         }
@@ -117,6 +132,9 @@ public class Transmission implements Runnable {
         }
     }
 
+    /**
+     * Solicita al servidor un canvi de contrasenya i gestiona la resposta del servidor a la solicitud
+     */
     private void changePassword() {
         try {
             System.out.println("Enviada new password");
@@ -129,6 +147,10 @@ public class Transmission implements Runnable {
         }
     }
 
+    /**
+     * Envia una solicitud al servidor per a l'evolucio monetaria de l'usuari.
+     * Un cop el servidor repspon la solicitud, s'ompla la taula de l'evolucio monetaria en el menu de settings
+     */
     private void walletEvolution() {
         try {
             networkManager.send(msg);
@@ -157,7 +179,9 @@ public class Transmission implements Runnable {
 
     }
 
-
+    /**
+     * Envia una solicitud d'ingres i gestiona la resposta del servidor a aquest intent d'ingres monetari
+     */
     private void deposit() {
         try {
             networkManager.send(msg);
@@ -179,15 +203,18 @@ public class Transmission implements Runnable {
         }
     }
 
+    /**
+     * Envia una nova transacio al servidor i no espera cap resposta
+     */
     private void transaction(){
-
         Transaction transaction = (Transaction) msg;
         //S'envia la transaccio al servidor
         networkManager.send(transaction);
-
     }
 
-    /** Demana una carta al servidor i l'afegeix al tauler*/
+    /**
+     * Demana una carta al servidor i l'afegeix al tauler del BlackJack
+     */
     private void blackJackRequestCard() {
         try {
             Card carta = (Card) msg;
@@ -205,9 +232,7 @@ public class Transmission implements Runnable {
             }else{
                 //S'afegeix la carta al model del joc
                 networkManager.newBJCard(cartaResposta);
-
             }
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -243,7 +268,13 @@ public class Transmission implements Runnable {
         }
     }
 
-    /** Espera a que el servidor respongui una peticio. Es mira cada 100ms si ha arribat la resposta*/
+    /**
+     * Espera a que el servidor respongui una peticio. Es mira cada 100ms si ha arribat la resposta
+     * @param SolicitudEnviada Missatge que s'ha enviat i s'espera una resposta
+     * @return la resposta del servidor al missatge enviat
+     * @throws InterruptedException excepcio provocada per l'interrupcio del sleep
+     */
+
     public Message waitResponse(Message SolicitudEnviada) throws InterruptedException {
         Message resposta;
 
@@ -256,7 +287,10 @@ public class Transmission implements Runnable {
         return resposta;
     }
 
-    /** Finalitza el logIn, actualitzant les dades de l'usuari. Tambe es gestiona la copia local del logIn*/
+    /**
+     *  Finalitza el logIn, actualitzant les dades de l'usuari. Tambe es gestiona la copia local del logIn
+     * @param userVerificat usuari s'ha autentificat satisfactoriament
+     */
     private void finishUpdate(User userVerificat){
         //S'actualitza el user
         networkManager.setUser(userVerificat);

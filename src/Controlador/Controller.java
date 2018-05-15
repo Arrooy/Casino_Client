@@ -275,7 +275,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                System.out.println("HEYOU");
                 logInView.clearFields();
                 signInView.clearFields();
                 finestra.setGameSelector(user.isGuest());
@@ -570,5 +569,20 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         HorseRaceController.exit();
         if(BJController != null)
             BJController.exitInGame();
+    }
+
+    public void showErrorConnection() {
+        if(user != null){
+            //Si l'usuari solicita logOut
+            if(mainView.displayErrorConnection()){
+                //S'inicia el logOut
+                JsonManager.removeRemember();
+                networkManager.requestLogOut();
+                finestra.setMainView();
+            }else {
+                //De lo contrari, es surt del programa
+                draggableWindow.exitProgram(1);
+            }
+        }
     }
 }

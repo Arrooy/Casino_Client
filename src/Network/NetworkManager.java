@@ -68,10 +68,11 @@ public class NetworkManager extends Thread {
 
     /** Indica el nombre de cops que el client ha intentat reconectarse amb el servidor*/
     private int nTryConnect;
-
+    //TODO: NEEDS JAVADOC
     private RouletteManager rouletteManager;
 
-    /** Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.
+    /**
+     * Inicialitza el NetworkManager carregant les condicions inicials del JSON. Un cop inicialitzat tot, s'inicia el thread.
      * @param splashScreen pantalla de carrega del sistema
      */
     public NetworkManager(SplashScreen splashScreen) {
@@ -91,9 +92,11 @@ public class NetworkManager extends Thread {
         start();
     }
 
-    /** Intenta fer logIn a partir de 2 creedencials. Usuari - Password.*/
+    /**
+     * Intenta fer logIn a partir de 2 creedencials. Usuari - Password.
+     * @param credentials usuari i password del usuari que vol autentificar-se
+     */
     public void logIn(Object ... credentials) {
-
         //Si el client no esta connectat al servidor, es connecta
         if(!conectatAmbServidor){
             connectarAmbServidor();
@@ -103,7 +106,7 @@ public class NetworkManager extends Thread {
             User user = new User((String)credentials[0],(String)credentials[1],Transmission.CONTEXT_LOGIN);
             new Transmission( user, this);
         }else{
-            System.out.println("No hi ha connexio amb el server");
+            displayError("Connection error","Our servers aren't available right now.\nTry it again later...");
         }
     }
 
@@ -117,7 +120,6 @@ public class NetworkManager extends Thread {
         }else{
             logOut();
         }
-
     }
 
     /** Completa el tencament de la sessio actual despres de rebre la confirmacio per part del servidor*/
@@ -130,36 +132,40 @@ public class NetworkManager extends Thread {
 
     @Override
     public void run() {
-        while(true) {
 
+        while(true) {
+            try {
             //Si el client no esta connectat al servidor, esperem a que ho estigui
             if(!conectatAmbServidor) {
-                try {
-                    sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                sleep(300);
+
             }else{
                 //Quan el client estigui connectat es llegeixen les commandes del servidor i
                 //es guarden en la llista de lectures.
-                try {
+
                     Message missatge = (Message) ois.readObject();
                     System.out.println("[DEBUG] Context: " + missatge.getContext());
 
                     //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
                     if(ServidorVolDesconnectarAquestClient(missatge))
                         continue;
-
                     lectures.add(missatge);
-                } catch (IOException | ClassNotFoundException e) {
-                    //e.printStackTrace();
-                }
+            }
+
+            } catch (IOException ioe) {
+                conectatAmbServidor = false;
+                controller.showErrorConnection();
+            }catch (InterruptedException | ClassNotFoundException cnf){
+
             }
         }
-    }//Restar money bet al consultar la pasta
+    }
 
-
-    /** Reconeix el missatge rebut del servidor i indica si el servidor vol la desconnexio d'aquest client*/
+    /**
+     * Reconeix el missatge rebut del servidor i indica si el servidor vol la desconnexio d'aquest client
+     * @param missatge nou missatge rebut del servidor
+     * @return indica si el servidor vol la desconexio del usuari
+     */
     private boolean ServidorVolDesconnectarAquestClient(Message missatge){
         //Si el missatge es un usuari amb el flag online a false significa que el servidor
         //desitja/permet la desconnexio d'aquest client
@@ -217,12 +223,6 @@ public class NetworkManager extends Thread {
         }
     }
 
-    public void exitLoadingScreen() {
-        //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
-        splashScreen.exit();
-        controller.showFinestra();
-    }
-
     /**
      * Connecta el client amb el servidor sense fer l'enllaç amb el controlador. Tampoc revisa el autoLogin.
      * Es molt util quan es vol fer un logIn despres d'haver fet un logOut
@@ -235,7 +235,7 @@ public class NetworkManager extends Thread {
             oos = new ObjectOutputStream(socket.getOutputStream());
             conectatAmbServidor = true;
         }catch (IOException e){
-            System.out.println("Impossible connectarse amb el servidor");
+            //impossible connectarse amb el servidor, problema controlat més endevant en el proces de logIn o signIn
         }
     }
 
@@ -252,7 +252,7 @@ public class NetworkManager extends Thread {
         }
     }
 
-    /*
+    /**
      * Com la lectura del sevidor es fa constantment de manera paral·lela, el funcionament de read varia bastant.
      * Read es limita a buscar un missatge identificat amb l'ID rebut per parametres dins del conjunt de missatges
      * rebuts pel client, guardats a la llista lectures.
@@ -274,6 +274,7 @@ public class NetworkManager extends Thread {
         return null;
     }
 
+    //TODO: NEEDS JAVADOC
     public Message waitForContext(String context) {
         while (true) {
             for (int i = 0; i < lectures.size(); i++) if (lectures.get(i).getContext().equals(context)) {
@@ -294,8 +295,8 @@ public class NetworkManager extends Thread {
         }
     }
 
-    /** TODO: no se escriure nois, algu majuda?
-    /*
+
+    /**
      * Com la lectura del sevidor es fa constantment de manera paral·lela, el funcionament de read varia bastant.
      * Read es limita a buscar un missatge identificat amb el contexte rebut per parametres dins del conjunt de missatges
      * rebuts pel client, guardats a la llista lectures.
@@ -317,36 +318,58 @@ public class NetworkManager extends Thread {
         //Si no s'ha trobat l'ID, es retorna null;
         return null;
     }
-    /** Inicialitza l'usuari un cop aquest s'ha autentificat*/
+
+    /**
+     * Inicialitza l'usuari un cop aquest s'ha autentificat
+     * @param user usuari que s'hacaba d'autentificar satisfactoriament
+     */
     public void setUser(User user) {
         this.user = user;
         controller.setUser(user);
         System.out.println("[NETWORK MANAGER]: Logged In");
     }
 
-    /** Inidica si es vol recordar el logIn*/
+    /**
+     * Inidica si es vol recordar el logIn
+     * @return retorna si s'ha de recordar el logIn localment
+     */
     public boolean rememberLogIn() {
         if(autoLogin)
             return true;
         return controller.rememberLogIn();
     }
 
-    /** Mostra un error amb una alerta al centre de la finestra grafica*/
+    /**
+     * Mostra un error amb una alerta al centre de la finestra grafica
+     * @param title titol de l'alerta
+     * @param errorText missatge de l'alerta
+     */
     public void displayError(String title, String errorText){
         controller.displayError(title,errorText);
     }
 
+    /**
+     * Surt de la loadingScreen i mostra el menu dels jocs
+     */
     public void enterToGames() {
-        controller.showGamesView();
         exitLoadingScreen();
+        controller.showGamesView();
+    }
+
+    /**
+     * Surt de la loadingScreen i mostra el menu principal
+     */
+    public void exitLoadingScreen() {
+        //Com ja estem conectats al servidor, ja podem obrir la vista i tencar la SplashScreen
+        splashScreen.exit();
+        controller.showFinestra();
     }
 
     /**
      * Envia al servidor una petició de SignUp per a un usuari concret
-     * @param user
+     * @param user usuari que es vol registrar al casino
      */
-    public void
-    requestSignUp(User user) {
+    public void requestSignUp(User user) {
 
         //Si el client no esta connectat al servidor, es connecta
         if(!conectatAmbServidor){
@@ -356,10 +379,8 @@ public class NetworkManager extends Thread {
             //Configurem el signIn i enviem la solicitud al servidor
             new Transmission( user, this);
         }else{
-            System.out.println("No hi ha connexio amb el server");
+            displayError("Connection error","Our servers aren't available right now.\nTry it again later...");
         }
-
-
     }
 
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
@@ -375,19 +396,35 @@ public class NetworkManager extends Thread {
         User userAux = new User(user.getUsername(), user.getPassword(), user.getMail(), Transmission.CONTEXT_GET_COINS);
         new Transmission(userAux, this);
     }
+
+    /**
+     * Indica al servidor que es vol iniciar una nova partida del BlackJack.
+     * Aquesta partida s'inicialitza amb una aposta inicial i una baralla de cartes
+     * @param nomCartes nom de totes les cartes de la baralla
+     * @param bet aposta que ha plantejat l'usuari
+     */
     public void initBlackJack(Stack<String> nomCartes,long bet) {
+        //Si l'aposta es correcte, aquesta sera diferent de 0
         if(bet != 0){
+            //Es crea la carta que iniciara la partida i s'envia
             Card card = new Card("",bet,Transmission.CONTEXT_BJ_INIT,nomCartes,false);
             new Transmission(card,this);
         }
     }
 
+    /**
+     * Demana al servidor una nova carta per al BlackJack
+     * @param forIa indica si la carta es per la IA o per l'usuari
+     */
     public void newBlackJackCard(boolean forIa) {
         new Transmission(new Card("",Transmission.CONTEXT_BJ,forIa),this);
     }
 
-
-    /** Pont transmitter - controlador - Model BlackJack*/
+    /**
+     *  Pont transmitter - controlador - Model BlackJack
+     *  En el cas que cartaResposta sigui la carta que ha iniciat la partida, es demanen 3 cartes mes.
+     * @param cartaResposta carta rebuda que s'ha de processar en el joc BlackJack
+     */
     public void newBJCard(Card cartaResposta) {
 
         if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_INIT)){
@@ -399,6 +436,9 @@ public class NetworkManager extends Thread {
            controller.newBJCard(cartaResposta);
     }
 
+    /**
+     * Entra al casino com a guest
+     */
     public void enterAsGuest() {
         if(!conectatAmbServidor){
             connectarAmbServidor();
@@ -408,10 +448,13 @@ public class NetworkManager extends Thread {
             //Configurem el logIn i enviem la solicitud al servidor
             new Transmission( new User(), this);
         }else{
-            System.out.println("No hi ha connexio amb el server");
+            displayError("Connection error","Our servers aren't available right now.\nTry it again later...");
         }
     }
 
+    /**
+     * Gestiona les noves cartes per a la ia que es volen demanar al servidor
+     */
     public void newCardForIaTurn() {
         Sounds.play("cardPlace1.wav");
         try {
@@ -431,11 +474,6 @@ public class NetworkManager extends Thread {
     public void endRoulette() {
         rouletteManager.disconnect();
     }
-
-    public Controller getController() {
-        return controller;
-    }
-
 
     /**Metode per indicar al servidor de que volem jugar als cavalls*/
     public void sendHorseRaceRequest() {
@@ -466,6 +504,10 @@ public class NetworkManager extends Thread {
         new Transmission(new WalletEvolutionMessage(),this);
     }
 
+    /**
+     * Actualitza el valors de la taula on apareix l'evolucio dels diners de l'usuari
+     * @param newWallet tots els valors que figuren a la taula
+     */
     public void updateWalletEvolution(WalletEvolutionMessage newWallet) {
         controller.updateWalletEvolution(newWallet);
     }
@@ -489,7 +531,6 @@ public class NetworkManager extends Thread {
     }
 
     public void setRouletteWallet(long wallet) {
-
         rouletteManager.setWallet(wallet);
     }
 
@@ -506,5 +547,12 @@ public class NetworkManager extends Thread {
         }
 
         return info;
+    }
+
+    /**
+     * Finalitza tots els graphics oberts dels jocs
+     */
+    public void endGraphics() {
+        controller.endGraphics();
     }
 }

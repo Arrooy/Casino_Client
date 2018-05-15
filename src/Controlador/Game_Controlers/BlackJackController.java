@@ -427,9 +427,14 @@ public class BlackJackController implements GraphicsController {
 
                 g.setColor(new Color(216, 202, 168));
 
-                g.drawString("Cards score :" + userScore, width - metrics.stringWidth(("Cards score :" + userScore)) - 15, height - metrics.getAscent() * 2);
+                g.drawImage(AssetManager.getImage("Num.png",metrics.stringWidth(("Bet: " + bet + MONEY_SYMBOL)) + 20,metrics.getAscent() + 20),50 - 10,75 - metrics.getAscent() - 7,null);
                 g.drawString("Bet: " + bet + MONEY_SYMBOL, 50, 75);
-                g.drawString("User wallet: " + moneyToSpend + MONEY_SYMBOL, 50, height - metrics.getAscent() * 4);
+
+                g.drawImage(AssetManager.getImage("Num.png",metrics.stringWidth(("Cards score: " + userScore)) + 20,metrics.getAscent() + 20),width - metrics.stringWidth(("Cards score :" + userScore)) - 15 - 10,height - metrics.getAscent() * 2 - metrics.getAscent() - 7,null);
+                g.drawString("Cards score: " + userScore, width - metrics.stringWidth(("Cards score: " + userScore)) - 15, height - metrics.getAscent() * 2);
+
+                g.drawImage(AssetManager.getImage("Num.png",metrics.stringWidth(("Wallet: " + moneyToSpend + MONEY_SYMBOL)) + 20,metrics.getAscent() * 3  + 20),50 - 10,height - metrics.getAscent() * 4 - metrics.getAscent() - 7,null);
+                g.drawString("Wallet: " + moneyToSpend + MONEY_SYMBOL, 50, height - metrics.getAscent() * 4);
                 g.drawString("Profit: " + bet * 2.0 + MONEY_SYMBOL, 50, height - metrics.getAscent() * 2);
 
             }
@@ -440,14 +445,25 @@ public class BlackJackController implements GraphicsController {
     private void showHowToPlay(Graphics2D g,int width,int height) {
         g.setColor(new Color(20,20,20,230));
         g.fillRect(0,0,width,height);
-        Image image = AssetManager.getImage("tutoBJ.png");
+        g.setColor(new Color(216, 202, 168));
+        g.setFont(AssetManager.getEFont(width/12));
+        FontMetrics m = g.getFontMetrics(g.getFont());
 
-        if(image.getWidth(null) > blackJackView.getWidth() || blackJackView.getHeight() < image.getHeight(null)){
-            g.drawImage(image,0,0,blackJackView.getWidth(),blackJackView.getHeight(),null);
-        }else{
-            g.drawImage(image,width/2 - image.getWidth(null)/2,10,null);
-        }
+        int imageWidth = m.stringWidth("How to play");
+        g.drawImage(AssetManager.getImage("Num.png",imageWidth + 20,m.getHeight() + 10),width / 2 - imageWidth / 2 - 10, 25,null);
+        g.drawString("How to play",width / 2 - imageWidth / 2,m.getAscent() + 25);
 
+        g.setFont(AssetManager.getEFont(height/14));
+        m = g.getFontMetrics(g.getFont());
+
+        Image image = AssetManager.getImage("SBBJ.png");
+
+        g.drawImage(AssetManager.getImage("SBBJ.png"),width / 2 - 50 - m.stringWidth("Request a card")/3 - image.getWidth(null),height - m.getAscent() * 5 - m.getAscent()/2 - image.getHeight(null)/2 ,null);
+        image = AssetManager.getImage("BBBJ.png");
+        g.drawImage(AssetManager.getImage("BBBJ.png"),width / 2 - m.stringWidth("Finish turn")/3 - image.getWidth(null),height - m.getAscent() * 2 - m.getAscent()/2 - image.getHeight(null)/2,null);
+
+        g.drawString("Request a card",width / 2 + 50 - m.stringWidth("Request a card")/3, height - m.getAscent() * 5);
+        g.drawString("Finish turn",width / 2 + 50 - m.stringWidth("Finish turn")/3, height - m.getAscent() * 2);
     }
 
     //Dibuixa les cartes del tauler
