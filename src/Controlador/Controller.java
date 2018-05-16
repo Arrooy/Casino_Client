@@ -238,7 +238,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     public void setUser(User u){
         user = u;
-        horseRaceController.setUser(u);
+        horseRaceController.setUser(user);
     }
 
     public void newBJCard(Card cartaResposta) {

@@ -555,4 +555,18 @@ public class NetworkManager extends Thread {
     public void endGraphics() {
         controller.endGraphics();
     }
+
+    public String[][] updateHorseList() {
+        String[][] info = null;
+
+        for(int i = lectures.size()-1; i > 0; i--) {
+            Message msg = lectures.get(i);
+            if (msg.getContext().equals("HORSE-ListUpdate")) {
+                System.out.println("[HORSE LIST]: Updating");
+                info = ((BetList) msg).getInfo();
+                lectures.remove(msg);
+            }
+        }
+        return info;
+    }
 }

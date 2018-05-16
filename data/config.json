@@ -1,4 +1,7 @@
 {
+ "LogUsername": "gerard",
  "PortServidor": 2525,
- "IpServidor": "localhost"
+ "IpServidor": "localhost",
+ "IsLoggedIn": true,
+ "#LogPassword": "GscgiWsQxynTklUZMpXSc21RGL29fxgT/llTjSIvLlynxvz23o17Wwi3BgyD6Q5W"
 }

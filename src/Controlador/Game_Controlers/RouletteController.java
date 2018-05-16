@@ -68,7 +68,7 @@ public class RouletteController implements GraphicsController {
     //private Image getDownButtonSelected;
     private Image listTable;
 
-    public static final Color TEXT_COLOR = new Color(216, 204, 163);
+    private static final Color TEXT_COLOR = new Color(216, 204, 163);
 
     private int vlx;
     private int vly;
@@ -151,7 +151,7 @@ public class RouletteController implements GraphicsController {
 
         rouletteImage = AssetManager.getImage("Rulet.png");
         background = AssetManager.getImage("casino ruleta sin marco.png");
-        boardImage = AssetManager.getImage("marco ruleta MAS PEQE 2.png");
+        boardImage = AssetManager.getImage("rouletteBackgroundSmall.png");
         wood = AssetManager.getImage("Num.png");
 
         viewList = AssetManager.getImage("VG.png");
@@ -240,8 +240,6 @@ public class RouletteController implements GraphicsController {
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g.setColor(Color.white);
 
         switch (mode) {
             case GAME_MODE:
