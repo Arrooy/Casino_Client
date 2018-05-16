@@ -404,10 +404,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         for (int horse = 0; horse < MAX_HORSES; horse++) {
             g.drawImage(AssetManager.getImage("horse" + horse % 6 + "_" + horseFrames[horse] + ".png", (int) (horseRaceView.getWidth() / 14.44), (int) (horseRaceView.getHeight() / 10.4)), horsePositions[horse].x, horsePositions[horse].y, null);
         }
-        g.setFont(font.deriveFont(15f));
+        g.setFont(font.deriveFont((float)(0.0098039215686275*(horseRaceView.getWidth()))));
         g.setColor(GREY);
         g.drawString("Press \"Esc\" to exit." , (int)(0.01), (int)(horseRaceView.getHeight()*0.03));
-        g.setFont(font.deriveFont(20f));
+        g.setFont(font.deriveFont((float)(horseRaceView.getWidth()*0.0130718954248366)));
         g.setColor(TEXT_COLOR);
         g.drawString("Bet:" , (int)(horseRaceView.getWidth()*BET_TITLE_X), (int)(horseRaceView.getHeight()*BET_TITLE_Y));
         g.drawString("Wallet: " + this.user.getWallet() , (int)(horseRaceView.getWidth()*WALLET_MESSAGE_X), (int)(horseRaceView.getHeight()*WALLET_MESSAGE_Y));
@@ -442,35 +442,35 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             }
         }
         if (!isRacing&&!isCountDown&&!waitCountdown.isCounting()&&!raceCountdown.isCounting() && firstRace ) {
-            g.setFont(font.deriveFont(10f));
+            g.setFont(font.deriveFont((float)(0.0065359477124183*horseRaceView.getWidth())));
             g.drawString("Race: ...",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X),  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
         }
 
         if (isBetting) {
             if(this.betOK){
-                g.setFont(font.deriveFont(18f));
+                g.setFont(font.deriveFont((float)(0.0117647058823529*horseRaceView.getWidth())));
                 g.drawString("Amount: " + betAmount , (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y )));
                 g.drawString("Horse: " + betHorse, (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y + 0.03)));
             }else{
-                g.setFont(font.deriveFont(18f));
+                g.setFont(font.deriveFont((float)(0.0117647058823529*horseRaceView.getWidth())));
                 g.setColor(GRANA);
                 g.drawString("Insufficient funds", (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*BET_STATUS_Y));
                 g.setColor(TEXT_COLOR);
             }
         }else{
-            g.setFont(font.deriveFont(18f));
+            g.setFont(font.deriveFont((float)(0.0117647058823529*horseRaceView.getWidth())));
             g.drawString("Amount: " , (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y )));
             g.drawString("Horse: " , (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y + 0.03)));
         }
         if (isCountDown && betResult) {
-            g.setFont(font.deriveFont(18f));
+            g.setFont(font.deriveFont((float)(0.0117647058823529*horseRaceView.getWidth())));
             if (prize == 0) {
                 g.drawString("Bet Lost", (int)(horseRaceView.getWidth()*BET_RESULT_X), (int)(horseRaceView.getHeight()*BET_RESULT_Y));
             } else {
                 g.drawString("Prize:  " + prize, (int)(horseRaceView.getWidth()*BET_RESULT_X), (int)(horseRaceView.getHeight()*BET_RESULT_Y));
             }
         }
-        g.setFont(font.deriveFont(20f));
+        g.setFont(font.deriveFont((float)(horseRaceView.getWidth()*0.0130718954248366)));
         if(isCountDown && !firstRace ){
             g.drawString("Winner: Horse " + (12 - winner), (int)(horseRaceView.getWidth()*WINNER_MESSAGE_X), (int)(horseRaceView.getHeight()*WINNER_MESSAGE_Y));
         }else{
@@ -479,7 +479,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         }
 
         if(!isRacing && !raceCountdown.isCounting() && !waitCountdown.isCounting()){
-            g.setFont(font.deriveFont(20f));
+            g.setFont(font.deriveFont((float)(horseRaceView.getWidth()*0.0130718954248366)));
             g.drawString("Wait: ...",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X),  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
 
         }
@@ -528,16 +528,13 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     public void mouseClicked(MouseEvent e) {
         long bet = -1;
         HorseMessage horseMessage;
-        System.out.println("CLICK: x:"+ e.getPoint().x/(float)horseRaceView.getWidth() + "   y: " +  e.getPoint().y/(float)horseRaceView.getHeight());
-        System.out.println("Rel Click X:  " + (HORSE_END_X/((double)horseRaceView.getWidth()) - HORSE_START_X));
-
         if(!isRacing && ! isBetting){
             if(e.getX() >= horseRaceView.getWidth()*HORSE_START_X - (horseRaceView.getWidth() / 14.44) && e.getX() <= horseRaceView.getWidth()*HORSE_START_X + (horseRaceView.getWidth() / 14.44)) {
                 for (int horse = 0; horse < MAX_HORSES; horse++) {
                     if(e.getY() >= horsePositions[horse].y - (horseRaceView.getHeight() / 10.4) && e.getY() <= horsePositions[horse].y + (horseRaceView.getHeight() / 10.4) ){
                         try {
                             bet = Long.parseLong((String) JOptionPane.showInputDialog(null, "Bet:", "HORSE " + (12 - horse), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(AssetManager.getImage("horse" + (horse) + "_"+ horseFrames[horse]+".png")), null, 0));
-                            System.out.println(bet);
+                            System.out.println("Horse bet: " + bet);
                             if(bet <= 0){
                                 JOptionPane.showMessageDialog(horseRaceView, "Bet must be greater than 0", "BET ERROR", JOptionPane.ERROR_MESSAGE, null);
                             }else{
@@ -586,7 +583,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             }
         }
 
-        System.out.println(Controller.getWinWidth() + " X "+ Controller.getWinHeight());
 
         if (e.getX() > ebx && e.getX() < ebx + returnButton.getWidth(null) && e.getY() > eby && e.getY() < eby + returnButton.getHeight(null)) {
             if (mode == GAME_MODE) networkManager.exitRoulette();
