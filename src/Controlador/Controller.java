@@ -84,7 +84,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()){
+        switch (e.getActionCommand()) {
             case "goToLogIn":
                 finestra.setLogInView();
                 break;
@@ -112,7 +112,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 networkManager.enterAsGuest();
                 break;
             case "roulette":
-                    //Codi per a usuaris normals
+                //Codi per a usuaris normals
                 finestra.showUserconfig(false);
                 setRoulette();
                 break;
@@ -123,11 +123,18 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 finestra.showUserconfig(false);
                 System.out.println("Play");
                 break;
+
             case "blackJack":
-                //Si la partida s'inicia correctament perque l'aposta es adient, s'amaga l'icono de settings de la
-                //barra superior del Jframe, de lo contrari, l'icono es conserva
-                finestra.showUserconfig(networkManager.initBlackJack(Baralla.getNomCartes(),manageBJBet()));
+                if (user.isGuest()){
+                    //Si la partida s'inicia correctament perque l'aposta es adient, s'amaga l'icono de settings de la
+                    //barra superior del Jframe, de lo contrari, l'icono es conserva
+                    networkManager.initBlackJack(Baralla.getNomCartes(), manageBJBet());
+                    finestra.showUserconfig(false);
+                }else {
+                    finestra.showUserconfig(networkManager.initBlackJack(Baralla.getNomCartes(), manageBJBet()));
+                }
                 break;
+
             case "acceptSignIn":
                 if(signInView.getUsername().length() > 0 && signInView.getEmail().length() > 0){
                     signUp();
@@ -135,8 +142,8 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                     signInView.passwordKO("Must fill in all fields");
                     signInView.manageError(true);
                 }
-
                 break;
+
             case "settings":
                 if(user != null && !user.isGuest())
                     finestra.setSettingsView("SETTINGS - changePass");
