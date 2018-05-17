@@ -566,7 +566,6 @@ public class NetworkManager extends Thread {
         if(msg != null){
             System.out.println("[HORSES-LIST]: Updating");
             info = msg.getInfo();
-            System.out.println(info.toString());
         }
         return info;
     }
