@@ -5,15 +5,12 @@ import Controlador.Game_Controlers.BlackJackController;
 import Controlador.Game_Controlers.HorseRaceController;
 import Controlador.Game_Controlers.RouletteController;
 import Model.*;
-import Model.RouletteModel.RouletteBetMessage;
 import Utils.JsonManager;
 import Vista.*;
 import Network.*;
-//import Vista.Finestra;
 import Vista.GameViews.BlackJack.BlackJackView;
 import Vista.GameViews.Roulette.RouletteView;
 import Vista.GameViews.HorseRaceView;
-//import Vista.MainFrame.Finestra;
 import Vista.MainFrame.Finestra;
 import Vista.SettingsViews.*;
 import Vista.SwingModifications.IconPasswordField;
@@ -27,7 +24,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 
 /** Controlador del client*/
-
 public class Controller implements ActionListener, ComponentListener, KeyListener, FocusListener{
 
     /** Dimensions de la finestra en tot moment */
@@ -504,8 +500,12 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             return false;
         }
     }
-    /** Mirem que solida es la contrasenya, en cas de que no s'hagin introduit un mínim d0un nombre, una Majuscula i una minuscula el llença
-     * una excepcio amb el text d'error que cal mostrar*/
+
+    /**
+     * Mirem que solida es la contrasenya, en cas de que no s'hagin introduit
+     * un mínim d0un nombre, una Majuscula i una minuscula el llença
+     * una excepcio amb el text d'error que cal mostrar
+     */
     private int containsRequiredChars (String string) throws Exception{
         int relativeStrength = 0;
         int length = string.length();
@@ -556,8 +556,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     }
 
     private void setRoulette() {
-        if (rouletteController == null) rouletteController = new RouletteController(rouletteView, networkManager);
-        else rouletteController.initRoulette();
+        if (rouletteController == null) {
+            rouletteController = new RouletteController(rouletteView, networkManager);
+            rouletteController.initRoulette();
+        } else rouletteController.initRoulette();
         rouletteGraphicsManager = new GraphicsManager(rouletteView, rouletteController);
         finestra.requestRouletteFocus();
 

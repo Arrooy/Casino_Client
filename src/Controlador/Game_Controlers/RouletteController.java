@@ -2,19 +2,14 @@ package Controlador.Game_Controlers;
 
 import Controlador.Controller;
 import Controlador.CustomGraphics.GraphicsController;
-import Controlador.CustomGraphics.GraphicsManager;
 import Model.AssetManager;
-import Model.RouletteModel.RouletteBetMessage;
 import Model.User;
-import Network.BetGetter;
 import Network.NetworkManager;
 import Network.Transmission;
 import Vista.GameViews.Roulette.RouletteView;
 import Vista.GraphicUtils.RouletteElements.GRect;
 import Vista.GraphicUtils.RouletteElements.RouletteBall;
 import Vista.GraphicUtils.RouletteElements.RouletteBetTable;
-import Vista.MainFrame.Finestra;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -22,34 +17,88 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.LinkedList;
 
+/**
+ * Classe que controla tot el conjunt de la ruleta. Aquesta gestiona
+ * tots els gràfics que s'han de pintar per pantalla, i actualitza la lògica
+ * de l'apartat visual d'aquesta.
+ *
+ * A més a més s'encarrega de controlar de manera autònoma les accions de
+ * l'usuari amb el teclat o el ratolí, per a poder realitzar les diferents
+ * accions que permet el joc.
+ *
+ * El joc rep instruccions des de la classe "RouletteManager", la qual proporciona tota
+ * la informació referent a cada tir, i és qui llença la instrucció de generar el tir
+ * proporcionant els parametres aleatoris necessaris per a obtenir el guanyador final.
+ * A més a més al moment de realitzar l'aposta, també s'indica el temps restant per a iniciar
+ * la següent aposta, per així poder representar un temporitzador que indica el temps
+ * restant fins la següent aposta.
+ *
+ * En quant a les apostes, al pèmer sobre una casella de la taula es redirigeix la
+ * instrucció a un thread apart que mostra un JinputDialog que demana una quantitat de
+ * diners, i la comunica al servidor, on es gestiona l'aposta de manera convenient.
+ *
+ * El tir de la ruleta consisteix en una animació en la que es desconeix el guanyador d'aquesta,
+ * i només es coneix la posició inicial de la ruleta, la velocitat d'aquesta i la velocitat
+ * de la bola, i amb aquests parametres s'actualitza la logica de la animació per a arribar al
+ * mateix resultat que el servidor. Aquesta només es visualitza quan es rep la instrucció de
+ * generar un tir, i desapareix al cap d'uns 12 segons aproximadament.
+ *
+ * Finalment cal dir que es proporciona un mode de visualització en el que en comptes de
+ * visualitzar el tauler i la ruleta, es visualitza un llistat de les apostes realitzades
+ * per tots els jugadors connectats.
+ */
 public class RouletteController implements GraphicsController {
 
+    /** Numero total de cel·les de la ruleta */
     private static final int MAXCELLS = 37;
+
+    /** Angle amb el que s'ha de rotar la imatge de la ruleta per a sincronitzar-la amb la lògica */
     private static final double zeroAng = Math.PI/2 + (Math.PI*2/MAXCELLS)/2;
+
+    /** Dimensions del panell teòric en el que es realitza la simulacio */
     private int width = 600, height = 600;
 
-    public static final int LIST_DIM = 700;
+    /** Amplada / Alçada del tauler de la llista d'apostes totals */
+    private static final int LIST_DIM = 700;
 
+    /** Taula de conversio que serveix per transformar el index de la casella de la ruleta
+     * per obtenir el valor real d'aquella casella en concret */
     private static final int[] converTable = {0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 26, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26};
+
+    /** Taula de conversió que transforma l'index de les cel·les del tauler d'apostes en el seu valor en String */
     private static final String[] listBetConversion = {"0", "3", "2", "1", "6", "5", "4", "9", "8", "7", "12", "11", "10", "15", "14", "13", "18", "17", "16", "21", "20", "19", "24", "23", "22", "27", "26", "25", "30", "29", "28", "33", "32", "31", "36", "35", "34", "First line", "Second line", "Third line", "First half", "Even", "Red", "Black", "Odd", "Second Half", "First dozen", "Second dozen", "Third dozen"};
 
+    /** Llistat de barres separadores de les cel·les de la ruleta */
     private LinkedList<GRect> bars;
+
+    /** Bola que es llença a la ruleta */
     private RouletteBall ball;
 
+    /** Velocitat i acceleració del gir de la ruleta */
     private double vel, acc;
+
+    /** Velocitat inicial que pren el gir de la ruleta */
     private static double initVel = 40;
+
+    /** Indica si s'ha trobat un guanyador o no en una tirada */
     private boolean winnerE;
+
+    /** Guanyador d'una tirada concreta */
     private int winner;
 
+    /** Offset inicial de caselles amb el que s'inicia l'animació de la ruleta */
     private int shotOff;
 
-    private GraphicsManager gm;
-
+    /** Moment en el que es realitzarà la següent tirada */
     private static long nextTime = Timestamp.from(Instant.now()).getTime();
 
+    /** Taula d'apostes */
     private RouletteBetTable table;
 
+    /** Imatge de fons (tauler d'apostes) */
     private Image background;
+
+
     private Image rouletteImage;
     private Image boardImage;
     private Font font;
@@ -63,9 +112,7 @@ public class RouletteController implements GraphicsController {
 
     private Image listBackground;
     private Image upButton;
-    //private Image upButtonSelected;
     private Image downButton;
-    //private Image getDownButtonSelected;
     private Image listTable;
 
     private static final Color TEXT_COLOR = new Color(216, 204, 163);
@@ -83,12 +130,10 @@ public class RouletteController implements GraphicsController {
 
     private NetworkManager networkManager;
 
-    private long wallet, bet;
+    private long wallet, lastWallet, bet;
 
-    ////////////////////
-
-    public static final int GAME_MODE = 0;
-    public static final int LIST_MODE = 1;
+    private static final int GAME_MODE = 0;
+    private static final int LIST_MODE = 1;
 
     private int mode;
 
@@ -98,9 +143,6 @@ public class RouletteController implements GraphicsController {
     private RouletteView view;
 
     public RouletteController(RouletteView view, NetworkManager networkManager) {
-        //this.width = width;
-        //this.height = height;
-        this.gm = gm;
         this.networkManager = networkManager;
         this.view = view;
 
@@ -116,6 +158,7 @@ public class RouletteController implements GraphicsController {
         listOff = 0;
 
         wallet = 0;
+        lastWallet = 0;
         bet = 0;
     }
 
@@ -181,6 +224,8 @@ public class RouletteController implements GraphicsController {
 
         hideRoulette = true;
         backAnim = false;
+
+        initRoulette();
     }
 
     public static void updateNextTime(long newTime) {
@@ -189,6 +234,7 @@ public class RouletteController implements GraphicsController {
 
     public static String nextTimeToString() {
         long diff = nextTime - Timestamp.from(Instant.now()).getTime();
+        if (diff < 0) diff += 78000;
         return String.format("%02d", (int) (diff / 1000));
     }
 
@@ -271,8 +317,11 @@ public class RouletteController implements GraphicsController {
             g.setFont(font.deriveFont(17f));
 
             for (int i = 0; i < Math.min((info.length > 0 ? info[0].length : 0), 33); i++) {
+                int cellID = Integer.parseInt(info[1][i + listOff]);
+                String cell = (cellID < 37 ? cellID + "" : listBetConversion[cellID]);
+
                 for (int j = 0; j < 3; j++) {
-                    String s = j == 1 ? listBetConversion[Integer.parseInt(info[j][i + listOff])] : info[j][i + listOff];
+                    String s = j == 1 ? cell : info[j][i + listOff];
                     int width = g.getFontMetrics().getStringBounds(s, g).getBounds().width / 2;
 
                     g.drawString(s, cx[j] - width, zy + 18 * i);
@@ -314,16 +363,33 @@ public class RouletteController implements GraphicsController {
 
         if (winnerE && !hideRoulette) g.drawString("" + getWinner(), cx - 250, cy + 200);
 
-        int walwid = g.getFontMetrics().getStringBounds("" + wallet, g).getBounds().width;
+        int walwid = g.getFontMetrics().getStringBounds("" + (wallet - bet), g).getBounds().width;
         g.setFont(font.deriveFont(20f));
-        g.drawString("Wallet", Controller.getWinWidth()/2 - g.getFontMetrics().getStringBounds("Wallet", g).getBounds().width/2, Controller.getWinHeight() - 100);
+
+        String mtitle = hideRoulette ? "Wallet" : "Result";
+
+        g.drawString(mtitle, Controller.getWinWidth()/2 - g.getFontMetrics().getStringBounds(mtitle, g).getBounds().width/2, Controller.getWinHeight() - 100);
         g.setFont(font.deriveFont(50f));
-        g.drawString(wallet - bet + "", Controller.getWinWidth()/2 - walwid/2, Controller.getWinHeight() - 40);
+
+        long moneyToShow;
+
+        if (hideRoulette) {
+            if (winnerE) {
+                moneyToShow = wallet - lastWallet;
+            } else {
+                moneyToShow = (long) (Math.random() * lastWallet);
+            }
+        } else {
+            moneyToShow = wallet - bet;
+        }
+        moneyToShow = (wallet - bet);
+        g.drawString(moneyToShow + "", Controller.getWinWidth()/2 - walwid/2, Controller.getWinHeight() - 40);
 
         g.drawImage(viewListPressed ? viewListSelected : viewList, vlx, vly, null);
     }
 
     public void setWinner(int winer) {
+        if (!winnerE) requestWallet();
         winnerE = true;
         this.winner = winer;
     }
@@ -374,6 +440,8 @@ public class RouletteController implements GraphicsController {
         roffTimer = System.nanoTime();
         backAnim = false;
         hideRoulette = false;
+        lastWallet = wallet;
+        //requestWallet();
     }
 
     public void requestWallet() {
@@ -386,7 +454,7 @@ public class RouletteController implements GraphicsController {
     public void mousePressed(MouseEvent e) {
         if (mode == GAME_MODE) {
             int cellID = table.getCellID(e.getX(), e.getY());
-            if (cellID >= 0) view.bet(cellID, networkManager, "How much do you want to bet?", "Bet on " + listBetConversion[cellID]);
+            if (cellID >= 0) view.bet(cellID, networkManager, "How much do you want to bet?", "Bet on " + (cellID < 37 ? cellID + "" : listBetConversion[cellID]));
 
             viewListPressed = e.getX() > vlx && e.getY() > vly && e.getY() < vly + viewList.getHeight(null) && e.getX() < vlx + viewList.getWidth(null);
         }
@@ -408,7 +476,7 @@ public class RouletteController implements GraphicsController {
                 mode = LIST_MODE;
         }
 
-        System.out.println(Controller.getWinWidth() + " X "+ Controller.getWinHeight());
+        //System.out.println(Controller.getWinWidth() + " X "+ Controller.getWinHeight());
 
         if (e.getX() > ebx && e.getX() < ebx + returnButton.getWidth(null) && e.getY() > eby && e.getY() < eby + returnButton.getHeight(null)) {
             if (mode == GAME_MODE) networkManager.exitRoulette();

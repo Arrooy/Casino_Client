@@ -112,6 +112,7 @@ public class Transmission implements Runnable {
 
             case CONTEXT_WALLET_REQUEST:
                 networkManager.send(msg);
+                this.networkManager.updateWallet(((User)msg).getWallet());
                 requestWallet(msg);
                 break;
 
@@ -126,10 +127,8 @@ public class Transmission implements Runnable {
      */
     private void requestWallet(Message msg) {
         try {
-            System.out.println("[WALLET]: Requested");
             Message resp = waitResponse(msg);
             networkManager.setRouletteWallet(((User) resp).getWallet());
-            System.out.println("[WALLET]: Received (" + ((User) resp).getWallet() + ")");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

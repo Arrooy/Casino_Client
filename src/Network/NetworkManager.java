@@ -68,7 +68,8 @@ public class NetworkManager extends Thread {
 
     /** Indica el nombre de cops que el client ha intentat reconectarse amb el servidor*/
     private int nTryConnect;
-    //TODO: NEEDS JAVADOC
+
+    /** Controla la comunicació entre servidor i el RouletteController */
     private RouletteManager rouletteManager;
 
     /**
@@ -533,7 +534,8 @@ public class NetworkManager extends Thread {
     }
 
     public void setRouletteWallet(long wallet) {
-        rouletteManager.setWallet(wallet);
+        //rouletteManager.setWallet(wallet);
+        if (rouletteManager != null) rouletteManager.setWallet(wallet);
     }
 
     public String[][] updateRouletteList() {
@@ -570,6 +572,10 @@ public class NetworkManager extends Thread {
             }
         }
         return info;
+    }
+
+    public void updateWallet(long wallet) {
+        this.user.setWallet(wallet);
     }
 
     public void signUpErrorMessage(String message) {

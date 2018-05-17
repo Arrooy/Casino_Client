@@ -50,7 +50,7 @@ public class RouletteManager extends Thread {
             roulette.setParams(shot.getRouletteVel(), shot.getBallVel(), shot.getShotOff());
             RouletteController.updateNextTime((long) shot.getTimeTillNext());
             roulette.shoot();
-            roulette.requestWallet();
+            //roulette.requestWallet();
 
             waitTillNext(Math.max(0, (long) shot.getTimeTillNext() - Timestamp.from(Instant.now()).getTime() - 10));
         }
