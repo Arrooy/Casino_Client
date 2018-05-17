@@ -529,7 +529,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        betAmount = -1;
         HorseMessage horseMessage;
         if(!isRacing && ! isBetting){
             if(e.getX() >= horseRaceView.getWidth()*HORSE_START_X - (horseRaceView.getWidth() / 14.44) && e.getX() <= horseRaceView.getWidth()*HORSE_START_X + (horseRaceView.getWidth() / 14.44)) {
