@@ -1,6 +1,7 @@
 package Vista.GraphicUtils.RouletteElements;
 
 import Controlador.Game_Controlers.RouletteController;
+import Controlador.Sounds;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -69,6 +70,9 @@ public class RouletteBall {
                 enableRelativeRotation();
                 for (GRect r: c.getBars()) correctFinalPosition(r);
                 c.setWinner(findWinner());
+                //TODO: ADRIA - MIQUEL -> PQ ES REPRODUEIXEN AQUESTES LINIES DE CODI AL OBRIR EL CASINO SI LA RULETA NO STA GIRANT?
+                Sounds.stopOneAudioFile("RRun.wav");
+                Sounds.play("REnd.wav");
             }
 
             if (dist(x, y, centerX, centerY) < intLim){

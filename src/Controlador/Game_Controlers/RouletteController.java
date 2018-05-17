@@ -2,6 +2,7 @@ package Controlador.Game_Controlers;
 
 import Controlador.Controller;
 import Controlador.CustomGraphics.GraphicsController;
+import Controlador.Sounds;
 import Model.AssetManager;
 import Model.User;
 import Network.NetworkManager;
@@ -255,7 +256,8 @@ public class RouletteController implements GraphicsController {
 
         for (GRect r: bars) r.updateRotation( (float) vel, 0.017f, teoricWidth/2, teoricHeight/2);
 
-        ball.update(0.017f, vel, teoricWidth/2, teoricHeight/2);
+
+        ball.update(0.017f, vel, teoricWidth / 2, teoricHeight / 2);
 
         boolean bool = true;
         for (int i = bars.size() - 1; i >= 0 && bool; i--) if (ball.rectCollision(bars.get(i))) bool = false;
@@ -441,6 +443,9 @@ public class RouletteController implements GraphicsController {
         backAnim = false;
         hideRoulette = false;
         lastWallet = wallet;
+
+        //S'inicia el fx de la bola
+        Sounds.play("RRun.wav");
         //requestWallet();
     }
 
@@ -463,6 +468,8 @@ public class RouletteController implements GraphicsController {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        Sounds.play("RClick.wav");
+
         if (mode == LIST_MODE) {
             if (e.getX() > Controller.getWinWidth()/2 + LIST_DIM/2 - 10 && e.getX() < Controller.getWinWidth()/2 + LIST_DIM/2 + 10
                     && e.getY() > Controller.getWinHeight()/2 - 20 && e.getY() < Controller.getWinHeight()/2)
