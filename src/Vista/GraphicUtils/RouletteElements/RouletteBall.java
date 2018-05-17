@@ -6,20 +6,56 @@ import Controlador.Sounds;
 import java.awt.*;
 import java.util.LinkedList;
 
+
+/**
+ * Classe que gestiona la bola que es tira a la ruleta i que gestiona
+ * totes les fisiques necessàries.
+ *
+ * Concretament genera una força que empeny a la bola cap a fora del centre de
+ * la ruleta, afectant a la velocitat i direcció d'aquesta. A més a més es controlen
+ * les fisiques de col·lisió contra els separadors de les cel·les que fan que la bola
+ * reboti normalment vàries vegades abans de caure a una cel·la final.
+ *
+ * Seguidament també es controla si la bola cau en una cel·la, i en cas afirmatiu
+ * s'anul·la la velocitat i acceleracio de la bola, fent que aquesta giri coordinadament
+ * amb la resta del tauler. Aquest mode s'anomena "Relative Rotation"
+ */
 public class RouletteBall {
 
+    /** Gravetat que s'aplica a la bola */
     private final float gravity = 0.2f;
+
+    /** Velocitat inicial de la bola */
     private static double initVel = 250;
 
+    /** Posició de la bola dins un panell de 600x600 */
     private double x, y;
+
+    /** Velocitat en els eixos x i y */
     private double velX, velY;
+
+    /** Radi de la bola */
     private double r;
 
+    /** Centre del panell i radi de la circumferencia limit */
     private double centerX, centerY, limit, intLim;
 
+    /** Classe que gestiona la simulació sencera de la tirada */
     private RouletteController c;
+
+    /** Atribut que indica si la bola ha de rotar de manera sincronitzada amb la ruleta */
     private boolean relrot;
 
+    /**
+     * Constructor de la classe
+     * @param x Posició x inicial
+     * @param y Posició y inicial
+     * @param centerX Posició central del panell
+     * @param centerY Posició central del panell
+     * @param c Gestor de la simulació
+     * @param limit Limit fins el que es pot moure lliurement la bola
+     * @param intLim Limit interior
+     */
     public RouletteBall(double x, double y, double centerX, double centerY, RouletteController c, double limit, double intLim) {
         this.x = x;
         this.y = y;
@@ -37,28 +73,28 @@ public class RouletteBall {
         r = 3;
     }
 
+    /**
+     * Setter de la velocitat inicial de la simulació
+     * @param velY Velocitat
+     */
     public void setDefaultVelY(double velY) {
         RouletteBall.initVel = velY;
     }
 
+    /** Mètode que activa la rotació relativa a la ruleta */
     private void enableRelativeRotation() {
         relrot = true;
         velY = 0;
         velX = 0;
     }
 
-    /*public void setRelativeRotation(double vel, int refx, int refy) {
-        double vectX = (x - refx);
-        double vectY = (y - refy);
-
-        double a = Math.PI / (vel);
-
-        if (relrot) {
-            x = ((vectX * Math.cos(a) - vectY * Math.sin(a))) + refx;
-            y = ((vectX * Math.sin(a) + vectY * Math.cos(a))) + refy;
-        }
-    }*/
-
+    /**
+     * Mètode que actulitza la posició de la bola
+     * @param delta Valor per a escalar la velocitat
+     * @param vel Veocitat en la que rota la ruleta
+     * @param refx Posició central de la ruleta
+     * @param refy Posició central de la ruleta
+     */
     public void update(float delta, double vel, int refx, int refy) {
         double vectX = (x - centerX);
         double vectY = (y - centerY);
@@ -70,7 +106,7 @@ public class RouletteBall {
                 enableRelativeRotation();
                 for (GRect r: c.getBars()) correctFinalPosition(r);
                 c.setWinner(findWinner());
-                //TODO: ADRIA - MIQUEL -> PQ ES REPRODUEIXEN AQUESTES LINIES DE CODI AL OBRIR EL CASINO SI LA RULETA NO STA GIRANT?
+
                 Sounds.stopOneAudioFile("RRun.wav");
                 Sounds.play("REnd.wav");
             }
@@ -93,10 +129,26 @@ public class RouletteBall {
         }
     }
 
+    /**
+     * Funció que calcula el mòdul d'una distància entre dos punts
+     * @return Mòdul de la distancia
+     */
     private double dist(double x1, double y1, double x2, double y2){
         return Math.sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
     }
 
+    /**
+     * Mètode per a pintar la bola. Simplement pinta un cercle blanc amb una
+     * vora negre, a la posició indicada.
+     *
+     * A diferencia de la funcio update() que actualitza la logoca en un panell de
+     * 600x600, aquesta funció s'aplica en la totalitat de la pantalla, de manera
+     * que aquesta requereix com a parametres el resplaçament necessari que se
+     * l'hi ha d'aplicar per a mantenir una completa sincronització amb
+     * la resta d'elements visuals de la pantalla.
+     * @param g Graphics en els que pintar
+     * @param rad Radi de la ruleta
+     */
     public void render(Graphics g, double rx, double ry, int rad) {
         g.setColor(Color.white);
         g.fillOval((int) ((x - centerX) * (rad/100) + rx - r * (rad/100)), (int) ((y - centerY) * (rad/100) + ry - r * (rad/100)), (int) (2*r) * (rad/100), (int) (2*r) * (rad/100));
@@ -105,6 +157,12 @@ public class RouletteBall {
         g.drawOval((int) ((x - centerX) * (rad/100) + rx - r * (rad/100)), (int) ((y - centerY) * (rad/100) + ry - r * (rad/100)), (int) (2*r) * (rad/100), (int) (2*r) * (rad/100));
     }
 
+    /**
+     * Mètode que corregeix la posició final de la bola en la ruleta
+     * per evitar que aquesta quedi en posicions incertes en les que es
+     * dificil apreciar la cel·la en la que ha caigut
+     * @param rect Rectangle amb el que pot estar col·lisionant i es requereix corregir el fet
+     */
     private void correctFinalPosition(GRect rect) {
         double[] dist = new double[4];
         if (lineCollision(rect.getX4(), rect.getY4(), rect.getX2(), rect.getY2(), dist, 0)) correctPosition(rect.getX4(), rect.getY4(), rect.getX2(), rect.getY2());
@@ -113,6 +171,14 @@ public class RouletteBall {
         if (lineCollision(rect.getX1(), rect.getY1(), rect.getX3(), rect.getY3(), dist, 3)) correctPosition(rect.getX1(), rect.getY1(), rect.getX3(), rect.getY3());
     }
 
+    /**
+     * Mètode que indica si la bola col·lisiona amb un rectangle concret,
+     * comprovant la intersecció amb els marges d'aquest. No és necessari comprovar
+     * si es troba a dins ja que tots els rectangles als que s'aplica aquesta funció
+     * són més estrets que la propia bola.
+     * @param rect Rectangle a comprovar
+     * @return Boolea que indica si existeix o no la col·lisió
+     */
     public boolean rectCollision(GRect rect) {
         double[] dist = new double[4];
         boolean b = false;
@@ -147,52 +213,11 @@ public class RouletteBall {
         return true;
     }
 
-    private int getCollidedLine(GRect rect) {
-        double xc = (rect.getX1() + rect.getX2() + rect.getX3() + rect.getX4()) / 4;
-        double yc = (rect.getY1() + rect.getY2() + rect.getY3() + rect.getY4()) / 4;
-
-        double vectX = x - xc;
-        double vectY = y - yc;
-
-        double[][] v = new double[4][2];
-
-        v[0][0] = rect.getX1() - xc;
-        v[0][1] = rect.getY1() - yc;
-
-        v[1][0] = rect.getX2() - xc;
-        v[1][1] = rect.getY2() - yc;
-
-        v[2][0] = rect.getX3() - xc;
-        v[2][1] = rect.getY3() - yc;
-
-        v[3][0] = rect.getX4() - xc;
-        v[3][1] = rect.getY4() - yc;
-
-        double ab = Math.atan2(vectY, vectX);
-        double[] a = new double[4];
-
-        for (int i = 0; i < 4; i++) a[i] = Math.atan2(v[i][1], v[i][0]);
-        int min = 0, max = 0;
-        for (int i = 0; i < 4; i++) {
-            if (a[max] < a[i]) max = i;
-            if (a[min] > a[i]) min = i;
-        }
-
-        if (a[max] < ab || a[min] > ab) {
-            if (min == 1 && max == 3) return 0;
-            if (min == 0 && max == 1) return 1;
-            if (min == 3 && max == 2) return 2;
-            if (min == 2 && max == 0) return 3;
-        }
-
-        if (a[1] > ab && a[3] < ab) return 0;
-        if (a[0] > ab && a[1] < ab) return 1;
-        if (a[3] > ab && a[2] < ab) return 2;
-        if (a[2] > ab && a[0] < ab) return 3;
-
-        return 0;
-    }
-
+    /**
+     * Mètode que redirigeix la velocitat de la bola després d'una col·lisió contra
+     * un rectangle. Concretament el mètode serveix per redirigir la bola
+     * respecte una recta concreta donada per dues coordenades.
+     */
     private void redirectBall(double x1, double x2, double y1, double y2) {
         double dx = y1 - y2;
         double dy = x2 - x1;
@@ -210,6 +235,15 @@ public class RouletteBall {
         correctPosition(x2, y2, x1, y1);
     }
 
+    /**
+     *  Metode que corregeix la posició de la bola.
+     *  La seva finalitat consisteix en evitar la situació en la que la bola s'actualitza
+     *  col·lisionant contra un rectangle i al redirigir la direcció, la gravetat fa que en
+     *  la següent actualització la bola segueixi dins el rectangle, i així entrar en un bucle
+     *  de col·lisions constants. Per a evitar aixó, es treu la bola fora de la zona de col·lisió.
+     *  De manera que aques mètode es dedica a calcular la posició òptima a la que recol·locar la
+     *  bola de manera que sigui el minim perceptible possible.
+     */
     private void correctPosition(double x1, double y1, double x2, double y2) {
         double mp = (x2 - x1) / (y1 - y2);
         double m = (y2 - y1) / (x2 - x1);
@@ -229,8 +263,8 @@ public class RouletteBall {
         double yr1 = mp * xr1 + np;
         double yr2 = mp * xr2 + np;
 
-        double diff1 = Math.sqrt(Math.pow(xr1 - 300, 2) + Math.pow(yr1 - 300, 2)); //TODO: fer centre generic
-        double diff2 = Math.sqrt(Math.pow(xr2 - 300, 2) + Math.pow(yr2 - 300, 2)); //TODO: fer centre generic
+        double diff1 = Math.sqrt(Math.pow(xr1 - 300, 2) + Math.pow(yr1 - 300, 2));
+        double diff2 = Math.sqrt(Math.pow(xr2 - 300, 2) + Math.pow(yr2 - 300, 2));
 
         if (diff1 - diff2 > r/2) {
             x = diff1 > diff2 ? xr2 : xr1;
@@ -256,6 +290,10 @@ public class RouletteBall {
         }
     }
 
+    /**
+     * Mètode que comprova a quina cel·la es troba de la ruleta
+     * @return Index de la cel·la estacionada.
+     */
     private int findWinner() {
         LinkedList<GRect> bars = c.getBars();
         int i;
@@ -276,6 +314,13 @@ public class RouletteBall {
         return found;
     }
 
+    /**
+     * Mètode que comprova la intersecció de la bola amb una linia indicada.
+     * @param x1 Posició dels extrems de la linia
+     * @param dist Distancia del centre a la linia
+     * @param index Index del costat comprovat
+     * @return Booleà que indica si hi ha o no col·lisió contra la linia
+     */
     private boolean lineCollision(double x1, double y1, double x2, double y2, double[] dist, int index) {
         double m1 = (y2 - y1) / (x2 - x1);
         double m2 = (x2 - x1) / (y1 - y2);//(x1 - x2) / (y2 - y1);
@@ -294,9 +339,5 @@ public class RouletteBall {
 
         dist[index] = d;
         return d < r && b;//d < r &&
-    }
-
-    public boolean outOfScreen(){
-        return x < -1000 || x > 10000|| y < -1000 || y > 10000;
     }
 }
