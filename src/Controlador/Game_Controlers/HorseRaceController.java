@@ -74,6 +74,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private boolean firstRace;
     private boolean oncePerRace;
     private boolean betOK;
+    private boolean confirmReceived;
 
     private Countdown waitCountdown;
     private Countdown raceCountdown;
@@ -140,6 +141,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.animationRate = 0;
         this.prize = 0;
         this.betAmount = 0;
+        confirmReceived = false;
         this.betResult = false;
         this.winner = -1;
         this.firstRace = true;
@@ -165,6 +167,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     public void init() {
         this.isRacing = false;
         this.isBetting = false;
+        confirmReceived = false;
         this.isCountDown = false;
         this.betResult = false;
         this.firstRace = true;
@@ -216,6 +219,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.firstRace = true;
         this.oncePerRace = true;
         waitCountdown.stopCount();
+        confirmReceived = false;
         raceCountdown.stopCount();
         endYourHorses();
         this.mode = GAME_MODE;
@@ -233,6 +237,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.isCountDown = false;
         this.oncePerRace = false;
         this.betResult = false;
+        confirmReceived = false;
         this.betOK = false;
         this.graphicsManager.exit();
         this.networkManager.exitHorses();
@@ -253,13 +258,26 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         info = aux == null ? info : aux;
 
         if (play) {
+            if (isBetting) {
+                horseMessage = (HorseMessage) networkManager.readContext("HORSES-BetConfirm");
+                if (horseMessage != null) {
+                    confirmReceived = true;
+                    System.out.println("Bet Received: " + horseMessage.getHorseBet().isBetOK());
+                    betOK = horseMessage.getHorseBet().isBetOK();
+                    if (!betOK) {
+                        betResult = false;
+                    }
+                }
+            }
             if (!isRacing) {
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-Countdown");
                 if (horseMessage != null) {
                     this.isBetting = false;
+                    this.betOK = false;
                     this.isCountDown = true;
                     this.oncePerRace = true;
-                    this.betOK = false;
+                    this.firstRace = false;
+                    confirmReceived = false;
                     this.waitCountdown.newCount(horseMessage.getTimeForRace());
                     endYourHorses();
                 }
@@ -278,23 +296,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             } else if (isRacing) {
                 moveHorses(horsePositions, horseCountdowns, horseSections, raceCountdown);
                 this.waitCountdown.stopCount();
-                if (isBetting) {
-                    horseMessage = (HorseMessage) networkManager.readContext("HORSES-BetConfirm");
-                    if (horseMessage != null) {
-                        betOK = horseMessage.getHorseBet().isBetOK();
-                        if (betOK) {
-                            betAmount = horseMessage.getHorseBet().getBet();
-                            betHorse = horseMessage.getHorseBet().getHorse() + 1;
-                            new Transaction("HorseBet", user.getUsername(), -betAmount, 1);
-
-                        }else{
-                            betResult = false;
-                        }
-                    }
-
-                }else{
-                    betResult = false;
-                }
                 if (oncePerRace) {
                     if (raceCountdown.getCount() <= 0) {
                         System.out.println("HORSES- Race Finished");
@@ -399,7 +400,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
 
     private void renderHorses(Graphics g) {
-        //TODO Change font size in respect to window size
         g.drawImage(AssetManager.getImage("HORSES-PANEL.png"), 0, 0, horseRaceView.getWidth(), horseRaceView.getHeight(), null);
         for (int horse = 0; horse < MAX_HORSES; horse++) {
             g.drawImage(AssetManager.getImage("horse" + horse % 6 + "_" + horseFrames[horse] + ".png", (int) (horseRaceView.getWidth() / 14.44), (int) (horseRaceView.getHeight() / 10.4)), horsePositions[horse].x, horsePositions[horse].y, null);
@@ -450,8 +450,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             if(this.betOK){
                 g.setFont(font.deriveFont((float)(0.0117647058823529*horseRaceView.getWidth())));
                 g.drawString("Amount: " + betAmount , (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y )));
-                g.drawString("Horse: " + betHorse, (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y + 0.03)));
-            }else{
+                g.drawString("Horse: " + (12 - betHorse), (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y + 0.03)));
+            }else if(confirmReceived){
                 g.setFont(font.deriveFont((float)(0.0117647058823529*horseRaceView.getWidth())));
                 g.setColor(GRANA);
                 g.drawString("Insufficient funds", (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*BET_STATUS_Y));
@@ -526,26 +526,31 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        long bet = -1;
+        betAmount = -1;
         HorseMessage horseMessage;
         if(!isRacing && ! isBetting){
             if(e.getX() >= horseRaceView.getWidth()*HORSE_START_X - (horseRaceView.getWidth() / 14.44) && e.getX() <= horseRaceView.getWidth()*HORSE_START_X + (horseRaceView.getWidth() / 14.44)) {
                 for (int horse = 0; horse < MAX_HORSES; horse++) {
                     if(e.getY() >= horsePositions[horse].y - (horseRaceView.getHeight() / 10.4) && e.getY() <= horsePositions[horse].y + (horseRaceView.getHeight() / 10.4) ){
                         try {
-                            bet = Long.parseLong((String) JOptionPane.showInputDialog(null, "Bet:", "HORSE " + (12 - horse), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(AssetManager.getImage("horse" + (horse) + "_"+ horseFrames[horse]+".png")), null, 0));
-                            System.out.println("Horse bet: " + bet);
-                            if(bet <= 0){
+                            betAmount = Long.parseLong((String) JOptionPane.showInputDialog(null, "Bet:", "HORSE " + (12 - horse), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(AssetManager.getImage("horse" + (horse) + "_"+ horseFrames[horse]+".png")), null, 0));
+                            if(betAmount <= 0){
                                 JOptionPane.showMessageDialog(horseRaceView, "Bet must be greater than 0", "BET ERROR", JOptionPane.ERROR_MESSAGE, null);
                             }else{
-                                horseMessage  = new HorseMessage(new HorseBet(bet,horse, user.getUsername()), "Bet");
+                                betHorse = horse;
+                                horseMessage  = new HorseMessage(new HorseBet(betAmount,betHorse, user.getUsername()), "Bet");
                                 horseMessage.setID(user.getID());
-                                new Transmission(horseMessage, this.networkManager);
-                                this.isBetting = true;
+                                if(!isRacing){
+                                    new Transmission(horseMessage, this.networkManager);
+                                    this.isBetting = true;
+                                }
+
                             }
 
                         }catch (Exception exception){
-                            this.isBetting = false;
+                            betHorse = 0;
+                            betAmount = -1;
+                            exception.printStackTrace();
                         }
                         break;
                     }
@@ -611,20 +616,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        //Per saber si estan en el boto
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        HorseMessage horseMessage;
-        /*switch (e.getActionCommand()){
-           case "Horses-Bet":
-                horseMessage  = new HorseMessage(new HorseBet(horseRaceView.getBetAmount(),horseRaceView.getBetHorse(), user.getID()), "Bet");
-                horseMessage.setID(user.getID());
-                new Transmission(horseMessage, this.networkManager);
-                this.isBetting = true;
-
-        }*/
     }
 
     public void updateSize(){

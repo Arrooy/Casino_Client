@@ -112,7 +112,7 @@ public class GraphicsManager implements Runnable {
             image = JPanelObjectiu.createImage(JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
         }
 
-        if (image.getWidth(null) != width || image.getHeight(null) != height) {
+        if (image != null && (image.getWidth(null) != width || image.getHeight(null) != height)) {
             image = JPanelObjectiu.createImage(w, h);
         }
 
