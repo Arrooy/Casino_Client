@@ -276,7 +276,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.betOK = false;
                     this.isCountDown = true;
                     this.oncePerRace = true;
-                    this.firstRace = false;
+
                     confirmReceived = false;
                     this.waitCountdown.newCount(horseMessage.getTimeForRace());
                     endYourHorses();
@@ -286,8 +286,9 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     System.out.println("HORSES- Schedule received");
                     this.horseRaceModel.setHorseSchedule(horseMessage.getHorseSchedule());
                     this.waitCountdown.stopCount();
-                    this.raceCountdown.newCount(horseRaceModel.getHorseSchedule().getRaceTime());
+                    this.raceCountdown.newCount(horseRaceModel.getHorseSchedule().getRaceTime() - 1);
                     this.isRacing = true;
+                    this.firstRace = false;
                     this.oncePerRace = true;
                     this.isCountDown = false;
                     initRace();
@@ -465,7 +466,9 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         if (isCountDown && betResult) {
             g.setFont(font.deriveFont((float)(0.0117647058823529*horseRaceView.getWidth())));
             if (prize == 0) {
+                g.setColor(GRANA);
                 g.drawString("Bet Lost", (int)(horseRaceView.getWidth()*BET_RESULT_X), (int)(horseRaceView.getHeight()*BET_RESULT_Y));
+                g.setColor(TEXT_COLOR);
             } else {
                 g.drawString("Prize:  " + prize, (int)(horseRaceView.getWidth()*BET_RESULT_X), (int)(horseRaceView.getHeight()*BET_RESULT_Y));
             }
@@ -538,7 +541,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                                 JOptionPane.showMessageDialog(horseRaceView, "Bet must be greater than 0", "BET ERROR", JOptionPane.ERROR_MESSAGE, null);
                             }else{
                                 betHorse = horse;
-                                horseMessage  = new HorseMessage(new HorseBet(betAmount,betHorse, user.getUsername()), "Bet");
+                                horseMessage  = new HorseMessage(new HorseBet(betAmount,12- betHorse, user.getUsername()), "Bet");
                                 horseMessage.setID(user.getID());
                                 if(!isRacing){
                                     new Transmission(horseMessage, this.networkManager);
