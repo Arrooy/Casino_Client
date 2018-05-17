@@ -83,7 +83,6 @@ public class GraphicsManager implements Runnable {
             long beforeUpdateRender = System.nanoTime();
             long deltaMillis = updateDurationMillis + sleepDurationMillis;
 
-            JPanelObjectiu.requestFocus();
             updateAndRender(deltaMillis);
 
             updateDurationMillis = (System.nanoTime() - beforeUpdateRender) / 1000000L;
@@ -92,25 +91,27 @@ public class GraphicsManager implements Runnable {
             try {
                 Thread.sleep(sleepDurationMillis);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+             //   e.printStackTrace();
             }
         }
-        System.out.println("Going out of thread");
     }
 
     private void updateAndRender(long deltaMillis) {
         controlador_extern.update(deltaMillis / 1000f);
         prepareGameImage();
-        controlador_extern.render(image.getGraphics());
+        if(image != null)
+            controlador_extern.render(image.getGraphics());
         renderGameImage(JPanelObjectiu.getGraphics());
     }
 
     private void prepareGameImage() {
         int w = width <= 0 ? JPanelObjectiu.getWidth() : width;
         int h = height <= 0 ? JPanelObjectiu.getHeight() : height;
+
         if (image == null) {
             image = JPanelObjectiu.createImage(JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
         }
+
         if (image.getWidth(null) != width || image.getHeight(null) != height) {
             image = JPanelObjectiu.createImage(w, h);
         }
@@ -119,10 +120,10 @@ public class GraphicsManager implements Runnable {
             Graphics g = image.getGraphics();
             g.setColor(clearColor);
             g.fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
-            g.fillRect(0, 0, width, height);//JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
+            g.fillRect(0, 0, width, height);
         }
-        //TODO:Revisar
-        if (clearImage == null) {
+
+        if (clearImage == null && image != null) {
             image.getGraphics().setColor(clearColor);
             image.getGraphics().fillRect(0, 0, JPanelObjectiu.getWidth(), JPanelObjectiu.getHeight());
         }
@@ -130,6 +131,7 @@ public class GraphicsManager implements Runnable {
 
     public void exit() {
         running = false;
+        thread.interrupt();
     }
 
     private void renderGameImage(Graphics g1) {
