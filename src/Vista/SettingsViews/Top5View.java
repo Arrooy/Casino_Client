@@ -9,25 +9,30 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 
+/**Classe que crea el panell que visualitza amb una taula la fluctuacio de diners de l'usuari*/
 public class Top5View extends JPanel {
 
+    /**Taula amb la informacio monetaria*/
     private JTable table;
-    private final static Color TRANSPARENT = new Color(0,0,0,0);
-    private final static Color CREMA = new Color (218, 204, 164);
-    private final static Color GRANA = new Color(125, 28, 37);
-    private final static Color VERD = new Color(40, 73, 7);
-    private final static Color GROC = new Color(237, 175, 67);
-    private final static Color MARRO = new Color(56,37,19);
-    private final static Color VERDFOSC = new Color(104,125,72, 255);
 
+    /**Color Crema*/
+    private final static Color CREMA = new Color (218, 204, 164);
+
+    /**Color Marro*/
+    private final static Color MARRO = new Color(56,37,19);
+
+    /**Array de cadenes amb el nom de les capçaleres de la taula*/
     private static final String[] columnNames = {"Game",
                                                 "Money before",
                                                 "Money after"};
 
+    /**Constructor del panell que defineix on i com es col·loquen els elements*/
     public Top5View(){
+        //Es defineix el Layout
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
 
+        //Panell per centrar la taula al centre del panell
         JPanel jPanelGridTaula = new JPanel(new GridBagLayout());
         jPanelGridTaula.setOpaque(false);
         jPanelGridTaula.setBorder(BorderFactory.createEmptyBorder());
@@ -36,11 +41,16 @@ public class Top5View extends JPanel {
         c.insets = new Insets(0, 0, 10, 0);
         c.fill = GridBagConstraints.CENTER;
 
+        //Contingut de la fila
         Object [][] data = new Object[1][3];
         data[0][0] = "Loading";
         data[0][1] = "Loading";
         data[0][2] = "Loading";
+
+        //Creacio de la taula
         table = new JTable(data,columnNames);
+
+        //Canvi de colors de la taula per a que s'ajusti al fons
         table.setGridColor(MARRO);
         table.setForeground(CREMA);
         table.setOpaque(false);
@@ -52,12 +62,17 @@ public class Top5View extends JPanel {
         header.setFont(AssetManager.getEFont(15));
         header.setBorder(BorderFactory.createLineBorder(MARRO));
 
+        //Es desactiven les funcionalitats de la taula perque nomes s'utilitza per visualitzar la informacio
         table.setColumnSelectionAllowed(false);
         table.setFocusable(false);
         table.setEnabled(false);
-        table.setPreferredScrollableViewportSize(new Dimension(400,400)); // 400 400
+
+        //Mida de la taula
+        table.setPreferredScrollableViewportSize(new Dimension(340,400)); // 400 400
         table.setDefaultEditor(Object.class, null);
 
+        //Panell amb scroll per poder veure tota la informacio de la taula en cas de que n'hi hagi
+        //mes de la que es pot visualitzar amb la mida que s'ha definit la taula.
         JScrollPane jScrollPane = new JScrollPane(table);
         jScrollPane.setOpaque(false);
         jScrollPane.getViewport().setOpaque(false);
@@ -67,15 +82,14 @@ public class Top5View extends JPanel {
 
         jScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-
-
         jPanelGridTaula.add(jScrollPane, c);
 
+        //Es col·loca la taula al centre del panell
         add(jPanelGridTaula,BorderLayout.CENTER);
     }
 
+    /**Metode que actualitza la taula segons les diferents fluctuacions de diners que ha patit l'usuari*/
     public void updateWallet(WalletEvolutionMessage newWallet) {
-
         JTable aux;
 
         if(newWallet != null){
@@ -109,6 +123,8 @@ public class Top5View extends JPanel {
         updateUI();
     }
 
+    /**Metode que indica des d'on s'ha produit la fluctuacio de diners
+     * @return String amb el nom d'on s'ha produit la fluctuacio*/
     private String getTypeName(int i){
         String nomType;
         switch (i){

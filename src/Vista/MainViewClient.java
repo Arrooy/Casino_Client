@@ -60,7 +60,10 @@ public class MainViewClient extends View{
         setOpaque(false);
     }
 
-    /** Afegeix el controlador del programa a la vista*/
+    /**
+     * Metode override que relaciona cada element amb el seu Action Listener
+     * @param c Controlador
+     * */
     @Override
     public void addController(Controller c){
         logInButton.setActionCommand("goToLogIn");

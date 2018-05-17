@@ -127,7 +127,7 @@ public class GameSelectorView extends View {
         setOpaque(false);
     }
 
-    /***/
+    /**Metode que s'encarrega d'activar o desactivar els botons segons si l'usuari es guest o no*/
     public void enableButtons(boolean guest){
         if(guest){
             jbHorseRace.setEnabled(false);
@@ -140,7 +140,10 @@ public class GameSelectorView extends View {
         }
     }
 
-
+    /**
+     * Metode override que relaciona cada element amb el seu Action Listener
+     * @param c Controlador
+     * */
     @Override
     public void addController(Controller c) {
         jbSettings.setActionCommand("settings");
@@ -159,6 +162,7 @@ public class GameSelectorView extends View {
         jbRoulette.addActionListener(c);
     }
 
+    /**Metode que configura les imatges d'un boto per quan no esta apretat, per quan si que ho esta i per quan esta desactivat*/
     private void configButton(JButton boto, String normal, String onSelection, String disabled){
         boto.setBorderPainted(false);
         boto.setBorder(null);
