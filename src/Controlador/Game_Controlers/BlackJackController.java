@@ -160,6 +160,7 @@ public class BlackJackController implements GraphicsController {
 
         //Si la carta correspon a una carta per a la IA, un cop ha acabat el torn del usuari, es gira
         if(cartaResposta.getContext().equals(Transmission.CONTEXT_BJ_FINISH_USER)){
+            Sounds.play("cardFlip.wav");
             model.giraIA();
         }
 
@@ -168,6 +169,7 @@ public class BlackJackController implements GraphicsController {
             //S'omple el text de game over i s'activa el gameOver
             gameOverText = "You loose " + bet + MONEY_SYMBOL;
             subText = "Click to exit the game";
+            Sounds.play("cashL.wav");
             gameOver = true;
         }else{
             //De lo contrari, s'afegeix la carta al model
@@ -188,6 +190,7 @@ public class BlackJackController implements GraphicsController {
             //En el cas d'inidicar derrota per l'user, s'indica el missatge i sacaba la partida
             gameOverText = "You loose " + bet + MONEY_SYMBOL;
             subText = "Click to exit the game";
+            Sounds.play("cashL.wav");
             gameOver = true;
         }else if(cartaResposta.getDerrota().equals("IA")) {
             //En el cas d'inidicar derrota per la IA, s'inidica el valor dels diners obtinguts
@@ -196,6 +199,7 @@ public class BlackJackController implements GraphicsController {
             }else{
                 gameOverText = "You win " + bet * 2.0 + MONEY_SYMBOL;
             }
+            Sounds.play("cashW.wav");
             //S'indica el subtext i que s'ha acabat la partida
             subText = "Click to exit the game";
             gameOver = true;
@@ -215,7 +219,6 @@ public class BlackJackController implements GraphicsController {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        System.out.println("Key pressed" + e.getKeyChar());
         if (animationIsOver) {
 
             //En el cas d'estar mostrant el tutorial i premer una tecla, fem desapareixer aquest
