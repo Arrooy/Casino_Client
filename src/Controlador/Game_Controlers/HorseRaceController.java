@@ -3,6 +3,7 @@ package Controlador.Game_Controlers;
 import Controlador.Controller;
 import Controlador.CustomGraphics.GraphicsController;
 import Controlador.CustomGraphics.GraphicsManager;
+import Controlador.Sounds;
 import Model.AssetManager;
 import Model.HorseRace_Model.HorseBet;
 import Model.HorseRace_Model.HorseMessage;
@@ -118,6 +119,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private String[][] info;
     private int listOff;
 
+    /** Permet la reproduccio una unica vegada d'un arxiu d'audio en el bucle update*/
+    private boolean singleAudioPlay;
 
     public HorseRaceController(HorseRaceView horseRaceView, NetworkManager networkManager, Finestra finestra) {
         this.horseRaceModel = new HorseRaceModel();
@@ -279,6 +282,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
                     confirmReceived = false;
                     this.waitCountdown.newCount(horseMessage.getTimeForRace());
+                    this.singleAudioPlay = true;
                     endYourHorses();
                 }
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-Schedule");
@@ -291,6 +295,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.firstRace = false;
                     this.oncePerRace = true;
                     this.isCountDown = false;
+
+                    Sounds.stopOneAudioFile("HStart.wav");
+                    Sounds.play("HRun.wav");
+
                     initRace();
                     //Ja podem reproduir la carrera
                 }
@@ -300,6 +308,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                 if (oncePerRace) {
                     if (raceCountdown.getCount() <= 0) {
                         System.out.println("HORSES- Race Finished");
+                        Sounds.stopOneAudioFile("HRun.wav");
                         horseMessage = new HorseMessage((HorseBet) null, "Finished");
                         horseMessage.setID(user.getID());
                         new Transmission(horseMessage, this.networkManager);
@@ -433,12 +442,18 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             }
         } else {
             if (isCountDown && waitCountdown.getCount() > 0) {
+                //TODO: BUG-> GERARD, aquesta conficio esta mal feta. 10/1000 es 0! son int! pd: si son millis, potser l'operacio indicada es la *
                 if(waitCountdown.getCount() < 10/1000){
                     g.drawString("Wait: 0" + (waitCountdown.getCount() / 1000) + "s",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X) ,  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
 
                 }else{
                     g.drawString("Wait: " + (waitCountdown.getCount() / 1000) + "s",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X),  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
 
+                    if(singleAudioPlay && waitCountdown.getCount() < 7*1000){
+                        //Reprodueix l'audio de la trompeta inicial tot intentant sincronitzarse amb el temps actual del joc
+                        Sounds.play("HStart.wav",7000 - waitCountdown.getCount());
+                        singleAudioPlay = false;
+                    }
                 }
             }
         }
@@ -517,6 +532,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         HorseMessage horseMessage;
         if(e.getKeyCode() == 27){
             stopPlay();
+
             networkManager.showGamesView();
         }
 
@@ -567,6 +583,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        Sounds.play("HClick.wav");
         returnPressed = e.getX() > ebx && e.getX() < ebx + returnButton.getWidth(null) && e.getY() > eby && e.getY() < eby + returnButton.getHeight(null);
         if (returnPressed && mode == GAME_MODE){
             stopPlay();
@@ -639,6 +656,4 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             graphicsManager.exit();
         }
     }
-
-
 }

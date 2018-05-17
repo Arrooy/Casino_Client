@@ -285,6 +285,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 finestra.setGameSelector(user.isGuest());
                 gameSelectorView.updateUI();
                 SwingUtilities.updateComponentTreeUI(finestra);
+                Sounds.stopAllAudio();
                 Sounds.songNoEnd("wii.wav");
             }
         });

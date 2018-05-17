@@ -70,7 +70,9 @@ public class Sounds extends Thread {
      * @param file nom del audio que es vol aturar
      */
     public static void stopOneAudioFile(String file){
-        audios.get(file).stop();
+        Clip audioToStop = audios.get(file);
+        if(audioToStop.isRunning())
+            audioToStop.stop();
     }
 
     /**
@@ -87,6 +89,27 @@ public class Sounds extends Thread {
 
             //Es torna a la posicio inicial del clip
             clip.setFramePosition(0);
+
+            //S'inicia l'audio
+            clip.start();
+        }
+    }
+
+    /**
+     * Reprodueix un audio guardat en el sistema en el instant de temps indicat
+     * @param fileName nom del audio que es vol reproduir
+     * @param startTime temps inicial de reproducio en ms
+     */
+    public static void play(String fileName,long startTime){
+        if(!muted) {
+            //S'agafa l'audio del diccionari
+            Clip clip = audios.get(fileName);
+
+            //En el cas d'estar reproduint-se, s'atura
+            if (clip.isRunning()) clip.stop();
+
+            //Es torna a la posicio inicial del clip
+            clip.setMicrosecondPosition(startTime * 1000);
 
             //S'inicia l'audio
             clip.start();
