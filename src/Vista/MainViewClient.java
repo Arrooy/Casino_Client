@@ -6,44 +6,52 @@ import Model.AssetManager;
 import javax.swing.*;
 import java.awt.*;
 
+/**Classe que crea la pantalla d'inici del joc*/
 public class MainViewClient extends View{
 
+    /**Boto per iniciar sessio*/
     private JButton logInButton;
-    private JButton logOutButton;
+
+    /**Boto per crear un compte*/
     private JButton jbSignIn;
+
+    /**Boto per entrar com a convidat*/
     private JButton jbGuest;
 
-    /**
-     *  Crea la vista del client amb una amplada i una alçada determinades per width i height
-     */
-
+    /** Crea la vista del client amb una amplada i una alçada determinades per width i height*/
     public MainViewClient(){
+        //Es defineix el Layout
         this.setLayout(new BorderLayout());
 
         GridBagConstraints c = new GridBagConstraints();
 
-        //Panell que té els botons per iniciar el joc amb el mode desitjat
+        //Panell que te els botons per iniciar el joc amb el mode desitjat
         JPanel jpgblBotons = new JPanel(new GridBagLayout());
 
+        //Es crea el boto logIn i se'n configuren les imatges associades segons l'estat del boto
+        logInButton = new JButton();
+        configButton(logInButton,"LOGIN_SOMBRA.png","LOGIN_NO_SOMBRA.png");
+
+        //Es crea el boto signIn i se'n configuren les imatges associades segons l'estat del boto
+        jbSignIn = new JButton();
+        configButton(jbSignIn,"SIGNIN_SOMBRA.png","SIGNIN_NO_SOMBRA.png");
+
+        //Es crea el boto guest i se'n configuren les imatges associades segons l'estat del boto
+        jbGuest = new JButton();
+        configButton(jbGuest,"GUEST_SOMBRA.png","GUEST_NO_SOMBRA.png");
+
+        //Posicio logIn
         c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
-
-        logInButton = new JButton();
-        configButton(logInButton,"LOGIN_SOMBRA.png","LOGIN_NO_SOMBRA.png");
-
-        jbSignIn = new JButton();
-        configButton(jbSignIn,"SIGNIN_SOMBRA.png","SIGNIN_NO_SOMBRA.png");
-
-        jbGuest = new JButton();
-        configButton(jbGuest,"GUEST_SOMBRA.png","GUEST_NO_SOMBRA.png");
-
         jpgblBotons.add(logInButton, c);
 
+        //Posicio signIn
         c.gridy = 1;
         jpgblBotons.add(jbSignIn, c);
 
+        //Posicio guest
         c.gridy = 2;
         c.insets = new Insets(0,0,0,0);
         jpgblBotons.add(jbGuest, c);
@@ -55,11 +63,6 @@ public class MainViewClient extends View{
     /** Afegeix el controlador del programa a la vista*/
     @Override
     public void addController(Controller c){
-
-        jbSignIn.setActionCommand("goSignIn");
-        jbSignIn.addActionListener(c);
-
-        //Tenen el mateix actionCommand perque les dues accions resulten en el mateix - wtf?
         logInButton.setActionCommand("goToLogIn");
         logInButton.addActionListener(c);
 
@@ -75,11 +78,7 @@ public class MainViewClient extends View{
         JOptionPane.showMessageDialog(null,errorText,title,JOptionPane.ERROR_MESSAGE);
     }
 
-    public boolean displayQuestion(String message) {
-        //Retorna true si
-        //Retorn false no
-        return JOptionPane.showConfirmDialog(null,message,"Are you sure?",JOptionPane.YES_NO_OPTION) == 0;
-    }
+    /**Metode que configura les imatges d'un boto per quan no esta apretat i per quan si que ho esta*/
     private void configButton(JButton boto, String normal,String onSelection){
         boto.setBorderPainted(false);
         boto.setBorder(null);
@@ -93,6 +92,7 @@ public class MainViewClient extends View{
         boto.setPressedIcon(new ImageIcon(AssetManager.getImage(normal)));
     }
 
+    /**Metode que obre un panell que mostra un missatge d'error de connexio amb el servidor*/
     public boolean displayErrorConnection() {
         Object[] options1 = {"LogOut", "Quit program"};
 
