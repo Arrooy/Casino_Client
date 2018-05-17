@@ -136,11 +136,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 break;
 
             case "acceptSignIn":
-                System.out.println("YES WE AREIN");
                 if(signInView.getUsername().length() > 0 && signInView.getEmail().length() > 0){
                     signUp();
                 }else{
-                    System.out.println("YES ALL EMPTY");
                     signInView.passwordKO("Must fill in all fields");
                     signInView.manageError(true);
                 }

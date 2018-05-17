@@ -263,7 +263,7 @@ public class Transmission implements Runnable {
                 return true;
             } else {
                 //De lo contari, s'indica al usuari que s'ha equivocat
-
+                ((User) msg).setSignUpErrorReason(responseUser.getSignUpErrorReason());
                 return false;
             }
         } catch (Exception e) {
