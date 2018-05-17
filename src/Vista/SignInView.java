@@ -142,7 +142,7 @@ public class SignInView extends View implements PasswordConfirm {
         jpfConfirmPassword = new IconPasswordField("padlock.png",PASSWORD_CONFIRM_HINT,20,PASSWORD_CONFIRM_TOOL_TIP);
 
         //Posicio camp username
-        c.insets = new Insets(0,0,20,0);
+        c.insets = new Insets(0,130,20,0);
         c.gridy = 0;
         c.gridx = 0;
         c.ipadx = 100;
@@ -160,7 +160,6 @@ public class SignInView extends View implements PasswordConfirm {
 
         //Posicio camp repetir contrasenya
         c.gridy = 3;
-        c.insets = new Insets(0,0,20,0);
         jpgblInfo.add(jpfConfirmPassword, c);
 
         //S'afegeix el boto per acceptar la informacio introduida
@@ -185,7 +184,7 @@ public class SignInView extends View implements PasswordConfirm {
         c.gridx = 0;
         c.ipadx = 100;
         c.gridwidth = 3;
-        c.insets = new Insets(0,0,20,0);
+        c.insets = new Insets(0,130,20,0);
         c.fill = GridBagConstraints.HORIZONTAL;
         this.jpbStrength = new JProgressBar();
         this.jpbStrength.setMinimum(0);
@@ -196,7 +195,7 @@ public class SignInView extends View implements PasswordConfirm {
         c.gridy = 6;
         c.gridx = 1;
         c.gridwidth = 2;
-        c.insets = new Insets(20,0,0,0);
+        c.insets = new Insets(20,120,0,0);
         jpgblInfo.add(jbAccept, c);
 
         //Panell que conte centrats els camps, els botons i el missatge d'error
