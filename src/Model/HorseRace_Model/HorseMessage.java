@@ -14,7 +14,8 @@ import Network.Message;
  *     Result          HORSES-Result           S->C        Server is sending a client their prize, and informing about the winning horse
  *     Countdown       HORSES-Countdown        S->C        Server informs a client about the time remaining to begin a race
  *     Schedule        HORSES-Schedule         S->C        Server sends the race schedule for reproducing the race
- *     BetConfirm      Horses-BetConfirm       S->C        Server sends bet confirmation
+ *     BetConfirm      HORSES-BetConfirm       S->C        Server sends bet confirmation
+ *     WalletRequest   HORSES-WalletRequest    C->S->C     Client asks for the user's wallet, server returns the wallet
  *
  *  */
 public class HorseMessage extends Message {
@@ -23,10 +24,16 @@ public class HorseMessage extends Message {
     private HorseSchedule horseSchedule;
     private long timeForRace;
     private HorseResult horseResult;
+    private long wallet;
     private double ID;
 
     public void setID(double ID) {
         this.ID = ID;
+    }
+
+    public HorseMessage(long wallet){
+        option = "WalletRequest";
+        this.wallet = wallet;
     }
 
     public HorseMessage(HorseBet horseBet, String option){
@@ -63,6 +70,9 @@ public class HorseMessage extends Message {
         return timeForRace;
     }
 
+    public long getWallet(){
+        return wallet;
+    }
 
     public HorseResult getHorseResult(){
         return this.horseResult;
@@ -90,5 +100,3 @@ public class HorseMessage extends Message {
         return this.horseSchedule;
     }
 }
-
-

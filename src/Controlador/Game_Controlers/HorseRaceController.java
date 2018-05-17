@@ -228,6 +228,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.mode = GAME_MODE;
         this.listOff = 0;
         resetBetList();
+        requestWallet();
     }
 
     /**
@@ -260,12 +261,18 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         String[][] aux = networkManager.updateHorseList();
         info = aux == null ? info : aux;
 
+
         if (play) {
+            horseMessage = (HorseMessage) networkManager.readContext("HORSES-WalletRequest");
+            if(horseMessage!= null){
+                this.user.setWallet(horseMessage.getWallet());
+            }
+
             if (isBetting) {
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-BetConfirm");
                 if (horseMessage != null) {
-                    new Transmission(new User("", "", "walletRequest"), networkManager);
                     confirmReceived = true;
+                    requestWallet();
                     System.out.println("Bet Received: " + horseMessage.getHorseBet().isBetOK());
                     betOK = horseMessage.getHorseBet().isBetOK();
                     if (!betOK) {
@@ -322,6 +329,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.firstRace = false;
                     this.waitCountdown.stopCount();
                     resetBetList();
+                    requestWallet();
                     System.out.println("HORSES- Done");
                     if (isBetting && betOK) {
                         betResult = true;
@@ -647,6 +655,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
             }
         }
+    }
+
+    public void requestWallet(){
+        new Transmission(new HorseMessage((long)0), networkManager);
     }
 
 
