@@ -56,9 +56,6 @@ public class RouletteController implements GraphicsController {
     /** Angle amb el que s'ha de rotar la imatge de la ruleta per a sincronitzar-la amb la lògica */
     private static final double zeroAng = Math.PI/2 + (Math.PI*2/MAXCELLS)/2;
 
-    /** Dimensions del panell teòric en el que es realitza la simulacio */
-    private int width = 600, height = 600;
-
     /** Amplada / Alçada del tauler de la llista d'apostes totals */
     private static final int LIST_DIM = 700;
 
@@ -99,56 +96,96 @@ public class RouletteController implements GraphicsController {
     /** Imatge de fons (tauler d'apostes) */
     private Image background;
 
-
+    /** Imatge de la ruleta */
     private Image rouletteImage;
+
+    /** Imatge del panell sobre el que apareix la ruleta */
     private Image boardImage;
+
+    /** Font que s'utilitza pels textos del joc */
     private Font font;
 
+    /** Fons del temporitzador */
     private Image wood;
 
+    /** Boto per visualitzar la llista d'apostes */
     private Image viewList;
+
+    /** Mode seleccionat del boto de visualització d'apostes */
     private Image viewListSelected;
+
+    /** Boto EXIT */
     private Image returnButton;
+
+    /** Boto EXIT seleccionat */
     private Image returnButtonSelected;
 
+    /** Fons de pantalla de la llista d'apostes */
     private Image listBackground;
+
+    /** Boto per desplaçar ascendentment el llistat d'apostes */
     private Image upButton;
+
+    /** Boto per desplaçar descendentment el llistat d'apostes */
     private Image downButton;
+
+    /** Imatge del tauler del llistat d'apostes */
     private Image listTable;
 
+    /** Color dels diferents textos a printar */
     private static final Color TEXT_COLOR = new Color(216, 204, 163);
 
-    private int vlx;
-    private int vly;
-    private int ebx;
-    private int eby;
+    /** Coordenades del boto de View List */
+    private int vlx, vly;
 
+    /** Coordenades del boto de View List */
+    private int ebx, eby;
+
+    /** Indica si el botó View List es troba seleccionat */
     private boolean viewListPressed;
+
+    /** Indica si el botó EXIT es troba seleccionat */
     private boolean returnPressed;
 
-    private double rx, ry, rang, roffTimer;
+    /** Angle actual amb el que es representa la ruleta */
+    private double rang, roffTimer;
+
+    /** Indiquen si la ruleta s'ha d'amagar o bé iniciar l'animació per desapareixer */
     private boolean backAnim, hideRoulette;
 
+    /** Accés al NetworkManager per a enviar Messages al Server */
     private NetworkManager networkManager;
 
-    private long wallet, lastWallet, bet;
+    /** Wallet de l'usuari i aposta total realitzada */
+    private long wallet, bet;//lastWallet
 
+    /** Mode de visualització de la ruleta */
     private static final int GAME_MODE = 0;
+
+    /** Mode de visualització del llistat d'apostes */
     private static final int LIST_MODE = 1;
 
+    /** Mode de visualització */
     private int mode;
 
+    /** Informació que es pinta al llistat d'apostes */
     private String[][] info;
+
+    /** Offset amb el que es mostra el llistat */
     private int listOff;
 
+    /** Vista en la que es representa tot el que es genera en aquesta classe */
     private RouletteView view;
 
+    /**
+     * Constructor de la classe
+     * @param view Vista a la que es pinta la funcio render
+     * @param networkManager Comunicador amb el Servidor
+     */
     public RouletteController(RouletteView view, NetworkManager networkManager) {
         this.networkManager = networkManager;
         this.view = view;
 
-        rx = width/2;
-        ry = height/2;
         rang = zeroAng;
         roffTimer = 0;
         backAnim = false;
@@ -159,13 +196,14 @@ public class RouletteController implements GraphicsController {
         listOff = 0;
 
         wallet = 0;
-        lastWallet = 0;
+        //lastWallet = 0;
         bet = 0;
     }
 
+    /**
+     * Mètode per a reinicialitzar el controlador
+     */
     public void initRoulette() {
-        rx = width/2;
-        ry = height/2;
         rang = zeroAng;
         roffTimer = 0;
         backAnim = false;
@@ -179,6 +217,10 @@ public class RouletteController implements GraphicsController {
         bet = 0;
     }
 
+    /**
+     * Mètode en el que s'inicialitza tot el contingut gràfic i lògic
+     * de la classe.
+     */
     @Override
     public void init() {
         final int teoricWidth = 600;
@@ -229,16 +271,33 @@ public class RouletteController implements GraphicsController {
         initRoulette();
     }
 
+    /**
+     * Mètode per a actualitzar el temps del proper tir
+     * @param newTime Nou temps
+     */
     public static void updateNextTime(long newTime) {
         nextTime = newTime;
     }
 
-    public static String nextTimeToString() {
+    /**
+     * Funció que obté en un format especial els segons que queden per al
+     * següent tir de la ruleta
+     * @return String amb el temps
+     */
+    private static String nextTimeToString() {
         long diff = nextTime - Timestamp.from(Instant.now()).getTime();
-        if (diff < 0) diff += 78000;
+        if (diff < -10) diff += 78000;
+        else if (diff < 0) diff = 0;
         return String.format("%02d", (int) (diff / 1000));
     }
 
+    /**
+     * Funció que actualitza la lògica del joc. Actualitza la ruleta seguint
+     * el mateix procediment que el servidor per a arribar al mateix resultat.
+     * A més a més també actualitza el moviment de les animacions restants i
+     * actualitza el contingut de la llista d'apostes.
+     * @param delta Periode d'actualitzacio de la pantalla (0.017s)
+     */
     @Override
     public void update(float delta) {
 
@@ -264,8 +323,6 @@ public class RouletteController implements GraphicsController {
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        rx = Controller.getWinWidth()/2;
-        ry = Controller.getWinHeight()/2;
         rang += Math.PI / vel;
         if ((System.nanoTime() - roffTimer)/1000000000 > 10) {
             if (!backAnim) roffTimer = System.nanoTime();
@@ -284,6 +341,10 @@ public class RouletteController implements GraphicsController {
         info = aux == null ? info : aux;
     }
 
+    /**
+     * Mètode que pinta o bé el joc de la ruleta o bé el llistat d'apostes realitzades
+     * @param g Element en el que pintar el contingut
+     */
     @Override
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -301,6 +362,15 @@ public class RouletteController implements GraphicsController {
         g.drawImage(returnPressed ? returnButtonSelected : returnButton, ebx, eby, null);
     }
 
+    /**
+     * Mètode que genera la imatge a mostrar per pantalla del llistat d'apostes.
+     * La imatge es composa d'un botó per a retornar al joc i un tauler central que
+     * mostra el llistat d'apostes realitzades, en el que es pot veure el nom de
+     * l'usuari que ha realitzat l'aposta, la cel·la en la que ha apostat i la quantitat
+     * de diners que ha apostat. A més a més també es renderitzen dos botons a la part
+     * central-dreta de la taula, amb els que l'usuari pot navegar pel llistat.
+     * @param g Component en el que pintar el llistat
+     */
     private void renderList(Graphics g) {
         g.drawImage(listBackground, 0, 0, Controller.getWinWidth(), Controller.getWinHeight(), null);
 
@@ -332,10 +402,21 @@ public class RouletteController implements GraphicsController {
         }
     }
 
+    /**
+     * Mètode que nateja el llistat d'apostes
+     */
     private void resetBetList() {
         info = new String[0][0];
     }
 
+    /**
+     * Mètode que genera la imatge a mostrar per pantalla en la que es visualitza
+     * el tauler d'apostes i la ruleta en si, juntament amb la UI que l'acompanya,
+     * que consisteix en un botó per a visualitzar el llistat d'apostes, un botó per
+     * retornar al menu principal dels jocs, el wallet actual de l'usuari, i el
+     * temps restant per a una nota tirada de la ruleta.
+     * @param g Component en el que pintar els grafics
+     */
     private void renderRoulette(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g.drawImage(background, 0, 0, Controller.getWinWidth(), Controller.getWinHeight(), null);
@@ -375,7 +456,7 @@ public class RouletteController implements GraphicsController {
 
         long moneyToShow;
 
-        if (hideRoulette) {
+        /*if (hideRoulette) {
             if (winnerE) {
                 moneyToShow = wallet - lastWallet;
             } else {
@@ -383,29 +464,44 @@ public class RouletteController implements GraphicsController {
             }
         } else {
             moneyToShow = wallet - bet;
-        }
+        }*/
         moneyToShow = (wallet - bet);
         g.drawString(moneyToShow + "", Controller.getWinWidth()/2 - walwid/2, Controller.getWinHeight() - 40);
 
         g.drawImage(viewListPressed ? viewListSelected : viewList, vlx, vly, null);
     }
 
+    /**
+     * Mètode per a indicar que la bola ha caigut a una cel·la de la ruleta
+     * @param winer Cel·la de la ruleta
+     */
     public void setWinner(int winer) {
         if (!winnerE) requestWallet();
         winnerE = true;
         this.winner = winer;
     }
 
+    /** Getter de les barres separadores de la ruleta */
     public LinkedList<GRect> getBars() {
         return bars;
     }
 
+    /**
+     * Mètode per a establir els paràmetres aleatoris de cada tirada generats
+     * pel servidor.
+     * @param vel Velocitat inicial de la ruleta
+     * @param ballVel Velocitat inicial de la bola
+     * @param shotOff Deplaçament inicial de cel·les
+     */
     public void setParams(double vel, double ballVel, int shotOff) {
         RouletteController.initVel = vel;
         ball.setDefaultVelY(ballVel);
         this.shotOff = shotOff;
     }
 
+    /**
+     * @return Retorna el numero guanyador de la tirada
+     */
     public int getWinner() {
         return converTable[(shotOff + winner) % MAXCELLS];
     }
@@ -415,21 +511,30 @@ public class RouletteController implements GraphicsController {
     @Override
     public void keyPressed(KeyEvent e) {}
 
+    /**
+     * Codi que s'executa cada cop que es deixa de prèmer un botó
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         System.out.println("KEY PRESSED");
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             System.out.println("ESCAPE PRESSED");
             networkManager.exitRoulette();
-        } /*else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            //mode = mode == GAME_MODE ? LIST_MODE : GAME_MODE;
-        }*/
+        }
     }
 
+    /**
+     * Mètode que serveix per a iniciar una tirada a partir dels
+     * paràmetres establerts
+     */
     public void shoot() {
         bars = new LinkedList<>();
+
+        int width = 600;
+        int height = 600;
+
         for (int i = 0; i < 37; i++) {
-            bars.add(new GRect(width / 2 - 100, height / 2 - 1, 20, 2, i * 2*Math.PI/37, width/2, height/2));
+            bars.add(new GRect(width / 2 - 100, height / 2 - 1, 20, 2, i * 2*Math.PI/37, width /2, height /2));
         }
         ball = new RouletteBall(width / 2 - 20, height / 2 - 50, width / 2, height / 2, this, 100, 80);
         vel = initVel;
@@ -442,19 +547,30 @@ public class RouletteController implements GraphicsController {
         roffTimer = System.nanoTime();
         backAnim = false;
         hideRoulette = false;
-        lastWallet = wallet;
+        //lastWallet = wallet;
 
         //S'inicia el fx de la bola
         Sounds.play("RRun.wav");
         //requestWallet();
     }
 
+    /**
+     * Mètode que realitza una petició al servidor per a que
+     * aquest retorni la quantitat de diners actual de l'usuari
+     */
     public void requestWallet() {
         new Transmission(new User("", "", "walletRequest"), networkManager);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {}
+
+    /**
+     * Mètode que s'executa cada cop que l'usuari prem el ratolí en una part de la
+     * pantalla. S'encarrega d'activar els botons en cas de prèmer en ells, i s'encarrega
+     * d'activar el JInputDialog en el que es demana a l'usuari que introdueixi la quantitat
+     * de diners que vol apostar en aquella cel·la per a fer la petició d'aposta al servidor
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         if (mode == GAME_MODE) {
@@ -466,6 +582,10 @@ public class RouletteController implements GraphicsController {
         returnPressed = e.getX() > ebx && e.getX() < ebx + returnButton.getWidth(null) && e.getY() > eby && e.getY() < eby + returnButton.getHeight(null);
     }
 
+    /**
+     * Mètode que s'executa al deixar de prèmer e ratolí. S'encarrega de realitzar l'acció
+     * pertinent de cada botó en cas necessari.
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         Sounds.play("RClick.wav");
@@ -503,18 +623,27 @@ public class RouletteController implements GraphicsController {
     @Override
     public void mouseMoved(MouseEvent e) {}
 
+    /**
+     * Mètode per a afegir una aposta al tauler després d'haver-la confirmat
+     * al servidor.
+     * @param bet Quantitat apostada
+     * @param cellID Cel·la en la que s'hi aposta
+     */
     public void bet(long bet, int cellID) {
         table.bet(bet, cellID);
     }
 
+    /** Setter del moneder */
     public void setWallet(long wallet) {
         this.wallet = wallet;
     }
 
+    /** Mètode per eliminar la aposta realitzada */
     public void resetBet() {
         bet = 0;
     }
 
+    /** Mètode per a incrementar la aposta realitzada */
     public void increaseBet(long amount) {
         bet += amount;
     }
