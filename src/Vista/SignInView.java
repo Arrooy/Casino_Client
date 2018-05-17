@@ -119,7 +119,7 @@ public class SignInView extends View implements PasswordConfirm {
 
         //S'afegeix el botó per acceptar la info introduida
         jbAccept = new JButton();
-        configButton(jbAccept,"ACCEPT_NO_SOMBRA.png","ACCEPT_SOMBRA.png");
+        configButton(jbAccept,"ACCEPT_NO_SOMBRA.png","ACCEPT_SOMBRA.png","ACCEPT_DIS.png");
         jbAccept.setEnabled(false);
 
         c = new GridBagConstraints();
@@ -288,5 +288,10 @@ public class SignInView extends View implements PasswordConfirm {
         boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(normal)));
         boto.setRolloverIcon(new ImageIcon(AssetManager.getImage(normal)));
         boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
+    }
+    //Ampliacio del configButton per a poder concretar l'imatge del boto disabled
+    private void configButton(JButton boto, String normal,String onSelection, String disabled){
+        configButton(boto,normal,onSelection);
+        boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(disabled)));
     }
 }

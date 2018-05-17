@@ -61,7 +61,10 @@ public class Transmission implements Runnable {
                 break;
 
             case CONTEXT_SIGNUP:
-                if(!updateConnection()) System.out.println("SIGNIN ERROR - FESME GRAFIC!");
+                if(!updateConnection()){
+                    networkManager.signUpErrorMessage(((User)msg).getSignUpErrorReason());
+                }
+
                 break;
 
             case CONTEXT_LOGIN_GUEST:
@@ -260,6 +263,7 @@ public class Transmission implements Runnable {
                 return true;
             } else {
                 //De lo contari, s'indica al usuari que s'ha equivocat
+
                 return false;
             }
         } catch (Exception e) {

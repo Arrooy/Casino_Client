@@ -571,4 +571,8 @@ public class NetworkManager extends Thread {
         }
         return info;
     }
+
+    public void signUpErrorMessage(String message) {
+        controller.signUpErrorMessage(message);
+    }
 }
