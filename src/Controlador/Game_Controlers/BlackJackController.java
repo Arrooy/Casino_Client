@@ -79,10 +79,14 @@ public class BlackJackController implements GraphicsController {
 
     /** Diners de l'usuari per a gastar*/
     private long moneyToSpend;
+
+    /** Boolea per a solucionar una molestia amb l'audio del joc i el renderitzat dels graphics*/
     private boolean dontjumpFirstIteration;
 
+    /** Indica si s'ha de mostrar el tutorial*/
     private boolean showTutorial;
 
+    /** Indica si l'animacio ha finalitzat*/
     private boolean animationIsOver;
 
     /** Crea un controlador del blackjack*/
@@ -104,6 +108,9 @@ public class BlackJackController implements GraphicsController {
         initGame();
     }
 
+    /**
+     * Inicia una nova partida del BlackJack
+     */
     public void initGame(){
         gameOver = false;
         stopMusicOneTime = true;

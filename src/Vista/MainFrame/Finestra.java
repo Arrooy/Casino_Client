@@ -49,7 +49,7 @@ public class Finestra extends JFrame {
 
         setMinimumSize(new Dimension(729, 770));
 
-        PanelWithBackGround MainPane = new PanelWithBackGround(new BorderLayout());
+        PanelWithBackGround MainPane = new PanelWithBackGround("background.png");
         MainPane.setOpaque(false);
 
         content = new JPanel();

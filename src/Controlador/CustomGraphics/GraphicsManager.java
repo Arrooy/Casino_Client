@@ -130,8 +130,6 @@ public class GraphicsManager implements Runnable {
 
     public void exit() {
         running = false;
-        Graphics g = image.getGraphics();
-        g.clearRect(0, 0, width, height);
     }
 
     private void renderGameImage(Graphics g1) {

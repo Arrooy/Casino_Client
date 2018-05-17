@@ -124,12 +124,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 System.out.println("Play");
                 break;
             case "blackJack":
-                System.out.println("INIT BLACKJACK REQUESTED");
-                networkManager.initBlackJack(Baralla.getNomCartes(),manageBJBet());
-                finestra.showUserconfig(false);
-                break;
-            case "goSignIn":
-                finestra.setSignInView();
+                //Si la partida s'inicia correctament perque l'aposta es adient, s'amaga l'icono de settings de la
+                //barra superior del Jframe, de lo contrari, l'icono es conserva
+                finestra.showUserconfig(networkManager.initBlackJack(Baralla.getNomCartes(),manageBJBet()));
                 break;
             case "acceptSignIn":
                 if(signInView.getUsername().length() > 0 && signInView.getEmail().length() > 0){
@@ -188,15 +185,20 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
         do {
             String res = blackJackView.showInputDialog();
-            try {
-                value = Long.parseLong(res);
-            } catch (NumberFormatException error) {
-               if(res == null){
-                   value = 0;
-               }else {
-                   blackJackView.showDialog("Bet error","Only numbers are expected as a bet");
-               }
+
+            if(res.charAt(0) == 'a'){
+                res = res.substring(1);
+                try {
+                    value = Long.parseLong(res);
+                } catch (NumberFormatException error) {
+                    blackJackView.showDialog("Bet error","Only numbers are expected as a bet");
+                }
+            }else{
+                //Es torna al gameMenu
+                value = 0;
             }
+
+
         }while(value == -1);
         return value;
     }

@@ -403,13 +403,15 @@ public class NetworkManager extends Thread {
      * @param nomCartes nom de totes les cartes de la baralla
      * @param bet aposta que ha plantejat l'usuari
      */
-    public void initBlackJack(Stack<String> nomCartes,long bet) {
+    public boolean initBlackJack(Stack<String> nomCartes,long bet) {
         //Si l'aposta es correcte, aquesta sera diferent de 0
         if(bet != 0){
             //Es crea la carta que iniciara la partida i s'envia
             Card card = new Card("",bet,Transmission.CONTEXT_BJ_INIT,nomCartes,false);
             new Transmission(card,this);
+            return false;
         }
+        return true;
     }
 
     /**
