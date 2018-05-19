@@ -565,7 +565,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                         }catch (Exception exception){
                             betHorse = 0;
                             betAmount = -1;
-                            exception.printStackTrace();
                         }
                         break;
                     }
