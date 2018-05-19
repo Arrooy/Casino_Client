@@ -88,7 +88,8 @@ public class Top5View extends JPanel {
         add(jPanelGridTaula,BorderLayout.CENTER);
     }
 
-    /**Metode que actualitza la taula segons les diferents fluctuacions de diners que ha patit l'usuari*/
+    /**Metode que actualitza la taula segons les diferents fluctuacions de diners que ha patit l'usuari
+     * @param newWallet Missatge que retorna les transaccions de l'usuari*/
     public void updateWallet(WalletEvolutionMessage newWallet) {
         JTable aux;
 
@@ -124,6 +125,7 @@ public class Top5View extends JPanel {
     }
 
     /**Metode que indica des d'on s'ha produit la fluctuacio de diners
+     * @param i enter que indica el tipus
      * @return String amb el nom d'on s'ha produit la fluctuacio*/
     private String getTypeName(int i){
         String nomType;

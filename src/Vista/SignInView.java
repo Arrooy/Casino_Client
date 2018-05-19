@@ -35,6 +35,9 @@ public class SignInView extends View implements PasswordConfirm {
     /**String constant per indicar que el camp s'ha d'omplir amb la contrasenya*/
     private static final String PASSWORD_CONFIRM_TOOL_TIP = "Repeat the password introduced above";
 
+    /**Caracter constant que es mostra quan s'escriu la contrasenya enlloc dels caracters que l'usuari esta escribint*/
+    private final static char PASSWORD_CHAR = '*';
+
     /**Color Crema*/
     private final static Color CREMA = new Color (218, 204, 164);
 
@@ -135,11 +138,17 @@ public class SignInView extends View implements PasswordConfirm {
         JPanel jpgblInfo = new JPanel(new GridBagLayout());
         jpgblInfo.setOpaque(false);
 
-        //S'afegeixen els camps per omplir
+        //S'afegeixen els camps per omplir i s'hi associa una icona per tal d'identificar-los millor
         jtfName = new IconTextField("user.png",USERNAME_HINT,USERNAME_TOOL_TIP);
         jtfEmail = new IconTextField("email.png",EMAIL_HINT,EMAIL_TOOL_TIP);
         jpfPassword = new IconPasswordField("padlock.png",PASSWORD_HINT,20,PASSWORD_TOOL_TIP);
+
+        //Es canvia el caracter que es mostra quan s'escriu la contrasenya enlloc dels caracters que l'usuari esta escribint
+        jpfPassword.setEchoChar(PASSWORD_CHAR);
         jpfConfirmPassword = new IconPasswordField("padlock.png",PASSWORD_CONFIRM_HINT,20,PASSWORD_CONFIRM_TOOL_TIP);
+
+        //Es canvia el caracter que es mostra quan s'escriu la contrasenya enlloc dels caracters que l'usuari esta escribint
+        jpfConfirmPassword.setEchoChar(PASSWORD_CHAR);
 
         //Posicio camp username
         c.insets = new Insets(0,130,20,0);
@@ -270,7 +279,8 @@ public class SignInView extends View implements PasswordConfirm {
         return getPassword().equals(getConfirmation());
     }
 
-    /** Metode que mostra un missatge d'error*/
+    /** Metode que mostra un missatge d'error
+     * @param message missatge d'error que es mostra quan la contrasenya es incorrecta o te algun error*/
     @Override
     public void passwordKO(String message){
         jlErrorMessage.setText(message);
@@ -278,7 +288,8 @@ public class SignInView extends View implements PasswordConfirm {
     }
 
     /** Metode que fixa el valor del JProgress bar
-     * Depenent del "strength" actualitza color i text de l'indicador de seguretat*/
+     * Depenent del "strength" actualitza color i text de l'indicador de seguretat
+     * @param strength enter qie indica la fortalesa de la contrasenya*/
     @Override
     public void setStrength(int strength){
         if(strength < 15){
@@ -300,7 +311,8 @@ public class SignInView extends View implements PasswordConfirm {
 
     }
 
-    /** Controla la visibilitat del missatge d'error*/
+    /** Controla la visibilitat del missatge d'error
+     * @param error boolean que indica si hi ha hagut algun error o no*/
     @Override
     public void manageError(boolean error){
         if(error){
@@ -316,13 +328,17 @@ public class SignInView extends View implements PasswordConfirm {
         return new String(jpfPassword.getPassword());
     }
 
-    /** Controla el funcionament del boto que et permet sotmetre la nova contrasenya*/
+    /** Controla el funcionament del boto que et permet sotmetre la nova contrasenya
+     * @param ok indica si la contrasenya es correcta*/
     @Override
     public void canConfirm(boolean ok){
         jbAccept.setEnabled(ok);
     }
 
-    /**Metode que configura les imatges d'un boto per quan no esta apretat i per quan si que ho esta*/
+    /**Metode que configura les imatges d'un boto per quan no esta apretat i per quan si que ho esta
+     * @param boto JButton al que es volen associal les imatges
+     * @param normal Imatge per quan el boto no esta apretat
+     * @param onSelection Imatge per quan el boto esta apretat*/
     private void configButton(JButton boto, String normal,String onSelection){
         boto.setBorderPainted(false);
         boto.setBorder(null);
@@ -335,7 +351,11 @@ public class SignInView extends View implements PasswordConfirm {
         boto.setPressedIcon(new ImageIcon(AssetManager.getImage(onSelection)));
     }
 
-    /**Ampliacio del configButton per a poder concretar l'imatge del boto disabled*/
+    /**Ampliacio del configButton per a poder concretar l'imatge del boto disabled
+     * @param boto JButton al que es volen associal les imatges
+     * @param normal Imatge per quan el boto no esta apretat
+     * @param onSelection Imatge per quan el boto esta apretat
+     * @param disabled Imatge per quan el boto esta desactivat*/
     private void configButton(JButton boto, String normal,String onSelection, String disabled){
         configButton(boto,normal,onSelection);
         boto.setDisabledIcon(new ImageIcon(AssetManager.getImage(disabled)));

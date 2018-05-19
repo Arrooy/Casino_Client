@@ -122,10 +122,12 @@ public class LogInView extends View {
         c.insets = new Insets(0,0,0,0);
         jpgblInfo.add(jcbRememberLogIn, c);
 
-        //S'afegeixen els camps per omplir
+        //S'afegeixen els camps per omplir i s'hi associa una icona per tal d'identificar-los millor
         jtfUsername = new IconTextField("user.png",USERNAME_HINT,TOOLTIP_USERNAME_LOGIN);
         jtfUsername.requestFocus();
         jpfPassword = new IconPasswordField("padlock.png",PASSWORD_HINT,TOOLTIP_PASSWORD_LOGIN);
+
+        //Es canvia el caracter que es mostra quan s'escriu la contrasenya enlloc dels caracters que l'usuari esta escribint
         jpfPassword.setEchoChar(PASSWORD_CHAR);
 
         //Posicio camp username
@@ -212,7 +214,10 @@ public class LogInView extends View {
         jlErrorMessage.setForeground(TRANSPARENT);
     }
 
-    /**Metode que configura les imatges d'un boto per quan no esta apretat i per quan si que ho esta*/
+    /**Metode que configura les imatges d'un boto per quan no esta apretat i per quan si que ho esta
+     * @param boto JButton al que es volen associal les imatges
+     * @param normal Imatge per quan el boto no esta apretat
+     * @param onSelection Imatge per quan el boto esta apretat*/
     private void configButton(JButton boto, String normal,String onSelection){
         boto.setBorderPainted(false);
         boto.setBorder(null);
