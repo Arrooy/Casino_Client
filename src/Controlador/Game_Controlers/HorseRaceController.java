@@ -434,7 +434,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     g.drawString(("Race: 0" + raceCountdown.getCount() / 1000 + "s"),(int)(horseRaceView.getWidth()*TIME_MESSAGE_X) ,  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
 
                 }else{
-                    g.drawString("Racing..."/*("Race: " + (raceCountdown.getCount() / 1000 + "s"))*/,(int)(horseRaceView.getWidth()*TIME_MESSAGE_X) ,  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
+                    g.drawString("Racing...",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X) ,  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
 
                 }
             }
@@ -544,9 +544,11 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         if(!isRacing && ! (isBetting && betOK)){
             if(e.getX() >= horseRaceView.getWidth()*HORSE_START_X - (horseRaceView.getWidth() / 14.44) && e.getX() <= horseRaceView.getWidth()*HORSE_START_X + (horseRaceView.getWidth() / 14.44)) {
                 for (int horse = 0; horse < MAX_HORSES; horse++) {
-                    if(e.getY() >= horsePositions[horse].y - (horseRaceView.getHeight() / 10.4) && e.getY() <= horsePositions[horse].y + (horseRaceView.getHeight() / 10.4) ){
+                    if(e.getY() >= (horsePositions[horse].y - (horseRaceView.getHeight() / 10.4)) && e.getY() <= (horsePositions[horse].y + (horseRaceView.getHeight() / 10.4)) ){
                         try {
-                            betAmount = Long.parseLong((String) JOptionPane.showInputDialog(null, "Bet:", "HORSE " + (12 - horse), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(AssetManager.getImage("horse" + (horse) + "_"+ horseFrames[horse]+".png")), null, 0));
+                            System.out.println("OK");
+                            Sounds.play("HClick.wav");
+                            betAmount = Long.parseLong((String) JOptionPane.showInputDialog(null, "Bet:", "HORSE " + (12 - horse) ,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(AssetManager.getImage("horse" + (horse % 6) + "_"+ horseFrames[horse]+".png")), null, 0));
                             if(betAmount <= 0){
                                 JOptionPane.showMessageDialog(horseRaceView, "Bet must be greater than 0", "BET ERROR", JOptionPane.ERROR_MESSAGE, null);
                             }else{
@@ -560,10 +562,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                                 }
 
                             }
-
                         }catch (Exception exception){
                             betHorse = 0;
                             betAmount = -1;
+                            exception.printStackTrace();
                         }
                         break;
                     }
@@ -578,7 +580,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        Sounds.play("HClick.wav");
         returnPressed = e.getX() > ebx && e.getX() < ebx + returnButton.getWidth(null) && e.getY() > eby && e.getY() < eby + returnButton.getHeight(null);
         if (returnPressed && mode == GAME_MODE){
             stopPlay();
