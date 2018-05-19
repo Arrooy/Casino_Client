@@ -7,7 +7,11 @@ public class HorseResult implements Serializable {
     private int winner;
     private long prize;
 
-
+    /**
+     * Guardem el guanyador de la cursa i el premi que ha rebut l'usuari
+     * @param winner guanyador de la cursa
+     * @param prize premi per apostar
+     */
     public HorseResult(int winner, long prize){
         this.winner = winner;
         this.prize = prize;

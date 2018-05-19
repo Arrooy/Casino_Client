@@ -44,7 +44,10 @@ public class HorseBet implements Serializable {
         this.betOK = betOK;
     }
 
-
+    /**
+     * S'indica si una aposta s'a pogut trametre
+     * @return boolea que indica si l'aposte s'ha afegit correctament
+     */
     public boolean isBetOK() {
         return betOK;
     }

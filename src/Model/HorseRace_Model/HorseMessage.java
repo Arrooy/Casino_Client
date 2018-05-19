@@ -36,12 +36,22 @@ public class HorseMessage extends Message {
         this.wallet = wallet;
     }
 
+    /**
+     * Constructor utilitzat per enviar una aposta o nformar sobre l'estat d'ella
+     * @param horseBet aposta que es vol realitzar
+     * @param option String que permet identificar el tipus de missatge
+     */
     public HorseMessage(HorseBet horseBet, String option){
         this.horseBet = horseBet;
         this.option = option;
         this.horseSchedule = null;
         this.horseResult = null;
     }
+    /**
+     * Constructor utilitzat per enviar la carrera als clients
+     * @param horseSchedule objecte que conte l'informacio per reproduir una carrera
+     * @param option String que permet identificar el tipus de missatge
+     */
     public HorseMessage(HorseSchedule horseSchedule, String option){
         this.horseBet = null;
         this.option = option;
@@ -50,6 +60,11 @@ public class HorseMessage extends Message {
 
     }
 
+    /**
+     * Constructor utilitzat per informar als clients del temps que queda per començar una carrera
+     * @param timeForRace temps per començar la carrera en mlisegons
+     * @param option String que permet identificar el tipus de missatge
+     */
     public HorseMessage(long timeForRace, String option){
         this.timeForRace = timeForRace;
         this.option = option;
@@ -58,6 +73,11 @@ public class HorseMessage extends Message {
         this.horseResult = null;
     }
 
+    /**
+     * Constructor utilitzat per enviar el resultat d'una carrera i una aposta
+     * @param result Conte el cavall guanyador i el premi de l'aposta
+     * @param option String que permet identificar el tipus de missatge
+     */
     public HorseMessage(HorseResult result, String option){
         this.horseBet = null;
         this.option = option;

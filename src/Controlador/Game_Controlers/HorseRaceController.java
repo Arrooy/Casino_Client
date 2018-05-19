@@ -25,7 +25,8 @@ import java.awt.event.MouseEvent;
 import java.util.Random;
 
 
-/**Controlador de la cursa de cavalls*/
+/**Controlador de la cursa de cavalls encarregat a indidicar en el Graphics manager quines coses mostrar i a comunicar-se amb el
+ * networkManager per establir una communicacio amb el servidor i aixi reroduir les curses correctament*/
 public class HorseRaceController implements GraphicsController, ActionListener {
 
     private final static Color GRANA = new Color(125, 28, 37);
@@ -100,9 +101,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private Image returnButtonSelected;
     private Image listBackground;
     private Image upButton;
-    //private Image upButtonSelected;
     private Image downButton;
-    //private Image getDownButtonSelected;
     private Image listTable;
 
     private boolean viewListPressed;
@@ -115,6 +114,9 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     private String[][] info;
     private int listOff;
+
+    private int frameWidth;
+    private int frameHeight;
 
     /** Permet la reproduccio una unica vegada d'un arxiu d'audio en el bucle update*/
     private boolean singleAudioPlay;
@@ -148,6 +150,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.oncePerRace = true;
         this.mode = GAME_MODE;
         this.listOff = 0;
+        this.frameHeight = horseRaceView.getHeight();
+        this.frameWidth = horseRaceView.getWidth();
     }
 
 
@@ -159,10 +163,17 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.graphicsManager.setClearColor(Color.black);
     }
 
+    /**
+     * S'afegeix l'usuari que esta jugant al joc
+     * @param user Usuari que esta jugant
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
+    /**
+     * S'inicialitzen variables i assets per tal de reproduir les carreres de manera correcte
+     */
     @Override
     public void init() {
         this.isRacing = false;
@@ -201,10 +212,13 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
         info = new String[0][0];
 
+        this.frameHeight = horseRaceView.getHeight();
+        this.frameWidth = horseRaceView.getWidth();
+
     }
 
     /**
-     * Començem a jugar
+     * Començem a jugar, s'inicialitzen variables , comptadors, posicions i frames dels cavalls
      */
     public void play() {
 
@@ -226,10 +240,13 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.listOff = 0;
         resetBetList();
         requestWallet();
+
+        this.frameHeight = horseRaceView.getHeight();
+        this.frameWidth = horseRaceView.getWidth();
     }
 
     /**
-     * Parem de jugar
+     * Parem de jugar, tot indicant al servidor de que ens desconecti del joc
      */
     public void stopPlay() {
         this.play = false;
@@ -246,6 +263,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         raceCountdown.stopCount();
     }
 
+    /**
+     * Metode en el que controlem la carrera i la comunicacio amb el servidor a traves de les classes de NetworkManager i GraphicsManager
+     * @param delta Periode d'actualitzacio de la pantalla (0.017s)
+     */
     @Override
     public void update(float delta) {
         HorseMessage horseMessage;
@@ -336,6 +357,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         }
     }
 
+    /**
+     * Inicialitzem als cavalls per tal de reproduir la carrera,
+     * s'escull un frame aleatori per cada cavall.
+     */
     private void initRace() {
         Random random = new Random();
         int section = 0;
@@ -347,11 +372,19 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         }
     }
 
+    /**
+     * Es retorna el temps d'una seccio per a un cavall
+     * @param horse cavall
+     * @param section seccio
+     * @return temps del cavall "horse" a la secco "section"
+     */
     private long getTime(int horse, int section){
         return horseRaceModel.getHorseSchedule().getTime(horse, section);
     }
 
-
+    /**
+     * Posem els cavalls a l'inici de la cursa
+     */
     public void endYourHorses(){
         for (int horse = 0; horse < MAX_HORSES; horse++) {
             horsePositions[horse] = new Point((int) (HORSE_START_X * horseRaceView.getWidth()), (int) (HORSE_START_Y * (float) horseRaceView.getHeight() + horse * HORSE_SEPARATION * (float) horseRaceView.getHeight()));
@@ -360,6 +393,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         }
     }
 
+    /**
+     * Metode que permet gestionar el que ha de fer el graphicsmanager per tal de mostrar la cursa i la llista d'apostes
+     * @param g Element en el que pintar el contingut
+     */
     @Override
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -375,6 +412,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         g.drawImage(returnPressed ? returnButtonSelected : returnButton, ebx, eby, null);
     }
 
+    /**
+     * Metode que permet gestionar el que ha de fer el graphicsmanager per tal de mostrar llista d'apostes
+     * @param g Element en el que pintar el contingut
+     */
     private void renderList(Graphics g) {
         g.drawImage(listBackground, 0, 0, Controller.getWinWidth(), Controller.getWinHeight(), null);
 
@@ -403,11 +444,19 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         }
     }
 
+    /**
+     * Es buida la llista d'apostes
+     */
     private void resetBetList() {
         info = new String[0][0];
     }
 
 
+    /**
+     * Metode que permet gestionar el que ha de fer el graphicsmanager per tal de mostrar la cursa amb els missatgees
+     * pertinents d'aquesta i reproduir els sorolls de la cursa
+     * @param g Element en el que pintar el contingut
+     */
     private void renderHorses(Graphics g) {
         g.drawImage(AssetManager.getImage("HORSES-PANEL.png"), 0, 0, horseRaceView.getWidth(), horseRaceView.getHeight(), null);
         for (int horse = 0; horse < MAX_HORSES; horse++) {
@@ -502,6 +551,13 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         g.drawImage(viewListPressed ? viewListSelected : viewList, vlx, vly, null);
     }
 
+    /**
+     * Actualitza la posicio de tots els cavalls depenent del temps restant de la cursa i de la seccio en la que es troben els cavalls
+     * @param horsePositions posicions de tots els cavalls a la pantalla
+     * @param horseCountdowns temps restant per acabar una seccio per cada cavall
+     * @param horseSections seccio en que es troba cada cavall
+     * @param raceCountdown temps restant de la cursa
+     */
     private void moveHorses(Point[] horsePositions, Countdown[] horseCountdowns, int[] horseSections, Countdown raceCountdown) {
         if(raceCountdown.isCounting()){
             for (int horse = 0; horse < MAX_HORSES; horse++){
@@ -525,6 +581,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     public void keyTyped(KeyEvent e) {
     }
 
+    /**
+     * En cas d'escape sortim del joc
+     * @param e Key event que permet mostrar la coordenada del ratoli al premer-lo
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == 27){
@@ -539,6 +599,12 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     }
 
+
+    /**
+     * Si es prem sobre un cavall quan no s'esta fent una cursa mostrarem un panell que
+     * permet a l'usuari introduir els diners que vol apostar
+     * @param e  Key event que permet mostrar la coordenada del ratoli al fer click
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         HorseMessage horseMessage;
@@ -547,7 +613,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                 for (int horse = 0; horse < MAX_HORSES; horse++) {
                     if(e.getY() >= (horsePositions[horse].y - (horseRaceView.getHeight() / 10.4)) && e.getY() <= (horsePositions[horse].y + (horseRaceView.getHeight() / 10.4)) ){
                         try {
-                            System.out.println("OK");
                             Sounds.play("HClick.wav");
                             betAmount = Long.parseLong((String) JOptionPane.showInputDialog(null, "Bet:", "HORSE " + (12 - horse) ,  JOptionPane.INFORMATION_MESSAGE, new ImageIcon(AssetManager.getImage("horse" + (horse % 6) + "_"+ horseFrames[horse]+".png")), null, 0));
                             if(betAmount <= 0){
@@ -580,6 +645,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     }
 
+    /**
+     * En cas de premer el boto d'Ext sortirem del joc
+     * @param e  Key event que permet mostrar la coordenada del ratoli al premer-lo
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         returnPressed = e.getX() > ebx && e.getX() < ebx + returnButton.getWidth(null) && e.getY() > eby && e.getY() < eby + returnButton.getHeight(null);
@@ -589,6 +658,10 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         }
     }
 
+    /**
+     * Mostrem la llista d'apostes en curs per la carrera en temps real
+     * @param e
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         if (mode == LIST_MODE) {
@@ -639,20 +712,33 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     public void actionPerformed(ActionEvent e) {
     }
 
+    /**
+     * S'actualitza el tamany dels cavalls i les seves posicions per tal de que respectn el tamany de la pantalla
+     */
     public void updateSize(){
         if(this.horseRaceView != null && graphicsManager!= null){
             graphicsManager.resize(horseRaceView.getWidth(),horseRaceView.getHeight());
             for(int i = 0; i < MAX_HORSES; i++){
-
+                horsePositions[i].x = ((horsePositions[i].x * horseRaceView.getWidth())/ this.frameWidth);
+                horsePositions[i].y = ((horsePositions[i].y * horseRaceView.getHeight())/ this.frameHeight);
             }
+
         }
+        this.frameHeight = horseRaceView.getHeight();
+        this.frameWidth = horseRaceView.getWidth();
     }
 
+    /**
+     * Es demana al servidor de que ens envii el wallet de l'usuari
+     */
     public void requestWallet(){
         new Transmission(new HorseMessage((long)0), networkManager);
     }
 
 
+    /**
+     * Sortim del joc
+     */
     public static void exit(){
         if(graphicsManager != null){
             graphicsManager.exit();

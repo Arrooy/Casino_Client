@@ -17,7 +17,10 @@ public class HorseSchedule implements Serializable {
     private static final int MIN_SECTION_TIME = 1000;
 
 
-
+    /**
+     * Es creen temps aleatoris entre MAX_SECTION_TIME i MIN_SECTION_TIME per cada cavall a cada seccio de les SECTIONS seccions.
+     * El temps de la cursa també es aleatori i oscillara entre 5 i 10 segons.
+     */
     public HorseSchedule(){
         Random rand = new Random();
         int[] totalTime = new int[12];
@@ -54,12 +57,17 @@ public class HorseSchedule implements Serializable {
         return slowestTime;
     }
 
-
+    /**
+     * Retorna el temps d'un cavall en una seccio
+     * @param i Cavall
+     * @param j Seccio
+     * @return temps d'un cavall en una seccio
+     */
     public int getTime(int i,int j){
         return times[i][j];
     }
 
-
+    /** Retorna el guanyador de la cursa**/
     public int getWinner(){
         return winner;
     }

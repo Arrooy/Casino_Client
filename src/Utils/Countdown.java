@@ -35,10 +35,16 @@ public class Countdown extends Thread {
         }
     }
 
+    /**
+     * @return temps que queda per acabar el comptatge en milisegons
+     */
     public long getCount(){
         return this.count;
     }
 
+    /**
+     * Es para el comptatge
+     */
     public void stopCount(){
         this.isCounting = false;
         this.count = 0;
@@ -51,6 +57,10 @@ public class Countdown extends Thread {
         this.isCounting = true;
     }
 
+    /**
+     *
+     * @return boolea que inidica si s'esta comptant
+     */
     public boolean isCounting() {
         return isCounting;
     }

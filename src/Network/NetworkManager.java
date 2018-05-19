@@ -312,7 +312,6 @@ public class NetworkManager extends Thread {
             //Si el missatge de l'iteracio conte l'id que es buscava, es retorna l'objecte.
             if(message != null && message.getContext().equals(context)) {
                 lectures.remove(message);
-                System.out.println(message.getContext());
                 return message;
             }
         }
@@ -560,6 +559,11 @@ public class NetworkManager extends Thread {
         controller.endGraphics();
     }
 
+    /**
+     * S'actualitza la llista d'apostes dels cavalls en cas d'haber rebut un missatge del servidor amb el contexte de
+     * HORSES_ListUpdate
+     * @return Array de Strings amb les apostes de tots els jugadors de la partida
+     */
     public String[][] updateHorseList() {
         String[][] info = null;
         BetList msg = (BetList) readContext("HORSES-ListUpdate");
@@ -570,6 +574,10 @@ public class NetworkManager extends Thread {
         return info;
     }
 
+    /**
+     * S'actualitzen les monedes del client
+     * @param wallet nova quantitat de monedes
+     */
     public void updateWallet(long wallet) {
         this.user.setWallet(wallet);
     }

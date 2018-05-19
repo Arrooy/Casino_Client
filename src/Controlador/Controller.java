@@ -117,7 +117,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 networkManager.sendHorseRaceRequest();
                 horseRaceController.play();
                 finestra.showUserconfig(false);
-                System.out.println("Play");
                 break;
 
             case "blackJack":
@@ -173,6 +172,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
+    /**
+     * Permet mostrar feedback sobre si s'ha canviat la contrasenya correctament
+     * @param approved boolea que indica si s'ha canviat la contrasenya correctament
+     */
     public void manageChangePass(boolean approved){
         if(approved){
             passwordChangeView.clearFields();
@@ -206,6 +209,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         return value;
     }
 
+    /**
+     * Mostra la finestra
+     * */
     public void showFinestra() {
         finestra.setVisible(true);
         finestra.requestFocus();
@@ -310,10 +316,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.horseRaceView = horseRaceView;
     }
 
-    public void initHorses (){
-        System.out.println("INIT HORSES REQUESTED");
-        finestra.setHorseRaceView();
-    }
 
     @Override
     public void componentResized(ComponentEvent e) {
@@ -407,14 +409,13 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 }
                 break;
             case "SIGNIN - PASSWORD FIELD":
-                //TODO Errada: al escriure le contrasenya surt com un jpsswordField on el progressbar, AJUDA
                 strength = checkPassword(signInView.getNewPassword(), signInView);
                 if(signInView.getPasswordChangeRequest() && strength > 0){
                     signInView.canConfirm(true);
                 }else {
                     if (strength <= 0) {
-                        signInView.canConfirm(false);
                         signInView.setStrength(-strength);
+                        signInView.canConfirm(false);
                         signInView.manageError(true);
                     } else {
                         signInView.setStrength(strength);
@@ -443,6 +444,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
         }
     }
+
+
+
 
 
     /** Mostrem si el canvi de contrasenya s'ha pogut efectuar correctament
@@ -598,6 +602,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
+    /**
+     * Mostra un missatge d'error a al finestra del sign in
+     * @param message missatge a mostrar
+     */
     public void signUpErrorMessage(String message){
         signInView.passwordKO(message);
         signInView.manageError(true);
