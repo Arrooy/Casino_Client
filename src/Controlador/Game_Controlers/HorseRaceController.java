@@ -49,8 +49,14 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private static final double TIME_MESSAGE_X = 0.045;
     private static final double WINNER_MESSAGE_X = TIME_MESSAGE_X;
     private static final double WINNER_MESSAGE_Y = TIME_MESSAGE_Y + 0.06;
-    private static final double WALLET_MESSAGE_X = TIME_MESSAGE_X;
-    private static final double WALLET_MESSAGE_Y = WINNER_MESSAGE_Y + 0.06;
+    private static final double WALLET_TITLE_X = TIME_MESSAGE_X;
+    private static final double WALLET_TITLE_Y = WINNER_MESSAGE_Y + 0.06;
+    private static final double WALLET_MESSAGE_X = TIME_MESSAGE_X + 0.01;
+    private static final double WALLET_MESSAGE_Y = WALLET_TITLE_Y + 0.035;
+    private static final double EARNINGS_TITLE_X = TIME_MESSAGE_X;
+    private static final double EARNINGS_TITLE_Y = WALLET_MESSAGE_Y + 0.06;
+    private static final double EARNINGS_MESSAGE_X = WALLET_MESSAGE_X;
+    private static final double EARNINGS_MESSAGE_Y = EARNINGS_TITLE_Y + 0.035;
     private static final double BET_TITLE_X = TIME_MESSAGE_X;
     private static final double BET_TITLE_Y = 0.7;
     private static final double BET_STATUS_X = BET_TITLE_X;
@@ -118,6 +124,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private int frameWidth;
     private int frameHeight;
 
+    private int gameEarnings;
+
     /** Permet la reproduccio una unica vegada d'un arxiu d'audio en el bucle update*/
     private boolean singleAudioPlay;
 
@@ -152,6 +160,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.listOff = 0;
         this.frameHeight = horseRaceView.getHeight();
         this.frameWidth = horseRaceView.getWidth();
+        this.gameEarnings = 0;
     }
 
 
@@ -215,6 +224,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.frameHeight = horseRaceView.getHeight();
         this.frameWidth = horseRaceView.getWidth();
 
+        this.gameEarnings = 0;
+
     }
 
     /**
@@ -243,6 +254,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
         this.frameHeight = horseRaceView.getHeight();
         this.frameWidth = horseRaceView.getWidth();
+
+        this.gameEarnings = 0;
     }
 
     /**
@@ -261,6 +274,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.networkManager.exitHorses();
         waitCountdown.stopCount();
         raceCountdown.stopCount();
+        this.gameEarnings = 0;
     }
 
     /**
@@ -294,6 +308,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     betOK = horseMessage.getHorseBet().isBetOK();
                     if (!betOK) {
                         betResult = false;
+                    }else{
+                        gameEarnings-=horseMessage.getHorseBet().getBet();
                     }
                 }
             }
@@ -352,6 +368,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     }
                     this.winner = horseMessage.getHorseResult().getWinner();
                     prize = horseMessage.getHorseResult().getPrize();
+                    gameEarnings+=prize;
                 }
             }
         }
@@ -467,10 +484,24 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         g.drawString("Press \"Esc\" to exit." , (int)(0.01), (int)(horseRaceView.getHeight()*0.03));
         g.setFont(font.deriveFont((float)(horseRaceView.getWidth()*0.0130718954248366)));
         g.setColor(TEXT_COLOR);
+        g.drawString("Earnings:", (int)(horseRaceView.getWidth()*EARNINGS_TITLE_X), (int)(horseRaceView.getHeight()*EARNINGS_TITLE_Y));
+        if(gameEarnings < 0){
+            g.setColor(GRANA);
+        }else{
+            g.setColor(TEXT_COLOR);
+        }
+        g.drawString(Integer.toString(gameEarnings), (int)(horseRaceView.getWidth()*EARNINGS_MESSAGE_X), (int)(horseRaceView.getHeight()*EARNINGS_MESSAGE_Y));
+        g.setColor(TEXT_COLOR);
         g.drawString("Bet" , (int)(horseRaceView.getWidth()*BET_TITLE_X), (int)(horseRaceView.getHeight()*BET_TITLE_Y));
-        g.drawString("Wallet: " + this.user.getWallet() , (int)(horseRaceView.getWidth()*WALLET_MESSAGE_X), (int)(horseRaceView.getHeight()*WALLET_MESSAGE_Y));
+        g.drawString("Wallet: " , (int)(horseRaceView.getWidth()*WALLET_TITLE_X), (int)(horseRaceView.getHeight()*WALLET_TITLE_Y));
+        if(this.user.getWallet() <= 0){
+            g.setColor(GRANA);
+        }else{
+            g.setColor(TEXT_COLOR);
+        }
+        g.drawString(Long.toString(this.user.getWallet()),(int)(horseRaceView.getWidth()*WALLET_MESSAGE_X), (int)(horseRaceView.getHeight()*WALLET_MESSAGE_Y));
+        g.setColor(TEXT_COLOR);
         if (isRacing && raceCountdown.isCounting()) {
-
             if (System.currentTimeMillis() - animationRate > 50) {
                 for (int i = 0; i < horseFrames.length; i++) {
                     horseFrames[i]++;

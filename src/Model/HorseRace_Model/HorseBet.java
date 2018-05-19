@@ -40,10 +40,10 @@ public class HorseBet implements Serializable {
     }
 
 
-    public HorseBet(boolean betOK){
+    public HorseBet(boolean betOK, long bet){
         this.betOK = betOK;
+        this.bet = bet;
     }
-
     /**
      * S'indica si una aposta s'a pogut trametre
      * @return boolea que indica si l'aposte s'ha afegit correctament
