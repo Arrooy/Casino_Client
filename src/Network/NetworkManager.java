@@ -564,8 +564,7 @@ public class NetworkManager extends Thread {
      * HORSES_ListUpdate
      * @return Array de Strings amb les apostes de tots els jugadors de la partida
      */
-    public String[][] updateHorseList() {
-        String[][] info = null;
+    public String[][] updateHorseList(String[][] info) {
         BetList msg = (BetList) readContext("HORSES-ListUpdate");
         if(msg != null){
             System.out.println("[HORSES-LIST]: Updating");

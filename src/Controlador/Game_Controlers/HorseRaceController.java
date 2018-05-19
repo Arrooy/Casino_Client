@@ -290,10 +290,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         ebx = Controller.getWinWidth() - returnButton.getWidth(null) - 20;
         eby = Controller.getWinHeight() - returnButton.getHeight(null) - 20;
 
-        String[][] aux = networkManager.updateHorseList();
-        info = aux == null ? info : aux;
-
-
+        info = networkManager.updateHorseList(info);
         if (play) {
             horseMessage = (HorseMessage) networkManager.readContext("HORSES-WalletRequest");
             if(horseMessage!= null){
@@ -336,6 +333,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.firstRace = false;
                     this.oncePerRace = true;
                     this.isCountDown = false;
+                    this.betResult = false;
 
                     Sounds.stopOneAudioFile("HStart.wav");
                     Sounds.play("HRun.wav");
