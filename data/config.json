@@ -1,7 +1,4 @@
 {
- "LogUsername": "MCS15",
  "PortServidor": 2525,
- "IpServidor": "localhost",
- "IsLoggedIn": true,
- "#LogPassword": "fP9BdlBnCj7hHj2s2QKj66hPS2ZcKMEXeMWGVo7SnaCc4MgceH1cw9bX726o9/LH"
+ "IpServidor": "localhost"
 }

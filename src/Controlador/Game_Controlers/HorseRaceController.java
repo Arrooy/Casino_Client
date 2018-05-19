@@ -28,9 +28,6 @@ import java.util.Random;
 /**Controlador de la cursa de cavalls*/
 public class HorseRaceController implements GraphicsController, ActionListener {
 
-    private static final String[] listBetConversion = {"0", "3", "2", "1", "6", "5", "4", "9", "8", "7", "12", "11", "10", "15", "14", "13", "18", "17", "16", "21", "20", "19", "24", "23", "22", "27", "26", "25", "30", "29", "28", "33", "32", "31", "36", "35", "34", "First line", "Second line", "Third line", "First half", "Even", "Red", "Black", "Odd", "Second Half", "First dozen", "Second dozen", "Third dozen"};
-
-
     private final static Color GRANA = new Color(125, 28, 37);
     private final static Color GREY = new Color(49, 63, 47);
     private static final Color TEXT_COLOR = new Color(216, 204, 163);
@@ -273,7 +270,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                 if (horseMessage != null) {
                     confirmReceived = true;
                     requestWallet();
-                    System.out.println("Bet Received: " + horseMessage.getHorseBet().isBetOK());
                     betOK = horseMessage.getHorseBet().isBetOK();
                     if (!betOK) {
                         betResult = false;
@@ -287,7 +283,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.betOK = false;
                     this.isCountDown = true;
                     this.oncePerRace = true;
-
+                    requestWallet();
                     confirmReceived = false;
                     this.waitCountdown.newCount(horseMessage.getTimeForRace());
                     this.singleAudioPlay = true;
@@ -295,7 +291,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                 }
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-Schedule");
                 if (horseMessage != null) {
-                    System.out.println("HORSES- Schedule received");
                     this.horseRaceModel.setHorseSchedule(horseMessage.getHorseSchedule());
                     this.waitCountdown.stopCount();
                     this.raceCountdown.newCount(horseRaceModel.getHorseSchedule().getRaceTime());
@@ -315,7 +310,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                 this.waitCountdown.stopCount();
                 if (oncePerRace) {
                     if (raceCountdown.getCount() <= 0) {
-                        System.out.println("HORSES- Race Finished");
                         Sounds.stopOneAudioFile("HRun.wav");
                         horseMessage = new HorseMessage((HorseBet) null, "Finished");
                         horseMessage.setID(user.getID());
@@ -331,16 +325,11 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.waitCountdown.stopCount();
                     resetBetList();
                     requestWallet();
-                    System.out.println("HORSES- Done");
                     if (isBetting && betOK) {
                         betResult = true;
                     }
                     this.winner = horseMessage.getHorseResult().getWinner();
                     prize = horseMessage.getHorseResult().getPrize();
-                    if (prize == 0) {
-                    } else {
-                        new Transaction("HorseBet", user.getUsername(), prize, 1);
-                    }
                 }
             }
         }
@@ -404,7 +393,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
             for (int i = 0; i < Math.min((info.length > 0 ? info[0].length : 0), 33); i++) {
                 for (int j = 0; j < 3; j++) {
-                    String s = j == 1 ? listBetConversion[Integer.parseInt(info[j][i + listOff])] : info[j][i + listOff];
+                    String s =  info[j][i + listOff];
                     int width = g.getFontMetrics().getStringBounds(s, g).getBounds().width / 2;
 
                     g.drawString(s, cx[j] - width, zy + 18 * i);
@@ -487,13 +476,13 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             g.drawString("Horse: " , (int)(horseRaceView.getWidth()*BET_STATUS_X), (int)(horseRaceView.getHeight()*(BET_STATUS_Y + 0.03)));
         }
         if (isCountDown && betResult) {
-            g.setFont(font.deriveFont((float)(0.0117647058823529*horseRaceView.getWidth())));
+            g.setFont(font.deriveFont((float) (0.0117647058823529 * horseRaceView.getWidth())));
             if (prize == 0) {
                 g.setColor(GRANA);
-                g.drawString("Bet Lost", (int)(horseRaceView.getWidth()*BET_RESULT_X), (int)(horseRaceView.getHeight()*BET_RESULT_Y));
+                g.drawString("Bet Lost", (int) (horseRaceView.getWidth() * BET_RESULT_X), (int) (horseRaceView.getHeight() * BET_RESULT_Y));
                 g.setColor(TEXT_COLOR);
             } else {
-                g.drawString("Prize:  " + prize, (int)(horseRaceView.getWidth()*BET_RESULT_X), (int)(horseRaceView.getHeight()*BET_RESULT_Y));
+                g.drawString("Prize:  " + prize, (int) (horseRaceView.getWidth() * BET_RESULT_X), (int) (horseRaceView.getHeight() * BET_RESULT_Y));
             }
         }
         g.setFont(font.deriveFont((float)(horseRaceView.getWidth()*0.0130718954248366)));
@@ -537,10 +526,8 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        HorseMessage horseMessage;
         if(e.getKeyCode() == 27){
             stopPlay();
-
             networkManager.showGamesView();
         }
 
@@ -554,7 +541,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         HorseMessage horseMessage;
-        if(!isRacing && ! isBetting){
+        if(!isRacing && ! (isBetting && betOK)){
             if(e.getX() >= horseRaceView.getWidth()*HORSE_START_X - (horseRaceView.getWidth() / 14.44) && e.getX() <= horseRaceView.getWidth()*HORSE_START_X + (horseRaceView.getWidth() / 14.44)) {
                 for (int horse = 0; horse < MAX_HORSES; horse++) {
                     if(e.getY() >= horsePositions[horse].y - (horseRaceView.getHeight() / 10.4) && e.getY() <= horsePositions[horse].y + (horseRaceView.getHeight() / 10.4) ){
@@ -564,11 +551,12 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                                 JOptionPane.showMessageDialog(horseRaceView, "Bet must be greater than 0", "BET ERROR", JOptionPane.ERROR_MESSAGE, null);
                             }else{
                                 betHorse = horse;
-                                horseMessage  = new HorseMessage(new HorseBet(betAmount,12- betHorse, user.getUsername()), "Bet");
+                                horseMessage  = new HorseMessage(new HorseBet(betAmount,  betHorse, user.getUsername()), "Bet");
                                 horseMessage.setID(user.getID());
                                 if(!isRacing){
                                     new Transmission(horseMessage, this.networkManager);
                                     this.isBetting = true;
+                                    this.confirmReceived = false;
                                 }
 
                             }
@@ -576,7 +564,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                         }catch (Exception exception){
                             betHorse = 0;
                             betAmount = -1;
-                            exception.printStackTrace();
                         }
                         break;
                     }
