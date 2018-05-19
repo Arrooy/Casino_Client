@@ -61,7 +61,7 @@ public class MainViewClient extends View{
     }
 
     /**
-     * Metode override que relaciona cada element amb el seu Action Listener
+     * Metode override que relaciona cada element amb el seu Listener, i per tant es relaciona la vista amb el controlador
      * @param c Controlador
      * */
     @Override

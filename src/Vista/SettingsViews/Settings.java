@@ -127,7 +127,7 @@ public class Settings extends View {
     }
 
     /**
-     * Metode override que relaciona cada element amb el seu Action Listener
+     * Metode que relaciona cada element amb el seu Listener, i per tant es relaciona la vista amb el controlador
      * @param c Controlador
      * */
     public void addController(Controller c) {
