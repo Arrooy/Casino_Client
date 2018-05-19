@@ -58,7 +58,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private static final double BET_STATUS_X = BET_TITLE_X;
     private static final double BET_STATUS_Y = BET_TITLE_Y + 0.036;
     private static final double BET_RESULT_X = BET_TITLE_X;
-    private static final double BET_RESULT_Y = BET_STATUS_Y + 0.05;
+    private static final double BET_RESULT_Y = BET_STATUS_Y + 0.06;
 
     private static GraphicsManager graphicsManager;
     private NetworkManager networkManager;
@@ -319,6 +319,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                         Sounds.stopOneAudioFile("HRun.wav");
                         horseMessage = new HorseMessage((HorseBet) null, "Finished");
                         horseMessage.setID(user.getID());
+                        new Transmission(horseMessage, networkManager);
                         this.raceCountdown.stopCount();
                         oncePerRace = false;
                     }
