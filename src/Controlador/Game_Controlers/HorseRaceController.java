@@ -283,6 +283,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.betOK = false;
                     this.isCountDown = true;
                     this.oncePerRace = true;
+                    this.confirmReceived = false;
                     requestWallet();
                     confirmReceived = false;
                     this.waitCountdown.newCount(horseMessage.getTimeForRace());
