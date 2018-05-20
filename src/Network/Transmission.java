@@ -23,7 +23,6 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_BJ_INIT = "blackjackinit";
     public static final String CONTEXT_BJ_FINISH_USER = "blackjackFinish";
     public static final String CONTEXT_TRANSACTION = "transaction";
-    public static final String CONTEXT_HR_INIT = "horseRaceInit";
     public static final String CONTEXT_DEPOSIT = "deposit";
     public static final String CONTEXT_WALLET_REQUEST = "walletRequest";
     public static final String CONTEXT_ROULETTE_BET = "rouletteBet";
@@ -92,9 +91,6 @@ public class Transmission implements Runnable {
                 deposit();
                 break;
 
-            case CONTEXT_HR_INIT:
-                horseRaceRequestTimes();
-                break;
 
             case CONTEXT_WALLET_EVOLUTION:
                 walletEvolution();
@@ -184,10 +180,7 @@ public class Transmission implements Runnable {
         }
     }
 
-    //TODO: comentar WTF
-    private void horseRaceRequestTimes() {
 
-    }
 
     /**
      * Envia una solicitud d'ingres i gestiona la resposta del servidor a aquest intent d'ingres monetari

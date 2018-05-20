@@ -95,7 +95,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.finestra = finestra;
         this.draggableWindow = draggableWindow;
         this.horseRaceView = horseRaceView;
-        this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager, this.finestra);
+        this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager);
     }
 
     /**

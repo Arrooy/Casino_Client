@@ -162,7 +162,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     /** Permet la reproduccio una unica vegada d'un arxiu d'audio en el bucle update*/
     private boolean singleAudioPlay;
 
-    public HorseRaceController(HorseRaceView horseRaceView, NetworkManager networkManager, Finestra finestra) {
+    public HorseRaceController(HorseRaceView horseRaceView, NetworkManager networkManager) {
         this.horseRaceModel = new HorseRaceModel();
         this.horseRaceView = horseRaceView;
         this.networkManager = networkManager;
