@@ -24,25 +24,27 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 
-/** Controlador del client*/
+/**
+ * Controlador principal del client que gestiona totes les interaccions amb la finestra
+ * principal, i els elements de swing usats en les diferents vistes, ja que en les
+ * finestres gràfiques s'han dedicat controladors personalitzats degut a que el seu control és
+ * molt més concret i complex.
+ */
 public class Controller implements ActionListener, ComponentListener, KeyListener, FocusListener{
 
     /** Dimensions de la finestra en tot moment */
-    private static int windowWidth;
-    private static int windowHeight;
+    private static int windowWidth, windowHeight;
 
     /** Finestra grafica del client*/
     private Finestra finestra;
 
+    /** Conjunt de Vistes que conformen tot el programa del Client */
     private MainViewClient mainView;
     private LogInView logInView;
     private SignInView signInView;
     private GameSelectorView gameSelectorView;
     private AddMoneyView addMoneyView;
-    private Settings settings;
-    private SettingsView settingsView;
     private PasswordChangeView passwordChangeView;
-    private Top5View top5View;
     private BlackJackView blackJackView;
 
     private RouletteView rouletteView;
@@ -71,6 +73,11 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager, this.finestra);
     }
 
+    /**
+     * Mètode que s'executa amb cada interacció de l'usuari amb qualsevol element
+     * de Swing del programa, fora de qualsevol joc.
+     * @param e Event generat per l'acció
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -105,7 +112,8 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 finestra.showUserconfig(false);
                 setRoulette();
                 break;
-            case "horseRace": // Es vol començar a jugar añs cavaññs
+            case "horseRace":
+                // Es vol començar a jugar als cavalls
                 finestra.setHorseRaceView();
                 networkManager.sendHorseRaceRequest();
                 horseRaceController.play();
@@ -219,14 +227,16 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     /**
      * Mostra la finestra despres de apareixer la loadingScreen
-     * */
+     */
     public void showFinestra() {
         finestra.setVisible(true);
         finestra.requestFocus();
     }
 
-    //Gestiona els errors de l'opcio d'addMoney del menu de settings. Si no existeix cap error, envia la
-    //solicitud d'afegir diners al servidor
+    /**
+     * Gestiona els errors de l'opcio d'addMoney del menu de settings. Si no existeix cap error, envia la
+     * solicitud d'afegir diners al servidor
+     */
     private void addMoney() {
         long deposit = addMoneyView.getAmount();
         String password = addMoneyView.getPassword();
@@ -291,24 +301,24 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
      * @param settings
      */
     public void setSettings(Settings settings) {
-        this.settings = settings;
         this.passwordChangeView = settings.getPasswordChangeView();
-        this.top5View = settings.getWalletEvolutionView();
         this.addMoneyView = settings.getAddMoneyView();
-        this.settingsView = settings.getSettingsView();
     }
-    public void showGamesView() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                logInView.clearFields();
-                signInView.clearFields();
-                finestra.setGameSelector(user.isGuest());
-                gameSelectorView.updateUI();
-                SwingUtilities.updateComponentTreeUI(finestra);
-                Sounds.stopAllAudio();
-                Sounds.songNoEnd("wii.wav");
-            }
+
+    /**
+     * Mètode que fa que l'usuari accedeixi a la vista de selecció
+     * de joc. Automàticament nateja tots els camps de les vistes de SignIn i LogIn
+     * i atura tots els sons actius
+     */
+    public void showGamesView() {//TODO: aqui s'ha fet una lambda automatica, qui sap si peta
+        SwingUtilities.invokeLater(() -> {
+            logInView.clearFields();
+            signInView.clearFields();
+            finestra.setGameSelector(user.isGuest());
+            gameSelectorView.updateUI();
+            SwingUtilities.updateComponentTreeUI(finestra);
+            Sounds.stopAllAudio();
+            Sounds.songNoEnd("wii.wav");
         });
     }
 //TODO
@@ -322,6 +332,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         finestra.setBlackJackView();
     }
 
+    /**
+     * Mètode que s'executa quan es varia el tamany de la finestra.
+     * S'utilitza per notificar a alguns panells gràfics el nou tamany de la finestra
+     */
     @Override
     public void componentResized(ComponentEvent e) {
         if(BJController != null) BJController.updateSizeBJ();
@@ -332,6 +346,11 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         windowHeight = finestra.getHeight();
     }
 
+    /**
+     * En cas de fer pantalla completa o alguna acció que varii el tamany de la finestra
+     * sense necessitat de fer un resize de la finestra manual, s'executa aquest codi que
+     * notifica del canvi de tamany
+     */
     @Override
     public void componentMoved(ComponentEvent e) {
         if(BJController != null)
@@ -358,19 +377,13 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         return windowHeight - Finestra.getTopBarHeight();
     }
 
-    @Override
-    public void componentShown(ComponentEvent e) {}
-    @Override
-    public void componentHidden(ComponentEvent e) {}
-    @Override
-    public void keyTyped(KeyEvent e) {}
-    @Override
-    public void keyPressed(KeyEvent e) {}
-
+    /**
+     * Mètode que s'executa al deixar de prèmer una tecla estant sobre un JTextField i similars.
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         int strength = 0;
-        switch( ((JComponent)e.getSource()).getName()){
+        switch (((JComponent)e.getSource()).getName()) {
             case "PASSWORD FIELD CHANGE - NEW PASSWORD":
                 strength = checkPassword(passwordChangeView.getNewPassword(), passwordChangeView);
                 if(passwordChangeView.getPasswordChangeRequest() && strength > 0){
@@ -446,15 +459,8 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                     }
                 }
                 break;
-
         }
     }
-
-
-
-
-
-
 
     /**
      * Mostrem si el canvi de contrasenya s'ha pogut efectuar correctament
@@ -491,7 +497,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             return 0;
         }
     }
-
 
     /**
      * Comprovem que no hi hagi ningun caracter non UTF-8
@@ -555,11 +560,16 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
+    /**
+     * Mètode que inicia el joc de la Roulette. En cas necessari genera el controlador,
+     * i si no, simplement el reinicia per a realitzar correctament l'inicialització del joc.
+     */
     private void setRoulette() {
         if (rouletteController == null) {
             rouletteController = new RouletteController(rouletteView, networkManager);
             rouletteController.initRoulette();
         } else rouletteController.initRoulette();
+
         rouletteGraphicsManager = new GraphicsManager(rouletteView, rouletteController);
         finestra.requestRouletteFocus();
 
@@ -567,21 +577,33 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         finestra.setRouletteView();
     }
 
-    public void endGraphics() {
+    /**
+     * Mètode que tanca els gràfics de la ruleta de manera segura
+     */
+    public void endRouletteGraphics() {
         if (rouletteGraphicsManager != null) rouletteGraphicsManager.exit();
         networkManager.endRoulette();
     }
 
+    /**
+     * Mètode que carrega la informació del wallet evolution
+     * a la JTable dels Settings de l'usuari
+     * @param newWallet Informació a carregar
+     */
     public void updateWalletEvolution(WalletEvolutionMessage newWallet) {
         finestra.updateWallet(newWallet);
     }
 
+    /**
+     * Mètode que expulsa del joc actual a l'usuari
+     */
     public void exit() {
         HorseRaceController.exit();
         if(BJController != null)
             BJController.exitInGame();
     }
 
+    //TODO: comentar
     public void showErrorConnection() {
         if(user != null){
             //Si l'usuari solicita logOut
@@ -606,7 +628,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         signInView.manageError(true);
     }
 
-
+    //TODO: Comentar
     @Override
     public void focusGained(FocusEvent e) {
         //En el moment que s'obtingui focus en una IconTextField o una IconPasswordField
@@ -619,6 +641,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
+    //TODO: Comentar
     @Override
     public void focusLost(FocusEvent e) {
         //En el moment que es perdi el focus en una IconTextField o una IconPasswordField
@@ -632,6 +655,8 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 ((IconPasswordField)e.getSource()).setHint(true);
         }
     }
+
+    //TODO: Comentar
 
     public void setMainView(MainViewClient mainView) {
         this.mainView = mainView;
@@ -647,7 +672,13 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     public void setBlackJackView(BlackJackView blackJackView) {
         this.blackJackView = blackJackView;
     }
-    public void setHorseRaceView(HorseRaceView horseRaceView){
-        this.horseRaceView = horseRaceView;
-    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {}
+    @Override
+    public void componentHidden(ComponentEvent e) {}
+    @Override
+    public void keyTyped(KeyEvent e) {}
+    @Override
+    public void keyPressed(KeyEvent e) {}
 }

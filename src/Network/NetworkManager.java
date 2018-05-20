@@ -513,7 +513,7 @@ public class NetworkManager extends Thread {
 
     public void exitRoulette() {
         //new Transmission(new RouletteMessage(1), this);
-        controller.endGraphics();
+        controller.endRouletteGraphics();
         showGamesView();
         System.gc();
     }
@@ -542,7 +542,7 @@ public class NetworkManager extends Thread {
      * Finalitza tots els graphics oberts dels jocs
      */
     public void endGraphics() {
-        controller.endGraphics();
+        controller.endRouletteGraphics();
     }
 
     /**
