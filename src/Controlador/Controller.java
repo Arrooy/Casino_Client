@@ -38,8 +38,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     /** Finestra grafica del client*/
     private Finestra finestra;
 
-
-
     /**Vista principal que conte els botons per escollir com es vol entrar al joc,
      * iniciant sessio, creant un nou usuari o com a convidat*/
     private MainViewClient mainView;
@@ -255,6 +253,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
      */
     public void showFinestra() {
         finestra.setVisible(true);
+        finestra.showAudio(false);
         finestra.requestFocus();
     }
 

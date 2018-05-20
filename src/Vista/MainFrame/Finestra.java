@@ -201,6 +201,7 @@ public class Finestra extends JFrame {
 
         //S'amaga el userConfig button
         jbtUser.setVisible(false);
+        jbtMute.setVisible(false);
 
         rightOptions.add(jbticonify);
         rightOptions.add(jbtmax);
@@ -330,7 +331,7 @@ public class Finestra extends JFrame {
     public void setMainView() {
         layout.show(content, "main");
         jbtUser.setVisible(false);
-       jbtMute.setVisible(false);
+        jbtMute.setVisible(false);
     }
 
     /** Mostra la vista del menu per selecionar els jocs. Si l'usuari que vol anar al gameSelector
@@ -339,5 +340,7 @@ public class Finestra extends JFrame {
         layout.show(content, "gameSelectorView");
         gameSelectorView.enableButtons(guest);
         showUserconfig(!guest);
+        showAudio(true);
     }
+
 }
