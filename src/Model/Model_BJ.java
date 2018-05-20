@@ -76,7 +76,6 @@ public class Model_BJ {
     public void clearData() {
         userCards.clear();
         IACards.clear();
-        earnings = 0;
         valueDisplayUser = 0;
         valueDisplayIa = 0;
     }
@@ -118,4 +117,5 @@ public class Model_BJ {
         this.earnings += earnings;
     }
 
+    public void resetEarnings(){this.earnings = 0;}
 }

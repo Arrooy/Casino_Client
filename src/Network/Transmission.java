@@ -231,6 +231,7 @@ public class Transmission implements Runnable {
             if(cartaResposta.getContext().equals(CONTEXT_BJ_INIT) && !cartaResposta.isBetOk()) {
                 //Es mostra error
                 networkManager.displayError("Money error","Impossible to place that bet!");
+                networkManager.restartBlackJackModel();
                 networkManager.showGamesView();
             }else{
                 //S'afegeix la carta al model del joc

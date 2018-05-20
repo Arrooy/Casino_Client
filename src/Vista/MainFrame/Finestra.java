@@ -244,6 +244,11 @@ public class Finestra extends JFrame {
         jbtUser.setVisible(visible);
     }
 
+    /** Mostra o amaga l'icono de audio en el topBar segons visible*/
+    public void showAudio(boolean visible){
+        jbtMute.setVisible(visible);
+    }
+
     /** Modifica el icono de muted segons el argument muted*/
     public void changeMuteIcon(boolean muted){
         if(muted){
@@ -324,7 +329,8 @@ public class Finestra extends JFrame {
     /** Mostra la vista del menu principal*/
     public void setMainView() {
         layout.show(content, "main");
-        showUserconfig(false);
+        jbtUser.setVisible(false);
+       jbtMute.setVisible(false);
     }
 
     /** Mostra la vista del menu per selecionar els jocs. Si l'usuari que vol anar al gameSelector

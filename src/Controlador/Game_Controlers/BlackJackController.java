@@ -153,7 +153,6 @@ public class BlackJackController implements GraphicsController {
         //Tambe s'agafa el valor de la wallet de l'usuari i es guarda en variables auxiliars.
         if(cartaResposta.getContext().equals(CONTEXT_BJ_INIT)){
             bet = cartaResposta.getBet();
-            model.addEarnings(-bet);
             moneyToSpend = cartaResposta.getWallet();
         }
         //En el cas de no estar definit el controller, es defineix
@@ -171,6 +170,7 @@ public class BlackJackController implements GraphicsController {
             //S'omple el text de game over i s'activa el gameOver
             gameOverText = "You loose " + bet + MONEY_SYMBOL;
             subText = "Click to exit the game";
+            model.addEarnings(-bet);
             Sounds.play("cashL.wav");
             gameOver = true;
         }else{
@@ -192,14 +192,17 @@ public class BlackJackController implements GraphicsController {
             //En el cas d'inidicar derrota per l'user, s'indica el missatge i sacaba la partida
             gameOverText = "You loose " + bet + MONEY_SYMBOL;
             subText = "Click to exit the game";
+            model.addEarnings(-bet);
             Sounds.play("cashL.wav");
             gameOver = true;
         }else if(cartaResposta.getDerrota().equals("IA")) {
             //En el cas d'inidicar derrota per la IA, s'inidica el valor dels diners obtinguts
             if(model.getValueUser() == 21 && model.getUserCards().size() == 2) {
                 gameOverText = "You win " + bet * 1.5 + MONEY_SYMBOL;
+                model.addEarnings((long)(bet * 1.5));
             }else{
                 gameOverText = "You win " + bet * 2.0 + MONEY_SYMBOL;
+                model.addEarnings((long)(bet * 2.0));
             }
             Sounds.play("cashW.wav");
             //S'indica el subtext i que s'ha acabat la partida
@@ -210,6 +213,8 @@ public class BlackJackController implements GraphicsController {
 
     /** Gestiona el sortir del joc*/
     private void exitGame(){
+        System.out.println("RESETING EARNINGS");
+        model.resetEarnings();
         gp.exit();
         controller.showGamesView();
         updateSizeBJ();
@@ -231,8 +236,11 @@ public class BlackJackController implements GraphicsController {
                 if (gameOver) {
                     //Si la tecla es la r, es crea una nova partida
                     if (e.getKeyChar() == 'r' || e.getKeyChar() == 'R') {
-                        networkManager.initBlackJack(Baralla.getNomCartes(), controller.manageBJBet());
-                        gp.exit();
+                        if(networkManager.initBlackJack(Baralla.getNomCartes(), controller.manageBJBet())){
+                            exitGame();
+                        }else{
+                            gp.exit();
+                        }
                     } else {
                         exitGame();
                     }
@@ -419,6 +427,9 @@ public class BlackJackController implements GraphicsController {
 
                 g.setFont(AssetManager.getEFont(width/10));
                 FontMetrics metrics = g.getFontMetrics(g.getFont());
+                //Si el tamany de la font es massa gran, el reduim
+                if(metrics.stringWidth(gameOverText) > width)g.setFont(AssetManager.getEFont(width/13));
+                metrics = g.getFontMetrics(g.getFont());
 
                 g.setColor(new Color(216, 202, 168));
                 g.drawString(gameOverText,width/2 - metrics.stringWidth(gameOverText)/2,height/3);
@@ -445,10 +456,27 @@ public class BlackJackController implements GraphicsController {
                 g.drawImage(AssetManager.getImage("Num.png",metrics.stringWidth(("Cards score: " + userScore)) + 20,metrics.getAscent() + 20),width - metrics.stringWidth(("Cards score :" + userScore)) - 15 - 10,height - metrics.getAscent() * 2 - metrics.getAscent() - 7,null);
                 g.drawString("Cards score: " + userScore, width - metrics.stringWidth(("Cards score: " + userScore)) - 15, height - metrics.getAscent() * 2);
 
-                g.drawImage(AssetManager.getImage("Num.png",metrics.stringWidth(("Wallet: " + moneyToSpend + MONEY_SYMBOL)) + 20,metrics.getAscent() * 3  + 20),50 - 10,height - metrics.getAscent() * 4 - metrics.getAscent() - 7,null);
-                g.drawString("Wallet: " + moneyToSpend + MONEY_SYMBOL, 50, height - metrics.getAscent() * 4);
-                g.drawString("Profit: " + bet * 2.0 + MONEY_SYMBOL, 50, height - metrics.getAscent() * 2);
+                int auxA = metrics.stringWidth("Wallet: " + moneyToSpend + MONEY_SYMBOL);
+                int auxB = metrics.stringWidth("Profit: " + bet * 2.0 + MONEY_SYMBOL);
+                int auxC = metrics.stringWidth("Earnings: " + (model.getEarnings() < 0 ? model.getEarnings()*10 : model.getEarnings()) + MONEY_SYMBOL);
+                int widthTaulaFusta = Math.max(auxA,Math.max(auxB,auxC));
 
+                g.drawImage(AssetManager.getImage("Num.png",widthTaulaFusta + 20,metrics.getAscent() * 5  + 20),50 - 10,height - metrics.getAscent() * 5 - metrics.getAscent() - 7,null);
+                g.drawString("Wallet: " + moneyToSpend + MONEY_SYMBOL, 50, height - metrics.getAscent() * 5);
+                g.drawString("Profit: " + bet * 2.0 + MONEY_SYMBOL, 50, height - metrics.getAscent() * 3);
+
+                if(model.getEarnings() > 0){
+                    g.drawString("Earnings: ",50,height - metrics.getAscent());
+                    g.setColor(new Color(40, 73, 7));
+                }else if(model.getEarnings() < 0){
+                    g.drawString("Earnings: ",50,height - metrics.getAscent());
+                    g.setColor(new Color(125, 28, 37));
+                }else{
+                    g.drawString("Earnings: " + model.getEarnings() + MONEY_SYMBOL,50,height - metrics.getAscent());
+                }
+                if(model.getEarnings() != 0){
+                    g.drawString("" + model.getEarnings() + MONEY_SYMBOL,50 + metrics.stringWidth("Earnings: "),height - metrics.getAscent());
+                }
             }
         }
     }
@@ -494,6 +522,12 @@ public class BlackJackController implements GraphicsController {
                 g.drawImage(Baralla.findImage(card), card.getX(), card.getY(), null);
             }
         }
+    }
+
+    /**Borra totes les dades del model del BJ per quan es surt d'aquest*/
+    public void resetModel() {
+        model.clearData();
+        model.resetEarnings();
     }
 
     @Override

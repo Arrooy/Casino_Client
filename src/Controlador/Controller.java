@@ -121,10 +121,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 break;
             case "logOut":
                 //S'intenta desconectar-se del servidor
+                Sounds.stopAllAudio();
                 JsonManager.removeRemember();
                 networkManager.requestLogOut();
                 finestra.setMainView();
-
                 break;
             case "signIn":
                 finestra.setSignInView();
@@ -732,4 +732,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     public void keyTyped(KeyEvent e) {}
     @Override
     public void keyPressed(KeyEvent e) {}
+
+    /**Borra totes les dades del model del BJ per quan es surt d'aquest*/
+    public void restartBlackJackModel() {
+        BJController.resetModel();
+    }
 }

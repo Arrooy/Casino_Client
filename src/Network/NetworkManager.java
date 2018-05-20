@@ -603,6 +603,10 @@ public class NetworkManager extends Thread {
     public void showGamesView() {
         controller.showGamesView();
     }
+    /**Borra totes les dades del model del BJ per quan es surt d'aquest*/
+    public void restartBlackJackModel(){
+        controller.restartBlackJackModel();
+    }
 
     //TODO: comentar
     public void signUpErrorMessage(String message) {
