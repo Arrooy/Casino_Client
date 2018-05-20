@@ -288,6 +288,7 @@ public class Finestra extends JFrame {
 
 
     //Funcions per a variar la vista dins del card layout
+
     /** Mostra la vista del logIn*/
     public void setLogInView() {
         layout.show(content, "logIn");
@@ -325,7 +326,8 @@ public class Finestra extends JFrame {
         showUserconfig(false);
     }
 
-    /** Mostra la vista del */
+    /** Mostra la vista del menu per selecionar els jocs. Si l'usuari que vol anar al gameSelector
+     * es user, es mostra la vista modificada.*/
     public void setGameSelector(boolean guest) {
         layout.show(content, "gameSelectorView");
         gameSelectorView.enableButtons(guest);
