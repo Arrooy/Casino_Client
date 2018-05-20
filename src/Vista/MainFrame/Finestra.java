@@ -60,13 +60,19 @@ public class Finestra extends JFrame {
     /** Barra superior on apareixen els botons de exit,maximize,minimize,mute,userConfig*/
     private static JPanel topBar;
 
-    /***/
+    /** Boto de la barra superior per tencar el programa*/
     private JButton jbtexit;
+
+    /** Boto de la barra superior per minimitzar el programa*/
     private JButton jbticonify;
+
+    /** Boto de la barra superior per maximitzar el programa*/
     private JButton jbtmax;
+
+    /** Boto de la barra superior per obrir el menu de Settings*/
     private JButton jbtUser;
 
-
+    /** Boto de la barra superior per silenciar els sorolls del programa*/
     private JButton jbtMute;
 
     /** Crea el JFrame definint el seu icono, mida, tray i panells que conte al seu interior*/
