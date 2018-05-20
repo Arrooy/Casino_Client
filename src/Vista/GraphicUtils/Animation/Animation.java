@@ -3,7 +3,7 @@ package Vista.GraphicUtils.Animation;
 import java.awt.*;
 
 /**
- * Classe per generar una animació. Laanimacióes composa de frames,
+ * Classe per generar una animació. La animació es composa de frames,
  * cada frame es compon d'una imatge que es pot extreure de la classe
  * AssetManager.
  * L'ús de la classe es basa en:

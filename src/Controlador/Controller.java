@@ -335,7 +335,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
      * de joc. Automàticament nateja tots els camps de les vistes de SignIn i LogIn
      * i atura tots els sons actius
      */
-    public void showGamesView() {//TODO: aqui s'ha fet una lambda automatica, qui sap si peta
+    public void showGamesView() {
         SwingUtilities.invokeLater(() -> {
             logInView.clearFields();
             signInView.clearFields();
@@ -346,7 +346,11 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             Sounds.songNoEnd("wii.wav");
         });
     }
-//TODO
+
+    /**
+     * Inicialitza el controlador del BlackJack. Si aquest esta inicialitzat, inicia una nova partida canviant la vista
+     * a la vista del joc.
+     */
     public void initBlackJack() {
         //crea el controlador de la nova partida amb un nou model
         if(BJController == null)
@@ -628,7 +632,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             BJController.exitInGame();
     }
 
-    //TODO: comentar
+    /**
+     * ShowErrorConnection gestiona una desconnexio inesperada per part del Servidor.
+     * Mostra un dialeg per elegir que es vol fer donada tal situacio. Sortir o fer logOut
+     */
     public void showErrorConnection() {
         if(user != null){
             //Si l'usuari solicita logOut
@@ -653,7 +660,11 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         signInView.manageError(true);
     }
 
-    //TODO: Comentar
+    /**
+     * Els JTextComponent del casino tenen un FocusListener aplicat per tal de gestionar l'aparença de la hint.
+     * Quan el focus es guanya, s'ha de borrar la hint.
+     * @param e event de focusGained
+     */
     @Override
     public void focusGained(FocusEvent e) {
         //En el moment que s'obtingui focus en una IconTextField o una IconPasswordField
@@ -666,7 +677,11 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
-    //TODO: Comentar
+    /**
+     * Els JTextComponent del casino tenen un FocusListener aplicat per tal de gestionar l'aparença de la hint.
+     * Quan el focus es perd, s'ha de repintar la hint si no s'ha escrit res.
+     * @param e event de focusLost
+     */
     @Override
     public void focusLost(FocusEvent e) {
         //En el moment que es perdi el focus en una IconTextField o una IconPasswordField
@@ -681,19 +696,30 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
-    //TODO: Comentar
+    //Aquestes funcions permeten l'inicialitzacio de les diferents views del casino
 
+    /** Inicialitza la main view*/
     public void setMainView(MainViewClient mainView) {
         this.mainView = mainView;
     }
+
+    /** Inicialitza la view del logIn*/
     public void setLogInView(LogInView logInView) {
         this.logInView = logInView;
     }
+
+    /** Inicialitza la view del signIn*/
     public void setSignInView(SignInView signInView) {this.signInView = signInView;}
+
+    /** Inicialitza la view del menu per selecionar quin joc es vol jugar*/
     public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
+
+    /** Inicialitza la view de la roulette*/
     public void setRouletteView(RouletteView rouletteView) {
         this.rouletteView = rouletteView;
     }
+
+    /** Inicialitza la view del blackJack*/
     public void setBlackJackView(BlackJackView blackJackView) {
         this.blackJackView = blackJackView;
     }
