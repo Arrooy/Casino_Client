@@ -13,7 +13,6 @@ import Network.Transmission;
 import Utils.Countdown;
 import Vista.GameViews.HorseRaceView;
 import Vista.GraphicsManager;
-import Vista.MainFrame.Finestra;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,17 +30,17 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     /**Colors*/
     private final static Color GRANA = new Color(125, 28, 37);
     private final static Color GREY = new Color(49, 63, 47);
-    private static final Color TEXT_COLOR = new Color(216, 204, 163);
+    private final static Color TEXT_COLOR = new Color(216, 204, 163);
 
     /**nombre de cavalls i seccions*/
     private static final int MAX_HORSES = 12;
     private static final int SECTIONS = 5;
 
     /**Modes de visualitzacio*/
-    public static final int GAME_MODE = 0;
-    public static final int LIST_MODE = 1;
+    private static final int GAME_MODE = 0;
+    private static final int LIST_MODE = 1;
     /**Dimensions de la llista d'apostes*/
-    public static final int LIST_DIM = 700;
+    private static final int LIST_DIM = 700;
 
     /**Posicions relatives dels missatges i cavalls*/
     private static final double HORSE_START_Y = 0.026;
@@ -129,7 +128,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private int mode;
 
     /**Imatges necessaries per reproduir el joc*/
-    private Image wood;
     private Image viewList;
     private Image viewListSelected;
     private Image returnButton;
@@ -199,9 +197,9 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     /**
      * Inicialitza el GraphicsManager
      */
-    public void setGraphics() {
-        this.graphicsManager = new GraphicsManager(this.horseRaceView, this);
-        this.graphicsManager.setClearColor(Color.black);
+    private void setGraphics() {
+        graphicsManager = new GraphicsManager(this.horseRaceView, this);
+        graphicsManager.setClearColor(Color.black);
     }
 
     /**
@@ -218,46 +216,48 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     @Override
     public void init() {
         this.isRacing = false;
-        this.isBetting = false;
-        confirmReceived = false;
         this.isCountDown = false;
-        this.betResult = false;
         this.firstRace = true;
         this.oncePerRace = true;
+
+        this.isBetting = false;
+        this.confirmReceived = false;
+        this.betResult = false;
         this.betHorse = 0;
         this.betOK = false;
-        waitCountdown.stopCount();
-        raceCountdown.stopCount();
-        endYourHorses();
-        font = AssetManager.getEFont(20);
+        this.gameEarnings = 0;
+
+        this.waitCountdown.stopCount();
+        this.raceCountdown.stopCount();
+
+        this.font = AssetManager.getEFont(20);
+
         this.mode = GAME_MODE;
 
-        viewList = AssetManager.getImage("VG.png");
-        viewListSelected = AssetManager.getImage("VGS.png");
-        returnButton = AssetManager.getImage("EXIT_NO_SOMBRA.png");
-        returnButtonSelected = AssetManager.getImage("EXIT_SOMBRA.png");
+        this.viewList = AssetManager.getImage("VG.png");
+        this.viewListSelected = AssetManager.getImage("VGS.png");
+        this.returnButton = AssetManager.getImage("EXIT_NO_SOMBRA.png");
+        this.returnButtonSelected = AssetManager.getImage("EXIT_SOMBRA.png");
 
-        viewListPressed = false;
-        returnPressed = false;
+        this.viewListPressed = false;
+        this.returnPressed = false;
 
-        listBackground = AssetManager.getImage("background.png");
-        upButton = AssetManager.getImage("SUB.png");
-        downButton = AssetManager.getImage("BAJ.png");
-        listTable = AssetManager.getImage("POnline.png");
-        wood = AssetManager.getImage("Num.png");
+        this.listBackground = AssetManager.getImage("background.png");
+        this.upButton = AssetManager.getImage("SUB.png");
+        this.downButton = AssetManager.getImage("BAJ.png");
+        this.listTable = AssetManager.getImage("POnline.png");
 
-        vlx = 20;
-        vly = Controller.getWinHeight() - viewList.getHeight(null) - 20;
-        ebx = Controller.getWinWidth() - returnButton.getHeight(null) - 20;
-        eby = Controller.getWinHeight() - returnButton.getHeight(null) - 20;
+        this.vlx = 20;
+        this.vly = Controller.getWinHeight() - viewList.getHeight(null) - 20;
+        this.ebx = Controller.getWinWidth() - returnButton.getHeight(null) - 20;
+        this.eby = Controller.getWinHeight() - returnButton.getHeight(null) - 20;
 
-        info = new String[0][0];
+        this.info = new String[0][0];
 
         this.frameHeight = horseRaceView.getHeight();
         this.frameWidth = horseRaceView.getWidth();
 
-        this.gameEarnings = 0;
-
+        endYourHorses();
     }
 
     /**
@@ -265,48 +265,56 @@ public class HorseRaceController implements GraphicsController, ActionListener {
      */
     public void play() {
 
-        setGraphics();
         this.play = true;
-        this.betHorse = 0;
-        this.betOK = false;
         this.isRacing = false;
-        this.isBetting = false;
-        this.betResult = false;
         this.isCountDown = false;
         this.firstRace = true;
         this.oncePerRace = true;
-        waitCountdown.stopCount();
-        confirmReceived = false;
-        raceCountdown.stopCount();
-        endYourHorses();
-        this.mode = GAME_MODE;
-        this.listOff = 0;
-        resetBetList();
-        requestWallet();
+        this.waitCountdown.stopCount();
+        this.raceCountdown.stopCount();
 
         this.frameHeight = horseRaceView.getHeight();
         this.frameWidth = horseRaceView.getWidth();
 
         this.gameEarnings = 0;
+        this.isBetting = false;
+        this.betResult = false;
+        this.betHorse = 0;
+        this.betOK = false;
+        this.confirmReceived = false;
+
+        this.mode = GAME_MODE;
+        this.listOff = 0;
+
+
+        setGraphics();
+        endYourHorses();
+
+        resetBetList();
+        requestWallet();
     }
 
     /**
      * Parem de jugar, tot indicant al servidor de que ens desconecti del joc
      */
-    public void stopPlay() {
+    private void stopPlay() {
+
         this.play = false;
         this.isRacing = false;
-        this.isBetting = false;
         this.isCountDown = false;
         this.oncePerRace = false;
+
+        this.isBetting = false;
         this.betResult = false;
-        confirmReceived = false;
+        this.confirmReceived = false;
         this.betOK = false;
-        this.graphicsManager.exit();
-        this.networkManager.exitHorses();
-        waitCountdown.stopCount();
-        raceCountdown.stopCount();
         this.gameEarnings = 0;
+
+        this.waitCountdown.stopCount();
+        this.raceCountdown.stopCount();
+
+        graphicsManager.exit();
+        this.networkManager.exitHorses();
     }
 
     /**
@@ -317,12 +325,12 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     public void update(float delta) {
         HorseMessage horseMessage;
 
-        vlx = 20;
-        vly = Controller.getWinHeight() - viewList.getHeight(null) - 20;
-        ebx = Controller.getWinWidth() - returnButton.getWidth(null) - 20;
-        eby = Controller.getWinHeight() - returnButton.getHeight(null) - 20;
+        this.vlx = 20;
+        this.vly = Controller.getWinHeight() - viewList.getHeight(null) - 20;
+        this.ebx = Controller.getWinWidth() - returnButton.getWidth(null) - 20;
+        this.eby = Controller.getWinHeight() - returnButton.getHeight(null) - 20;
 
-        info = networkManager.updateHorseList(info);
+        this.info = this.networkManager.updateHorseList(info);
         if (play) {
             horseMessage = (HorseMessage) networkManager.readContext("HORSES-WalletRequest");
             if(horseMessage!= null){
@@ -332,13 +340,13 @@ public class HorseRaceController implements GraphicsController, ActionListener {
             if (isBetting) {
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-BetConfirm");
                 if (horseMessage != null) {
-                    confirmReceived = true;
+                    this.confirmReceived = true;
+                    this.betOK = horseMessage.getHorseBet().isBetOK();
                     requestWallet();
-                    betOK = horseMessage.getHorseBet().isBetOK();
                     if (!betOK) {
-                        betResult = false;
+                        this.betResult = false;
                     }else{
-                        gameEarnings-=horseMessage.getHorseBet().getBet();
+                        this.gameEarnings-=horseMessage.getHorseBet().getBet();
                     }
                 }
             }
@@ -350,11 +358,11 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     this.isCountDown = true;
                     this.oncePerRace = true;
                     this.confirmReceived = false;
-                    requestWallet();
-                    confirmReceived = false;
                     this.waitCountdown.newCount(horseMessage.getTimeForRace());
                     this.singleAudioPlay = true;
+
                     endYourHorses();
+                    requestWallet();
                 }
                 horseMessage = (HorseMessage) networkManager.readContext("HORSES-Schedule");
                 if (horseMessage != null) {
@@ -432,7 +440,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     /**
      * Posem els cavalls a l'inici de la cursa
      */
-    public void endYourHorses(){
+    private void endYourHorses(){
         for (int horse = 0; horse < MAX_HORSES; horse++) {
             horsePositions[horse] = new Point((int) (HORSE_START_X * horseRaceView.getWidth()), (int) (HORSE_START_Y * (float) horseRaceView.getHeight() + horse * HORSE_SEPARATION * (float) horseRaceView.getHeight()));
             horseFrames[horse] = 2;
@@ -722,7 +730,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
 
     /**
      * Mostrem la llista d'apostes en curs per la carrera en temps real
-     * @param e
+     * @param e Mouse Event que permet obtenir la coordenada del ratoli
      */
     @Override
     public void mouseReleased(MouseEvent e) {
@@ -793,7 +801,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     /**
      * Es demana al servidor de que ens envii el wallet de l'usuari
      */
-    public void requestWallet(){
+    private void requestWallet(){
         new Transmission(new HorseMessage((long)0), networkManager);
     }
 
