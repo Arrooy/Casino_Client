@@ -5,7 +5,6 @@ import Controlador.Game_Controlers.HorseRaceController;
 import Controlador.Game_Controlers.RouletteController;
 import Utils.Sounds;
 import Model.*;
-import Model.HorseRace_Model.HorseMessage;
 import Model.HorseRace_Model.HorseSchedule;
 import Model.RouletteModel.RouletteBetMessage;
 import Utils.JsonManager;
