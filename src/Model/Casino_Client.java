@@ -1,17 +1,10 @@
 package Model;
 import Controlador.Controller;
-import Controlador.CustomGraphics.GraphicsManager;
 import Controlador.DraggableWindow;
-import Controlador.Game_Controlers.RouletteController;
 import Network.*;
 //import Vista.MainFrame.Finestra;
-import Utils.Seguretat;
 import Vista.MainFrame.Finestra;
 import Controlador.SplashScreen;
-import Vista.MainFrame.Finestra;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class Casino_Client {
     public static void main(String[] args) {

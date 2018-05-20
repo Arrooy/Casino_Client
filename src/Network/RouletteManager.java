@@ -7,6 +7,11 @@ import Model.RouletteModel.RouletteMessage;
 import java.sql.Timestamp;
 import java.time.Instant;
 
+/**
+ * Classe que s'encarregga de gestionar la comunicació entre el servidor
+ * i el joc de la ruleta. Aquest es dedica a anar disparant una nova tirada
+ * de la ruleta cada cop que rep l'ordre del servidor, i
+ */
 public class RouletteManager extends Thread {
 
     private NetworkManager networkManager;
@@ -45,12 +50,10 @@ public class RouletteManager extends Thread {
 
         while (connected) {
             RouletteMessage shot = (RouletteMessage) networkManager.waitForContext("roulette");
-            System.out.println("[ROULETTE]: s'ha rebut una tirada");
 
             roulette.setParams(shot.getRouletteVel(), shot.getBallVel(), shot.getShotOff());
             RouletteController.updateNextTime((long) shot.getTimeTillNext());
             roulette.shoot();
-            //roulette.requestWallet();
 
             waitTillNext(Math.max(0, (long) shot.getTimeTillNext() - Timestamp.from(Instant.now()).getTime() - 10));
         }
@@ -58,14 +61,13 @@ public class RouletteManager extends Thread {
         //Es comunica al servidor la desconnexió de l'usuari de la ruleta
         msg = new RouletteMessage(1);
         new Transmission(msg, networkManager);
-        System.out.println("[ROULETTE]: Disconnection");
     }
 
     private void waitTillNext(long time) {
         try {
             sleep(time);
         } catch (InterruptedException e) {
-            System.out.println("[ROULETTE THREAD]: SLEEP INTERRUPTED");
+            //System.out.println("[ROULETTE THREAD]: SLEEP INTERRUPTED");
         }
     }
 

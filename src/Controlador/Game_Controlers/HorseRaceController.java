@@ -2,13 +2,12 @@ package Controlador.Game_Controlers;
 
 import Controlador.Controller;
 import Controlador.CustomGraphics.GraphicsController;
-import Controlador.CustomGraphics.GraphicsManager;
+import Vista.GraphicsManager;
 import Controlador.Sounds;
 import Model.AssetManager;
 import Model.HorseRace_Model.HorseBet;
 import Model.HorseRace_Model.HorseMessage;
 import Model.HorseRace_Model.HorseRaceModel;
-import Model.Transaction;
 import Model.User;
 import Network.NetworkManager;
 import Network.Transmission;

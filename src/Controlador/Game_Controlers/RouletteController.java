@@ -64,7 +64,7 @@ public class RouletteController implements GraphicsController {
     private static final int[] converTable = {0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 26, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26};
 
     /** Taula de conversió que transforma l'index de les cel·les del tauler d'apostes en el seu valor en String */
-    private static final String[] listBetConversion = {"0", "3", "2", "1", "6", "5", "4", "9", "8", "7", "12", "11", "10", "15", "14", "13", "18", "17", "16", "21", "20", "19", "24", "23", "22", "27", "26", "25", "30", "29", "28", "33", "32", "31", "36", "35", "34", "First line", "Second line", "Third line", "First half", "Even", "Red", "Black", "Odd", "Second Half", "First dozen", "Second dozen", "Third dozen"};
+    private static final String[] listBetConversion = {"0", "3", "2", "1", "6", "5", "4", "9", "8", "7", "12", "11", "10", "15", "14", "13", "18", "17", "16", "21", "20", "19", "24", "23", "22", "27", "26", "25", "30", "29", "28", "33", "32", "31", "36", "35", "34", "First line", "Second line", "Third line", "First half", "Even", "Red", "Black", "Odd", "Second Half", "First dozen", "Second dozen", "Third dozen", "-----"};
 
     /** Llistat de barres separadores de les cel·les de la ruleta */
     private LinkedList<GRect> bars;
@@ -389,8 +389,12 @@ public class RouletteController implements GraphicsController {
             g.setFont(font.deriveFont(17f));
 
             for (int i = 0; i < Math.min((info.length > 0 ? info[0].length : 0), 33); i++) {
-                int cellID = Integer.parseInt(info[1][i + listOff]);
-                String cell = (cellID < 37 ? cellID + "" : listBetConversion[cellID]);
+                String cell = "-----";
+                try {
+                    //int cellID = info[1][i + listOff].equals("-----") ? 49 : Integer.parseInt(info[1][i + listOff]);
+                    int cellID = info[1][i + listOff].equals("-----") ? 49 : Integer.parseInt(info[1][i + listOff]);
+                    cell = (cellID < 37 ? cellID + "" : listBetConversion[cellID]);
+                } catch (Exception e) {}
 
                 for (int j = 0; j < 3; j++) {
                     String s = j == 1 ? cell : info[j][i + listOff];
@@ -454,18 +458,7 @@ public class RouletteController implements GraphicsController {
         g.drawString(mtitle, Controller.getWinWidth()/2 - g.getFontMetrics().getStringBounds(mtitle, g).getBounds().width/2, Controller.getWinHeight() - 100);
         g.setFont(font.deriveFont(50f));
 
-        long moneyToShow;
-
-        /*if (hideRoulette) {
-            if (winnerE) {
-                moneyToShow = wallet - lastWallet;
-            } else {
-                moneyToShow = (long) (Math.random() * lastWallet);
-            }
-        } else {
-            moneyToShow = wallet - bet;
-        }*/
-        moneyToShow = (wallet - bet);
+        long moneyToShow = (wallet - bet);
         g.drawString(moneyToShow + "", Controller.getWinWidth()/2 - walwid/2, Controller.getWinHeight() - 40);
 
         g.drawImage(viewListPressed ? viewListSelected : viewList, vlx, vly, null);
@@ -541,7 +534,9 @@ public class RouletteController implements GraphicsController {
         winnerE = false;
 
         table.cleanTable();
-        resetBetList();
+        //resetBetList();
+        String[][] aux = networkManager.updateRouletteList();
+        info = aux == null ? info : aux;
 
         rang = zeroAng - (Math.PI*2/MAXCELLS) * shotOff;
         roffTimer = System.nanoTime();

@@ -526,7 +526,7 @@ public class NetworkManager extends Thread {
     }
 
     public void exitRoulette() {
-        new Transmission(new RouletteMessage(1), this);
+        //new Transmission(new RouletteMessage(1), this);
         controller.endGraphics();
         showGamesView();
         System.gc();

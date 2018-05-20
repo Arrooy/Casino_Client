@@ -11,7 +11,7 @@ import Model.Model_BJ;
 import Network.NetworkManager;
 import Network.Transmission;
 import Vista.GameViews.BlackJack.BlackJackView;
-import Controlador.CustomGraphics.GraphicsManager;
+import Vista.GraphicsManager;
 
 
 import java.awt.*;
