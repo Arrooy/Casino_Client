@@ -8,8 +8,6 @@ import Vista.View;
 import javax.swing.*;
 import java.awt.*;
 
-//TODO arreglar missatges error money i log in, sign in
-
 /**Classe que crea el panell que implementa la funcio dels settings d'afegir diners al compte*/
 public class AddMoneyView extends View {
     /**String constant per indicar que el camp s'ha d'omplir amb la contrasenya*/
