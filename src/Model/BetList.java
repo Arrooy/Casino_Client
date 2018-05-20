@@ -31,7 +31,7 @@ public class BetList extends Message {
      */
     public BetList(String[][] info, int type) {
         if (type == ROULETTE) context = "rouletteListUpdate";
-        else if (type == HORSES) context = "horsesListUpdate";
+        else if (type == HORSES) context = "HORSES-ListUpdate";
         ID = Math.random();
 
         this.info = info;

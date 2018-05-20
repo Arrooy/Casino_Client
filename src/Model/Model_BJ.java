@@ -36,11 +36,15 @@ public class Model_BJ {
     /** Valor de les cartes de la IA*/
     private int valueDisplayIa;
 
+    /** Resultat economic de repetides partides*/
+    private long earnings;
+
     /** Crea el model del BlackJack*/
     public Model_BJ(){
         IACards = new LinkedList<>();
         userCards = new LinkedList<>();
 
+        earnings = 0;
         valueDisplayUser = 0;
         valueDisplayIa = 0;
     }
@@ -72,9 +76,11 @@ public class Model_BJ {
     public void clearData() {
         userCards.clear();
         IACards.clear();
+        earnings = 0;
         valueDisplayUser = 0;
         valueDisplayIa = 0;
     }
+
     /** Indica si les 4 cartes inicials s'han afegit al model*/
     public boolean areCardsLoaded() {
         return IACards.size() + userCards.size() >= 4;
@@ -83,6 +89,7 @@ public class Model_BJ {
     public LinkedList<Card> getIACards() {
         return IACards;
     }
+
     public LinkedList<Card> getUserCards() {
         return userCards;
     }
@@ -102,4 +109,13 @@ public class Model_BJ {
     public int getValueUser(){
         return valueDisplayUser;
     }
+
+    public long getEarnings(){
+        return earnings;
+    }
+
+    public void addEarnings(long earnings){
+        this.earnings += earnings;
+    }
+
 }

@@ -119,6 +119,7 @@ public class BlackJackController implements GraphicsController {
         dontjumpFirstIteration = false;
 
         animationIsOver = false;
+
         //Es borren les cartes guardades del model
         this.model.clearData();
 
@@ -152,6 +153,7 @@ public class BlackJackController implements GraphicsController {
         //Tambe s'agafa el valor de la wallet de l'usuari i es guarda en variables auxiliars.
         if(cartaResposta.getContext().equals(CONTEXT_BJ_INIT)){
             bet = cartaResposta.getBet();
+            model.addEarnings(-bet);
             moneyToSpend = cartaResposta.getWallet();
         }
         //En el cas de no estar definit el controller, es defineix
