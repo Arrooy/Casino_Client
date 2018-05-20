@@ -1,4 +1,4 @@
-package Vista;
+package Utils;
 
 import Controlador.Controller;
 

@@ -5,7 +5,7 @@ import Controlador.CustomGraphics.GraphicsController;
 import Utils.Sounds;
 import Utils.AssetManager;
 import Model.HorseRace_Model.HorseBet;
-import Model.HorseRace_Model.HorseMessage;
+import Network.HorseMessage;
 import Model.HorseRace_Model.HorseRaceModel;
 import Model.User;
 import Network.NetworkManager;

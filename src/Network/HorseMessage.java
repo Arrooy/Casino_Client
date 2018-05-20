@@ -1,4 +1,7 @@
-package Model.HorseRace_Model;
+package Network;
+import Model.HorseRace_Model.HorseBet;
+import Model.HorseRace_Model.HorseResult;
+import Model.HorseRace_Model.HorseSchedule;
 import Network.Message;
 
 /**Missatge respecte al joc dels cavalls
