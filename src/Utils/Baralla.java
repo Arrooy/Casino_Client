@@ -92,6 +92,6 @@ public class Baralla {
      * @return La imatge de la carta
      */
     public static BufferedImage getRandomCard() {
-        return (BufferedImage)cartes.values().toArray()[(int)(Math.random() *cartes.size())];
+        return (BufferedImage) cartes.values().toArray()[(int)(Math.random() *cartes.size())];
     }
 }
