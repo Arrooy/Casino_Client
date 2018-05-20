@@ -8,14 +8,11 @@ public class HorseSchedule implements Serializable {
     private int[][] times;
     private int winner;
 
-
-
     private static final int MAX_HORSES = 12;
     private static final int SECTIONS = 5;
 
     private static final int MAX_SECTION_TIME = 2000;
     private static final int MIN_SECTION_TIME = 1000;
-
 
     /**
      * Es creen temps aleatoris entre MAX_SECTION_TIME i MIN_SECTION_TIME per cada cavall a cada seccio de les SECTIONS seccions.
@@ -39,7 +36,6 @@ public class HorseSchedule implements Serializable {
             }
         }
     }
-
 
     /**Retorna el temps total de la carrera*/
     public int getRaceTime(){
@@ -76,11 +72,11 @@ public class HorseSchedule implements Serializable {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("WINNER: " + this.winner + "\nRACETIME: " + getRaceTime() + "\n");
+        stringBuilder.append("WINNER: ").append(this.winner).append("\nRACETIME: ").append(getRaceTime()).append("\n");
         for(int i = 0; i < 12; i++){
-            stringBuilder.append("HORSE " + i + "\n");
+            stringBuilder.append("HORSE ").append(i).append("\n");
             for(int j = 0; j < 5; j++){
-                stringBuilder.append("\tTime "+ j + ": " + times[i][j] + "\n" );
+                stringBuilder.append("\tTime ").append(j).append(": ").append(times[i][j]).append("\n");
             }
         }
         return stringBuilder.toString();

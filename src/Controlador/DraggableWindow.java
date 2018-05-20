@@ -128,6 +128,7 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
     public void mouseExited(MouseEvent e) {
 
     }
+
     @Override
     public void windowIconified(WindowEvent e) {
 
