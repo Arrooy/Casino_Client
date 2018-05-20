@@ -107,7 +107,7 @@ public class GRect {
     /**
      * Mètode que rota un punt usant com a referencia la velocitat de rotació
      * i no l'angle en si
-     * @param vel Velocitat de rotació (Invers: Quant més gran es el valor més lenta es la rotacio -> creixement logaritmic)
+     * @param vel Velocitat de rotació (Invers: Quant més gran es el valor més lenta es la rotacio - creixement logaritmic)
      * @param x Punt a rotar
      * @param y Punt a rotar
      * @param refx Referencia respecte la que es realitza la rotacio

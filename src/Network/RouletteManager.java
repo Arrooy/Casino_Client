@@ -28,7 +28,7 @@ public class RouletteManager extends Thread {
 
     /**
      * Constructor de la classe
-     * @param networkManager Intermediari Servidor<->Client
+     * @param networkManager Intermediari Servidor - Client
      */
     public RouletteManager(NetworkManager networkManager) {
         this.networkManager = networkManager;
