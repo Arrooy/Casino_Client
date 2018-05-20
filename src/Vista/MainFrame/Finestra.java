@@ -4,6 +4,7 @@ import Controlador.Controller;
 import Controlador.DraggableWindow;
 import Utils.AssetManager;
 import Model.WalletEvolutionMessage;
+import Utils.Tray;
 import Vista.*;
 import Vista.GameViews.BlackJack.BlackJackView;
 import Vista.GameViews.Roulette.RouletteView;

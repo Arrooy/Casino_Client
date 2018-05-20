@@ -445,7 +445,7 @@ public class NetworkManager extends Thread {
             new Transmission(new Card("",Transmission.CONTEXT_BJ,true),this);
             controller.initBlackJack();
         }
-           controller.newBJCard(cartaResposta);
+        controller.newBJCard(cartaResposta);
     }
 
     /**

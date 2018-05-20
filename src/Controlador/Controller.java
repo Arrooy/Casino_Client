@@ -115,7 +115,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             case "logIn":
                 //S'intenta fer logIn al servidor amb les credencials introduides
                 networkManager.logIn(logInView.getUsername(), logInView.getPassword());
-                //user.setUsername(logInView.getUsername());
                 break;
             case "logOut":
                 //S'intenta desconectar-se del servidor
@@ -354,7 +353,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
      * a la vista del joc.
      */
     public void initBlackJack() {
-        //crea el controlador de la nova partida amb un nou model
+        //Crea el controlador de la nova partida amb un nou model
         if(BJController == null)
             BJController = new BlackJackController(blackJackView,networkManager);
         else

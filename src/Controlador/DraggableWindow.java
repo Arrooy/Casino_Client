@@ -4,7 +4,7 @@ import Network.NetworkManager;
 //import Vista.MainFrame.Finestra;
 import Utils.Sounds;
 import Vista.MainFrame.Finestra;
-import Vista.Tray;
+import Utils.Tray;
 
 import java.awt.event.*;
 
