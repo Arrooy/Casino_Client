@@ -94,14 +94,6 @@ public class HorseMessage extends Message {
         return wallet;
     }
 
-    public HorseResult getHorseResult(){
-        return this.horseResult;
-    }
-
-    public void setHorseSchedule(HorseSchedule horseSchedule) {
-        this.horseSchedule = horseSchedule;
-    }
-
     @Override
     public String getContext() {
         return "HORSES-" + option;
@@ -110,6 +102,14 @@ public class HorseMessage extends Message {
     @Override
     public double getID() {
         return this.ID;
+    }
+
+    public HorseResult getHorseResult(){
+        return this.horseResult;
+    }
+
+    public void setHorseSchedule(HorseSchedule horseSchedule) {
+        this.horseSchedule = horseSchedule;
     }
 
     public HorseBet getHorseBet(){
