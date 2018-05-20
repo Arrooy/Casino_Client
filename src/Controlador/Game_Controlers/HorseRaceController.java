@@ -28,17 +28,22 @@ import java.util.Random;
  * networkManager per establir una communicacio amb el servidor i aixi reroduir les curses correctament*/
 public class HorseRaceController implements GraphicsController, ActionListener {
 
+    /**Colors*/
     private final static Color GRANA = new Color(125, 28, 37);
     private final static Color GREY = new Color(49, 63, 47);
     private static final Color TEXT_COLOR = new Color(216, 204, 163);
 
+    /**nombre de cavalls i seccions*/
     private static final int MAX_HORSES = 12;
     private static final int SECTIONS = 5;
 
+    /**Modes de visualitzacio*/
     public static final int GAME_MODE = 0;
     public static final int LIST_MODE = 1;
-
+    /**Dimensions de la llista d'apostes*/
     public static final int LIST_DIM = 700;
+
+    /**Posicions relatives dels missatges i cavalls*/
     private static final double HORSE_START_Y = 0.026;
     private static final double HORSE_START_X = 0.252;
     private static final double HORSE_SEPARATION = 0.074;
@@ -63,42 +68,67 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private static final double BET_RESULT_X = BET_TITLE_X;
     private static final double BET_RESULT_Y = BET_STATUS_Y + 0.06;
 
+    /**Permet la gestio de grafics*/
     private static GraphicsManager graphicsManager;
+    /**Permet comunicar-se amb el servdor*/
     private NetworkManager networkManager;
+    /**Vista del joc*/
     private HorseRaceView horseRaceView;
+    /**Usuari que esta jugant*/
     private User user;
+    /**Model del joc*/
     private HorseRaceModel horseRaceModel;
-    private Finestra finestra;
 
+
+    /**Indica si s'esta fent una carrera*/
     private boolean isRacing;
+    /**Indica si s'esta apostant*/
     private boolean isBetting;
+    /**Indica si s'esta jugant*/
     private boolean play;
+    /**Inica si estem esperant a correr*/
     private boolean isCountDown;
+    /**Indica si s'ha de mostrar el resultat d'una aposta*/
     private boolean betResult;
+    /**indica si es la primera carrera que fem*/
     private boolean firstRace;
+    /**Permet enviar el missatge de carrera acabada una vegada per carrera*/
     private boolean oncePerRace;
+    /**Indica si l'aposta s'ha pogut fer*/
     private boolean betOK;
+    /**Indica si s'ha rebut confirmacio de l'aposta*/
     private boolean confirmReceived;
 
+    /**Temps d'espera per començar la cursa*/
     private Countdown waitCountdown;
+    /**Temps d'espera per acabar la cursa*/
     private Countdown raceCountdown;
 
-
+    /**Temps per que cada cavall acab una secco*/
     private Countdown[] horseCountdowns;
+    /**Posicio de cada cavall*/
     private Point[] horsePositions;
+    /**Frame de cada cavall*/
     private int[] horseFrames;
+    /**Seccio de cada cavall*/
     private int[] horseSections;
 
+    /**Guanyador de la cursa*/
     private int winner;
+    /**Velocitat d'animacio dels cavalls*/
     private long animationRate;
+    /**Premi en cas d'aposta*/
     private long prize;
+    /**Quantitat apostada*/
     private long betAmount;
+    /**Cavall en el que s'ha apostat*/
     private int betHorse;
-
+    /**Font del texte*/
     private Font font;
-
+    /**Indica si mostrar la llista d'apostes o el joc*/
     private int mode;
 
+    /**Imatges necessaries per reproduir el joc*/
     private Image wood;
     private Image viewList;
     private Image viewListSelected;
@@ -109,20 +139,24 @@ public class HorseRaceController implements GraphicsController, ActionListener {
     private Image downButton;
     private Image listTable;
 
+    /**Estat dels botons per la llista*/
     private boolean viewListPressed;
     private boolean returnPressed;
 
+    /**Posicions de la llista d'apostes i botons*/
     private int ebx;
     private int eby;
     private int vlx;
     private int vly;
 
+    /**Array d'informacio per mostrar a la llista d'apostes*/
     private String[][] info;
     private int listOff;
 
+    /**Tamany de la pantalla, utilitzar per escalar el joc en cas de resize*/
     private int frameWidth;
     private int frameHeight;
-
+    /**Guanys relatius en la partida*/
     private int gameEarnings;
 
     /** Permet la reproduccio una unica vegada d'un arxiu d'audio en el bucle update*/
@@ -132,7 +166,6 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         this.horseRaceModel = new HorseRaceModel();
         this.horseRaceView = horseRaceView;
         this.networkManager = networkManager;
-        this.finestra = finestra;
         this.isRacing = false;
         this.waitCountdown = new Countdown();
         this.raceCountdown = new Countdown();
