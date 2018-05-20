@@ -1,8 +1,8 @@
 package Controlador;
 
 import Controlador.CustomGraphics.GraphicsController;
-import Vista.GraphicsManager;
 import Model.AssetManager;
+import Vista.GraphicsManager;
 import Vista.SplashScreen.SplashScreenVista;
 
 import javax.swing.*;

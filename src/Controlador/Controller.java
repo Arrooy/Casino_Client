@@ -1,6 +1,5 @@
 package Controlador;
 
-import Vista.GraphicsManager;
 import Controlador.Game_Controlers.BlackJackController;
 import Controlador.Game_Controlers.HorseRaceController;
 import Controlador.Game_Controlers.RouletteController;

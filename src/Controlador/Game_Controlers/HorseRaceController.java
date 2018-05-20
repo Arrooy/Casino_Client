@@ -2,7 +2,6 @@ package Controlador.Game_Controlers;
 
 import Controlador.Controller;
 import Controlador.CustomGraphics.GraphicsController;
-import Vista.GraphicsManager;
 import Controlador.Sounds;
 import Model.AssetManager;
 import Model.HorseRace_Model.HorseBet;
@@ -13,6 +12,7 @@ import Network.NetworkManager;
 import Network.Transmission;
 import Utils.Countdown;
 import Vista.GameViews.HorseRaceView;
+import Vista.GraphicsManager;
 import Vista.MainFrame.Finestra;
 
 import javax.swing.*;
