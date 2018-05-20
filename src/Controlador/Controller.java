@@ -39,20 +39,45 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     private Finestra finestra;
 
     /** Conjunt de Vistes que conformen tot el programa del Client */
+
+    /**Vista principal que conte els botons per escollir com es vol entrar al joc,
+     * iniciant sessio, creant un nou usuari o com a convidat*/
     private MainViewClient mainView;
+
+    /**Vista que conte els diferents camps necessaris per iniciar sessio*/
     private LogInView logInView;
+
+    /**Vista que conte els diferents camps necessaris per crear un nou usuari*/
     private SignInView signInView;
+
+    /**Vista que conte els botons per escollir a quin joc es vol jugar, a mes a mes tambe te el boto per accedir a settings*/
     private GameSelectorView gameSelectorView;
+
+    /**Vista que conte els camps necessaris per afegir diners al compte*/
     private AddMoneyView addMoneyView;
+
+    /**Vista que conte els camps necessaris per canviar de contrasenya*/
     private PasswordChangeView passwordChangeView;
+
+    /**Vista del joc del Black Jack*/
     private BlackJackView blackJackView;
 
+    /**Vista del joc de la ruleta*/
     private RouletteView rouletteView;
+
+    /**Encarregat de gestionar els grafics del joc de la ruleta*/
     private GraphicsManager rouletteGraphicsManager;
 
+    /**Encarregat de gestionar i controlar el joc del Black Jack*/
     private BlackJackController BJController;
+
+    /**Vista del joc dels cavalls*/
     private HorseRaceView horseRaceView;
+
+    /**Encarregat de gestionar i controlar el joc dels cavalls*/
     private HorseRaceController horseRaceController;
+
+    /**Encarregat de gestionar i controlar el joc de la ruleta*/
     private RouletteController rouletteController;
 
     /** Usuari que controla el client*/
