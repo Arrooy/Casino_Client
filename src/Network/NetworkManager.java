@@ -144,24 +144,24 @@ public class NetworkManager extends Thread {
 
         while(true) {
             try {
-            //Si el client no esta connectat al servidor, esperem a que ho estigui
-            if(!conectatAmbServidor) {
-                sleep(300);
+                //Si el client no esta connectat al servidor, esperem a que ho estigui
+                if(!conectatAmbServidor) {
+                    sleep(300);
 
-            }else{
-                //Quan el client estigui connectat es llegeixen les commandes del servidor i
-                //es guarden en la llista de lectures.
+                }else{
+                    //Quan el client estigui connectat es llegeixen les commandes del servidor i
+                    //es guarden en la llista de lectures.
 
-                    Message missatge = (Message) ois.readObject();
-                    System.out.println("[DEBUG] Context: " + missatge.getContext());
+                        Message missatge = (Message) ois.readObject();
+                        System.out.println("[DEBUG] Context: " + missatge.getContext());
 
-                    //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
-                    if(ServidorVolDesconnectarAquestClient(missatge))
-                        continue;
-                    lectures.add(missatge);
-            }
-
+                        //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
+                        if(ServidorVolDesconnectarAquestClient(missatge))
+                            continue;
+                        lectures.add(missatge);
+                }
             } catch (IOException ioe) {
+                ioe.printStackTrace();
                 conectatAmbServidor = false;
                 controller.showErrorConnection();
             }catch (InterruptedException | ClassNotFoundException cnf){
@@ -301,7 +301,7 @@ public class NetworkManager extends Thread {
             try {
                 sleep(5);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+
             }
         }
     }

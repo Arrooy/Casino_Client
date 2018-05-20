@@ -108,6 +108,7 @@ public class Card extends Message {
     public boolean isForIA() {
         return forIA;
     }
+
     public void setForIA(boolean a) {
         forIA = a;
     }
@@ -196,6 +197,7 @@ public class Card extends Message {
     public void setValent11(int valent11) {
         this.valent11 = valent11;
     }
+
     public long getBet() {
         return bet;
     }
@@ -203,6 +205,7 @@ public class Card extends Message {
     public void setBet(int bet) {
         this.bet = bet;
     }
+
     public boolean isBetOk() {
         return isBetOk;
     }
