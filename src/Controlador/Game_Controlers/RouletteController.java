@@ -2,6 +2,7 @@ package Controlador.Game_Controlers;
 
 import Controlador.Controller;
 import Controlador.CustomGraphics.GraphicsController;
+import Model.RouletteModel.RouletteBetMessage;
 import Utils.Sounds;
 import Utils.AssetManager;
 import Model.User;
@@ -11,6 +12,8 @@ import Vista.GameViews.Roulette.RouletteView;
 import Vista.GraphicUtils.RouletteElements.GRect;
 import Vista.GraphicUtils.RouletteElements.RouletteBall;
 import Vista.GraphicUtils.RouletteElements.RouletteBetTable;
+import Vista.MainFrame.Finestra;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -580,7 +583,16 @@ public class RouletteController implements GraphicsController {
     public void mousePressed(MouseEvent e) {
         if (mode == GAME_MODE) {
             int cellID = table.getCellID(e.getX(), e.getY());
-            if (cellID >= 0) view.bet(cellID, networkManager, "How much do you want to bet?", "Bet on " + (cellID < 37 ? cellID + "" : listBetConversion[cellID]));
+            if (cellID >= 0) {
+                try {
+                    long bet = Long.parseLong(Finestra.showInputDialog("How much do you want to bet?", "Bet on " + (cellID < 37 ? cellID + "" : listBetConversion[cellID])));
+
+                    if (bet > 0) new Transmission(new RouletteBetMessage(bet, cellID), networkManager);
+                    else Finestra.showDialog("Input not valid", "Error");
+                } catch (Exception e1) {
+                    Finestra.showDialog("Input not valid", "Error");
+                }
+            }
 
             viewListPressed = e.getX() > vlx && e.getY() > vly && e.getY() < vly + viewList.getHeight(null) && e.getX() < vlx + viewList.getWidth(null);
         }
@@ -607,8 +619,6 @@ public class RouletteController implements GraphicsController {
             if (e.getX() > vlx && e.getY() > vly && e.getY() < vly + viewList.getHeight(null) && e.getX() < vlx + viewList.getWidth(null))
                 mode = LIST_MODE;
         }
-
-        //System.out.println(Controller.getWinWidth() + " X "+ Controller.getWinHeight());
 
         if (e.getX() > ebx && e.getX() < ebx + returnButton.getWidth(null) && e.getY() > eby && e.getY() < eby + returnButton.getHeight(null)) {
             if (mode == GAME_MODE) networkManager.exitRoulette();
