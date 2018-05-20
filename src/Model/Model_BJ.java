@@ -2,6 +2,8 @@ package Model;
 
 import java.util.LinkedList;
 
+
+/** En aquesta classe es guarden les dades de la partida actual del BlackJack*/
 public class Model_BJ {
 
     /** Constants per al posicionament de les cartes al tauler*/

@@ -136,7 +136,7 @@ public class GraphicsManager implements Runnable {
             try {
                 Thread.sleep(sleepDurationMillis);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+
             }
         }
     }

@@ -383,7 +383,6 @@ public class NetworkManager extends Thread {
 
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
 
-
     /**
      * Indica al servidor que es vol iniciar una nova partida del BlackJack.
      * Aquesta partida s'inicialitza amb una aposta inicial i una baralla de cartes

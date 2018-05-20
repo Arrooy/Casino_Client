@@ -57,27 +57,18 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     private User user;
 
     /** Responsable de la connectivitat amb el servidor*/
-    private static NetworkManager networkManager;
+    private NetworkManager networkManager;
+
+    /** Gestor del JFrame. S'utilitza en aquesta classe per a sortir del casino*/
     private DraggableWindow draggableWindow;
 
     /** Inicialitza un nou controlador i realitza les relacions amb la vista i el gestor de la connectivitat*/
     public Controller(Finestra finestra, NetworkManager networkManager,DraggableWindow draggableWindow, HorseRaceView horseRaceView) {
-        Controller.networkManager = networkManager;
+        this.networkManager = networkManager;
         this.finestra = finestra;
         this.draggableWindow = draggableWindow;
         this.horseRaceView = horseRaceView;
-        this.horseRaceController = new HorseRaceController(this.horseRaceView, Controller.networkManager, this.finestra);
-    }
-
-    /** Mostra un error amb una alerta al centre de la finestra grafica*/
-    public void displayError(String title, String errorText){
-        mainView.displayError(title,errorText);
-    }
-
-
-    /** Retorna l'estat de la JCheckBox RememberLogIn inidcant doncs si s'ha de guardar localment el login del usuari*/
-    public boolean rememberLogIn(){
-        return logInView.getRememberLogIn();
+        this.horseRaceController = new HorseRaceController(this.horseRaceView, this.networkManager, this.finestra);
     }
 
     @Override
@@ -174,6 +165,16 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
+    /** Mostra un error amb una alerta al centre de la finestra grafica*/
+    public void displayError(String title, String errorText){
+        mainView.displayError(title,errorText);
+    }
+
+    /** Retorna l'estat de la JCheckBox RememberLogIn inidcant doncs si s'ha de guardar localment el login del usuari*/
+    public boolean rememberLogIn(){
+        return logInView.getRememberLogIn();
+    }
+
     /**
      * Permet mostrar feedback sobre si s'ha canviat la contrasenya correctament
      * @param approved boolea que indica si s'ha canviat la contrasenya correctament
@@ -188,12 +189,17 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
+    /**
+     * Gestiona el dialeg d'aposta per al BlackJack. Demana una aposta al usuari i si el format de l'aposta no es correcte,
+     * la torna a demanar
+     * @return el valor de l'aposta definitiu. Si el valor es 0 indica que l'aposta s'ha volgut cancelar
+     */
     public long manageBJBet() {
         long value = -1;
 
         do {
             String res = blackJackView.showInputDialog();
-
+            //Si la resposta te un caracter a, significa que l'usuari vol apostar
             if(res.charAt(0) == 'a'){
                 res = res.substring(1);
                 try {
@@ -212,13 +218,15 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     }
 
     /**
-     * Mostra la finestra
+     * Mostra la finestra despres de apareixer la loadingScreen
      * */
     public void showFinestra() {
         finestra.setVisible(true);
         finestra.requestFocus();
     }
 
+    //Gestiona els errors de l'opcio d'addMoney del menu de settings. Si no existeix cap error, envia la
+    //solicitud d'afegir diners al servidor
     private void addMoney() {
         long deposit = addMoneyView.getAmount();
         String password = addMoneyView.getPassword();
@@ -233,6 +241,12 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
+    /**
+     * Gestiona els errors que el servidor ha detectat al intentar ingresar diners
+     * @param type motiu de l'error.
+     *             type == 0 si no hi ha error
+     *             type == 1 si s'ha demanat masses diners
+     */
     public void transactionOK(int type){
         if (type == 0) {
             addMoneyView.showAddOK();
@@ -249,32 +263,27 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
+    /**
+     * Defineix l'usuari que esta autentificat amb el servidor
+     * @param u usuari que s'ha autentificat
+     */
     public void setUser(User u){
         user = u;
         horseRaceController.setUser(user);
     }
 
+    /** Redirecciona la carta rebuda pel servidor al BlackJack controller*/
     public void newBJCard(Card cartaResposta) {
         BJController.newBJCard(cartaResposta,this);
     }
 
+    /** Crea una solicitud de signIn al servidor*/
     private void signUp() {
         networkManager.requestSignUp(finestra.getSignUpUser());
     }
 
     public void showErrorLogIn(String s) {
         logInView.setError(s);
-    }
-    public void setMainView(MainViewClient mainView) {
-        this.mainView = mainView;
-    }
-    public void setLogInView(LogInView logInView) {
-        this.logInView = logInView;
-    }
-    public void setSignInView(SignInView signInView) {this.signInView = signInView;}
-    public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
-    public void setRouletteView(RouletteView rouletteView) {
-        this.rouletteView = rouletteView;
     }
 
     /**
@@ -302,7 +311,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
             }
         });
     }
-
+//TODO
     public void initBlackJack() {
         //crea el controlador de la nova partida amb un nou model
         if(BJController == null)
@@ -312,16 +321,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
         finestra.setBlackJackView();
     }
-
-    public void setBlackJackView(BlackJackView blackJackView) {
-        this.blackJackView = blackJackView;
-    }
-
-
-    public void setHorseRaceView(HorseRaceView horseRaceView){
-        this.horseRaceView = horseRaceView;
-    }
-
 
     @Override
     public void componentResized(ComponentEvent e) {
@@ -556,26 +555,6 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
-    @Override
-    public void focusGained(FocusEvent e) {
-        if(e.getSource() instanceof IconTextField){
-            ((IconTextField)e.getSource()).setHint(false);
-        }else if(e.getSource() instanceof IconPasswordField){
-            ((IconPasswordField)e.getSource()).setHint(false);
-        }
-    }
-
-    @Override
-    public void focusLost(FocusEvent e) {
-        if(e.getSource() instanceof IconTextField){
-            if(((IconTextField)e.getSource()).getText().equals(""))
-                ((IconTextField)e.getSource()).setHint(true);
-        }else if(e.getSource() instanceof IconPasswordField){
-            if(((IconPasswordField)e.getSource()).getPassword().length == 0)
-                ((IconPasswordField)e.getSource()).setHint(true);
-        }
-    }
-
     private void setRoulette() {
         if (rouletteController == null) {
             rouletteController = new RouletteController(rouletteView, networkManager);
@@ -625,5 +604,50 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     public void signUpErrorMessage(String message){
         signInView.passwordKO(message);
         signInView.manageError(true);
+    }
+
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        //En el moment que s'obtingui focus en una IconTextField o una IconPasswordField
+        if(e.getSource() instanceof IconTextField){
+            //S'elimina la hint
+            ((IconTextField)e.getSource()).setHint(false);
+        }else if(e.getSource() instanceof IconPasswordField){
+            //S'elimina la hint
+            ((IconPasswordField)e.getSource()).setHint(false);
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        //En el moment que es perdi el focus en una IconTextField o una IconPasswordField
+        if(e.getSource() instanceof IconTextField){
+            //Si no s'ha introduit cap text, es torna a mostrar la hint
+            if(((IconTextField)e.getSource()).getText().equals(""))
+                ((IconTextField)e.getSource()).setHint(true);
+        }else if(e.getSource() instanceof IconPasswordField){
+            //Si no s'ha introduit cap text, es torna a mostrar la hint
+            if(((IconPasswordField)e.getSource()).getPassword().length == 0)
+                ((IconPasswordField)e.getSource()).setHint(true);
+        }
+    }
+
+    public void setMainView(MainViewClient mainView) {
+        this.mainView = mainView;
+    }
+    public void setLogInView(LogInView logInView) {
+        this.logInView = logInView;
+    }
+    public void setSignInView(SignInView signInView) {this.signInView = signInView;}
+    public void setGameSelectorView(GameSelectorView gameSelectorView) {this.gameSelectorView = gameSelectorView;}
+    public void setRouletteView(RouletteView rouletteView) {
+        this.rouletteView = rouletteView;
+    }
+    public void setBlackJackView(BlackJackView blackJackView) {
+        this.blackJackView = blackJackView;
+    }
+    public void setHorseRaceView(HorseRaceView horseRaceView){
+        this.horseRaceView = horseRaceView;
     }
 }

@@ -9,21 +9,6 @@ import Controlador.SplashScreen;
 public class Casino_Client {
     public static void main(String[] args) {
 
-        /*
-        JFrame jFrame = new JFrame();
-        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        jFrame.setVisible(true);
-        jFrame.setSize(600, 600);
-
-        JPanel jPanel = new JPanel(new BorderLayout());
-        jPanel.setSize(600, 600);
-        jFrame.add(jPanel);
-
-        //Posar la ruleta ja en la finestra
-
-        new GraphicsManager(jPanel, new RouletteController(jFrame.getWidth(), jFrame.getHeight()), null);*/
-
-
         //Es carreguen totes les dades del joc
         SplashScreen splashScreen = new SplashScreen();
 

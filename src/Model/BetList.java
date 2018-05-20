@@ -12,7 +12,10 @@ public class BetList extends Message {
     public static final int ROULETTE = 0;
     public static final int HORSES = 1;
 
+    /** Context del missatge*/
     private String context;
+
+    /** Identificador del missatge*/
     private double ID;
 
     private String[][] info;
