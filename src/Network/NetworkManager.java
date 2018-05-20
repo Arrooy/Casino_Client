@@ -23,8 +23,15 @@ import static Network.Transmission.CONTEXT_BJ_FINISH_USER;
 
 /**
  * NetworkManager gestiona totes les comunicacions del client amb el servidor en les dues direccions.
+ *
+ * El seu funcionament es basa en anar rebent tots els missatges del servidor i anar-los guardant
+ * en una llista de lectures, que més endavant cada part del codi s'encarregarà de recollir.
+ *
+ * Al contenir un ID propi cada missatge, en la major part dels casos les lectures d'aquests es realitzen
+ * cercant l'identificador entre tot el llistat, tot i així, en els jocs com la ruleta o els cavalls
+ * on és el servidor qui inicia la comunicació, es prescindeix del valor de l'ID per a cercar directament
+ * segons el context del propi missatge.
  */
-
 public class NetworkManager extends Thread {
 
     /** Controlador del sistema*/
@@ -42,8 +49,10 @@ public class NetworkManager extends Thread {
     /** Usuari que esta utilitzant el client. Equival a null si aquest no ha fet LogIn*/
     private User user;
 
-    /** Canals d'emissio / recepcio d'objectes amb el serividor*/
+    /** Canal d'emissio d'objectes cap al serividor*/
     private ObjectOutputStream oos;
+
+    /** Canal de recepció d'objectes del serividor*/
     private ObjectInputStream ois;
 
     /**
@@ -274,14 +283,16 @@ public class NetworkManager extends Thread {
         return null;
     }
 
-    //TODO: NEEDS JAVADOC SAULA
+    /**
+     * Mètode que cada 5ms comprova si s'ha rebut un missatge amb un context concret
+     * @param context Context a cercar
+     * @return Missatge rebut amb el context indicat
+     */
     public Message waitForContext(String context) {
         while (true) {
             for (int i = 0; i < lectures.size(); i++) if (lectures.get(i).getContext().equals(context)) {
                 Message m = lectures.get(i);
                 lectures.remove(i);
-
-                System.out.println("[ROULETTE] Context finder: Trobat");
 
                 return m;
             }
@@ -303,7 +314,6 @@ public class NetworkManager extends Thread {
      * @param context Context del missatge
      * @return Si read no troba el missatge que es desitja, retorna null. De lo contrari retorna el missatge.
      */
-
     public Message readContext(String context){
         //Es miren tots els missatges registrats fins el moment
         for(int index = lectures.size() - 1; index >= 0; index--){
@@ -452,24 +462,36 @@ public class NetworkManager extends Thread {
         new Transmission(new Card("",CONTEXT_BJ_FINISH_USER,true),this);
     }
 
+    /**
+     * Mètode que inicia un Roulette Manager en el moment en el que l'usuari
+     * intenta accedir a la ruleta.
+     * @param c Controlador a iniciar.
+     */
     public void initRoulette(RouletteController c) {
         rouletteManager = new RouletteManager(this);
         System.gc();
         rouletteManager.init(c);
     }
 
+    /**
+     * Mètode que desconnecta l'usuari del joc de la ruleta
+     */
     public void endRoulette() {
         rouletteManager.disconnect();
     }
 
-    /**Metode per indicar al servidor de que volem jugar als cavalls*/
+    /**
+     * Metode per indicar al servidor de que volem jugar als cavalls
+     */
     public void sendHorseRaceRequest() {
         HorseMessage horseMessage = new HorseMessage((HorseSchedule) null, "Connect");
         horseMessage.setID(user.getID());
         new Transmission(horseMessage, this);
     }
 
-    /**Metode que indica al servidor que ens desconectem de la cursa de cavalls*/
+    /**
+     * Metode que indica al servidor que ens desconectem de la cursa de cavalls
+     */
     public void exitHorses() {
         HorseRaceController.exit();
         HorseMessage horseMessage = new HorseMessage((HorseSchedule) null, "Disconnect");
@@ -503,25 +525,44 @@ public class NetworkManager extends Thread {
         rouletteManager.bet(msg);
     }
 
+    /**
+     * Mètode que tanca el panell gràfic del joc de la ruleta i canvia la vista de
+     * la finestra al menú principal de selecció de jocs
+     */
     public void exitRoulette() {
-        //new Transmission(new RouletteMessage(1), this);
         controller.endRouletteGraphics();
         showGamesView();
         System.gc();
     }
 
+    /**
+     * Quan es realitza una petició al servidor per a saber el valor monetari que
+     * posseeix l'usuari, al respondre el servidor, s'executa aquesta funció per a
+     * establir el valor de la cartera en el joc de la ruleta.
+     * @param wallet Valor del moneder
+     */
     public void setRouletteWallet(long wallet) {
-        //rouletteManager.setWallet(wallet);
         if (rouletteManager != null) rouletteManager.setWallet(wallet);
     }
 
+    /**
+     * El sistema d'actualització de la llista d'apostes i usuaris connectats es basa en
+     * de part del servidor enviar el llistat actual cada cop que sigui necessari, i per
+     * part de l'usuari, el que es fa consisteix en cada cert temps, comprovar si s'ha rebut
+     * alguna actualització.
+     *
+     * Aquest mètode el que fa consisteix en cercar per tot el llistat de lectures realitzades
+     * un missatge que contingui el context que indica que consisteix en una actualització del
+     * llistat d'apostes.
+     *
+     * @return En cas de trobar una nova actualització s'envia el seu contingut, altrament val 'null'
+     */
     public String[][] updateRouletteList() {
         String[][] info = null;
 
         for(int i = lectures.size()-1; i > 0; i--) {
             Message msg = lectures.get(i);
             if (msg.getContext().equals("rouletteListUpdate")) {
-                System.out.println("[ROULETTE LIST]: Updating");
                 info = ((BetList) msg).getInfo();
                 lectures.remove(msg);
             }
@@ -544,10 +585,8 @@ public class NetworkManager extends Thread {
      */
     public String[][] updateHorseList(String[][] info) {
         BetList msg = (BetList) readContext("HORSES-ListUpdate");
-        if(msg != null){
-            System.out.println("[HORSES-LIST]: Updating");
-            info = msg.getInfo();
-        }
+        if(msg != null) info = msg.getInfo();
+
         return info;
     }
 
@@ -566,6 +605,7 @@ public class NetworkManager extends Thread {
         controller.showGamesView();
     }
 
+    //TODO: comentar
     public void signUpErrorMessage(String message) {
         controller.signUpErrorMessage(message);
     }

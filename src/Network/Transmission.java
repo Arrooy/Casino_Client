@@ -6,6 +6,7 @@ import Utils.JsonManager;
 import Model.Transaction;
 import Model.User;
 import Model.Card;
+import Vista.MainFrame.Finestra;
 
 import static java.lang.Thread.sleep;
 
@@ -161,6 +162,14 @@ public class Transmission implements Runnable {
         }
     }
 
+    /**
+     * Mètode que s'executa al enviar una petició per apostar al tauler de la ruleta.
+     * Primer s'envia el missatge i seguidament s'espera una resposta que indiqui si
+     * l'aposta s'ha pogut o no realitzar. En cas d'haver-se realitzat satisfactoriament,
+     * s'introdueix l'aposta al contingut gràfic de la partida; en cas contrari es mostra
+     * un missatge d'error indicant que l'aposta ha estat denegada.
+     * @param msg Missatge rebut
+     */
     private void rouletteBet(RouletteBetMessage msg) {
         if (msg.getCellID() >= 0) networkManager.send(msg);
 
@@ -168,12 +177,14 @@ public class Transmission implements Runnable {
             msg = (RouletteBetMessage) waitResponse(msg);
 
             if (msg.isSuccessful()) networkManager.betToRoulette(msg);
+            else Finestra.showDialog("Bet rejected", "Error");
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    //TODO: comentar WTF
     private void horseRaceRequestTimes() {
 
     }
