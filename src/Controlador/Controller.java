@@ -289,7 +289,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     /** Crea una solicitud de signIn al servidor*/
     private void signUp() {
-        networkManager.requestSignUp(finestra.getSignUpUser());
+        networkManager.requestSignUp(new User(signInView.getUsername(), signInView.getPassword(), signInView.getMail(), Transmission.CONTEXT_SIGNUP));
     }
 
     public void showErrorLogIn(String s) {

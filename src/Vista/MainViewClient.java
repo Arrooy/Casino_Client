@@ -76,17 +76,21 @@ public class MainViewClient extends View{
         jbGuest.addActionListener(c);
     }
 
-    /** Obra una finestra indicant un error
+    /**
+     * Obra una finestra indicant un error
      * @param title titol de l'error
-     * @param errorText missatge d'error*/
+     * @param errorText missatge d'error
+     */
     public void displayError(String title,String errorText) {
         JOptionPane.showMessageDialog(null,errorText,title,JOptionPane.ERROR_MESSAGE);
     }
 
-    /**Metode que configura les imatges d'un boto per quan no esta apretat i per quan si que ho esta
+    /**
+     * Metode que configura les imatges d'un boto per quan no esta apretat i per quan si que ho esta
      * @param boto JButton al que es volen associal les imatges
      * @param normal Imatge per quan el boto no esta apretat
-     * @param onSelection Imatge per quan el boto esta apretat*/
+     * @param onSelection Imatge per quan el boto esta apretat
+     */
     private void configButton(JButton boto, String normal,String onSelection){
         boto.setBorderPainted(false);
         boto.setBorder(null);

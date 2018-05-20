@@ -3,9 +3,7 @@ package Vista.MainFrame;
 import Controlador.Controller;
 import Controlador.DraggableWindow;
 import Utils.AssetManager;
-import Model.User;
 import Model.WalletEvolutionMessage;
-import Network.Transmission;
 import Vista.*;
 import Vista.GameViews.BlackJack.BlackJackView;
 import Vista.GameViews.Roulette.RouletteView;
@@ -16,12 +14,19 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
+
+/** Frame del casino. Apareix despres de que la SplashScreen carregui tots els assets del joc*/
 public class Finestra extends JFrame {
 
+    /** Color de la top bar*/
     private final Color COLOR_TOP_BAR = new Color(54, 57, 66);
 
-    private final int MIN_WIDTH = 300;
-    private final int MIN_HEIGHT = 300;
+    /** Amplada minima del joc*/
+    private final int MIN_WIDTH = 800;
+
+    /** Altura minima del joc*/
+    private final int MIN_HEIGHT = 800;
+
 
     private CardLayout layout;
     private MainViewClient mainView;
@@ -42,13 +47,16 @@ public class Finestra extends JFrame {
     private static JPanel topBar;
     private JButton jbtMute;
 
+    /** Crea el JFrame definint el seu icono, mida, tray i panells que conte al seu interior*/
     public Finestra() {
 
+        //S'inicia la tray
         Tray.init();
 
-        setMinimumSize(new Dimension(729, 770));
-
+        //S'afegeix tot el contingut al interor d'un panell amb background
         PanelWithBackGround MainPane = new PanelWithBackGround("background.png");
+
+        //Es defineix el panell principal no transparent
         MainPane.setOpaque(false);
 
         content = new JPanel();
@@ -77,12 +85,15 @@ public class Finestra extends JFrame {
 
         MainPane.add(content,BorderLayout.CENTER);
 
+        //Es genera el panell superior amb els botons de sortir, maximitzar, minimitzar, mute...
         generateTopBar(MainPane);
 
-       //useCustomCursor();*/
+        //Es configura el JFrame
         setUndecorated(true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setSize(640, 480);
+
+        setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
+        setSize(MIN_WIDTH, MIN_HEIGHT);
 
         //Try to fullScreen
         setExtendedState(MAXIMIZED_BOTH);
@@ -102,12 +113,6 @@ public class Finestra extends JFrame {
         add(MainPane,BorderLayout.CENTER);
     }
 
-
-    private void useCustomCursor() {
-        Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(AssetManager.getImage("mouse.png"),new Point(15,0),null);
-        setCursor(cursor);
-    }
-
     /*
      * Verifica que el dispositiu ha pogut fer la full screen.
      * La documentacio de JFrame indica que pot no ferse full screen alguns cops
@@ -115,10 +120,16 @@ public class Finestra extends JFrame {
     private void checkFullScreen() {
         if(getExtendedState() != MAXIMIZED_BOTH) {
             System.out.println("Full screen no esta disponible, tirant de minimitzada.");
-            goCenter();
+            centerInScreen();
         }
     }
 
+
+    /**
+     * Afegeix els controladors del JFrame
+     * @param c Controlador dels botons del joc, no del topPane
+     * @param dw controlador dels botons de la barra superior (topPane) del joc
+     */
     public void addController(Controller c, DraggableWindow dw) {
         Tray.addController(c);
 
@@ -161,66 +172,18 @@ public class Finestra extends JFrame {
         addComponentListener(c);
     }
 
-    public void setMainView() {
-        layout.show(content, "main");
-        showUserconfig(false);
-    }
-
-    public void setLogInView() {
-        layout.show(content, "logIn");
-    }
-
-    public void setGameSelector(boolean guest) {
-        layout.show(content, "gameSelectorView");
-        gameSelectorView.enableButtons(guest);
-        showUserconfig(!guest);
-    }
-
-    public void setSignInView() {
-        layout.show(content, "signIn");
-    }
-
-
-    public User getSignUpUser() {
-        return new User(signInView.getUsername(), signInView.getPassword(), signInView.getMail(), Transmission.CONTEXT_SIGNUP);
-    }
-
-    public void setBlackJackView() {
-        layout.show(content, "blackJack");
-    }
-
-    public void setRouletteView() {
-        layout.show(content, "roulette");
-    }
-
-
-    public void setHorseRaceView(){
-        layout.show(content, "horseRace");
-    }
-
-    public LogInView getLogInView() {
-        return logInView;
-    }
-
-    public SignInView getSignInView() {
-        return signInView;
-    }
-
-    /** Escollim la vista dels settings*/
-    public void setSettingsView(String s) {
-        layout.show(content, "settings");
-        settings.showSetting(s);
-    }
-
-    public void goCenter() {
+    /** Centra el JFrame al centre de la pantalla*/
+    public void centerInScreen() {
         setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2);
     }
 
+    //Genera el topBar amb els botons de sortir, mute, maximitzar,minimitzar i options
     private void generateTopBar(JPanel MainPanel) {
         topBar = new JPanel(new BorderLayout());
 
         topBar.setBackground(COLOR_TOP_BAR);
 
+        //Es genera un panell per agrupar els elements de la dreta(exit,maximize,minimize)
         JPanel rightOptions = new JPanel();
         jbtexit = new JButton();
         jbticonify = new JButton();
@@ -228,11 +191,14 @@ public class Finestra extends JFrame {
         jbtUser = new JButton();
         jbtMute = new JButton();
 
+        //Es configuren els botons
         configButton(jbtexit,"exitOnRest.png","exitOnMouse.png");
         configButton(jbticonify,"minimize.png","minimizeOnMouse.png");
         configButton(jbtmax,"maximize.png","maximizeOnMouse.png");
         configButton(jbtUser,"userConfig.png","userConfigOnMouse.png");
         configButton(jbtMute,"mute.png","muteOnMouse.png");
+
+        //S'amaga el userConfig button
         jbtUser.setVisible(false);
 
         rightOptions.add(jbticonify);
@@ -240,6 +206,8 @@ public class Finestra extends JFrame {
         rightOptions.add(jbtexit);
 
         rightOptions.setBackground(COLOR_TOP_BAR);
+
+        //Es genera un panell per a les opcions de l'esquerra(mute,userConfig)
         JPanel leftOptions = new JPanel();
         leftOptions.add(jbtUser);
         leftOptions.add(jbtMute);
@@ -252,10 +220,12 @@ public class Finestra extends JFrame {
         MainPanel.add(topBar,BorderLayout.NORTH);
     }
 
-    public static int getTopBarHeight() {
-        return topBar.getHeight();
-    }
-
+    /**
+     * Metode que configura les imatges d'un boto per quan no esta apretat i per quan si que ho esta
+     * @param boto JButton al que es volen associal les imatges
+     * @param normal Imatge per quan el boto no esta apretat
+     * @param onSelection Imatge per quan el boto esta apretat
+     */
     private void configButton(JButton boto, String normal, String onSelection){
         boto.setBorderPainted(false);
         boto.setBorder(null);
@@ -268,22 +238,12 @@ public class Finestra extends JFrame {
         boto.setPressedIcon(new ImageIcon(AssetManager.getImage(normal)));
     }
 
+    /** Mostra o amaga l'icono de userConfig en el topBar segons visible*/
     public void showUserconfig(boolean visible){
         jbtUser.setVisible(visible);
     }
 
-    public HorseRaceView getHorseRaceView() {
-        return this.horseRaceView;
-    }
-
-    public void updateWallet(WalletEvolutionMessage newWallet) {
-        settings.updateWallet(newWallet);
-    }
-
-    public void requestRouletteFocus() {
-        rouletteView.requestFocus();
-    }
-
+    /** Modifica el icono de muted segons el argument muted*/
     public void changeMuteIcon(boolean muted){
         if(muted){
             configButton(jbtMute,"muted.png","mutedOnMouse.png");
@@ -297,7 +257,6 @@ public class Finestra extends JFrame {
      * @return valor que ha proposat l'usuari per apostar
      */
     public static String showInputDialog(String message, String title) {
-
         return JOptionPane.showInputDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -308,5 +267,68 @@ public class Finestra extends JFrame {
      */
     public static void showDialog(String message, String title) {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+
+    public HorseRaceView getHorseRaceView() {
+        return this.horseRaceView;
+    }
+
+    public void updateWallet(WalletEvolutionMessage newWallet) {
+        settings.updateWallet(newWallet);
+    }
+
+    public void requestRouletteFocus() {
+        rouletteView.requestFocus();
+    }
+
+    public static int getTopBarHeight() {
+        return topBar.getHeight();
+    }
+
+
+    //Funcions per a variar la vista dins del card layout
+    /** Mostra la vista del logIn*/
+    public void setLogInView() {
+        layout.show(content, "logIn");
+    }
+
+    /** Mostra la vista del signIn*/
+    public void setSignInView() {
+        layout.show(content, "signIn");
+    }
+
+    /** Mostra la vista del blackJack*/
+    public void setBlackJackView() {
+        layout.show(content, "blackJack");
+    }
+
+    /** Mostra la vista de la roulette*/
+    public void setRouletteView() {
+        layout.show(content, "roulette");
+    }
+
+    /** Mostra la vista del horseRace*/
+    public void setHorseRaceView(){
+        layout.show(content, "horseRace");
+    }
+
+    /** Mostra la vista de les settings */
+    public void setSettingsView(String s) {
+        layout.show(content, "settings");
+        settings.showSetting(s);
+    }
+
+    /** Mostra la vista del menu principal*/
+    public void setMainView() {
+        layout.show(content, "main");
+        showUserconfig(false);
+    }
+
+    /** Mostra la vista del */
+    public void setGameSelector(boolean guest) {
+        layout.show(content, "gameSelectorView");
+        gameSelectorView.enableButtons(guest);
+        showUserconfig(!guest);
     }
 }

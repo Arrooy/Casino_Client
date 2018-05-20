@@ -39,7 +39,7 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
         //Si es fa dragg i la finestra esta fullScreen, fem la finestra petita
         if (vista.getExtendedState() == MAXIMIZED_BOTH) {
             vista.setExtendedState(NORMAL);
-            vista.goCenter();
+            vista.centerInScreen();
             mouseX = vista.getWidth() / 2;
             mouseY = e.getY();
         }
@@ -78,7 +78,7 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
     private void toogleFullScreen() {
         if(vista.getExtendedState() == MAXIMIZED_BOTH) {
             vista.setExtendedState(NORMAL);
-            vista.goCenter();
+            vista.centerInScreen();
         }else{
             vista.setExtendedState(MAXIMIZED_BOTH);
         }
