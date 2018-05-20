@@ -27,6 +27,7 @@ public class Finestra extends JFrame {
     /** Altura minima del joc*/
     private final int MIN_HEIGHT = 800;
 
+    //TODO: COmentar tot aixo
 
     private CardLayout layout;
     private MainViewClient mainView;

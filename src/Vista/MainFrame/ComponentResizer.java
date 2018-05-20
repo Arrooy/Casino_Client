@@ -424,7 +424,7 @@ public class ComponentResizer extends MouseAdapter
         return drag;
     }
 
-    /*
+    /**
      *  Adjust the drag value to be within the minimum and maximum range.
      */
     private int getDragBounded(int drag, int snapSize, int dimension, int minimum, int maximum)
@@ -439,7 +439,7 @@ public class ComponentResizer extends MouseAdapter
         return drag;
     }
 
-    /*
+    /**
      *  Keep the size of the component within the bounds of its parent.
      */
     private Dimension getBoundingSize(Component source)

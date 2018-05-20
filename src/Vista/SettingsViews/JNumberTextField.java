@@ -28,6 +28,10 @@ public class JNumberTextField extends IconTextField {
             e.consume();
     }
 
+    /**
+     * Mètode que retorna el valor numèric escrit per l'usuari
+     * @return valor numèric escrit per l'usuari
+     */
     public long getNumber() {
         long result = -1;
         String text = getText();

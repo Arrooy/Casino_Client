@@ -21,14 +21,26 @@ import java.awt.*;
  *      real de durada del frame.
  */
 public class Animation {
+
+    /** Array de frames que componen l'animació */
 	private Frame[] frames;
+
+	/** Duració de cada frame */
 	private double[] frameEndTimes;
+
+	/** Index de frame que s'està mostrant */
 	private int currentFrameIndex = 0;
 
+	/** Duració total de l'animació */
 	private double totalDuration = 0;
+
+	/** Temps actual de l'animació */
 	private double currentTime = 0;
-	
+
+	/** Indica si ha finalitzat la primera iteració complerta de l'animació */
 	private boolean finished;
+
+	/** Quantitat de repeticions produides des del seu inici */
 	private int reps;
 
     /**
@@ -68,6 +80,9 @@ public class Animation {
 		if (reps >= 1) finished = true;
 	}
 
+    /**
+     * Mètode que reinicia la animació al principi
+     */
 	private synchronized void wrapAnimation() {
 		currentFrameIndex = 0;
 		currentTime %= totalDuration; // equal to cT = cT % tD
@@ -118,7 +133,12 @@ public class Animation {
 		totalDuration = 0;
 		currentTime = 0;
 	}
-	
+
+    /**
+     * En cas de requerir una animació que només es mostri durant un bucle,
+     * aquest mètode indica quan ha passat aquest bucle
+     * @return Si ha realitzat un bucle de la animacio sencera
+     */
 	public boolean finished() {return finished;}
 
 }
