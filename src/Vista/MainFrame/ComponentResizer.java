@@ -8,7 +8,7 @@ import javax.swing.SwingUtilities;
 /**
  *  The ComponentResizer allows you to resize a component by dragging a border
  *  of the component.
- *  @credit: stack overflow.
+ *  @credit: https://stackoverflow.com
  */
 public class ComponentResizer extends MouseAdapter
 {

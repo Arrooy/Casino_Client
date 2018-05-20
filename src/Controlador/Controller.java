@@ -561,7 +561,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
      *
      */
     private int containsRequiredChars (String string) throws Exception{
-        int relativeStrength = 0;
+        int relativeStrength;
         int length = string.length();
         int upperCase = 0;
         int lowerCase = 0;
