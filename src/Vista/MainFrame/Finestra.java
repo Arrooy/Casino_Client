@@ -33,22 +33,40 @@ public class Finestra extends JFrame {
     /** Vista principal del casino, apareix al obrir la finestra*/
     private MainViewClient mainView;
 
+    /** Panell que conte tots els elements del logIn*/
     private LogInView logInView;
+
+    /** Panell per a selecionar a quin joc es vol jugar*/
     private GameSelectorView gameSelectorView;
+
+    /** Panell que permet a l'usuari crear un nou account en el casino*/
     private SignInView signInView;
+
+    /** Panell que conte totes les opcions del joc*/
     private Settings settings;
+
+    /** Panell on es pintara el blackJack*/
     private BlackJackView blackJackView;
+
+    /** Panell on es pintaran el joc dels cavalls*/
     private HorseRaceView horseRaceView;
-    private JPanel content;
+
+    /** Panell on es pintara la roulette*/
     private RouletteView rouletteView;
 
+    /** Panell on s'afageix tot el contingut del programa menys la barra superior*/
+    private JPanel content;
+
+    /** Barra superior on apareixen els botons de exit,maximize,minimize,mute,userConfig*/
+    private static JPanel topBar;
+
+    /***/
     private JButton jbtexit;
     private JButton jbticonify;
     private JButton jbtmax;
     private JButton jbtUser;
 
-    /** Panell superior*/
-    private static JPanel topBar;
+
     private JButton jbtMute;
 
     /** Crea el JFrame definint el seu icono, mida, tray i panells que conte al seu interior*/
