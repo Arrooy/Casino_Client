@@ -512,6 +512,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
         g.setFont(font.deriveFont((float)(0.0098039215686275*(horseRaceView.getWidth()))));
         g.setColor(GREY);
         g.drawString("Press \"Esc\" to exit." , (int)(0.01), (int)(horseRaceView.getHeight()*0.03));
+        g.drawString("Click on a Horse to Bet ", (int)(0.01), (int)(horseRaceView.getHeight()*0.054));
         g.setFont(font.deriveFont((float)(horseRaceView.getWidth()*0.0130718954248366)));
         g.setColor(TEXT_COLOR);
         g.drawString("Earnings:", (int)(horseRaceView.getWidth()*EARNINGS_TITLE_X), (int)(horseRaceView.getHeight()*EARNINGS_TITLE_Y));
@@ -557,11 +558,11 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                 }else{
                     g.drawString("Wait: " + (waitCountdown.getCount() / 1000) + "s",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X),  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
 
-                    if(singleAudioPlay && waitCountdown.getCount() < 7*1000){
-                        //Reprodueix l'audio de la trompeta inicial tot intentant sincronitzarse amb el temps actual del joc
-                        Sounds.play("HStart.wav",7000 - waitCountdown.getCount());
-                        singleAudioPlay = false;
-                    }
+                }
+                if(singleAudioPlay && waitCountdown.getCount() < 7 * 1000){
+                    //Reprodueix l'audio de la trompeta inicial tot intentant sincronitzarse amb el temps actual del joc
+                    Sounds.play("HStart.wav",7000 - waitCountdown.getCount());
+                    singleAudioPlay = false;
                 }
             }
         }
