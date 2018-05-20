@@ -3,8 +3,11 @@ package Utils;
 
 /**Classe que permet comptar enrere, en arribar a 0 para de comptar*/
 public class Countdown extends Thread {
+    /**Valor de comptatge*/
     private long count;
+    /**Temps d'inici des de l'ultim increment del comptatge*/
     private long startTime;
+    /**indcador de l'estat de comptatge*/
     private boolean isCounting;
 
     private static final int COUNTRATE = 200;

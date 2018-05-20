@@ -3,8 +3,8 @@ package Model.HorseRace_Model;
 
 /**Model de la cursa de cavalls*/
 public class HorseRaceModel {
+    /**Temps de cada cavall a cada seccio*/
     private HorseSchedule horseSchedule;
-    private HorseBet horseBet;
 
     public HorseRaceModel(){
     }
@@ -17,7 +17,5 @@ public class HorseRaceModel {
         return horseSchedule;
     }
 
-    public HorseBet getHorseBet(){
-        return horseBet;
-    }
+
 }
