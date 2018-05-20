@@ -559,7 +559,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     g.drawString("Wait: " + (waitCountdown.getCount() / 1000) + "s",(int)(horseRaceView.getWidth()*TIME_MESSAGE_X),  (int)(horseRaceView.getHeight()*TIME_MESSAGE_Y));
 
                 }
-                if(singleAudioPlay && waitCountdown.getCount() < 7 * 1000){
+                if(singleAudioPlay && waitCountdown.getCount() <= 7 * 1000 && waitCountdown.getCount() >= 6.5*1000){
                     //Reprodueix l'audio de la trompeta inicial tot intentant sincronitzarse amb el temps actual del joc
                     Sounds.play("HStart.wav",7000 - waitCountdown.getCount());
                     singleAudioPlay = false;
