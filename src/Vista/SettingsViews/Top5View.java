@@ -88,8 +88,10 @@ public class Top5View extends JPanel {
         add(jPanelGridTaula,BorderLayout.CENTER);
     }
 
-    /**Metode que actualitza la taula segons les diferents fluctuacions de diners que ha patit l'usuari
-     * @param newWallet Missatge que retorna les transaccions de l'usuari*/
+    /**
+     * Metode que actualitza la taula segons les diferents fluctuacions de diners que ha patit l'usuari
+     * @param newWallet Missatge que retorna les transaccions de l'usuari
+     */
     public void updateWallet(WalletEvolutionMessage newWallet) {
         JTable aux;
 
@@ -111,7 +113,6 @@ public class Top5View extends JPanel {
             }
             aux = new JTable(newData, columnNames);
         }else{
-            System.out.println("WALLET IS NULL");
             Object [][] data = new Object[1][3];
             data[0][0] = "Loading";
             data[0][1] = "Loading";
