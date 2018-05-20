@@ -27,10 +27,12 @@ public class Finestra extends JFrame {
     /** Altura minima del joc*/
     private final int MIN_HEIGHT = 800;
 
-    //TODO: COmentar tot aixo
-
+    /** Cardlayout de la finestra, conte tots els panells del joc*/
     private CardLayout layout;
+
+    /** Vista principal del casino, apareix al obrir la finestra*/
     private MainViewClient mainView;
+
     private LogInView logInView;
     private GameSelectorView gameSelectorView;
     private SignInView signInView;
@@ -45,6 +47,7 @@ public class Finestra extends JFrame {
     private JButton jbtmax;
     private JButton jbtUser;
 
+    /** Panell superior*/
     private static JPanel topBar;
     private JButton jbtMute;
 

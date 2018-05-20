@@ -608,9 +608,16 @@ public class NetworkManager extends Thread {
         controller.restartBlackJackModel();
     }
 
-    //TODO: comentar
+    /**
+     * Mostra un missatge d'error a al finestra del sign in
+     * @param message missatge a mostrar
+     */
     public void signUpErrorMessage(String message) {
         controller.signUpErrorMessage(message);
     }
+    /**
+     * Metode que posa el missatge d'error que es passa per parametres visible
+     * @param errorMessage String amb el missatge d'error que es vol mostrar
+     */
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
 }

@@ -315,7 +315,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     private void signUp() {
         networkManager.requestSignUp(new User(signInView.getUsername(), signInView.getPassword(), signInView.getMail(), Transmission.CONTEXT_SIGNUP));
     }
-
+    /**
+    * Metode que posa el missatge d'error que es passa per parametres visible
+    * @param s String amb el missatge d'error que es vol mostrar
+    */
     public void showErrorLogIn(String s) {
         logInView.setError(s);
     }
