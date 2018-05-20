@@ -347,6 +347,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     if (!betOK) {
                         this.betResult = false;
                     }else{
+                        this.betResult = false;
                         this.gameEarnings-=horseMessage.getHorseBet().getBet();
                     }
                 }
