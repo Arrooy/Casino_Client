@@ -1,7 +1,4 @@
 {
- "LogUsername": "cavallo",
  "PortServidor": 2525,
- "IpServidor": "localhost",
- "IsLoggedIn": true,
- "#LogPassword": "zj1m3NZb/1O72raynaO+6jwk186y5VRhldFBYTftpDws+VKyvhoqIURCrL69toao"
+ "IpServidor": "localhost"
 }

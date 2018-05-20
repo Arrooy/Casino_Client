@@ -47,7 +47,7 @@ public class AssetManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                     //En el cas de trobar un error en la carrega, es para el sistema
-                    System.out.println("Error llegint " + foto.getName());
+                    splashScreen.infoMessage("Error llegint " + foto.getName());
                     splashScreen.stop();
                 }
                 if (img != null) {
@@ -61,6 +61,11 @@ public class AssetManager {
         }
     }
 
+    /**
+     * Retorna la font del Casino amb un tamany definit per size
+     * @param size mida de la font
+     * @return font personalitzada
+     */
     public static Font getEFont(int size) {
         try {
             Font font = Font.createFont(Font.TRUETYPE_FONT, new File("./Assets/Fonts/ELEPHNT.TTF")).deriveFont((float)size);
@@ -68,10 +73,10 @@ public class AssetManager {
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./Assets/Fonts/ELEPHNT.TTF")));
             return font;
         } catch (IOException|FontFormatException e) {
-            System.out.println("No funciona la font");
-            e.printStackTrace();
+            //La font no sha trobat / no s'ha pogut carregar
+            //Fem plan b
+            return new Font("Comic Sans", Font.PLAIN, 20);
         }
-        return new Font("Comic Sans", Font.PLAIN, 20);
     }
 
     /**

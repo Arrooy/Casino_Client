@@ -141,10 +141,18 @@ public class Sounds extends Thread {
         }
     }
 
+    /**
+     * Indica si l'audio esta silenciat o no
+     * @return l'audio esta silenciat
+     */
     public static boolean isMuted() {
         return muted;
     }
 
+    /**
+     * Actualitza l'estat de l'audio
+     * @param muted nou estat de l'audio. Silenciat o no silenciat
+     */
     public static void setMuted(boolean muted) {
         Sounds.muted = muted;
         if(muted){

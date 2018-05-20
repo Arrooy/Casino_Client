@@ -46,7 +46,7 @@ public class Baralla {
                     img = ImageIO.read(carta);
                 } catch (IOException e) {
                     //En cas d'error, es para la carrega de Assets
-                    System.out.println("Error llegint " + carta.getName());
+                    splashScreen.infoMessage("Error llegint " + carta.getName());
                     splashScreen.stop();
                 }
                 if (img != null) {

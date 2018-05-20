@@ -1,6 +1,5 @@
 package Utils;
 
-import org.jasypt.util.text.BasicTextEncryptor;
 import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -103,7 +102,6 @@ public class JsonManager {
             //S'afegeix el contingut guardat en l'auxiliar nouJson
             file.write(nouJson.toString(1));
         }catch (IOException e){
-            e.printStackTrace();
             System.out.println("[Error]: Impossible sobreescriure el fitxer " + CONFIG_FILENAME);
         }
     }
@@ -129,7 +127,6 @@ public class JsonManager {
             //S'afegeix el contingut guardat en l'auxiliar nouJson
             file.write(nouJson.toString(1));
         }catch (IOException e){
-            e.printStackTrace();
             System.out.println("[Error]: Impossible sobreescriure el fitxer " + CONFIG_FILENAME);
         }
     }
@@ -152,7 +149,7 @@ public class JsonManager {
             afegeixCamp(USERNAME_R,username);
             afegeixCamp(PASSWORD_R,password);
         }catch (IOException e){
-            e.printStackTrace();
+            //No sha trobat \ no es pot escriure en el fitxer de configuracio
         }
     }
 
@@ -161,7 +158,7 @@ public class JsonManager {
         try{
             eliminaCamps(BOOLEAN_R,USERNAME_R,PASSWORD_R);
         }catch (IOException e){
-            e.printStackTrace();
+            //No sha trobat \ no es pot escriure en el fitxer de configuracio
         }
     }
 }

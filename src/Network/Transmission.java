@@ -13,6 +13,7 @@ import static java.lang.Thread.sleep;
 
 public class Transmission implements Runnable {
 
+    /** Diferents contexts que poden adoptar els missatges*/
     public static final String CONTEXT_LOGIN = "login";
     public static final String CONTEXT_LOGIN_GUEST = "loginGuest";
     public static final String CONTEXT_LOGOUT = "logout";
@@ -21,7 +22,6 @@ public class Transmission implements Runnable {
     public static final String CONTEXT_BJ_INIT = "blackjackinit";
     public static final String CONTEXT_BJ_FINISH_USER = "blackjackFinish";
     public static final String CONTEXT_TRANSACTION = "transaction";
-    public static final String CONTEXT_GET_COINS = "userCoins";
     public static final String CONTEXT_HR_INIT = "horseRaceInit";
     public static final String CONTEXT_DEPOSIT = "deposit";
     public static final String CONTEXT_WALLET_REQUEST = "walletRequest";
@@ -51,6 +51,7 @@ public class Transmission implements Runnable {
         (new Thread(this)).start();
     }
 
+    /** Segons el context del missatge es gestiona la seva solicitud i en algunes situacions s'espera la resposta del servidor*/
     @Override
     public void run() {
 
@@ -80,10 +81,6 @@ public class Transmission implements Runnable {
             case CONTEXT_BJ:
             case CONTEXT_BJ_FINISH_USER:
                 blackJackRequestCard();
-                break;
-
-            case CONTEXT_GET_COINS:
-                //Todo fer get coins MERI
                 break;
 
             case CONTEXT_TRANSACTION:

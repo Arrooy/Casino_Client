@@ -4,19 +4,24 @@ import java.io.Serializable;
 
 /**Classe que representa una aposta en les carreres de cavalls*/
 public class HorseBet implements Serializable {
-    /**
-     * Aposta
-     */
+    /** Aposta*/
     private long bet;
-    /**
-     * Identificador pel cavall
-     */
+
+    /** Identificador pel cavall*/
     private int horse;
-    /** nom del que ha fet la aposta**/
+
+    /** Nom del que ha fet la aposta**/
     private String name;
-    /**Boolea que indica si l'aposta es correcte*/
+
+    /** Indica si l'aposta es correcte*/
     private boolean betOK;
 
+    /***
+     * Crea una nova aposta per als cavalls
+     * @param bet cantitat de monedes que es volen apostar
+     * @param horse cavall que es vol apostar
+     * @param name nom de l'usuari que vol fer l'aposta
+     */
     public HorseBet (long bet, int horse, String name){
         this.bet = bet;
         this.horse = horse;

@@ -19,19 +19,26 @@ import Network.Message;
  *
  *  */
 public class HorseMessage extends Message {
-    /** opcio de missatge**/
+
+    /** Opcio de missatge**/
     private String option;
-    /**Aposta*/
+
+    /** Aposta*/
     private HorseBet horseBet;
-     /**Temps de cada cavall a cada seccio*/
+
+     /** Temps de cada cavall a cada seccio*/
     private HorseSchedule horseSchedule;
-    /**temps restant per la carrera*/
+
+    /** Temps restant per la carrera*/
     private long timeForRace;
-    /**Resultat de la carrera*/
+
+    /** Resultat de la carrera*/
     private HorseResult horseResult;
-    /**Diners del usuari*/
+
+    /** Diners del usuari*/
     private long wallet;
-    /**Id de l'usuari*/
+
+    /** Id de l'usuari*/
     private double ID;
 
     public void setID(double ID) {

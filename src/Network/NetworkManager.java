@@ -21,8 +21,6 @@ import java.util.Stack;
 
 import static Network.Transmission.CONTEXT_BJ_FINISH_USER;
 
-//TODO: FER QUE SERVER RETORNI USER EN EL LOGIN AMB USERNAME COM A USERNAME. PER SI ES DONA EL CAS QUE FAN LOGIN AMB EL MAIL!
-
 /**
  * NetworkManager gestiona totes les comunicacions del client amb el servidor en les dues direccions.
  */
@@ -129,6 +127,9 @@ public class NetworkManager extends Thread {
         user = null;
     }
 
+    /** Fil d'execucio del network manager, sempre esta llegint els missatges del servidor i els guarda a lectures
+     *  Donada la situacio de no estar connectat amb el servidor, espera a estarho
+     */
     @Override
     public void run() {
 
@@ -273,7 +274,7 @@ public class NetworkManager extends Thread {
         return null;
     }
 
-    //TODO: NEEDS JAVADOC
+    //TODO: NEEDS JAVADOC SAULA
     public Message waitForContext(String context) {
         while (true) {
             for (int i = 0; i < lectures.size(); i++) if (lectures.get(i).getContext().equals(context)) {
@@ -381,7 +382,21 @@ public class NetworkManager extends Thread {
         }
     }
 
-    public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
+    /**
+     * Entra al casino com a guest
+     */
+    public void enterAsGuest() {
+        if(!conectatAmbServidor){
+            connectarAmbServidor();
+        }
+
+        if(conectatAmbServidor) {
+            //Configurem el logIn i enviem la solicitud al servidor
+            new Transmission( new User(), this);
+        }else{
+            displayError("Connection error","Our servers aren't available right now.\nTry it again later...");
+        }
+    }
 
     /**
      * Indica al servidor que es vol iniciar una nova partida del BlackJack.
@@ -425,22 +440,6 @@ public class NetworkManager extends Thread {
     }
 
     /**
-     * Entra al casino com a guest
-     */
-    public void enterAsGuest() {
-        if(!conectatAmbServidor){
-            connectarAmbServidor();
-        }
-
-        if(conectatAmbServidor) {
-            //Configurem el logIn i enviem la solicitud al servidor
-            new Transmission( new User(), this);
-        }else{
-            displayError("Connection error","Our servers aren't available right now.\nTry it again later...");
-        }
-    }
-
-    /**
      * Gestiona les noves cartes per a la ia que es volen demanar al servidor
      */
     public void newCardForIaTurn() {
@@ -476,13 +475,6 @@ public class NetworkManager extends Thread {
         HorseMessage horseMessage = new HorseMessage((HorseSchedule) null, "Disconnect");
         horseMessage.setID(user.getID());
         new Transmission(horseMessage, this);
-    }
-
-    /**
-     * Mostra la vista central amb els diferents jocs de l'aplicacio
-     */
-    public void showGamesView() {
-        controller.showGamesView();
     }
 
     /**
@@ -567,7 +559,15 @@ public class NetworkManager extends Thread {
         this.user.setWallet(wallet);
     }
 
+    /**
+     * Mostra la vista central amb els diferents jocs de l'aplicacio
+     */
+    public void showGamesView() {
+        controller.showGamesView();
+    }
+
     public void signUpErrorMessage(String message) {
         controller.signUpErrorMessage(message);
     }
+    public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
 }

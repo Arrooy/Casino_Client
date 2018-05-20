@@ -5,9 +5,11 @@ import java.util.Random;
 
 /**Classe que permet enviar el temps que trigara cada cavall en arribar a diferents seccions de la cursa*/
 public class HorseSchedule implements Serializable {
-    /**temps de cada cavall a cada seccio*/
+
+    /**Temps de cada cavall a cada seccio*/
     private int[][] times;
-    /**guanyador de la cursa*/
+
+    /**Guanyador de la cursa*/
     private int winner;
 
     private static final int MAX_HORSES = 12;
