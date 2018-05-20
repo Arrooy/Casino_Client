@@ -598,7 +598,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                         horseCountdowns[horse].newCount(getTime(horse, horseSections[horse]));
                     }
                 }else{
-                    horsePositions[horse].x = (int)(horseRaceView.getWidth() * HORSE_SECTION * (horseSections[horse]  + (double)(getTime(horse, horseSections[horse]) - horseCountdowns[horse].getCount())/(double)(getTime(horse, horseSections[horse]))) + horseRaceView.getWidth()*HORSE_START_X);
+                    horsePositions[horse].x = (int) Math.round(horseRaceView.getWidth() * HORSE_SECTION * (horseSections[horse]  + (double)(getTime(horse, horseSections[horse]) - horseCountdowns[horse].getCount())/(double)(getTime(horse, horseSections[horse]))) + horseRaceView.getWidth()*HORSE_START_X);
                 }
             }
         }

@@ -114,7 +114,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
                 finestra.showUserconfig(false);
                 setRoulette();
                 break;
-            case "horseRace":
+            case "horseRace": // Es vol començar a jugar añs cavaññs
                 finestra.setHorseRaceView();
                 networkManager.sendHorseRaceRequest();
                 horseRaceController.play();
@@ -277,6 +277,10 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         this.rouletteView = rouletteView;
     }
 
+    /**
+     * Es configuren les vistes dels settings.
+     * @param settings
+     */
     public void setSettings(Settings settings) {
         this.settings = settings;
         this.passwordChangeView = settings.getPasswordChangeView();
@@ -451,12 +455,14 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
 
 
-    /** Mostrem si el canvi de contrasenya s'ha pogut efectuar correctament
-     * Retorn: < 0 : Menys de 8 caracters, retorn*-1 = strength
-     *       : = 0 : Altre error
-     *       : > 0 : No hi ha error, retorn = strength
-     *
-     * Tambe s'actualitza el missatge d'error si n'hi ha */
+
+
+    /**
+     * Mostrem si el canvi de contrasenya s'ha pogut efectuar correctament
+     * @param newPassword contrsenya que es vol introduir
+     * @param passwordConfirm contrasenya atniga
+     * @return Enter que permet detectar el tipus d'error
+     */
     public int checkPassword(String newPassword, PasswordConfirm passwordConfirm){
         int strength;
         try {
@@ -487,7 +493,12 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
         }
     }
 
-    /** Comprovem que no hi hagi ningun caracter non UTF-8*/
+
+    /**
+     * Comprovem que no hi hagi ningun caracter non UTF-8
+     * @param string contrasenya
+     * @return si es UTF encoded
+     */
     private boolean isValidUTF(String string){
         CharsetDecoder cs = Charset.forName("UTF-8").newDecoder();
 
@@ -512,6 +523,9 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
      * Mirem que solida es la contrasenya, en cas de que no s'hagin introduit
      * un mínim d0un nombre, una Majuscula i una minuscula el llença
      * una excepcio amb el text d'error que cal mostrar
+     * @param string contrasenya a comprovar
+     * @return  entter que indica que forta es la contrasenya
+     *
      */
     private int containsRequiredChars (String string) throws Exception{
         int relativeStrength = 0;

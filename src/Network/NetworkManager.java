@@ -383,17 +383,6 @@ public class NetworkManager extends Thread {
 
     public void setLoginErrorMessage(String errorMessage) { controller.showErrorLogIn(errorMessage); }
 
-    //TODO mirar transaction OK MERI
-
-    public void doTransaction(long money){
-        Transaction transaction = new Transaction(Transmission.CONTEXT_TRANSACTION, user.getUsername(), money, 0);
-        new Transmission(transaction, this);
-    }
-    //TODO revisat MERI
-    public void getWallet(){
-        User userAux = new User(user.getUsername(), user.getPassword(), user.getMail(), Transmission.CONTEXT_GET_COINS);
-        new Transmission(userAux, this);
-    }
 
     /**
      * Indica al servidor que es vol iniciar una nova partida del BlackJack.
