@@ -153,7 +153,6 @@ public class NetworkManager extends Thread {
                     //es guarden en la llista de lectures.
 
                         Message missatge = (Message) ois.readObject();
-                        System.out.println("[DEBUG] Context: " + missatge.getContext());
 
                         //Si el servidor vol desconnectar aquest client, no guardem el missatge a lectures i acabem el logOut
                         if(ServidorVolDesconnectarAquestClient(missatge))
