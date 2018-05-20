@@ -157,7 +157,8 @@ public class RouletteController implements GraphicsController {
     private NetworkManager networkManager;
 
     /** Wallet de l'usuari i aposta total realitzada */
-    private long wallet, bet;//lastWallet
+    private long wallet, bet, mirrorWallet, relativeGain;
+    private boolean walletInitiated;
 
     /** Mode de visualització de la ruleta */
     private static final int GAME_MODE = 0;
@@ -196,7 +197,7 @@ public class RouletteController implements GraphicsController {
         listOff = 0;
 
         wallet = 0;
-        //lastWallet = 0;
+        mirrorWallet = 0;
         bet = 0;
     }
 
@@ -214,6 +215,9 @@ public class RouletteController implements GraphicsController {
         listOff = 0;
 
         wallet = 0;
+        mirrorWallet = 0;
+        walletInitiated = false;
+        relativeGain = 0;
         bet = 0;
     }
 
@@ -337,6 +341,11 @@ public class RouletteController implements GraphicsController {
 
         table.update();
 
+        if (walletInitiated && mirrorWallet != wallet) {
+            relativeGain += wallet - mirrorWallet;
+            mirrorWallet = wallet;
+        }
+
         String[][] aux = networkManager.updateRouletteList();
         info = aux == null ? info : aux;
     }
@@ -407,13 +416,6 @@ public class RouletteController implements GraphicsController {
     }
 
     /**
-     * Mètode que nateja el llistat d'apostes
-     */
-    private void resetBetList() {
-        info = new String[0][0];
-    }
-
-    /**
      * Mètode que genera la imatge a mostrar per pantalla en la que es visualitza
      * el tauler d'apostes i la ruleta en si, juntament amb la UI que l'acompanya,
      * que consisteix en un botó per a visualitzar el llistat d'apostes, un botó per
@@ -448,12 +450,19 @@ public class RouletteController implements GraphicsController {
         int timwid = g.getFontMetrics().getStringBounds(nextTimeToString(), g).getBounds().width;
         g.drawString(nextTimeToString(), 30 + (wood.getWidth(null)/2 - timwid/2), 70);
 
-        if (winnerE && !hideRoulette) g.drawString("" + getWinner(), cx - 250, cy + 200);
+        if (winnerE && !hideRoulette) {
+            g.drawString("" + getWinner(), cx - 270, cy + 200);
+
+            g.setFont(font.deriveFont(18f));
+            g.drawString("Gain", cx + 270 - g.getFontMetrics().getStringBounds("Gain", g).getBounds().width, cy + 140);
+            g.setFont(font.deriveFont(50f));
+            g.drawString(getRelativeGain(), cx + 270 - g.getFontMetrics().getStringBounds(getRelativeGain(), g).getBounds().width, cy + 200);
+        }
 
         int walwid = g.getFontMetrics().getStringBounds("" + (wallet - bet), g).getBounds().width;
         g.setFont(font.deriveFont(20f));
 
-        String mtitle = hideRoulette ? "Wallet" : "Result";
+        String mtitle = "Wallet";
 
         g.drawString(mtitle, Controller.getWinWidth()/2 - g.getFontMetrics().getStringBounds(mtitle, g).getBounds().width/2, Controller.getWinHeight() - 100);
         g.setFont(font.deriveFont(50f));
@@ -462,6 +471,13 @@ public class RouletteController implements GraphicsController {
         g.drawString(moneyToShow + "", Controller.getWinWidth()/2 - walwid/2, Controller.getWinHeight() - 40);
 
         g.drawImage(viewListPressed ? viewListSelected : viewList, vlx, vly, null);
+    }
+
+    private String getRelativeGain() {
+        if (Math.abs(relativeGain) > 999999999) return relativeGain / 1000000000 + "B";
+        else if (Math.abs(relativeGain) > 999999) return relativeGain / 1000000 + "M";
+        else if (Math.abs(relativeGain) > 999) return relativeGain / 1000 + "k";
+        else return relativeGain + "";
     }
 
     /**
@@ -498,11 +514,6 @@ public class RouletteController implements GraphicsController {
     public int getWinner() {
         return converTable[(shotOff + winner) % MAXCELLS];
     }
-
-    @Override
-    public void keyTyped(KeyEvent e) {}
-    @Override
-    public void keyPressed(KeyEvent e) {}
 
     /**
      * Codi que s'executa cada cop que es deixa de prèmer un botó
@@ -542,7 +553,6 @@ public class RouletteController implements GraphicsController {
         roffTimer = System.nanoTime();
         backAnim = false;
         hideRoulette = false;
-        //lastWallet = wallet;
 
         //S'inicia el fx de la bola
         Sounds.play("RRun.wav");
@@ -609,15 +619,6 @@ public class RouletteController implements GraphicsController {
         viewListPressed = false;
     }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-    @Override
-    public void mouseExited(MouseEvent e) {}
-    @Override
-    public void mouseDragged(MouseEvent e) {}
-    @Override
-    public void mouseMoved(MouseEvent e) {}
-
     /**
      * Mètode per a afegir una aposta al tauler després d'haver-la confirmat
      * al servidor.
@@ -631,6 +632,11 @@ public class RouletteController implements GraphicsController {
     /** Setter del moneder */
     public void setWallet(long wallet) {
         this.wallet = wallet;
+
+        if (!walletInitiated) {
+            mirrorWallet = wallet;
+            walletInitiated = true;
+        }
     }
 
     /** Mètode per eliminar la aposta realitzada */
@@ -642,4 +648,18 @@ public class RouletteController implements GraphicsController {
     public void increaseBet(long amount) {
         bet += amount;
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+    @Override
+    public void keyPressed(KeyEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
+    @Override
+    public void mouseDragged(MouseEvent e) {}
+    @Override
+    public void mouseMoved(MouseEvent e) {}
+
 }
