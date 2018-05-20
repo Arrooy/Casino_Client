@@ -69,54 +69,69 @@ public class Transaction extends Message {
         ID = Math.random();
     }
 
+    /** Setter del moment en el que s'ha realitzat la transacció */
     public void setTime(Timestamp time) {
         this.time = time;
     }
 
+    /** Getter del context del missatge */
     @Override
     public String getContext() {
         return context;
     }
 
+    /** Getter de l'identificador del missatge */
     @Override
     public double getID() {
         return ID;
     }
 
+    /** Getter del Guany obtingut en la transacció */
     public long getGain() {
         return gain;
     }
 
+    /** Getter del moment en el que s'ha realitzat l'aposta */
     public Timestamp getTime() {
         return time;
     }
 
+    /** Getter del nom de l'usuari que ha realitzat l'aposta */
     public String getUsername() {
         return username;
     }
 
+    /** Getter del tipus d'aposta realitzada */
     public int getType() {
         return type;
     }
 
+    /** Getter de la contrassenya introduida per l'usuari */
     public String getPassword() {
         return password;
     }
 
+    /** Setter de la contrassenya introduida per l'usuari */
     public void setPassword(String password) {
         this.password = (String) Seguretat.encripta(password);
     }
+
+    /** Indica si la transacció s'ha realitzat amb èxit o no */
     public boolean isTransactionOk() {
         return transactionOk;
     }
 
+    /** Setter del èxit de la transacció */
     public void setTransactionOk(boolean transactionOk) {
         this.transactionOk = transactionOk;
     }
+
+    /** Setter del tipus d'aposta */
     public void setType(int type) {
         this.type = type;
     }
 
+    /** Setter del guany obtingut en la transaccio */
     public void setGain(long gain) {
         this.gain = gain;
     }
