@@ -4,21 +4,22 @@ import Model.HorseRace_Model.HorseResult;
 import Model.HorseRace_Model.HorseSchedule;
 import Network.Message;
 
-/**Missatge respecte al joc dels cavalls
- * /*
+/**
+ * Missatge respecte al joc dels cavalls
+ *
  * HorseMessage getContext()-
  *
  *     TASK           |STRING                |DIRECTION  |DESCRIPTION
  * -------------------------------------------------------------------------------------------------------------------------------------
- *     Join            HORSES-Connection       C->S        Client wants to join game
- *     Leave           HORSES-Disconnection    C->S        Client wants to leave game
- *     Bet             HORSES-Bet              C->S        Client wants to place a bet
- *     FinishMessage   HORSES-Finished         C->S        Client's race has finished
- *     Result          HORSES-Result           S->C        Server is sending a client their prize, and informing about the winning horse
- *     Countdown       HORSES-Countdown        S->C        Server informs a client about the time remaining to begin a race
- *     Schedule        HORSES-Schedule         S->C        Server sends the race schedule for reproducing the race
- *     BetConfirm      HORSES-BetConfirm       S->C        Server sends bet confirmation
- *     WalletRequest   HORSES-WalletRequest    C->S->C     Client asks for the user's wallet, server returns the wallet
+ *     Join            HORSES-Connection       C-S        Client wants to join game
+ *     Leave           HORSES-Disconnection    C-S        Client wants to leave game
+ *     Bet             HORSES-Bet              C-S        Client wants to place a bet
+ *     FinishMessage   HORSES-Finished         C-S        Client's race has finished
+ *     Result          HORSES-Result           S-C        Server is sending a client their prize, and informing about the winning horse
+ *     Countdown       HORSES-Countdown        S-C        Server informs a client about the time remaining to begin a race
+ *     Schedule        HORSES-Schedule         S-C        Server sends the race schedule for reproducing the race
+ *     BetConfirm      HORSES-BetConfirm       S-C        Server sends bet confirmation
+ *     WalletRequest   HORSES-WalletRequest    C-S-C     Client asks for the user's wallet, server returns the wallet
  *
  *  */
 public class HorseMessage extends Message {

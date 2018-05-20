@@ -27,7 +27,7 @@ import static Network.Transmission.CONTEXT_BJ_INIT;
 public class BlackJackController implements GraphicsController {
 
     /** Simbol que es mostra en el gameOverScreen*/
-    private final char MONEY_SYMBOL = '€';
+    private final char MONEY_SYMBOL = 'c';
 
     /** Temps que dura la animacio inicial*/
     private final long ANIMATION_TIME = 3000;
