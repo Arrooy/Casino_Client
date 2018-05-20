@@ -74,7 +74,7 @@ public class User extends Message {
      * @param username login i identificador de l'usuari (se suposa que no generarà col·lisió)
      * @param password contrassenya necessària per a realitzar el login
      * @param mail correu de contacte de l'usuari
-     * @param context
+     * @param context contexte en cas de que s'envii un ucuari com a missatge
      */
     public User(String username, String password, String mail, String context) {
         this.context = context;

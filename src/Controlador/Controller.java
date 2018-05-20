@@ -38,7 +38,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
     /** Finestra grafica del client*/
     private Finestra finestra;
 
-    /** Conjunt de Vistes que conformen tot el programa del Client */
+
 
     /**Vista principal que conte els botons per escollir com es vol entrar al joc,
      * iniciant sessio, creant un nou usuari o com a convidat*/
@@ -323,7 +323,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     /**
      * Es configuren les vistes dels settings.
-     * @param settings
+     * @param settings settings del programa on es troben les vistes dels settings
      */
     public void setSettings(Settings settings) {
         this.passwordChangeView = settings.getPasswordChangeView();
@@ -411,7 +411,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
      */
     @Override
     public void keyReleased(KeyEvent e) {
-        int strength = 0;
+        int strength;
         switch (((JComponent)e.getSource()).getName()) {
             case "PASSWORD FIELD CHANGE - NEW PASSWORD":
                 strength = checkPassword(passwordChangeView.getNewPassword(), passwordChangeView);

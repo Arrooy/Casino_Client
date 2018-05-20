@@ -24,7 +24,7 @@ public class Sounds extends Thread {
 
     /**
      * Carrega tots els audios de la carpeta especificada en PATH
-     * @param splashScreen
+     * @param splashScreen pantalla on es mostren missatges de l'estat de carrega
      */
     public static void loadAllSounds(SplashScreen splashScreen){
         //Al iniciar el programa, s'activa la musica

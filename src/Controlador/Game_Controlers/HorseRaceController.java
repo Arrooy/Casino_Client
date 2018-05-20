@@ -381,7 +381,7 @@ public class HorseRaceController implements GraphicsController, ActionListener {
                     initRace();
                     //Ja podem reproduir la carrera
                 }
-            } else if (isRacing) {
+            } else {
                 moveHorses(horsePositions, horseCountdowns, horseSections, raceCountdown);
                 this.waitCountdown.stopCount();
                 if (oncePerRace) {
