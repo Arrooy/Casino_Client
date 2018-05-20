@@ -4,7 +4,9 @@ import Controlador.Game_Controlers.BlackJackController;
 import Controlador.Game_Controlers.HorseRaceController;
 import Controlador.Game_Controlers.RouletteController;
 import Model.*;
+import Utils.Baralla;
 import Utils.JsonManager;
+import Utils.Sounds;
 import Vista.*;
 import Network.*;
 import Vista.GameViews.BlackJack.BlackJackView;
@@ -31,6 +33,7 @@ public class Controller implements ActionListener, ComponentListener, KeyListene
 
     /** Finestra grafica del client*/
     private Finestra finestra;
+
     private MainViewClient mainView;
     private LogInView logInView;
     private SignInView signInView;

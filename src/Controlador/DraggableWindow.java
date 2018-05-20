@@ -2,10 +2,10 @@ package Controlador;
 
 import Network.NetworkManager;
 //import Vista.MainFrame.Finestra;
+import Utils.Sounds;
 import Vista.MainFrame.Finestra;
 import Vista.Tray;
 
-import javax.swing.*;
 import java.awt.event.*;
 
 import static java.awt.Frame.ICONIFIED;
@@ -52,41 +52,6 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
         //Es guarda la posicio del mouse cada cop que es mous
         mouseX = e.getX();
         mouseY = e.getY();
-    }
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
     }
 
     @Override
@@ -161,6 +126,40 @@ public class DraggableWindow implements MouseMotionListener,WindowListener,Actio
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
 
     }
 }

@@ -1,7 +1,7 @@
 package Vista.SettingsViews;
 
 import Controlador.Controller;
-import Model.AssetManager;
+import Utils.AssetManager;
 import Vista.SwingModifications.IconPasswordField;
 import Vista.PasswordConfirm;
 import Vista.View;

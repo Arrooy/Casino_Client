@@ -1,5 +1,7 @@
-package Controlador;
+package Utils;
 
+
+import Controlador.SplashScreen;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

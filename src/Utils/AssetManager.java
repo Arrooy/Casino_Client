@@ -1,6 +1,5 @@
-package Model;
+package Utils;
 
-import Controlador.Sounds;
 import Controlador.SplashScreen;
 
 import javax.imageio.ImageIO;

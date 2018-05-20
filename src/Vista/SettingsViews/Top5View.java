@@ -1,7 +1,7 @@
 package Vista.SettingsViews;
 
 
-import Model.AssetManager;
+import Utils.AssetManager;
 import Model.WalletEvolutionMessage;
 
 import javax.swing.*;

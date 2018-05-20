@@ -1,7 +1,7 @@
 package Controlador;
 
 import Controlador.CustomGraphics.GraphicsController;
-import Model.AssetManager;
+import Utils.AssetManager;
 import Vista.GraphicsManager;
 import Vista.SplashScreen.SplashScreenVista;
 

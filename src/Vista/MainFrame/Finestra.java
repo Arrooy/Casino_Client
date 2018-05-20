@@ -2,7 +2,7 @@ package Vista.MainFrame;
 
 import Controlador.Controller;
 import Controlador.DraggableWindow;
-import Model.AssetManager;
+import Utils.AssetManager;
 import Model.User;
 import Model.WalletEvolutionMessage;
 import Network.Transmission;
@@ -10,7 +10,6 @@ import Vista.*;
 import Vista.GameViews.BlackJack.BlackJackView;
 import Vista.GameViews.Roulette.RouletteView;
 import Vista.GameViews.HorseRaceView;
-import Vista.MainFrame.ComponentResizer;
 import Vista.SettingsViews.Settings;
 
 import javax.swing.*;

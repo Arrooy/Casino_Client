@@ -1,8 +1,8 @@
 package Vista;
 
 
-import Model.AssetManager;
-import Model.Baralla;
+import Utils.AssetManager;
+import Utils.Baralla;
 
 import javax.swing.*;
 import java.awt.*;

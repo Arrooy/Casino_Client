@@ -2,10 +2,10 @@ package Controlador.Game_Controlers;
 
 import Controlador.Controller;
 import Controlador.CustomGraphics.GraphicsController;
-import Controlador.Sounds;
+import Utils.Sounds;
 
-import Model.AssetManager;
-import Model.Baralla;
+import Utils.AssetManager;
+import Utils.Baralla;
 import Model.Card;
 import Model.Model_BJ;
 import Network.NetworkManager;

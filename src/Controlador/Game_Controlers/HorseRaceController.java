@@ -2,8 +2,8 @@ package Controlador.Game_Controlers;
 
 import Controlador.Controller;
 import Controlador.CustomGraphics.GraphicsController;
-import Controlador.Sounds;
-import Model.AssetManager;
+import Utils.Sounds;
+import Utils.AssetManager;
 import Model.HorseRace_Model.HorseBet;
 import Model.HorseRace_Model.HorseMessage;
 import Model.HorseRace_Model.HorseRaceModel;

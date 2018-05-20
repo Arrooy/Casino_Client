@@ -1,6 +1,7 @@
-package Model;
+package Utils;
 
 import Controlador.SplashScreen;
+import Model.Card;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

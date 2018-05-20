@@ -1,6 +1,6 @@
 package Vista.SwingModifications;
 
-import Model.AssetManager;
+import Utils.AssetManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
