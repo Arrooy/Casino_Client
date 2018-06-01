@@ -1,4 +1,4 @@
-# El Casino - Treball 2n Semestre DPO - LaSalle
+# El Casino - LaSalle 2018
 
 ## Team
 [Project Manager - Miquel Saula](mailto:miquelsaula@gmail.com)
