@@ -1,6 +1,6 @@
 # El Casino - Treball 2n Semestre DPO - LaSalle
 
-## Equip
+## Team
 [Project Manager - Miquel Saula](mailto:miquelsaula@gmail.com)
 
 [Responsable de Programari - Adrià Arroyo](mailto:adria.arroyo.2016@salleurl.com)
